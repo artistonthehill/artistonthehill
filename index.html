@@ -590,115 +590,18 @@
   </div>
 </section>
 
-<section id="map">
+<section id="map" style="background:var(--ink); padding:80px 0;">
   <div class="container">
     <div class="section-header fade-in">
-      <span class="section-eyebrow">Where I Paint</span>
-      <h2 class="section-title">A world of <em>locations</em></h2>
-      <p class="section-subtitle">I paint on location worldwide — from Brighton's shores to the Bahamas, France, Mallorca, Monaco and beyond. Tap a location to explore paintings from there.</p>
+      <span class="section-eyebrow" style="color:var(--accent-light);">Where I Paint</span>
+      <h2 class="section-title" style="color:var(--white);">A world of <em>locations</em></h2>
+      <p class="section-subtitle" style="color:rgba(255,255,255,0.6);">77 paintings pinned to their exact locations — from Brighton's shores to the Bahamas, Amalfi, the Alps and beyond.</p>
     </div>
-    <div class="map-container fade-in">
-      <div class="map-svg-wrap">
-        <svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style="background:#0c0b09;">
-          <path d="M150,70 L310,65 L330,110 L320,155 L285,175 L240,168 L195,145 L155,120 Z" fill="#1e1c18" stroke="#2e2c28" stroke-width="0.8"/>
-          <path d="M245,185 L300,182 L312,235 L295,288 L262,295 L238,265 L242,215 Z" fill="#1e1c18" stroke="#2e2c28" stroke-width="0.8"/>
-          <path d="M460,82 L530,78 L548,108 L538,145 L508,158 L475,148 L455,120 Z" fill="#1e1c18" stroke="#2e2c28" stroke-width="0.8"/>
-          <path d="M462,83 L480,79 L485,96 L474,106 L463,98 Z" fill="#252218" stroke="#35322a" stroke-width="0.8"/>
-          <path d="M485,155 L530,148 L548,172 L544,228 L520,255 L495,248 L478,220 L472,185 Z" fill="#1e1c18" stroke="#2e2c28" stroke-width="0.8"/>
-          <path d="M570,70 L790,65 L810,105 L800,165 L735,182 L648,172 L575,138 L558,100 Z" fill="#1e1c18" stroke="#2e2c28" stroke-width="0.8"/>
-          <path d="M748,268 L832,262 L850,300 L836,336 L790,342 L752,318 Z" fill="#1e1c18" stroke="#2e2c28" stroke-width="0.8"/>
-          <line x1="0" y1="240" x2="1000" y2="240" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-          <line x1="500" y1="0" x2="500" y2="480" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-
-          <!-- Brighton / UK — pulsing -->
-          <g class="map-pin" onclick="showLocation('brighton')" transform="translate(471,91)">
-            <circle r="14" fill="#c49a6c" opacity="0.1"/>
-            <circle r="5.5" fill="#c49a6c" opacity="0.9"/>
-            <circle r="2.2" fill="#fff"/>
-            <circle r="5.5" fill="none" stroke="#c49a6c" stroke-width="0.8" opacity="0">
-              <animate attributeName="r" values="5.5;22" dur="2.5s" repeatCount="indefinite"/>
-              <animate attributeName="opacity" values="0.5;0" dur="2.5s" repeatCount="indefinite"/>
-            </circle>
-          </g>
-          <text x="471" y="81" font-family="Karla,sans-serif" font-size="6.5" fill="rgba(196,154,108,0.6)" text-anchor="middle" letter-spacing="1.2">UK</text>
-
-          <!-- Helford -->
-          <g class="map-pin" onclick="showLocation('helford')" transform="translate(454,96)">
-            <circle r="9" fill="#c49a6c" opacity="0.1"/>
-            <circle r="3.5" fill="#c49a6c" opacity="0.75"/>
-            <circle r="1.4" fill="#fff"/>
-          </g>
-
-          <!-- Jersey -->
-          <g class="map-pin" onclick="showLocation('jersey')" transform="translate(461,104)">
-            <circle r="8" fill="#c49a6c" opacity="0.1"/>
-            <circle r="3" fill="#c49a6c" opacity="0.7"/>
-            <circle r="1.2" fill="#fff"/>
-          </g>
-
-          <!-- France -->
-          <g class="map-pin" onclick="showLocation('france')" transform="translate(479,105)">
-            <circle r="10" fill="#c49a6c" opacity="0.12"/>
-            <circle r="4" fill="#c49a6c" opacity="0.8"/>
-            <circle r="1.6" fill="#fff"/>
-          </g>
-
-          <!-- Monaco -->
-          <g class="map-pin" onclick="showLocation('monaco')" transform="translate(492,115)">
-            <circle r="8" fill="#c49a6c" opacity="0.1"/>
-            <circle r="3" fill="#c49a6c" opacity="0.75"/>
-            <circle r="1.2" fill="#fff"/>
-          </g>
-
-          <!-- Mallorca — pulsing -->
-          <g class="map-pin" onclick="showLocation('mallorca')" transform="translate(485,120)">
-            <circle r="10" fill="#c49a6c" opacity="0.12"/>
-            <circle r="4" fill="#c49a6c" opacity="0.85"/>
-            <circle r="1.6" fill="#fff"/>
-            <circle r="4" fill="none" stroke="#c49a6c" stroke-width="0.8" opacity="0">
-              <animate attributeName="r" values="4;18" dur="3s" repeatCount="indefinite" begin="1.2s"/>
-              <animate attributeName="opacity" values="0.5;0" dur="3s" repeatCount="indefinite" begin="1.2s"/>
-            </circle>
-          </g>
-          <text x="485" y="133" font-family="Karla,sans-serif" font-size="6" fill="rgba(196,154,108,0.5)" text-anchor="middle" letter-spacing="1">MALLORCA</text>
-
-          <!-- Bahamas — pulsing -->
-          <g class="map-pin" onclick="showLocation('bahamas')" transform="translate(218,152)">
-            <circle r="13" fill="#c49a6c" opacity="0.12"/>
-            <circle r="5" fill="#c49a6c" opacity="0.9"/>
-            <circle r="2" fill="#fff"/>
-            <circle r="5" fill="none" stroke="#c49a6c" stroke-width="0.8" opacity="0">
-              <animate attributeName="r" values="5;22" dur="3s" repeatCount="indefinite" begin="0.6s"/>
-              <animate attributeName="opacity" values="0.5;0" dur="3s" repeatCount="indefinite" begin="0.6s"/>
-            </circle>
-          </g>
-          <text x="218" y="172" font-family="Karla,sans-serif" font-size="6.5" fill="rgba(196,154,108,0.55)" text-anchor="middle" letter-spacing="1">BAHAMAS</text>
-
-          <!-- Henley -->
-          <g class="map-pin" onclick="showLocation('henley')" transform="translate(469,88)">
-            <circle r="7" fill="#c49a6c" opacity="0.1"/>
-            <circle r="2.8" fill="#c49a6c" opacity="0.7"/>
-            <circle r="1.1" fill="#fff"/>
-          </g>
-        </svg>
-      </div>
-
-      <div class="location-panel" id="location-panel">
-        <div class="location-panel-header">
-          <div class="location-panel-title" id="location-title"></div>
-          <div class="location-panel-count" id="location-count"></div>
-        </div>
-        <div class="location-works-grid" id="location-works"></div>
-        <div style="margin-top:16px;">
-          <a href="#" class="btn-secondary" style="color:rgba(255,255,255,0.5); border-color:rgba(255,255,255,0.16);" onclick="openEnquiry(event)">Enquire about works from this location →</a>
-        </div>
-      </div>
-
-      <div class="map-footer">
-        <div class="map-legend-item"><div class="legend-dot"></div>Painting location</div>
-        <div class="map-legend-item" style="color:rgba(255,255,255,0.22);">Tap a marker to explore</div>
-        <a href="map.html" style="margin-left:auto; font-family:'Karla',sans-serif; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent-light); text-decoration:none; border-bottom:1px solid rgba(196,154,108,0.3); padding-bottom:2px;">Open full map →</a>
-      </div>
+    <div class="fade-in" style="margin-top:40px; text-align:center;">
+      <a href="map.html" style="display:inline-flex; align-items:center; gap:12px; background:var(--accent); color:#fff; padding:18px 36px; font-family:'Karla',sans-serif; font-size:0.78rem; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; text-decoration:none;">
+        Open the Map →
+      </a>
+      <p style="margin-top:16px; font-family:'Karla',sans-serif; font-size:0.78rem; color:rgba(255,255,255,0.35); letter-spacing:0.08em;">Zoom · tap any pin · open in Google Maps on your phone</p>
     </div>
   </div>
 </section>
@@ -828,7 +731,7 @@
         <div class="footer-col-title">Navigate</div>
         <ul class="footer-links">
           <li><a href="#works">Available Works</a></li>
-          <li><a href="#map">Where I Paint</a></li>
+          <li><a href="map.html">Where I Paint</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#commission">Commission</a></li>
           <li><a href="#private">Private Viewing</a></li>
