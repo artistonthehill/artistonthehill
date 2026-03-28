@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painted on the Mountain — Tony Parsons | Artist on the Hill</title>
+<meta name="description" content="Four original oil paintings from Tony Parsons' ski trip to Sauze d'Oulx, January 2025. Two sold on the mountain. Three remain. From £1,100.">
+<meta property="og:title" content="Painted on the Mountain — Tony Parsons">
+<meta property="og:description" content="Two sold before I got home. Four paintings from Sauze d'Oulx. TOAT Sketches, £1,100 each, framed and delivered.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#1a1714; --parchment:#f7f4ef; --warm-mid:#e8e2d9;
+    --accent:#8b6f47; --accent-light:#c49a6c; --white:#fff;
+    --text-body:#3a342d; --text-light:#7a6e65; --nav-h:72px;
+    --alps-blue:#2a4a6e; --alps-ice:#c8dae8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Karla',sans-serif; background:var(--parchment); color:var(--ink); font-weight:300; line-height:1.6; }
+
+  nav { position:fixed; top:0; left:0; right:0; height:var(--nav-h); background:rgba(247,244,239,0.96); backdrop-filter:blur(8px); border-bottom:1px solid var(--warm-mid); display:flex; align-items:center; justify-content:space-between; padding:0 40px; z-index:1000; }
+  .nav-logo { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:400; letter-spacing:0.08em; color:var(--ink); text-decoration:none; line-height:1.2; }
+  .nav-logo span { display:block; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-light); font-family:'Karla',sans-serif; }
+  .nav-back { font-family:'Karla',sans-serif; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-body); text-decoration:none; border-bottom:1px solid var(--warm-mid); padding-bottom:2px; transition:color 0.2s; }
+  .nav-back:hover { color:var(--accent); }
+
+  /* HERO */
+  .hero { min-height:100vh; background:var(--ink); display:flex; flex-direction:column; justify-content:flex-end; padding-top:var(--nav-h); position:relative; overflow:hidden; }
+  .hero-bg-img { position:absolute; inset:0; background:url('images/alps-squint.jpg') center 40%/cover; opacity:0.38; }
+  .hero-bg { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(42,74,110,0.3) 0%, rgba(26,23,20,0.9) 70%); z-index:1; }
+  .hero-content { position:relative; z-index:2; padding:80px 80px 100px; max-width:860px; }
+  .hero-kicker { font-family:'Karla',sans-serif; font-size:0.68rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--alps-ice); display:block; margin-bottom:20px; }
+  .hero-sold { display:inline-block; background:var(--accent); color:#fff; font-family:'Karla',sans-serif; font-size:0.62rem; letter-spacing:0.18em; text-transform:uppercase; padding:5px 12px; margin-bottom:20px; }
+  .hero-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2.8rem,7vw,6rem); font-weight:300; line-height:1.0; color:var(--white); margin-bottom:8px; }
+  .hero-title em { font-style:italic; color:var(--alps-ice); }
+  .hero-subtitle { font-family:'Cormorant Garamond',serif; font-size:clamp(1rem,2vw,1.5rem); font-weight:300; font-style:italic; color:rgba(255,255,255,0.55); margin-bottom:44px; }
+  .hero-stats { display:flex; gap:40px; padding-top:28px; border-top:1px solid rgba(255,255,255,0.1); flex-wrap:wrap; }
+  .hero-stat-num { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; color:var(--accent-light); display:block; line-height:1; }
+  .hero-stat-label { font-family:'Karla',sans-serif; font-size:0.65rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-top:4px; display:block; }
+
+  /* STORY */
+  .story-section { background:var(--ink); padding:80px 0; }
+  .story-inner { max-width:760px; margin:0 auto; padding:0 40px; }
+  .story-pull { font-family:'Cormorant Garamond',serif; font-size:clamp(1.3rem,2.5vw,1.9rem); font-weight:300; font-style:italic; line-height:1.55; color:var(--white); margin-bottom:32px; padding-left:24px; border-left:2px solid var(--alps-ice); }
+  .story-body { font-size:0.95rem; line-height:1.85; color:rgba(255,255,255,0.62); margin-bottom:20px; }
+  .story-body strong { color:rgba(255,255,255,0.9); font-weight:400; }
+  .sold-callout { background:rgba(139,111,71,0.15); border:1px solid rgba(196,154,108,0.25); padding:20px 24px; margin:32px 0; }
+  .sold-callout p { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; color:var(--accent-light); line-height:1.6; }
+
+  /* PAINTINGS GRID */
+  .paintings-section { padding:80px 0; background:var(--parchment); }
+  .container { max-width:1200px; margin:0 auto; padding:0 40px; }
+  .section-eyebrow { font-family:'Karla',sans-serif; font-size:0.68rem; letter-spacing:0.24em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:12px; }
+  .section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,3vw,2.8rem); font-weight:300; margin-bottom:12px; }
+  .section-subtitle { font-size:0.9rem; color:var(--text-light); margin-bottom:48px; }
+
+  /* 2x2 grid for four paintings */
+  .paintings-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px; }
+  .painting-card { background:var(--white); cursor:pointer; transition:box-shadow 0.3s; position:relative; }
+  .painting-card:hover { box-shadow:0 8px 40px rgba(26,23,20,0.12); }
+  .painting-img { overflow:hidden; height:320px; position:relative; background:var(--ink); }
+  .painting-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.6s ease; display:block; }
+  .painting-card:hover .painting-img img { transform:scale(1.04); }
+  .sold-overlay { position:absolute; inset:0; background:rgba(26,23,20,0.6); display:flex; align-items:center; justify-content:center; }
+  .sold-badge { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; font-style:italic; color:#fff; letter-spacing:0.08em; border:1px solid rgba(255,255,255,0.5); padding:10px 24px; }
+  .price-tag { position:absolute; bottom:14px; left:14px; background:rgba(26,23,20,0.85); font-family:'Cormorant Garamond',serif; font-size:1.2rem; color:var(--accent-light); padding:7px 12px; }
+  .toat-tag { position:absolute; top:14px; right:14px; background:var(--accent); color:#fff; font-family:'Karla',sans-serif; font-size:0.58rem; letter-spacing:0.16em; text-transform:uppercase; padding:4px 9px; }
+  .painting-info { padding:24px 28px 28px; }
+  .painting-name { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:400; margin-bottom:4px; }
+  .painting-meta { font-family:'Karla',sans-serif; font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-light); margin-bottom:12px; }
+  .painting-story { font-family:'Cormorant Garamond',serif; font-size:0.98rem; font-style:italic; line-height:1.65; color:var(--text-body); margin-bottom:16px; }
+  .enquire-btn { display:inline-flex; align-items:center; background:var(--ink); color:var(--white); padding:10px 18px; font-family:'Karla',sans-serif; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; transition:background 0.2s; border:none; cursor:pointer; }
+  .enquire-btn:hover { background:var(--alps-blue); }
+  .enquire-btn.disabled { background:#ccc; cursor:default; }
+
+  /* TOAT NOTE */
+  .toat-section { background:var(--ink); padding:60px 0; }
+  .toat-inner { max-width:680px; margin:0 auto; padding:0 40px; text-align:center; }
+  .toat-title { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; color:var(--white); margin-bottom:16px; }
+  .toat-body { font-size:0.88rem; line-height:1.8; color:rgba(255,255,255,0.55); margin-bottom:32px; }
+  .btn-primary { display:inline-flex; align-items:center; background:var(--ink); color:var(--white); border:1px solid rgba(255,255,255,0.2); padding:14px 28px; font-family:'Karla',sans-serif; font-size:0.76rem; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; transition:background 0.2s; }
+  .btn-primary:hover { background:var(--accent); border-color:var(--accent); }
+
+  footer { background:#111; color:rgba(255,255,255,0.4); padding:40px; text-align:center; font-family:'Karla',sans-serif; font-size:0.78rem; }
+  footer a { color:rgba(255,255,255,0.4); text-decoration:none; }
+  footer a:hover { color:var(--accent-light); }
+
+  @media(max-width:800px) {
+    .paintings-grid { grid-template-columns:1fr; }
+    .hero-content { padding:60px 28px 80px; }
+  }
+  @media(max-width:600px) {
+    nav { padding:0 20px; }
+    .container, .story-inner, .toat-inner { padding:0 20px; }
+    .painting-info { padding:20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Tony Parsons <span>Artist on the Hill</span></a>
+  <a href="index.html#works" class="nav-back">← All works</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-kicker">Sauze d'Oulx · Italian Alps · January 2025</span>
+    <div class="hero-sold">2 sold on the mountain · 3 remain</div>
+    <h1 class="hero-title">Painted on<br>the <em>Mountain</em></h1>
+    <p class="hero-subtitle">17kg of kit on my back. Skis on my feet. A back that was testing its limits.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num">4</span>
+        <span class="hero-stat-label">Paintings made</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">2</span>
+        <span class="hero-stat-label">Sold on location</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">£1,100</span>
+        <span class="hero-stat-label">Each · framed</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">TOAT</span>
+        <span class="hero-stat-label">All certified</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STORY -->
+<div class="story-section">
+  <div class="story-inner">
+    <p class="story-pull">"I was aiming for an alpine feel, focusing on mid-winter light. When the sun catches the peaks just right they almost glow — and with a bit of practice that light becomes a real pleasure to paint."</p>
+    <p class="story-body">A couple of weeks ago I was invited on a skiing trip to Sauze d'Oulx with a group of friends. Part of the motivation was simply to see whether my back would cope, after last year's shenanigans. I've also been steadily refining my plein-air kit — and this trip felt like a proper test: everything pared back to a rig that would fit entirely on my back.</p>
+    <p class="story-body">With various wooden boxes and around 17kg on my back, I didn't want the option of falling forwards or backwards, so skis felt like the sensible choice. Skiing with a heavy backpack was still a mission — I had to take it off and swing it onto my front every time I got on a lift. But it meant I could reach some extraordinary viewpoints and set up right in the midst of the action.</p>
+    <p class="story-body">One day my leg started shouting at me, so I slowed things down and went in search of the church in the centre of Sauze d'Oulx. It's been there in one form or another for <strong>over 800 years</strong>. There were several elements I wanted to collide in that sketch, so I deliberately crushed the perspective into something closer to a fish-eye view.</p>
+    <p class="story-body">Unlike previous mountain painting trips, I didn't try to work through whiteouts or fog this time — and I think that was the right decision. The first three days were bathed in glorious sunshine. I made five TOAT Sketches in total.</p>
+
+    <div class="sold-callout">
+      <p>"A couple sold while I was still in the mountains — to people who appear in the paintings themselves."</p>
+    </div>
+
+    <p class="story-body">These are the three that came back with me. They're punctuated in my memory by hot chocolates, a lot of help from friends, and light I won't forget in a hurry.</p>
+  </div>
+</div>
+
+<!-- PAINTINGS -->
+<div class="paintings-section">
+  <div class="container">
+    <span class="section-eyebrow">The Collection</span>
+    <h2 class="section-title">Sauze d'Oulx · January 2025</h2>
+    <p class="section-subtitle">42×30cm · Oil on canvas · TOAT Sketch · Framed · Worldwide delivery included</p>
+
+    <div class="paintings-grid">
+
+      <!-- Squint -->
+      <div class="painting-card" onclick="waEnquire('Squint', '£1,100')">
+        <div class="painting-img">
+          <img src="images/alps-squint.jpg" alt="Squint">
+          <div class="price-tag">£1,100</div>
+          <div class="toat-tag">TOAT</div>
+        </div>
+        <div class="painting-info">
+          <div class="painting-name">Squint</div>
+          <div class="painting-meta">42×30cm · Oil on canvas · Sauze d'Oulx</div>
+          <p class="painting-story">Mid-winter light catching the peaks — painted at altitude with the mountain dropping away below. The title says everything about how you have to look at this kind of light.</p>
+          <button class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Squint', '£1,100')">Enquire via WhatsApp</button>
+        </div>
+      </div>
+
+      <!-- The Mountain Church -->
+      <div class="painting-card" onclick="waEnquire('The Mountain Church', '£1,100')">
+        <div class="painting-img">
+          <img src="images/alps-mountain-church.jpg" alt="The Mountain Church">
+          <div class="price-tag">£1,100</div>
+          <div class="toat-tag">TOAT</div>
+        </div>
+        <div class="painting-info">
+          <div class="painting-name">The Mountain Church</div>
+          <div class="painting-meta">42×30cm · Oil on canvas · Sauze d'Oulx village</div>
+          <p class="painting-story">When my leg started shouting I went looking for the church in the centre of the village — it's been there in one form or another for over 800 years. I deliberately crushed the perspective into something closer to a fish-eye view.</p>
+          <button class="enquire-btn" onclick="event.stopPropagation(); waEnquire('The Mountain Church', '£1,100')">Enquire via WhatsApp</button>
+        </div>
+      </div>
+
+      <!-- The Bubble Lift -->
+      <div class="painting-card" onclick="waEnquire('The Bubble Lift', '£1,100')">
+        <div class="painting-img">
+          <img src="images/alps-bubble-lift.jpg" alt="The Bubble Lift">
+          <div class="price-tag">£1,100</div>
+          <div class="toat-tag">TOAT</div>
+        </div>
+        <div class="painting-info">
+          <div class="painting-name">The Bubble Lift</div>
+          <div class="painting-meta">42×30cm · Oil on canvas · Sauze d'Oulx</div>
+          <p class="painting-story">The scale of the Alps only becomes real when you paint it — the lift cables, the tiny figures, the vast white nothing. Set up at the top of the mountain with 17kg on my back and a very clear view of what lay between me and the bottom.</p>
+          <button class="enquire-btn" onclick="event.stopPropagation(); waEnquire('The Bubble Lift', '£1,100')">Enquire via WhatsApp</button>
+        </div>
+      </div>
+
+      <!-- Sestriere -->
+      <div class="painting-card" onclick="waEnquire('Sestriere', '£1,100')">
+        <div class="painting-img">
+          <img src="images/alps-sestriere.jpg" alt="Sestriere">
+          <div class="price-tag">£1,100</div>
+          <div class="toat-tag">TOAT</div>
+        </div>
+        <div class="painting-info">
+          <div class="painting-name">Sestriere</div>
+          <div class="painting-meta">42×30cm · Oil on canvas · Sestriere piste</div>
+          <p class="painting-story">The chaos of a busy mountain piste — figures in all directions, flags, the chalet roof cutting into the corner. Painted in full sunshine on one of those rare winter days when everything is exactly as it should be.</p>
+          <button class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Sestriere', '£1,100')">Enquire via WhatsApp</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TOAT NOTE -->
+<div class="toat-section">
+  <div class="toat-inner">
+    <h2 class="toat-title">TOAT Certified</h2>
+    <p class="toat-body">Each of these paintings carries a TOAT token — a physical aluminium disc attached to the back, digitally linked to a verified ownership record. If you ever choose to sell, the provenance travels with it. It's a system I co-invented, and every painting I release now is part of it.</p>
+    <a href="https://toat.art" target="_blank" class="btn-primary">Learn about TOAT →</a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025–2026 Tony Parsons · Artist on the Hill · <a href="index.html">Back to site</a> · <a href="bahamas.html">Bahamas</a> · <a href="amalfi.html">Amalfi</a></p>
+</footer>
+
+<script>
+function waEnquire(title, price) {
+  const msg = encodeURIComponent(`Hello Tony, I'm interested in "${title}" (${price}) from the Sauze d'Oulx Alpine collection.`);
+  window.open(`https://wa.me/447880601709?text=${msg}`, '_blank');
+}
+</script>
+</body>
+</html>

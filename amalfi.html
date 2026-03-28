@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Amalfi Coast Collection — Tony Parsons | Artist on the Hill</title>
+<meta name="description" content="Original oil paintings from Tony Parsons' October 2025 Amalfi Coast trip — Amalfi, Positano, Capri. Plein air works, TOAT-certified, from £1,000.">
+<meta property="og:title" content="Gracie Fields, Meeting the Mafia, and Breaking a €2,000 Table — The Amalfi Coast Collection">
+<meta property="og:description" content="7 original oil paintings from the Amalfi Coast. Painted on location in October 2025. From £1,000. All unsold. All available.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#1a1714; --parchment:#f7f4ef; --warm-mid:#e8e2d9;
+    --accent:#8b6f47; --accent-light:#c49a6c; --white:#fff;
+    --text-body:#3a342d; --text-light:#7a6e65; --nav-h:72px;
+    --amalfi-blue:#1a4a6e; --amalfi-terracotta:#c4602a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Karla',sans-serif; background:var(--parchment); color:var(--ink); font-weight:300; line-height:1.6; }
+
+  nav { position:fixed; top:0; left:0; right:0; height:var(--nav-h); background:rgba(247,244,239,0.96); backdrop-filter:blur(8px); border-bottom:1px solid var(--warm-mid); display:flex; align-items:center; justify-content:space-between; padding:0 40px; z-index:1000; }
+  .nav-logo { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:400; letter-spacing:0.08em; color:var(--ink); text-decoration:none; line-height:1.2; }
+  .nav-logo span { display:block; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-light); font-family:'Karla',sans-serif; }
+  .nav-back { font-family:'Karla',sans-serif; font-size:0.72rem; font-weight:400; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-body); text-decoration:none; border-bottom:1px solid var(--warm-mid); padding-bottom:2px; transition:color 0.2s; }
+  .nav-back:hover { color:var(--accent); border-color:var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-top: var(--nav-h);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(196,96,42,0.25) 0%, rgba(26,74,110,0.4) 50%, rgba(26,23,20,0.88) 75%);
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 80px 80px 100px;
+    max-width: 900px;
+  }
+  .hero-kicker {
+    font-family:'Karla',sans-serif; font-size:0.68rem; letter-spacing:0.28em;
+    text-transform:uppercase; color:var(--amalfi-terracotta);
+    display:block; margin-bottom:20px;
+    opacity: 0.9;
+  }
+  .hero-title {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.8rem,4vw,3.2rem);
+    font-weight:300; line-height:1.2;
+    color:var(--white); margin-bottom:16px;
+    font-style: italic;
+  }
+  .hero-subtitle {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(2.2rem,5vw,4.5rem);
+    font-weight:300; line-height:1.05;
+    color:var(--white); margin-bottom:40px;
+  }
+  .hero-subtitle em { font-style:italic; color:var(--accent-light); }
+  .hero-meta {
+    display:flex; gap:40px; flex-wrap:wrap;
+    padding-top:28px; border-top:1px solid rgba(255,255,255,0.1);
+  }
+  .hero-meta-item { }
+  .hero-meta-num { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; color:var(--accent-light); display:block; line-height:1; }
+  .hero-meta-label { font-family:'Karla',sans-serif; font-size:0.65rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-top:4px; display:block; }
+
+  /* STORY */
+  .story-section { background:var(--ink); color:var(--white); padding:80px 0; }
+  .story-inner { max-width:780px; margin:0 auto; padding:0 40px; }
+  .story-pull { font-family:'Cormorant Garamond',serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:300; font-style:italic; line-height:1.55; color:var(--white); margin-bottom:32px; padding-left:24px; border-left:2px solid var(--amalfi-terracotta); }
+  .story-body { font-size:0.95rem; line-height:1.85; color:rgba(255,255,255,0.65); margin-bottom:20px; }
+  .story-body strong { color:rgba(255,255,255,0.9); font-weight:400; }
+
+  /* PAINTINGS */
+  .paintings-section { padding:80px 0; }
+  .container { max-width:1200px; margin:0 auto; padding:0 40px; }
+  .section-eyebrow { font-family:'Karla',sans-serif; font-size:0.68rem; letter-spacing:0.24em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:12px; }
+  .section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,3vw,2.8rem); font-weight:300; margin-bottom:48px; }
+  .section-title em { font-style:italic; }
+
+  .painting-entry { display:grid; grid-template-columns:1fr 1fr; gap:0; margin-bottom:4px; background:var(--white); cursor:pointer; transition:box-shadow 0.3s; }
+  .painting-entry:hover { box-shadow:0 8px 40px rgba(26,23,20,0.12); }
+  .painting-entry.reverse { direction:rtl; }
+  .painting-entry.reverse > * { direction:ltr; }
+
+  .painting-img { overflow:hidden; background:var(--ink); min-height:380px; position:relative; }
+  .painting-img img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.6s ease; }
+  .painting-entry:hover .painting-img img { transform:scale(1.03); }
+  .price-tag { position:absolute; bottom:16px; left:16px; background:rgba(26,23,20,0.85); font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:var(--accent-light); padding:8px 14px; }
+  .toat-tag { position:absolute; top:16px; right:16px; background:var(--accent); color:#fff; font-family:'Karla',sans-serif; font-size:0.58rem; letter-spacing:0.16em; text-transform:uppercase; padding:4px 9px; }
+
+  .painting-info { padding:48px; display:flex; flex-direction:column; justify-content:center; }
+  .painting-name { font-family:'Cormorant Garamond',serif; font-size:clamp(1.6rem,2.5vw,2.2rem); font-weight:300; line-height:1.2; margin-bottom:4px; }
+  .painting-meta { font-family:'Karla',sans-serif; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-light); margin-bottom:24px; }
+  .painting-story { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-style:italic; line-height:1.72; color:var(--text-body); margin-bottom:28px; padding-left:18px; border-left:1px solid var(--warm-mid); flex:1; }
+  .painting-location { font-family:'Karla',sans-serif; font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-bottom:28px; }
+  .enquire-btn { display:inline-flex; align-items:center; gap:10px; background:var(--ink); color:var(--white); padding:13px 22px; font-family:'Karla',sans-serif; font-size:0.72rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; transition:background 0.2s; align-self:flex-start; }
+  .enquire-btn:hover { background:var(--amalfi-terracotta); }
+
+  /* TOAT SKETCHES */
+  .sketches-section { background:#111; padding:80px 0; }
+  .sketches-section .section-eyebrow { color:var(--accent-light); }
+  .sketches-section .section-title { color:var(--white); margin-bottom:16px; }
+  .sketches-intro { font-size:0.92rem; line-height:1.8; color:rgba(255,255,255,0.55); max-width:560px; margin-bottom:48px; }
+  .sketches-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:3px; }
+  .sketch-card { position:relative; overflow:hidden; cursor:pointer; background:var(--ink); aspect-ratio:4/3; }
+  .sketch-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease, opacity 0.3s; opacity:0.82; }
+  .sketch-card:hover img { transform:scale(1.07); opacity:1; }
+  .sketch-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(26,23,20,0.92) 0%, transparent 55%); opacity:0; transition:opacity 0.3s; display:flex; flex-direction:column; justify-content:flex-end; padding:18px; }
+  .sketch-card:hover .sketch-overlay { opacity:1; }
+  .sketch-title { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-style:italic; color:#fff; margin-bottom:2px; }
+  .sketch-price { font-family:'Cormorant Garamond',serif; font-size:0.95rem; color:var(--accent-light); }
+  .sketch-story { font-size:0.78rem; color:rgba(255,255,255,0.55); margin-top:6px; line-height:1.5; font-family:'Karla',sans-serif; }
+
+  /* CLOSING */
+  .closing-section { padding:80px 0; background:var(--parchment); border-top:1px solid var(--warm-mid); }
+  .closing-inner { max-width:680px; margin:0 auto; padding:0 40px; text-align:center; }
+  .closing-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,3.5vw,3rem); font-weight:300; line-height:1.2; margin-bottom:20px; }
+  .closing-title em { font-style:italic; color:var(--accent); }
+  .closing-body { font-size:0.92rem; line-height:1.8; color:var(--text-body); margin-bottom:36px; }
+  .cta-pair { display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .btn-primary { display:inline-flex; align-items:center; gap:12px; background:var(--ink); color:var(--white); padding:16px 32px; font-family:'Karla',sans-serif; font-size:0.78rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; transition:background 0.2s; }
+  .btn-primary:hover { background:var(--amalfi-terracotta); }
+  .btn-secondary { display:inline-flex; align-items:center; gap:8px; color:var(--text-body); font-family:'Karla',sans-serif; font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; text-decoration:none; border-bottom:1px solid var(--warm-mid); padding-bottom:2px; transition:color 0.2s; }
+  .btn-secondary:hover { color:var(--accent); }
+
+  footer { background:#111; color:rgba(255,255,255,0.4); padding:40px; text-align:center; font-family:'Karla',sans-serif; font-size:0.78rem; }
+  footer a { color:rgba(255,255,255,0.4); text-decoration:none; }
+  footer a:hover { color:var(--accent-light); }
+
+  @media(max-width:900px) {
+    .hero-content { padding:60px 32px 80px; }
+    .painting-entry, .painting-entry.reverse { grid-template-columns:1fr; direction:ltr; }
+    .painting-entry.reverse > * { direction:ltr; }
+    .sketches-grid { grid-template-columns:repeat(2,1fr); }
+  }
+  @media(max-width:600px) {
+    nav { padding:0 20px; }
+    .container { padding:0 20px; }
+    .story-inner { padding:0 24px; }
+    .painting-info { padding:28px 24px; }
+    .closing-inner { padding:0 24px; }
+    .sketches-grid { grid-template-columns:1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Tony Parsons <span>Artist on the Hill</span></a>
+  <a href="index.html#works" class="nav-back">← All works</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg-img" style="position:absolute;inset:0;background:url('images/amalfi-vista.jpg') center/cover;opacity:0.32;"></div>
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-kicker">October 2025 · Amalfi · Positano · Capri</span>
+    <p class="hero-title">Gracie Fields, Meeting the Mafia,<br>and Breaking a €2,000 Table.</p>
+    <h1 class="hero-subtitle">The Amalfi<br><em>Coast Collection</em></h1>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-num">7</span>
+        <span class="hero-meta-label">Original oils</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-num">3</span>
+        <span class="hero-meta-label">Locations</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-num">£1,000</span>
+        <span class="hero-meta-label">From</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-num">All</span>
+        <span class="hero-meta-label">Available</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STORY -->
+<div style="width:100%;max-height:520px;overflow:hidden;position:relative;">
+  <img src="images/amalfi-tony-painting.jpg" alt="Tony Parsons painting on the Amalfi quayside" style="width:100%;height:520px;object-fit:cover;object-position:center 35%;display:block;">
+  <div style="position:absolute;bottom:20px;left:24px;font-family:'Karla',sans-serif;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.6);">Tony Parsons · Amalfi quayside · October 2025</div>
+</div>
+<div class="story-section">
+  <div class="story-inner">
+    <p class="story-pull">"I've always wanted to paint the Amalfi Coast — and a couple of weeks ago I finally got the chance. The whole coast is startlingly beautiful, stuffed to the gills with tourists, and nearly impossible to work in."</p>
+    <p class="story-body">The quayside in Amalfi offered the best chance to work at the scale I wanted — everywhere else was just too crowded. While I painted, a few local chaps in white T-shirts and jeans wandered over to see what I was up to. Over the next few days they appeared in rotation, leaning on the wall behind me as I worked.</p>
+    <p class="story-body">A restaurant owner brought me a coffee and said, <strong>"Ah, I see you've met the Gentlemen!"</strong></p>
+    <p class="story-body">I stayed in an apartment clinging to the mountain in Atrani, just around the bend from Amalfi. I tried to shuffle the balcony furniture to capture the morning light on the church below — and managed to drop a hand-painted slate tabletop, smashing it to pieces and gashing my ankle in the process. My horrified landlady patched me up. I never did get to paint that particular view. And yes, I paid for the table.</p>
+    <p class="story-body">I ended the trip on the island of Capri, staying just above the house where <strong>Gracie Fields</strong> once lived — the wartime celebrity who also founded an orphanage in my hometown of Peacehaven. I painted the famous rock stacks from her garden as the sun went down.</p>
+  </div>
+</div>
+
+<!-- LARGE WORKS -->
+<div class="paintings-section">
+  <div class="container">
+    <span class="section-eyebrow">The Collection</span>
+    <h2 class="section-title">Large works — <em>painted on location</em></h2>
+
+    <!-- Blood Slate and Tears -->
+    <div class="painting-entry" onclick="waEnquire('Blood, Slate and Tears', '£3,000')">
+      <div class="painting-img">
+        <img src="images/amalfi-blood-slate-tears.jpg" alt="Blood, Slate and Tears">
+        <div class="price-tag">£3,000</div>
+        <div class="toat-tag">TOAT</div>
+      </div>
+      <div class="painting-info">
+        <div class="painting-name">Blood, Slate and Tears</div>
+        <div class="painting-meta">60×42cm · Oil on canvas-wrapped board · Atrani</div>
+        <p class="painting-story">"I tried to shuffle the balcony furniture to capture the morning light on the church below — and managed to drop a hand-painted slate tabletop, smashing it to pieces and gashing my ankle. My horrified landlady patched me up, but I never did get to paint that particular view. And yes, I paid for the table."</p>
+        <div class="painting-location">📍 Atrani, Amalfi Coast</div>
+        <a href="#" class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Blood, Slate and Tears', '£3,000')">Enquire via WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- Amalfi Vista -->
+    <div class="painting-entry reverse" onclick="waEnquire('Amalfi Vista', '£3,000')">
+      <div class="painting-img">
+        <img src="images/amalfi-vista.jpg" alt="Amalfi Vista">
+        <div class="price-tag">£3,000</div>
+        <div class="toat-tag">TOAT</div>
+      </div>
+      <div class="painting-info">
+        <div class="painting-name">Amalfi Vista</div>
+        <div class="painting-meta">60×42cm · Oil on canvas-wrapped board · Amalfi</div>
+        <p class="painting-story">"The quayside in Amalfi offered the best chance to work at the scale I wanted. While I painted, local chaps in white T-shirts wandered over in rotation, leaning on the wall behind me. A restaurant owner brought me a coffee and said, 'Ah, I see you've met the Gentlemen!'"</p>
+        <div class="painting-location">📍 Amalfi quayside</div>
+        <a href="#" class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Amalfi Vista', '£3,000')">Enquire via WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- Positano -->
+    <div class="painting-entry" onclick="waEnquire('Positano', '£3,000')">
+      <div class="painting-img">
+        <img src="images/amalfi-positano.jpg" alt="Positano">
+        <div class="price-tag">£3,000</div>
+        <div class="toat-tag">TOAT</div>
+      </div>
+      <div class="painting-info">
+        <div class="painting-name">Positano</div>
+        <div class="painting-meta">60×42cm · Oil on canvas-wrapped board · Positano</div>
+        <p class="painting-story">"I set up in the most obvious spot to catch the distant light on the cliffs and cathedral roof. As I was finishing, a local painter appeared and said, 'This is my place — you have twenty minutes!' I'd expected camaraderie among artists, but clearly some of these guys were working with different motives."</p>
+        <div class="painting-location">📍 Positano</div>
+        <a href="#" class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Positano', '£3,000')">Enquire via WhatsApp</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAT SKETCHES -->
+<div class="sketches-section">
+  <div class="container">
+    <span class="section-eyebrow">TOAT Sketches</span>
+    <h2 class="section-title" style="color:var(--white);">Four smaller works — <em style="color:var(--accent-light);">painted on location</em></h2>
+    <p class="sketches-intro">A3-format oils, each painted directly on location across the Amalfi Coast. Every one TOAT-certified. From £1,000.</p>
+
+    <div class="sketches-grid">
+
+      <div class="sketch-card" onclick="waEnquire('Capri Arch', '£1,200')">
+        <img src="images/amalfi-capri-arch.jpg" alt="Capri Arch">
+        <div class="sketch-overlay">
+          <div class="sketch-title">Capri Arch</div>
+          <div class="sketch-price">£1,200 · 42×30cm</div>
+          <div class="sketch-story">Rock stacks painted from Gracie Fields' garden as the sun went down</div>
+        </div>
+      </div>
+
+      <div class="sketch-card" onclick="waEnquire('Amalfi Cliffs Sunset', '£1,100')">
+        <img src="images/amalfi-cliffs-sunset.jpg" alt="Amalfi Cliffs Sunset">
+        <div class="sketch-overlay">
+          <div class="sketch-title">Amalfi Cliffs Sunset</div>
+          <div class="sketch-price">£1,100 · 42×30cm</div>
+          <div class="sketch-story">The cliffs at dusk from the quayside</div>
+        </div>
+      </div>
+
+      <div class="sketch-card" onclick="waEnquire('Positano Quay', '£1,100')">
+        <img src="images/amalfi-positano-quay.jpg" alt="Positano Quay">
+        <div class="sketch-overlay">
+          <div class="sketch-title">Positano Quay</div>
+          <div class="sketch-price">£1,100 · 42×30cm</div>
+          <div class="sketch-story">Painted from a sun lounger on the beach — the only spot no one could move me on</div>
+        </div>
+      </div>
+
+      <div class="sketch-card" onclick="waEnquire('Gracie\'s View', '£1,000')">
+        <img src="images/amalfi-blood-slate-tears.jpg" alt="Gracie's View">
+        <div class="sketch-overlay">
+          <div class="sketch-title">Gracie's View</div>
+          <div class="sketch-price">£1,000 · 42×30cm</div>
+          <div class="sketch-story">Capri — from the garden of Gracie Fields, who also founded an orphanage in Peacehaven</div>
+        </div>
+      </div>
+
+    </div>
+    <div style="margin-top:28px; font-family:'Karla',sans-serif; font-size:0.72rem; color:rgba(255,255,255,0.35); letter-spacing:0.1em;">
+      Tap any painting to enquire · 0% payment plans available · Free worldwide shipping
+    </div>
+  </div>
+</div>
+
+<!-- CLOSING -->
+<div class="closing-section">
+  <div class="closing-inner">
+    <h2 class="closing-title">Seven paintings.<br><em>All still available.</em></h2>
+    <p class="closing-body">These were painted in October 2025 and have been waiting for the right home since. Each is framed to order, TOAT-certified, and shipped worldwide at no extra cost. If something catches your eye, just get in touch — I'm happy to talk through any piece personally.</p>
+    <div class="cta-pair">
+      <a href="https://wa.me/447880601709?text=Hello%20Tony%2C%20I%27m%20interested%20in%20the%20Amalfi%20Coast%20Collection." target="_blank" class="btn-primary">WhatsApp Tony</a>
+      <a href="mailto:artistonthehill@gmail.com?subject=Amalfi Coast Collection" class="btn-secondary">or email →</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025–2026 Tony Parsons · Artist on the Hill · <a href="index.html">Back to site</a> · <a href="bahamas.html">Bahamas Collection</a></p>
+</footer>
+
+<script>
+function waEnquire(title, price) {
+  const msg = encodeURIComponent(`Hello Tony, I'm interested in "${title}" (${price}) from the Amalfi Coast Collection.`);
+  window.open(`https://wa.me/447880601709?text=${msg}`, '_blank');
+}
+</script>
+</body>
+</html>
