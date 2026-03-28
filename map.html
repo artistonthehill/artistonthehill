@@ -3,69 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Where I Paint — Tony Parsons | Artist on the Hill</title>
-<meta name="description" content="77 original oil paintings mapped to their exact locations — from Sussex to the Bahamas, Amalfi to the Alps. Tony Parsons, plein air painter.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Where I Paint — Tony Parsons</title>
 <style>
-  :root {
-    --ink:#1a1714; --parchment:#f7f4ef; --warm-mid:#e8e2d9;
-    --accent:#8b6f47; --accent-light:#c49a6c; --white:#fff;
-    --text-light:#7a6e65; --nav-h:64px;
-  }
   * { margin:0; padding:0; box-sizing:border-box; }
-  html, body { height:100%; }
-  body { font-family:'Karla',sans-serif; background:var(--parchment); color:var(--ink); display:flex; flex-direction:column; }
+  html, body { height:100%; font-family:'Karla',sans-serif; }
+  body { display:flex; flex-direction:column; background:#f7f4ef; }
 
   nav {
-    height:var(--nav-h); background:var(--parchment);
-    border-bottom:1px solid var(--warm-mid);
+    height:60px; background:#f7f4ef;
+    border-bottom:1px solid #e8e2d9;
     display:flex; align-items:center; justify-content:space-between;
-    padding:0 32px; flex-shrink:0;
+    padding:0 24px; flex-shrink:0; z-index:10;
   }
-  .nav-logo { font-family:'Cormorant Garamond',serif; font-size:1.15rem; font-weight:400; letter-spacing:0.08em; color:var(--ink); text-decoration:none; line-height:1.2; }
-  .nav-logo span { display:block; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-light); font-family:'Karla',sans-serif; }
-  .nav-back { font-family:'Karla',sans-serif; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
-  .nav-back:hover { color:var(--accent); }
+  .nav-logo { font-family:Georgia,serif; font-size:1.1rem; color:#1a1714; text-decoration:none; }
+  .nav-logo span { display:block; font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6e65; font-family:sans-serif; }
+  .nav-back { font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:#7a6e65; text-decoration:none; }
+  .nav-back:hover { color:#8b6f47; }
 
-  .map-header {
-    padding:20px 32px 16px;
-    display:flex; align-items:baseline; justify-content:space-between;
-    flex-wrap:wrap; gap:8px; flex-shrink:0;
-    border-bottom:1px solid var(--warm-mid);
-  }
-  .map-title { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:300; }
-  .map-title em { font-style:italic; color:var(--accent); }
-  .map-subtitle { font-family:'Karla',sans-serif; font-size:0.72rem; color:var(--text-light); letter-spacing:0.08em; }
+  #map { flex:1; min-height:0; }
 
-  .map-wrap { flex:1; position:relative; min-height:0; }
-  .map-wrap iframe { width:100%; height:100%; border:none; display:block; min-height:500px; }
+  /* Info window */
+  .iw-wrap { width:240px; font-family:sans-serif; }
+  .iw-img { width:100%; height:160px; object-fit:cover; display:block; border-radius:2px; margin-bottom:10px; background:#ddd; }
+  .iw-title { font-family:Georgia,serif; font-size:1.05rem; font-weight:400; color:#1a1714; margin-bottom:3px; line-height:1.3; }
+  .iw-size { font-size:0.72rem; color:#7a6e65; letter-spacing:0.06em; margin-bottom:6px; }
+  .iw-price { font-family:Georgia,serif; font-size:1.2rem; color:#8b6f47; margin-bottom:12px; }
+  .iw-btn {
+    display:block; background:#1a1714; color:#fff;
+    padding:9px 14px; font-size:0.68rem; letter-spacing:0.14em;
+    text-transform:uppercase; text-decoration:none;
+    text-align:center; border-radius:2px;
+  }
+  .iw-btn:hover { background:#8b6f47; }
 
-  .map-footer {
-    padding:12px 32px;
-    display:flex; align-items:center; justify-content:space-between;
-    flex-wrap:wrap; gap:12px;
-    border-top:1px solid var(--warm-mid);
-    background:var(--parchment); flex-shrink:0;
-  }
-  .map-note { font-family:'Karla',sans-serif; font-size:0.72rem; color:var(--text-light); }
-  .wa-link {
-    display:inline-flex; align-items:center; gap:8px;
-    background:var(--ink); color:var(--white);
-    padding:9px 18px; font-family:'Karla',sans-serif;
-    font-size:0.7rem; font-weight:500; letter-spacing:0.14em;
-    text-transform:uppercase; text-decoration:none; transition:background 0.2s;
-  }
-  .wa-link:hover { background:var(--accent); }
-
-  @media(max-width:600px) {
-    nav { padding:0 16px; }
-    .map-header { padding:14px 16px 12px; }
-    .map-footer { padding:10px 16px; }
-    .map-title { font-size:1.2rem; }
-  }
+  /* Override Google's info window chrome */
+  .gm-style .gm-style-iw-c { padding:0 !important; border-radius:4px !important; box-shadow:0 4px 24px rgba(0,0,0,0.15) !important; }
+  .gm-style .gm-style-iw-d { overflow:hidden !important; padding:16px !important; }
+  .gm-style .gm-style-iw-tc::after { background:#fff !important; }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Karla:wght@300;400&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -74,26 +50,66 @@
   <a href="index.html" class="nav-back">← Back to site</a>
 </nav>
 
-<div class="map-header">
-  <div>
-    <div class="map-title">Where I <em>Paint</em></div>
-    <div class="map-subtitle">77 paintings · Sussex to the Bahamas · tap any pin to see more</div>
-  </div>
-</div>
+<div id="map"></div>
 
-<div class="map-wrap">
-  <iframe
-    src="https://www.google.com/maps/d/u/0/embed?mid=1GSmtJ1RlFMByds9B8hbt8ycnkHSVZjo&ehbc=2E312F"
-    allowfullscreen
-    loading="lazy"
-    referrerpolicy="no-referrer-when-downgrade">
-  </iframe>
-</div>
+<script>
+const paintings = [{"title": "Itchenor in the Sun", "lat": 50.806564, "lng": -0.864358, "img": "images/itchenor.jpg", "price": "\u00a31,700", "size": "60\u00d730cm \u00b7 Oil on canvas"}, {"title": "West Country Buoy", "lat": 50.396608, "lng": -3.511417, "img": "images/buoy.jpg", "price": "\u00a31,600", "size": "55\u00d730cm \u00b7 Oil on board"}, {"title": "Richmond Bridge", "lat": 51.456917, "lng": -0.307158, "img": "images/richmond.jpg", "price": "\u00a31,700", "size": "60\u00d730cm \u00b7 Oil on canvas"}, {"title": "That Day on the Undercliff", "lat": 50.800576, "lng": -0.044967, "img": "images/undercliff.jpg", "price": "\u00a32,300", "size": "80\u00d730cm \u00b7 Oil on board"}, {"title": "De La Warr Pavilion", "lat": 50.837312, "lng": 0.472187, "img": "images/delawarr.jpg", "price": "\u00a32,300", "size": "80\u00d730cm \u00b7 Oil on board"}, {"title": "Saltdean & Peacehaven Cliffs", "lat": 50.800736, "lng": -0.045977, "img": "images/saltdeanandpeacehaven.jpg", "price": "\u00a31,100", "size": "A3 \u00b7 Oil on board"}, {"title": "Portchester Creek", "lat": 50.849599, "lng": -1.177874, "img": "images/porchester.jpg", "price": "\u00a32,300", "size": "80\u00d730cm \u00b7 Oil on board"}, {"title": "Hengistbury Head", "lat": 50.71438, "lng": -1.74639, "img": "images/hengistbury.jpg", "price": "\u00a32,000", "size": "80\u00d730cm \u00b7 Oil on board"}, {"title": "A Study in the Nature of Reflection", "lat": 8.337697, "lng": 98.488238, "img": "images/reflection.jpg", "price": "\u00a37,300", "size": "121\u00d791cm \u00b7 Oil on canvas"}, {"title": "Palma Marina Diptych", "lat": 39.567142, "lng": 2.648029, "img": "images/palma.jpg", "price": "\u00a32,300", "size": "2 \u00d7 A3 \u00b7 Oil on board"}, {"title": "Ripley and the Queen", "lat": 51.300583, "lng": -0.492209, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "Cliffe Bridge", "lat": 50.874096, "lng": 0.015951, "img": "images/itchenor.jpg", "price": "\u00a31,100", "size": "42x30cm \u00b7 Oil on board"}, {"title": "Horsley", "lat": 51.262669, "lng": -0.431707, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "Guildford Guild Hall", "lat": 51.235832, "lng": -0.571934, "img": "images/itchenor.jpg", "price": "\u00a31,100", "size": "42x30cm \u00b7 Oil on board"}, {"title": "Sussex Light", "lat": 50.838121, "lng": -0.080679, "img": "images/itchenor.jpg", "price": "\u00a35,400", "size": "Oil on board"}, {"title": "Thurlestone Beach", "lat": 50.257987, "lng": -3.857496, "img": "images/itchenor.jpg", "price": "\u00a31,100", "size": "42x30cm \u00b7 Oil on board"}, {"title": "Thurlestone West", "lat": 50.270202, "lng": -3.874083, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "Hope Cove Harbour", "lat": 50.245286, "lng": -3.85951, "img": "images/itchenor.jpg", "price": "\u00a31,100", "size": "42x30cm \u00b7 Oil on board"}, {"title": "Bantham and Burgh", "lat": 50.280333, "lng": -3.865736, "img": "images/itchenor.jpg", "price": "\u00a32,700", "size": "60x42cm \u00b7 Oil on board"}, {"title": "Bantham Hand", "lat": 50.282322, "lng": -3.892118, "img": "images/itchenor.jpg", "price": "\u00a34,200", "size": "80x60 \u00b7 Oil on board"}, {"title": "Mine!", "lat": 50.301623, "lng": -5.237479, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "Lusty Glaze Beach", "lat": 50.42219, "lng": -5.064237, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "Chapel Porth Beach", "lat": 50.301066, "lng": -5.236108, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "Charmouth. Golden Cap", "lat": 50.733439, "lng": -2.900673, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30 \u00b7 Oil on board"}, {"title": "Regency Colour", "lat": 50.822612, "lng": -0.137965, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "Kaboom", "lat": 50.800006, "lng": -0.043647, "img": "images/itchenor.jpg", "price": "\u00a33,000", "size": "60x42cm \u00b7 Oil on board"}, {"title": "Palma Yachts", "lat": 39.566903, "lng": 2.644182, "img": "images/itchenor.jpg", "price": "\u00a33,000", "size": "42x30cm \u00b7 Oil on board"}, {"title": "Ravilious Shepherds Cottage 2", "lat": 50.843238, "lng": 0.051936, "img": "images/itchenor.jpg", "price": "\u00a31,100", "size": "42x30cm \u00b7 Oil on board"}, {"title": "After Ravilious. Shepherds Cottage", "lat": 50.843484, "lng": 0.05233, "img": "images/itchenor.jpg", "price": "\u00a31,100", "size": "42x30cm \u00b7 Oil on board"}, {"title": "Roedean", "lat": 50.81421, "lng": -0.0922, "img": "images/itchenor.jpg", "price": "\u00a31,100", "size": "42x30cm \u00b7 Oil on board"}, {"title": "Peace Bruvver", "lat": 50.822626, "lng": -0.156713, "img": "images/itchenor.jpg", "price": "\u00a31,100", "size": "42x30cm \u00b7 Oil on board"}, {"title": "Massif Jump", "lat": 45.984258, "lng": 6.722621, "img": "images/itchenor.jpg", "price": "\u00a34,200", "size": "80x60cm \u00b7 Oil on board"}, {"title": "The Very Edge", "lat": 50.724791, "lng": 0.236144, "img": "images/itchenor.jpg", "price": "\u00a34,200", "size": "80x60 \u00b7 Oil on board"}, {"title": "Flaine above the world (2 part diptych )", "lat": 45.999293, "lng": 6.711599, "img": "images/itchenor.jpg", "price": "\u00a32,000", "size": "Oil on board"}, {"title": "Rapid Decsent", "lat": 46.003043, "lng": 6.700281, "img": "images/itchenor.jpg", "price": "\u00a31,100", "size": "Oil on board"}, {"title": "Flaine 2 part diptych", "lat": 46.00885, "lng": 6.682321, "img": "images/itchenor.jpg", "price": "\u00a32,000", "size": "Oil on board"}, {"title": "Interesting Friends", "lat": -16.750375, "lng": 144.72017, "img": "images/itchenor.jpg", "price": "\u00a36,400", "size": "120x100 cm \u00b7 Oil on board"}, {"title": "St Agnes Surfers", "lat": 50.319641, "lng": -5.202223, "img": "images/itchenor.jpg", "price": "\u00a31,100", "size": "42x30cm \u00b7 Oil on board"}, {"title": "Sennen Light", "lat": 50.078714, "lng": -5.704379, "img": "images/itchenor.jpg", "price": "\u00a31,200", "size": "60x30cm \u00b7 Oil on board"}, {"title": "Chapel Porth", "lat": 50.301127, "lng": -5.235321, "img": "images/itchenor.jpg", "price": "\u00a31,600", "size": "60x30cm \u00b7 Oil on board"}, {"title": "Flushing Sailing Club", "lat": 50.163056, "lng": -5.070261, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "Menai and the Fish Trap", "lat": 53.222363, "lng": -4.183849, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30 \u00b7 Oil on board"}, {"title": "Gazelle Quay Menai", "lat": 53.244116, "lng": -4.128907, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30 \u00b7 Oil on board"}, {"title": "Fenton! (Original) Newlands Corner", "lat": 51.232698, "lng": -0.507346, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30 cm \u00b7 Oil on board"}, {"title": "Mudeford Quay", "lat": 50.727242, "lng": -1.740979, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "Malahide", "lat": 53.453012, "lng": -6.153179, "img": "images/itchenor.jpg", "price": "\u00a33,000", "size": "60x42 cm \u00b7 Oil on board"}, {"title": "Sandycove pools", "lat": 53.287665, "lng": -6.118379, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80 x30 cm \u00b7 Oil on board"}, {"title": "Seaview in the sun", "lat": 50.72105, "lng": -1.109272, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "Bosham Causeway", "lat": 50.827798, "lng": -0.853544, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "St Wulfrans", "lat": 50.816777, "lng": -0.077018, "img": "images/itchenor.jpg", "price": "\u00a31,100", "size": "42x30cm \u00b7 Oil on board"}, {"title": "East Head", "lat": 50.788699, "lng": -0.911359, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "East of the Island", "lat": 50.711015, "lng": -1.102962, "img": "images/itchenor.jpg", "price": "\u00a32,300", "size": "80x30cm \u00b7 Oil on board"}, {"title": "Alabaster Bay", "lat": 24.7589, "lng": -76.3292, "img": "images/bahamas-alabaster-bay.jpg", "price": "\u00a33,000", "size": "60\u00d742cm \u00b7 Oil on board"}, {"title": "Spanish Wells Sunrise", "lat": 24.759, "lng": -76.329, "img": "images/bahamas-spanish-wells-sunrise.jpg", "price": "\u00a35,700", "size": "80\u00d760cm \u00b7 Oil on canvas"}, {"title": "Fish-eye View", "lat": 24.757, "lng": -76.332, "img": "images/bahamas-fish-eye-view.jpg", "price": "\u00a36,350", "size": "84\u00d760cm \u00b7 Oil on birch board"}, {"title": "Wreckers View", "lat": 24.7595, "lng": -76.3285, "img": "images/bahamas-wreckers-view.jpg", "price": "\u00a33,000", "size": "60\u00d742cm \u00b7 Oil on board"}, {"title": "Cabbage Beach", "lat": 25.082, "lng": -77.321, "img": "images/bahamas-cabbage-beach.jpg", "price": "\u00a33,000", "size": "60\u00d742cm \u00b7 Oil on board"}, {"title": "Russell Island", "lat": 24.765, "lng": -76.315, "img": "images/bahamas-russell-island.jpg", "price": "\u00a33,000", "size": "60\u00d742cm \u00b7 Oil on board"}, {"title": "Harbour Island", "lat": 25.501, "lng": -76.634, "img": "images/bahamas-harbour-island.jpg", "price": "\u00a33,000", "size": "60\u00d742cm \u00b7 Oil on board"}, {"title": "Love Beach", "lat": 25.074, "lng": -77.449, "img": "images/bahamas-love-beach.jpg", "price": "\u00a31,200", "size": "42\u00d730cm \u00b7 Oil on board"}, {"title": "Sea Swings", "lat": 24.76, "lng": -76.328, "img": "images/bahamas-sea-swings.jpg", "price": "\u00a31,100", "size": "42\u00d730cm \u00b7 Oil on board"}, {"title": "Sandy Point Marina", "lat": 26.012, "lng": -77.407, "img": "images/bahamas-sandy-point-marina.jpg", "price": "\u00a31,100", "size": "42\u00d730cm \u00b7 Oil on board"}, {"title": "The Pink House", "lat": 24.7585, "lng": -76.3295, "img": "images/bahamas-pink-house.jpg", "price": "\u00a31,200", "size": "42\u00d730cm \u00b7 Oil on board"}, {"title": "Governors Harbour", "lat": 25.194, "lng": -76.244, "img": "images/bahamas-governors-harbour.jpg", "price": "\u00a31,200", "size": "42\u00d730cm \u00b7 Oil on board"}, {"title": "Paradise Ferry", "lat": 25.08, "lng": -77.318, "img": "images/bahamas-paradise-ferry.jpg", "price": "\u00a31,100", "size": "42\u00d730cm \u00b7 Oil on board"}, {"title": "South Canal", "lat": 25.15, "lng": -76.27, "img": "images/bahamas-south-canal.jpg", "price": "\u00a31,100", "size": "42\u00d730cm \u00b7 Oil on board"}, {"title": "Amalfi Vista", "lat": 40.634, "lng": 14.6027, "img": "images/amalfi-vista.jpg", "price": "\u00a33,000", "size": "60\u00d742cm \u00b7 Oil on canvas-wrapped board"}, {"title": "Blood, Slate and Tears", "lat": 40.6348, "lng": 14.602, "img": "images/amalfi-blood-slate-tears.jpg", "price": "\u00a33,000", "size": "60\u00d742cm \u00b7 Oil on canvas-wrapped board"}, {"title": "Positano", "lat": 40.6281, "lng": 14.485, "img": "images/amalfi-positano.jpg", "price": "\u00a33,000", "size": "60\u00d742cm \u00b7 Oil on canvas-wrapped board"}, {"title": "Positano Quay", "lat": 40.6275, "lng": 14.4845, "img": "images/amalfi-positano-quay.jpg", "price": "\u00a31,100", "size": "42\u00d730cm \u00b7 TOAT Sketch"}, {"title": "Amalfi Cliffs Sunset", "lat": 40.6335, "lng": 14.6032, "img": "images/amalfi-cliffs-sunset.jpg", "price": "\u00a31,100", "size": "42\u00d730cm \u00b7 TOAT Sketch"}, {"title": "Capri Arch", "lat": 40.5503, "lng": 14.2417, "img": "images/amalfi-capri-arch.jpg", "price": "\u00a31,200", "size": "42\u00d730cm \u00b7 TOAT Sketch"}, {"title": "Gracie's View", "lat": 40.551, "lng": 14.2425, "img": "images/amalfi-capri-arch.jpg", "price": "\u00a31,000", "size": "42\u00d730cm \u00b7 TOAT Sketch"}, {"title": "Squint", "lat": 45.0193, "lng": 6.8554, "img": "images/alps-squint.jpg", "price": "\u00a31,100", "size": "42\u00d730cm \u00b7 Oil on canvas"}, {"title": "The Mountain Church", "lat": 45.0181, "lng": 6.8548, "img": "images/alps-mountain-church.jpg", "price": "\u00a31,100", "size": "42\u00d730cm \u00b7 Oil on canvas"}, {"title": "The Bubble Lift", "lat": 45.0198, "lng": 6.8561, "img": "images/alps-bubble-lift.jpg", "price": "\u00a31,100", "size": "42\u00d730cm \u00b7 Oil on canvas"}, {"title": "Sestriere", "lat": 44.9587, "lng": 6.8772, "img": "images/alps-sestriere.jpg", "price": "\u00a31,100", "size": "42\u00d730cm \u00b7 Oil on canvas"}];
 
-<div class="map-footer">
-  <p class="map-note">Tap any pin to see the painting · zoom and explore freely · opens in Google Maps on your phone</p>
-  <a href="https://wa.me/447880601709?text=Hello%20Tony%2C%20I%20found%20you%20on%20the%20map%20and%20I%27m%20interested%20in%20a%20painting." class="wa-link" target="_blank">Enquire via WhatsApp</a>
-</div>
+function initMap() {
+  const map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 6,
+    center: { lat: 52.0, lng: -2.0 },
+    mapTypeControl: true,
+    streetViewControl: false,
+    fullscreenControl: true,
+    styles: [
+      { featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+    ]
+  });
 
+  const infoWindow = new google.maps.InfoWindow();
+  const bounds = new google.maps.LatLngBounds();
+  let ukOnly = true;
+
+  paintings.forEach(p => {
+    const isUK = p.lat > 49 && p.lat < 61 && p.lng > -8.5 && p.lng < 2.1;
+    if (isUK) bounds.extend({ lat: p.lat, lng: p.lng });
+
+    const marker = new google.maps.Marker({
+      position: { lat: p.lat, lng: p.lng },
+      map,
+      title: p.title,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 9,
+        fillColor: '#8b6f47',
+        fillOpacity: 0.9,
+        strokeColor: '#fff',
+        strokeWeight: 2,
+      }
+    });
+
+    marker.addListener('click', () => {
+      const msg = encodeURIComponent(`Hello Tony, I'm interested in "${p.title}" (${p.price}).`);
+      const content = `
+        <div class="iw-wrap">
+          <img class="iw-img" src="${p.img}" alt="${p.title}" onerror="this.style.display='none'">
+          <div class="iw-title">${p.title}</div>
+          <div class="iw-size">${p.size}</div>
+          <div class="iw-price">${p.price}</div>
+          <a class="iw-btn" href="https://wa.me/447880601709?text=${msg}" target="_blank">Enquire via WhatsApp</a>
+        </div>`;
+      infoWindow.setContent(content);
+      infoWindow.open(map, marker);
+    });
+  });
+
+  // Fit to UK paintings on load
+  map.fitBounds(bounds, { padding: 40 });
+}
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYredcbFKqrJLNSWO0iDtrzarFLgCOoKs&callback=initMap">
+</script>
 </body>
 </html>
