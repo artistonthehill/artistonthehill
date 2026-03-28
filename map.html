@@ -3,128 +3,68 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Where I Paint — Tony Parsons</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<title>Where I Paint — Tony Parsons | Artist on the Hill</title>
+<meta name="description" content="77 original oil paintings mapped to their exact locations — from Sussex to the Bahamas, Amalfi to the Alps. Tony Parsons, plein air painter.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --ink:#1a1714; --parchment:#f7f4ef; --warm-mid:#e8e2d9;
-  --accent:#8b6f47; --accent-light:#c49a6c; --white:#fff;
-  --text-light:#7a6e65; --nav-h:72px;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;}
-body{font-family:'Karla',sans-serif;background:var(--ink);overflow:hidden;}
+  :root {
+    --ink:#1a1714; --parchment:#f7f4ef; --warm-mid:#e8e2d9;
+    --accent:#8b6f47; --accent-light:#c49a6c; --white:#fff;
+    --text-light:#7a6e65; --nav-h:64px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; }
+  body { font-family:'Karla',sans-serif; background:var(--parchment); color:var(--ink); display:flex; flex-direction:column; }
 
-nav{
-  position:fixed;top:0;left:0;right:0;height:var(--nav-h);
-  background:rgba(18,15,12,0.96);backdrop-filter:blur(8px);
-  border-bottom:1px solid rgba(255,255,255,0.08);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 32px;z-index:1000;
-}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;
-  letter-spacing:0.08em;color:var(--white);text-decoration:none;line-height:1.2;}
-.nav-logo span{display:block;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;
-  color:rgba(255,255,255,0.4);font-family:'Karla',sans-serif;}
-.nav-back{font-family:'Karla',sans-serif;font-size:0.7rem;font-weight:400;
-  letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);
-  text-decoration:none;transition:color 0.2s;}
-.nav-back:hover{color:var(--accent-light);}
+  nav {
+    height:var(--nav-h); background:var(--parchment);
+    border-bottom:1px solid var(--warm-mid);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 32px; flex-shrink:0;
+  }
+  .nav-logo { font-family:'Cormorant Garamond',serif; font-size:1.15rem; font-weight:400; letter-spacing:0.08em; color:var(--ink); text-decoration:none; line-height:1.2; }
+  .nav-logo span { display:block; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-light); font-family:'Karla',sans-serif; }
+  .nav-back { font-family:'Karla',sans-serif; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
+  .nav-back:hover { color:var(--accent); }
 
-#map{
-  position:fixed;
-  top:var(--nav-h);left:0;right:0;bottom:0;
-}
+  .map-header {
+    padding:20px 32px 16px;
+    display:flex; align-items:baseline; justify-content:space-between;
+    flex-wrap:wrap; gap:8px; flex-shrink:0;
+    border-bottom:1px solid var(--warm-mid);
+  }
+  .map-title { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:300; }
+  .map-title em { font-style:italic; color:var(--accent); }
+  .map-subtitle { font-family:'Karla',sans-serif; font-size:0.72rem; color:var(--text-light); letter-spacing:0.08em; }
 
-/* Photo pins */
-.photo-pin-wrap{display:flex;flex-direction:column;align-items:center;cursor:pointer;}
-.photo-pin{
-  width:52px;height:52px;
-  border:2.5px solid var(--accent-light);
-  border-radius:5px;overflow:hidden;
-  box-shadow:0 3px 16px rgba(0,0,0,0.7);
-  background:#111;
-  transition:transform 0.15s,border-color 0.15s,box-shadow 0.15s;
-}
-.photo-pin:hover{transform:scale(1.18);border-color:#fff;box-shadow:0 6px 24px rgba(0,0,0,0.85);}
-.photo-pin img{width:100%;height:100%;object-fit:cover;display:block;}
-.pin-tail{width:0;height:0;
-  border-left:5px solid transparent;border-right:5px solid transparent;
-  border-top:7px solid var(--accent-light);margin-top:-1px;}
+  .map-wrap { flex:1; position:relative; min-height:0; }
+  .map-wrap iframe { width:100%; height:100%; border:none; display:block; min-height:500px; }
 
-/* Info panel */
-.info-panel{
-  position:fixed;bottom:0;left:0;right:0;
-  background:rgba(14,11,9,0.97);
-  border-top:1px solid rgba(196,154,108,0.2);
-  padding:16px 24px;
-  display:flex;align-items:center;gap:16px;
-  z-index:1000;
-  transform:translateY(100%);
-  transition:transform 0.3s ease;
-  max-width:100%;
-}
-.info-panel.open{transform:translateY(0);}
-.info-img{width:72px;height:72px;object-fit:cover;border-radius:3px;
-  flex-shrink:0;border:1px solid rgba(196,154,108,0.2);background:#222;}
-.info-text{flex:1;min-width:0;}
-.info-title{font-family:'Cormorant Garamond',serif;font-size:16px;color:#fff;
-  margin-bottom:2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.info-meta{font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:0.12em;
-  text-transform:uppercase;margin-bottom:6px;}
-.info-price{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--accent-light);}
-.wa-btn{
-  background:#25D366;color:#fff;border:none;
-  padding:10px 16px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;
-  cursor:pointer;border-radius:2px;white-space:nowrap;flex-shrink:0;
-  font-family:'Karla',sans-serif;
-}
-.wa-btn:hover{background:#1fb85a;}
-.info-close{margin-left:4px;background:none;border:none;
-  color:rgba(255,255,255,0.3);font-size:20px;cursor:pointer;
-  padding:4px 8px;flex-shrink:0;}
-.info-close:hover{color:#fff;}
+  .map-footer {
+    padding:12px 32px;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:12px;
+    border-top:1px solid var(--warm-mid);
+    background:var(--parchment); flex-shrink:0;
+  }
+  .map-note { font-family:'Karla',sans-serif; font-size:0.72rem; color:var(--text-light); }
+  .wa-link {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--ink); color:var(--white);
+    padding:9px 18px; font-family:'Karla',sans-serif;
+    font-size:0.7rem; font-weight:500; letter-spacing:0.14em;
+    text-transform:uppercase; text-decoration:none; transition:background 0.2s;
+  }
+  .wa-link:hover { background:var(--accent); }
 
-/* Controls */
-.map-controls{
-  position:fixed;top:calc(var(--nav-h) + 12px);right:12px;
-  z-index:999;display:flex;flex-direction:column;gap:6px;
-}
-.ctrl-group{display:flex;flex-direction:column;gap:3px;}
-.ctrl-btn{
-  background:rgba(14,11,9,0.92);color:rgba(255,255,255,0.6);
-  border:1px solid rgba(255,255,255,0.1);padding:7px 14px;
-  font-size:10px;letter-spacing:0.12em;text-transform:uppercase;
-  cursor:pointer;transition:all 0.2s;border-radius:2px;
-  font-family:'Karla',sans-serif;white-space:nowrap;
-  text-align:left;
-}
-.ctrl-btn.active,.ctrl-btn:hover{color:var(--accent-light);border-color:rgba(196,154,108,0.35);}
-.ctrl-divider{height:1px;background:rgba(255,255,255,0.06);margin:4px 0;}
-
-.count-badge{
-  position:fixed;top:calc(var(--nav-h) + 12px);left:12px;
-  z-index:999;
-  background:rgba(14,11,9,0.88);
-  border:1px solid rgba(255,255,255,0.08);
-  padding:8px 14px;border-radius:2px;
-  font-family:'Karla',sans-serif;font-size:10px;
-  letter-spacing:0.12em;text-transform:uppercase;
-  color:rgba(255,255,255,0.45);
-}
-.count-badge span{color:var(--accent-light);font-size:13px;font-weight:500;display:block;}
-
-/* Leaflet overrides */
-.leaflet-control-zoom{border:none!important;}
-.leaflet-control-zoom a{
-  background:rgba(14,11,9,0.92)!important;
-  color:rgba(255,255,255,0.6)!important;
-  border:1px solid rgba(255,255,255,0.1)!important;
-}
-.leaflet-control-zoom a:hover{color:var(--accent-light)!important;}
-.leaflet-control-attribution{display:none;}
-
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Karla:wght@300;400;500&display=swap');
+  @media(max-width:600px) {
+    nav { padding:0 16px; }
+    .map-header { padding:14px 16px 12px; }
+    .map-footer { padding:10px 16px; }
+    .map-title { font-size:1.2rem; }
+  }
 </style>
 </head>
 <body>
@@ -134,136 +74,26 @@ nav{
   <a href="index.html" class="nav-back">← Back to site</a>
 </nav>
 
-<div id="map"></div>
-
-<div class="count-badge">
-  <span id="visible-count">77</span>
-  paintings mapped
-</div>
-
-<div class="map-controls">
-  <div class="ctrl-group">
-    <button class="ctrl-btn active" onclick="setView('uk',this)">🇬🇧 UK</button>
-    <button class="ctrl-btn" onclick="setView('world',this)">🌍 World</button>
-  </div>
-  <div class="ctrl-divider"></div>
-  <div class="ctrl-group">
-    <button class="ctrl-btn active" id="f-all" onclick="filterCat('all',this)">All</button>
-    <button class="ctrl-btn" id="f-marine" onclick="filterCat('marine',this)">Marine</button>
-    <button class="ctrl-btn" id="f-landscape" onclick="filterCat('landscape',this)">Landscape</button>
+<div class="map-header">
+  <div>
+    <div class="map-title">Where I <em>Paint</em></div>
+    <div class="map-subtitle">77 paintings · Sussex to the Bahamas · tap any pin to see more</div>
   </div>
 </div>
 
-<div class="info-panel" id="info-panel">
-  <img class="info-img" id="info-img" src="" alt="">
-  <div class="info-text">
-    <div class="info-title" id="info-title"></div>
-    <div class="info-meta" id="info-meta"></div>
-    <div class="info-price" id="info-price"></div>
-  </div>
-  <button class="wa-btn" id="info-wa">WhatsApp →</button>
-  <button class="info-close" onclick="closePanel()">×</button>
+<div class="map-wrap">
+  <iframe
+    src="https://www.google.com/maps/d/u/0/embed?mid=1GSmtJ1RlFMByds9B8hbt8ycnkHSVZjo&ehbc=2E312F"
+    allowfullscreen
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script>
-const allPaintings = [{"title": "Itchenor in the Sun", "meta": "60\u00d730cm \u00b7 Oil on canvas", "price": "\u00a31,700", "lat": 50.806564, "lng": -0.864358, "region": "uk", "img": "images/itchenor.jpg", "category": "marine"}, {"title": "West Country Buoy", "meta": "55\u00d730cm \u00b7 Oil on board", "price": "\u00a31,600", "lat": 50.396608, "lng": -3.511417, "region": "uk", "img": "images/buoy.jpg", "category": "marine"}, {"title": "Richmond Bridge", "meta": "60\u00d730cm \u00b7 Oil on canvas", "price": "\u00a31,700", "lat": 51.456917, "lng": -0.307158, "region": "uk", "img": "images/richmond.jpg", "category": "landscape"}, {"title": "That Day on the Undercliff", "meta": "80\u00d730cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.800576, "lng": -0.044967, "region": "uk", "img": "images/undercliff.jpg", "category": "landscape"}, {"title": "De La Warr Pavilion", "meta": "80\u00d730cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.837312, "lng": 0.472187, "region": "uk", "img": "images/delawarr.jpg", "category": "landscape"}, {"title": "Saltdean & Peacehaven Cliffs", "meta": "A3 \u00b7 Oil on board", "price": "\u00a31,100", "lat": 50.800736, "lng": -0.045977, "region": "uk", "img": "images/saltdeanandpeacehaven.jpg", "category": "landscape"}, {"title": "Portchester Creek", "meta": "80\u00d730cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.849599, "lng": -1.177874, "region": "uk", "img": "images/porchester.jpg", "category": "marine"}, {"title": "Hengistbury Head", "meta": "80\u00d730cm \u00b7 Oil on board", "price": "\u00a32,000", "lat": 50.71438, "lng": -1.74639, "region": "uk", "img": "images/hengistbury.jpg", "category": "landscape"}, {"title": "A Study in the Nature of Reflection", "meta": "121\u00d791cm \u00b7 Oil on canvas", "price": "\u00a37,300", "lat": 8.337697, "lng": 98.488238, "region": "world", "img": "images/reflection.jpg", "category": "landscape"}, {"title": "Palma Marina Diptych", "meta": "2 \u00d7 A3 \u00b7 Oil on board", "price": "\u00a32,300", "lat": 39.567142, "lng": 2.648029, "region": "world", "img": "images/palma.jpg", "category": "marine"}, {"title": "Ripley and the Queen", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 51.300583, "lng": -0.492209, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_b1f1e1bbd656441a847d94b01ae32588~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_b1f1e1bbd656441a847d94b01ae32588~mv2.jpg", "category": "landscape"}, {"title": "Cliffe Bridge", "meta": "42x30cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 50.874096, "lng": 0.015951, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_6f8c25bfffb647d99dcd4e49dc9aef41~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_6f8c25bfffb647d99dcd4e49dc9aef41~mv2.jpg", "category": "landscape"}, {"title": "Horsley", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 51.262669, "lng": -0.431707, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_68940bce9ab54156b6cc9bca1a471b61~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_68940bce9ab54156b6cc9bca1a471b61~mv2.jpg", "category": "landscape"}, {"title": "Guildford Guild Hall", "meta": "42x30cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 51.235832, "lng": -0.571934, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_25b9aed0bddd43d6b3e969b68fad0745~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_25b9aed0bddd43d6b3e969b68fad0745~mv2.jpg", "category": "landscape"}, {"title": "Sussex Light", "meta": "Oil on board", "price": "\u00a35,400", "lat": 50.838121, "lng": -0.080679, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_dbd6db1cdba144e1b9c88bcafdd176ad~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_dbd6db1cdba144e1b9c88bcafdd176ad~mv2.jpg", "category": "landscape"}, {"title": "Thurlestone Beach", "meta": "42x30cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 50.257987, "lng": -3.857496, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_e41dcf27c838404fa8cb94a178c5500d~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_e41dcf27c838404fa8cb94a178c5500d~mv2.jpg", "category": "marine"}, {"title": "Thurlestone West", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.270202, "lng": -3.874083, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_f9a5d15588c244eeaa35adfe3133c994~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_f9a5d15588c244eeaa35adfe3133c994~mv2.jpg", "category": "landscape"}, {"title": "Hope Cove Harbour", "meta": "42x30cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 50.245286, "lng": -3.85951, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_ce2dd5b479d44d0099ec67f6ba21c9c4~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_ce2dd5b479d44d0099ec67f6ba21c9c4~mv2.jpg", "category": "marine"}, {"title": "Bantham and Burgh", "meta": "60x42cm \u00b7 Oil on board", "price": "\u00a32,700", "lat": 50.280333, "lng": -3.865736, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_a48b21fa23bb42e989c36831a514f3d4~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_a48b21fa23bb42e989c36831a514f3d4~mv2.jpg", "category": "landscape"}, {"title": "Bantham Hand", "meta": "80x60 \u00b7 Oil on board", "price": "\u00a34,200", "lat": 50.282322, "lng": -3.892118, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_7f8598d36c9c4a3494933f304a1f57ca~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_7f8598d36c9c4a3494933f304a1f57ca~mv2.jpg", "category": "landscape"}, {"title": "Mine!", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.301623, "lng": -5.237479, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_0fee8683d5f84098bff6dde1b4635511~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_0fee8683d5f84098bff6dde1b4635511~mv2.jpg", "category": "landscape"}, {"title": "Lusty Glaze Beach", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.42219, "lng": -5.064237, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_afd163b3f8634078bcba1455d1d344b7~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_afd163b3f8634078bcba1455d1d344b7~mv2.jpg", "category": "marine"}, {"title": "Chapel Porth Beach", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.301066, "lng": -5.236108, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_6bc6898e21894d4d9a553f055f81823a~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_6bc6898e21894d4d9a553f055f81823a~mv2.jpg", "category": "marine"}, {"title": "Charmouth. Golden Cap", "meta": "80x30 \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.733439, "lng": -2.900673, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_9405e2a6e3364c00a3088bd172101139~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_9405e2a6e3364c00a3088bd172101139~mv2.jpg", "category": "landscape"}, {"title": "Regency Colour", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.822612, "lng": -0.137965, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_5fecf3390cd64dc9bea7bf0ef210645a~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_5fecf3390cd64dc9bea7bf0ef210645a~mv2.jpg", "category": "landscape"}, {"title": "Kaboom", "meta": "60x42cm \u00b7 Oil on board", "price": "\u00a33,000", "lat": 50.800006, "lng": -0.043647, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_dff1f8765a8b461bbf2e77777a8c9084~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_dff1f8765a8b461bbf2e77777a8c9084~mv2.jpg", "category": "landscape"}, {"title": "Palma Yachts", "meta": "42x30cm \u00b7 Oil on board", "price": "\u00a33,000", "lat": 39.566903, "lng": 2.644182, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_2320d392278149c983f491f02ce42154~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_2320d392278149c983f491f02ce42154~mv2.jpg", "category": "landscape"}, {"title": "Ravilious Shepherds Cottage 2", "meta": "42x30cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 50.843238, "lng": 0.051936, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_a77f8cbdde984c50af999a0a41d02a30~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_a77f8cbdde984c50af999a0a41d02a30~mv2.jpg", "category": "landscape"}, {"title": "After Ravilious. Shepherds Cottage", "meta": "42x30cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 50.843484, "lng": 0.05233, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_da6bb2bd5c7c4397a89d95fc0def8e7f~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_da6bb2bd5c7c4397a89d95fc0def8e7f~mv2.jpg", "category": "landscape"}, {"title": "Roedean", "meta": "42x30cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 50.81421, "lng": -0.0922, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_5121c8d8c39b4923894245a99c9aec72~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_5121c8d8c39b4923894245a99c9aec72~mv2.jpg", "category": "landscape"}, {"title": "Peace Bruvver", "meta": "42x30cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 50.822626, "lng": -0.156713, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_fc1dfdb941ef4d68b35921315fa0f0d4~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_fc1dfdb941ef4d68b35921315fa0f0d4~mv2.jpg", "category": "landscape"}, {"title": "Massif Jump", "meta": "80x60cm \u00b7 Oil on board", "price": "\u00a34,200", "lat": 45.984258, "lng": 6.722621, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_01dd68e438084aa091db5ed383223499~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_01dd68e438084aa091db5ed383223499~mv2.jpg", "category": "landscape"}, {"title": "The Very Edge", "meta": "80x60 \u00b7 Oil on board", "price": "\u00a34,200", "lat": 50.724791, "lng": 0.236144, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_c6018ddd853f477ba8f7097e450446e8~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_c6018ddd853f477ba8f7097e450446e8~mv2.jpg", "category": "landscape"}, {"title": "Flaine above the world (2 part diptych )", "meta": "Oil on board", "price": "\u00a32,000", "lat": 45.999293, "lng": 6.711599, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_b8edb92ff9c04ba99515bff702861457~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_b8edb92ff9c04ba99515bff702861457~mv2.jpg", "category": "landscape"}, {"title": "Rapid Decsent", "meta": "Oil on board", "price": "\u00a31,100", "lat": 46.003043, "lng": 6.700281, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_5b1e525f6e0a47fbb5c65c64381c4fe4~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_5b1e525f6e0a47fbb5c65c64381c4fe4~mv2.jpg", "category": "landscape"}, {"title": "Flaine 2 part diptych", "meta": "Oil on board", "price": "\u00a32,000", "lat": 46.00885, "lng": 6.682321, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_4a0f5db66d654deda1aaa12dba41fe72~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_4a0f5db66d654deda1aaa12dba41fe72~mv2.jpg", "category": "landscape"}, {"title": "Interesting Friends", "meta": "120x100 cm \u00b7 Oil on board", "price": "\u00a36,400", "lat": -16.750375, "lng": 144.72017, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_de49b51e927746babd1d80eb4d9f5d37~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_de49b51e927746babd1d80eb4d9f5d37~mv2.jpg", "category": "landscape"}, {"title": "St Agnes Surfers", "meta": "42x30cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 50.319641, "lng": -5.202223, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_cfa1eed53fe348789ab03f41365e13e0~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_cfa1eed53fe348789ab03f41365e13e0~mv2.jpg", "category": "marine"}, {"title": "Sennen Light", "meta": "60x30cm \u00b7 Oil on board", "price": "\u00a31,200", "lat": 50.078714, "lng": -5.704379, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_3f5b77605d0a4fae93941c195f5dbcb6~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_3f5b77605d0a4fae93941c195f5dbcb6~mv2.jpg", "category": "landscape"}, {"title": "Chapel Porth", "meta": "60x30cm \u00b7 Oil on board", "price": "\u00a31,600", "lat": 50.301127, "lng": -5.235321, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_6cea3375df4847be8984c4d6a4f26d80~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_6cea3375df4847be8984c4d6a4f26d80~mv2.jpg", "category": "landscape"}, {"title": "Flushing Sailing Club", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.163056, "lng": -5.070261, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_062f755b37504770930a72360479a0ec~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_062f755b37504770930a72360479a0ec~mv2.jpg", "category": "marine"}, {"title": "Menai and the Fish Trap", "meta": "80x30 \u00b7 Oil on board", "price": "\u00a32,300", "lat": 53.222363, "lng": -4.183849, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_609b452c82cd49beb7c6c6cb3631850f~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_609b452c82cd49beb7c6c6cb3631850f~mv2.jpg", "category": "landscape"}, {"title": "Gazelle Quay Menai", "meta": "80x30 \u00b7 Oil on board", "price": "\u00a32,300", "lat": 53.244116, "lng": -4.128907, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_3718ecd4d0ff4548b7ac86e0e8e71be3~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_3718ecd4d0ff4548b7ac86e0e8e71be3~mv2.jpg", "category": "marine"}, {"title": "Fenton! (Original) Newlands Corner", "meta": "80x30 cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 51.232698, "lng": -0.507346, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_c914de69652949768e475d473d3d3542~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_c914de69652949768e475d473d3d3542~mv2.jpg", "category": "landscape"}, {"title": "Mudeford Quay", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.727242, "lng": -1.740979, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_cd8c33ead11d402597a35b7135d35cc7~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_cd8c33ead11d402597a35b7135d35cc7~mv2.jpg", "category": "marine"}, {"title": "Malahide", "meta": "60x42 cm \u00b7 Oil on board", "price": "\u00a33,000", "lat": 53.453012, "lng": -6.153179, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_3028fa4173f046dc9e99dff3ff6c2fc1~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_3028fa4173f046dc9e99dff3ff6c2fc1~mv2.jpg", "category": "landscape"}, {"title": "Sandycove pools", "meta": "80 x30 cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 53.287665, "lng": -6.118379, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_42d01185ded741288750009df5661252~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_42d01185ded741288750009df5661252~mv2.jpg", "category": "marine"}, {"title": "Seaview in the sun", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.72105, "lng": -1.109272, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_a6467be7a4c6401b9f803149a865e161~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_a6467be7a4c6401b9f803149a865e161~mv2.jpg", "category": "marine"}, {"title": "Bosham Causeway", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.827798, "lng": -0.853544, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_e44c52ff26ad4973b0442c2eaf95b76c~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_e44c52ff26ad4973b0442c2eaf95b76c~mv2.jpg", "category": "landscape"}, {"title": "St Wulfrans", "meta": "42x30cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 50.816777, "lng": -0.077018, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_248d2698efee414684914db0c9b89664~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_248d2698efee414684914db0c9b89664~mv2.jpg", "category": "landscape"}, {"title": "East Head", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.788699, "lng": -0.911359, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_34d809a3277945a38a7c9c1208ce144a~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_34d809a3277945a38a7c9c1208ce144a~mv2.jpg", "category": "landscape"}, {"title": "East of the Island", "meta": "80x30cm \u00b7 Oil on board", "price": "\u00a32,300", "lat": 50.711015, "lng": -1.102962, "region": "uk", "img": "https://static.wixstatic.com/media/9dfbf6_972f5da4f55e415ca25ca9fc7783ab4c~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_972f5da4f55e415ca25ca9fc7783ab4c~mv2.jpg", "category": "marine"}, {"title": "Alabaster Bay", "meta": "60\u00d742cm \u00b7 Oil on board", "price": "\u00a33,000", "lat": 24.7589, "lng": -76.3292, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_bc6f0e418ed340388b1ba89d42c35eb5~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_bc6f0e418ed340388b1ba89d42c35eb5~mv2.jpg", "category": "marine"}, {"title": "Spanish Wells Sunrise", "meta": "80\u00d760cm \u00b7 Oil on canvas", "price": "\u00a35,700", "lat": 24.759, "lng": -76.329, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_dff281ae93164903ab2cf9157afbc5c2~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_dff281ae93164903ab2cf9157afbc5c2~mv2.jpg", "category": "marine"}, {"title": "Fish-eye View", "meta": "84\u00d760cm \u00b7 Oil on birch board", "price": "\u00a36,350", "lat": 24.757, "lng": -76.332, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_058293ef0b4b4f07856923e825d62100~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_058293ef0b4b4f07856923e825d62100~mv2.jpg", "category": "marine"}, {"title": "Wreckers View", "meta": "60\u00d742cm \u00b7 Oil on board", "price": "\u00a33,000", "lat": 24.7595, "lng": -76.3285, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_e166c7c526324da19ba90b4b1cfadc76~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_e166c7c526324da19ba90b4b1cfadc76~mv2.jpg", "category": "marine"}, {"title": "Cabbage Beach", "meta": "60\u00d742cm \u00b7 Oil on board", "price": "\u00a33,000", "lat": 25.082, "lng": -77.321, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_f60391df94754806a8e7140633426c80~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_f60391df94754806a8e7140633426c80~mv2.jpg", "category": "marine"}, {"title": "Russell Island", "meta": "60\u00d742cm \u00b7 Oil on board", "price": "\u00a33,000", "lat": 24.765, "lng": -76.315, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_bc6f0e418ed340388b1ba89d42c35eb5~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_bc6f0e418ed340238b1ba89d42c35eb5~mv2.jpg", "category": "marine"}, {"title": "Harbour Island", "meta": "60\u00d742cm \u00b7 Oil on board", "price": "\u00a33,000", "lat": 25.501, "lng": -76.634, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_dff281ae93164903ab2cf9157afbc5c2~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_dff281ae93164903ab2cf9157afbc5c2~mv2.jpg", "category": "marine"}, {"title": "Love Beach", "meta": "42\u00d730cm \u00b7 Oil on board", "price": "\u00a31,200", "lat": 25.074, "lng": -77.449, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_f60391df94754806a8e7140633426c80~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_f60391df94754806a8e7140633426c80~mv2.jpg", "category": "marine"}, {"title": "Sea Swings", "meta": "42\u00d730cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 24.76, "lng": -76.328, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_bc6f0e418ed340388b1ba89d42c35eb5~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_bc6f0e418ed340388b1ba89d42c35eb5~mv2.jpg", "category": "marine"}, {"title": "Sandy Point Marina", "meta": "42\u00d730cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 26.012, "lng": -77.407, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_e166c7c526324da19ba90b4b1cfadc76~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_e166c7c526324da19ba90b4b1cfadc76~mv2.jpg", "category": "marine"}, {"title": "The Pink House", "meta": "42\u00d730cm \u00b7 Oil on board", "price": "\u00a31,200", "lat": 24.7585, "lng": -76.3295, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_f5bd98f743f24e498bb7804ec618bf35~mv2.jpg/v1/fill/w_400,h_300,al_c,q_85,enc_avif,quality_auto/9dfbf6_f5bd98f743f24e498bb7804ec618bf35~mv2.jpg", "category": "marine"}, {"title": "Governors Harbour", "meta": "42\u00d730cm \u00b7 Oil on board", "price": "\u00a31,200", "lat": 25.194, "lng": -76.244, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_bc6f0e418ed340388b1ba89d42c35eb5~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_bc6f0e418ed340388b1ba89d42c35eb5~mv2.jpg", "category": "marine"}, {"title": "Paradise Ferry", "meta": "42\u00d730cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 25.08, "lng": -77.318, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_dff281ae93164903ab2cf9157afbc5c2~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_dff281ae93164903ab2cf9157afbc5c2~mv2.jpg", "category": "marine"}, {"title": "South Canal", "meta": "42\u00d730cm \u00b7 Oil on board", "price": "\u00a31,100", "lat": 25.15, "lng": -76.27, "region": "world", "img": "https://static.wixstatic.com/media/9dfbf6_e166c7c526324da19ba90b4b1cfadc76~mv2.jpg/v1/fill/w_400,h_300,al_c,q_80,enc_avif,quality_auto/9dfbf6_e166c7c526324da19ba90b4b1cfadc76~mv2.jpg", "category": "marine"}, {"title": "Amalfi Vista", "meta": "60\u00d742cm \u00b7 Oil on canvas-wrapped board", "price": "\u00a33,000", "lat": 40.634, "lng": 14.6027, "region": "world", "img": "images/amalfi-vista.jpg", "category": "landscape"}, {"title": "Blood, Slate and Tears", "meta": "60\u00d742cm \u00b7 Oil on canvas-wrapped board", "price": "\u00a33,000", "lat": 40.6348, "lng": 14.602, "region": "world", "img": "images/amalfi-blood-slate-tears.jpg", "category": "landscape"}, {"title": "Positano", "meta": "60\u00d742cm \u00b7 Oil on canvas-wrapped board", "price": "\u00a33,000", "lat": 40.6281, "lng": 14.485, "region": "world", "img": "images/amalfi-positano.jpg", "category": "landscape"}, {"title": "Positano Quay", "meta": "42\u00d730cm \u00b7 TOAT Sketch", "price": "\u00a31,100", "lat": 40.6275, "lng": 14.4845, "region": "world", "img": "images/amalfi-positano-quay.jpg", "category": "landscape"}, {"title": "Amalfi Cliffs Sunset", "meta": "42\u00d730cm \u00b7 TOAT Sketch", "price": "\u00a31,100", "lat": 40.6335, "lng": 14.6032, "region": "world", "img": "images/amalfi-cliffs-sunset.jpg", "category": "landscape"}, {"title": "Capri Arch", "meta": "42\u00d730cm \u00b7 TOAT Sketch", "price": "\u00a31,200", "lat": 40.5503, "lng": 14.2417, "region": "world", "img": "images/amalfi-capri-arch.jpg", "category": "landscape"}, {"title": "Gracie's View", "meta": "42\u00d730cm \u00b7 TOAT Sketch", "price": "\u00a31,000", "lat": 40.551, "lng": 14.2425, "region": "world", "img": "images/amalfi-capri-arch.jpg", "category": "landscape"}, {"title": "Squint", "meta": "42\u00d730cm \u00b7 Oil on canvas", "price": "\u00a31,100", "lat": 45.0193, "lng": 6.8554, "region": "world", "img": "images/alps-squint.jpg", "category": "landscape"}, {"title": "The Mountain Church", "meta": "42\u00d730cm \u00b7 Oil on canvas", "price": "\u00a31,100", "lat": 45.0181, "lng": 6.8548, "region": "world", "img": "images/alps-mountain-church.jpg", "category": "landscape"}, {"title": "The Bubble Lift", "meta": "42\u00d730cm \u00b7 Oil on canvas", "price": "\u00a31,100", "lat": 45.0198, "lng": 6.8561, "region": "world", "img": "images/alps-bubble-lift.jpg", "category": "landscape"}, {"title": "Sestriere", "meta": "42\u00d730cm \u00b7 Oil on canvas", "price": "\u00a31,100", "lat": 44.9587, "lng": 6.8772, "region": "world", "img": "images/alps-sestriere.jpg", "category": "landscape"}]];
+<div class="map-footer">
+  <p class="map-note">Tap any pin to see the painting · zoom and explore freely · opens in Google Maps on your phone</p>
+  <a href="https://wa.me/447880601709?text=Hello%20Tony%2C%20I%20found%20you%20on%20the%20map%20and%20I%27m%20interested%20in%20a%20painting." class="wa-link" target="_blank">Enquire via WhatsApp</a>
+</div>
 
-const views = {
-  uk:    {center:[52.0, -2.0], zoom:6},
-  world: {center:[35, 10],    zoom:2}
-};
-
-const map = L.map('map', {
-  center: views.uk.center, zoom: views.uk.zoom, zoomControl: true
-});
-
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  attribution: '', maxZoom: 19
-}).addTo(map);
-
-let markers = [];
-let currentView = 'uk';
-let currentCat = 'all';
-
-function makeIcon(p) {
-  const fallback = `<div style="width:100%;height:100%;background:#2a2520;display:flex;align-items:center;justify-content:center;color:rgba(196,154,108,0.4);font-size:18px;">🎨</div>`;
-  return L.divIcon({
-    className: '',
-    html: `<div class="photo-pin-wrap">
-      <div class="photo-pin">
-        <img src="${p.img}" alt="${p.title}" loading="lazy"
-             onerror="this.outerHTML='${fallback}'">
-      </div>
-      <div class="pin-tail"></div>
-    </div>`,
-    iconSize: [52, 63], iconAnchor: [26, 63]
-  });
-}
-
-function buildMarkers() {
-  markers.forEach(m => map.removeLayer(m));
-  markers = [];
-  let count = 0;
-  allPaintings.forEach(p => {
-    const inView = (currentView === 'world') || (p.region === 'uk');
-    const inCat = (currentCat === 'all') || (p.category === currentCat);
-    if (!inView || !inCat) return;
-    const m = L.marker([p.lat, p.lng], {icon: makeIcon(p)}).addTo(map);
-    m.on('click', () => showPanel(p));
-    markers.push(m);
-    count++;
-  });
-  document.getElementById('visible-count').textContent = count;
-}
-
-function setView(v, btn) {
-  currentView = v;
-  document.querySelectorAll('.ctrl-btn').forEach(b => {
-    if (b.textContent.includes('UK') || b.textContent.includes('World'))
-      b.classList.remove('active');
-  });
-  btn.classList.add('active');
-  buildMarkers();
-  closePanel();
-  if (v === 'uk') {
-    const ukPaintings = allPaintings.filter(p => p.region === 'uk');
-    if (ukPaintings.length > 0) {
-      const bounds = L.latLngBounds(ukPaintings.map(p => [p.lat, p.lng]));
-      map.flyToBounds(bounds.pad(0.1), {duration: 1.2});
-    }
-  } else {
-    map.flyTo(views[v].center, views[v].zoom, {duration: 1.4});
-  }
-}
-
-function filterCat(cat, btn) {
-  currentCat = cat;
-  document.querySelectorAll('#f-all,#f-marine,#f-landscape').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  buildMarkers();
-}
-
-function showPanel(p) {
-  document.getElementById('info-img').src = p.img;
-  document.getElementById('info-title').textContent = p.title;
-  document.getElementById('info-meta').textContent = p.meta;
-  document.getElementById('info-price').textContent = p.price;
-  const msg = encodeURIComponent(`Hello Tony, I'm interested in "${p.title}" (${p.price}). Could you tell me more?`);
-  document.getElementById('info-wa').onclick = () =>
-    window.open(`https://wa.me/447880601709?text=${msg}`, '_blank');
-  document.getElementById('info-panel').classList.add('open');
-}
-
-function closePanel() {
-  document.getElementById('info-panel').classList.remove('open');
-}
-
-document.getElementById('info-panel').addEventListener('click', e => {
-  if (e.target === document.getElementById('info-panel')) closePanel();
-});
-
-buildMarkers();
-</script>
 </body>
 </html>
