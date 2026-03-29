@@ -178,6 +178,26 @@
     .lightbox-inner { max-height:100vh; }
   }
 </style>
+  <!-- Google Analytics GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WE9VCP47Q8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+    gtag('config', 'G-WE9VCP47Q8');
+  </script>
+  <!-- SEO & AI meta -->
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="author" content="Tony Parsons">
+  <meta name="keywords" content="Tony Parsons artist, plein air oil painter, original oil paintings, Artist on the Hill, Brighton artist, TOAT, commission oil painting, marine painter, landscape painter">
+  <link rel="canonical" href="https://www.artistonthehill.co.uk/bahamas.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tony Parsons — Artist on the Hill">
+  <meta property="og:url" content="https://www.artistonthehill.co.uk/bahamas.html">
+  <meta property="og:image" content="https://www.artistonthehill.co.uk/images/bahamas-spanish-wells-sunrise.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@artistonthehill">
 </head>
 <body>
 
@@ -441,10 +461,10 @@
 </div>
 
 <footer>
-  <p>© 2024–2026 Tony Parsons · Artist on the Hill · <a href="index.html">Back to site</a> · <a href="mailto:artistonthehill@gmail.com">artistonthehill@gmail.com</a></p>
+  <p>© 2024–2026 Tony Parsons · Artist on the Hill · <a href="index.html">Back to site</a> · <a href="/cdn-cgi/l/email-protection#e78695938e94938889938f828f8e8b8ba7808a868e8bc984888a"><span class="__cf_email__" data-cfemail="7a1b080e13090e15140e121f121316163a1d171b131654191517">[email&#160;protected]</span></a></p>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const lbData = {
   alabaster: { title:'Alabaster Bay', meta:'60×42cm · Oil on board · Spanish Wells', price:'£3,000', story:'Painted from the deck of the catamaran Bumble Bee with Tim and Jules. A race to record the light in a classic Bahamas sunset — then rowed to Sapphire and was filled with Gin and Tonic by which point it was too dark to continue.', img:'https://static.wixstatic.com/media/9dfbf6_bc6f0e418ed340388b1ba89d42c35eb5~mv2.jpg/v1/fill/w_900,h_700,al_c,q_85,enc_avif,quality_auto/9dfbf6_bc6f0e418ed340388b1ba89d42c35eb5~mv2.jpg', details:{ Size:'60×42cm', Medium:'Oil on board', Location:'Spanish Wells, Eleuthera', Provenance:'TOAT certified', Shipping:'Worldwide included' } },
   sunrise: { title:'Spanish Wells Sunrise', meta:'80×60cm · Oil on stretched canvas', price:'£5,700', story:'Painted from photographs taken on the local ferry to Eleuthera. The sunset only does this kind of colour for a minute or two. It\'s huge and it glows.', img:'https://static.wixstatic.com/media/9dfbf6_dff281ae93164903ab2cf9157afbc5c2~mv2.jpg/v1/fill/w_900,h_700,al_c,q_85,enc_avif,quality_auto/9dfbf6_dff281ae93164903ab2cf9157afbc5c2~mv2.jpg', details:{ Size:'80×60cm', Medium:'Oil on stretched canvas', Location:'Spanish Wells, Eleuthera', Provenance:'TOAT certified', Shipping:'Worldwide included' } },
@@ -472,10 +492,4 @@ function openLB(id) {
 function closeLB() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow=''; }
 function waEnquire(title, price) {
   const msg = encodeURIComponent(`Hello Tony, I'm interested in "${title}" (${price}) from the Bahamas Collection.`);
-  window.open(`https://wa.me/447880601709?text=${msg}`, '_blank');
-}
-document.getElementById('lightbox').addEventListener('click', e => { if(e.target===document.getElementById('lightbox')) closeLB(); });
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeLB(); });
-</script>
-</body>
-</html>
+  window.open(`https://wa.me/447880601709?text=${msg}`,
