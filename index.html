@@ -719,6 +719,20 @@
         <a href="https://wa.me/447880601709?text=Hello%20Tony%2C%20I%27d%20like%20to%20discuss%20a%20commission." target="_blank" class="btn-primary">WhatsApp Tony</a>
         <a href="mailto:artistonthehill@gmail.com" class="btn-secondary">artistonthehill@gmail.com</a>
         </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <span class="footer-logo">Tony Parsons</span>
+        <p class="footer-tagline">Plein air oil painter — painting the world one shore at a time. Based in Brighton.</p>
+        <div class="footer-contact">
+          <a href="https://wa.me/447880601709">📱 07880 601709</a>
+          <a href="mailto:artistonthehill@gmail.com">✉ artistonthehill@gmail.com</a>
+        </div>
       </div>
       <div>
         <div class="footer-col-title">Navigate</div>
@@ -1023,17 +1037,4 @@ document.getElementById('mc-overlay').addEventListener('click', function(e) {
 });
 
 // ── FRESH FROM THE FIELD ──
-// Add paintings here as you upload them from the field.
-// Each entry: { title, meta, price, img, id (optional — links to lightbox) }
-const fieldPaintings = [
-  // EXAMPLE — remove and replace with real field uploads:
-  // { title:"Stormy Beachy Head", meta:"80×30cm · Oil on board · Painted today", price:"£2,300", img:"images/beachy-head.jpg" },
-];
-
-function renderFieldSection() {
-  if (fieldPaintings.length === 0) return;
-  const section = document.getElementById('field-section');
-  const grid = document.getElementById('field-grid');
-  section.style.display = 'block';
-  grid.innerHTML = fieldPaintings.map((p, i) => `
-    <div class="work-card standard" data-categ
+// Add paintings here as
