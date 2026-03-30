@@ -221,9 +221,35 @@
         </div>
       </div>
 
-    </div>
+
+      <!-- Crowborough Beacon Golf Club -->
+      <div class="painting-card">
+        <div class="card-img-wrap landscape">
+          <img class="card-img" src="images/crowborough-beacon.jpg" alt="Crowborough Beacon Golf Club">
+          <div class="card-overlay"><span class="card-overlay-btn">View payment plan →</span></div>
+        </div>
+        <!-- Instagram video embed -->
+        <div style="margin-top:0; background:#000; overflow:hidden; max-height:400px;">
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DUvnT6zDMMq/" data-instgrm-version="14" style="width:100%;margin:0;background:#000;border:0;border-radius:0;min-height:200px;"></blockquote>
+        </div>
+        <div class="card-body">
+          <div class="toat-tag">✦ TOAT Certified</div>
+          <div class="card-title">Crowborough Beacon Golf Club</div>
+          <div class="card-meta">Oil on board · 80 × 30 cm · Painted on location</div>
+          <div class="card-price">£2,300</div>
+          <p class="card-desc">Painted on a morning at the club looking out across the Weald — the light was extraordinary. Painted on site in a single session. Includes bespoke oak frame and TOAT provenance certification.</p>
+          <div class="card-actions">
+            <a href="https://wa.me/447880601709?text=Hello%20Tony%2C%20I%27m%20interested%20in%20the%20Crowborough%20Beacon%20Golf%20Club%20painting%20(%C2%A32%2C300)." target="_blank" class="btn-enquire">Enquire</a>
+            <button class="btn-plan" onclick="event.stopPropagation();openPlan('crowborough')">0% plan →</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end works-grid -->
   </div>
 </div>
+
+<script async src="https://www.instagram.com/embed.js"></script>
 
 <hr class="divider">
 <div style="padding:56px 0;text-align:center;">
@@ -258,7 +284,8 @@ const works = {
   'chicken':   {title:'Lucid Poultry',            price:'£9,250',  amount:9250},
   'croc':      {title:'Throne of the Unbothered', price:'£13,200', amount:13200},
   'polo':      {title:'Dual Accord',              price:'£6,200',  amount:6200},
-  'neon-monk': {title:'Neon Monk',                price:'£12,750', amount:12750}
+  'neon-monk':    {title:'Neon Monk',                price:'£12,750', amount:12750},
+  'crowborough':  {title:'Crowborough Beacon Golf Club', price:'£2,300',  amount:2300}
 };
 function openPlan(id) {
   const w = works[id]; if(!w) return;
