@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Private Viewing — For Faye</title>
+<meta name="robots" content="noindex, nofollow">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WE9VCP47Q8"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WE9VCP47Q8');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --accent:#8b6f47; --accent-light:#c49a6c; --white:#fff; --nav-h:72px; --parchment:#f7f4ef; --warm-mid:#e8e2d9; --ink:#1a1714; --text-body:#3a342d; --text-light:#7a6e65; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Karla',sans-serif;background:var(--parchment);color:var(--ink);font-weight:300;line-height:1.6;}
+
+  nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:rgba(247,244,239,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--warm-mid);display:flex;align-items:center;justify-content:space-between;padding:0 40px;z-index:1000;}
+  .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:400;letter-spacing:0.08em;color:var(--ink);text-decoration:none;line-height:1.2;}
+  .nav-logo span{display:block;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-light);font-family:'Karla',sans-serif;}
+  .nav-back{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-light);text-decoration:none;transition:color 0.2s;}
+  .nav-back:hover{color:var(--accent);}
+
+  .container{max-width:960px;margin:0 auto;padding:0 40px;}
+
+  .page-hero{padding:calc(var(--nav-h) + 80px) 0 56px;text-align:center;}
+  .hero-eyebrow{font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:16px;font-family:'Karla',sans-serif;}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:300;line-height:1.1;margin-bottom:16px;}
+  .hero-title em{font-style:italic;color:var(--accent);}
+  .hero-price{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,3vw,2rem);color:var(--ink);margin-bottom:8px;}
+  .hero-note{font-size:0.82rem;color:var(--text-light);font-style:italic;}
+
+  .divider{border:none;border-top:1px solid var(--warm-mid);margin:0;}
+
+  /* Image grid */
+  .gallery-section{padding:64px 0;}
+  .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .gallery-img-wrap{overflow:hidden;background:var(--warm-mid);}
+  .gallery-img-wrap.full{grid-column:1 / -1;}
+  .gallery-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease;}
+  .gallery-img-wrap:hover img{transform:scale(1.02);}
+  .gallery-img-wrap.portrait{aspect-ratio:3/4;}
+  .gallery-img-wrap.landscape{aspect-ratio:16/9;}
+  .gallery-img-wrap.square{aspect-ratio:1/1;}
+
+  /* Details */
+  .details-section{padding:0 0 64px;}
+  .details-inner{display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;padding:40px;background:#fff;border:1px solid var(--warm-mid);}
+  .details-left{flex:1;min-width:260px;}
+  .toat-tag{display:inline-flex;align-items:center;gap:5px;font-family:'Karla',sans-serif;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(139,111,71,0.25);padding:3px 8px;margin-bottom:16px;}
+  .work-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400;color:var(--ink);margin-bottom:6px;}
+  .work-meta{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:16px;}
+  .work-price{font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:var(--accent);margin-bottom:6px;}
+  .work-price-note{font-size:0.78rem;color:var(--text-light);font-style:italic;margin-bottom:20px;}
+  .work-desc{font-size:0.9rem;line-height:1.85;color:var(--text-body);}
+
+  .details-right{display:flex;flex-direction:column;gap:14px;padding-top:4px;}
+  .btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--white);padding:14px 28px;font-family:'Karla',sans-serif;font-size:0.74rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;transition:background 0.2s;white-space:nowrap;}
+  .btn-primary:hover{background:var(--accent);}
+  .btn-secondary{display:inline-flex;align-items:center;color:var(--text-light);font-family:'Karla',sans-serif;font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--warm-mid);padding-bottom:2px;transition:color 0.2s;white-space:nowrap;}
+  .btn-secondary:hover{color:var(--accent);}
+
+  /* Plan strip */
+  .plan-strip{background:var(--ink);color:var(--white);padding:36px 40px;display:flex;flex-wrap:wrap;gap:0;margin-bottom:64px;}
+  .plan-item{flex:1;min-width:130px;padding:0 24px;border-left:1px solid rgba(255,255,255,0.08);}
+  .plan-item:first-child{border-left:none;padding-left:0;}
+  .plan-label{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);display:block;margin-bottom:5px;font-family:'Karla',sans-serif;}
+  .plan-value{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--accent-light);}
+
+  footer{background:#111;color:rgba(255,255,255,0.3);padding:40px;text-align:center;font-family:'Karla',sans-serif;font-size:0.75rem;}
+  footer a{color:rgba(255,255,255,0.3);text-decoration:none;}
+  footer a:hover{color:var(--accent-light);}
+
+  @media(max-width:600px){nav{padding:0 20px;}.container{padding:0 20px;}.gallery-grid{grid-template-columns:1fr;}.details-inner{padding:24px;}.plan-strip{padding:28px 20px;}.plan-item{padding:0 12px;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Tony Parsons <span>Artist on the Hill</span></a>
+  <a href="index.html" class="nav-back">← Back to site</a>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <span class="hero-eyebrow">Private Viewing — For Faye</span>
+    <h1 class="hero-title">The Artist, <em>the Garden,<br>and the Collector</em></h1>
+    <div class="hero-price">£1,000,000</div>
+    <div class="hero-note">Payable immediately. No instalments. No negotiation.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- Gallery -->
+<div class="gallery-section">
+  <div class="container">
+    <div class="gallery-grid">
+
+      <!-- Portrait photo -->
+      <div class="gallery-img-wrap portrait">
+        <img src="images/faye-1.jpg" alt="Faye with Tony's work">
+      </div>
+
+      <!-- Garden / studio shot -->
+      <div class="gallery-img-wrap square" style="aspect-ratio:3/4;">
+        <img src="images/faye-2.jpg" alt="The garden studio">
+      </div>
+
+      <!-- Full width gallery shot -->
+      <div class="gallery-img-wrap full landscape">
+        <img src="images/faye-3.jpg" alt="Faye at the gallery">
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- Details -->
+<div class="details-section">
+  <div class="container">
+    <div class="details-inner">
+      <div class="details-left">
+        <div class="toat-tag">✦ TOAT Certified · Priceless provenance</div>
+        <div class="work-title">The Complete Faye Experience</div>
+        <div class="work-meta">Mixed media · Includes artist, garden, and all associated chaos</div>
+        <div class="work-price">£1,000,000</div>
+        <div class="work-price-note">Payable immediately. Cash preferred. Crypto accepted.</div>
+        <p class="work-desc">Rare opportunity to acquire the full creative universe of Tony Parsons — as witnessed and documented by its most discerning collector. Includes one garden full of paintings, one slightly bewildered artist, and photographic evidence that Faye has exceptional taste. TOAT-certified on the Ethereum blockchain for posterity. A bargain at twice the price.</p>
+      </div>
+      <div class="details-right">
+        <a href="https://wa.me/447880601709?text=Tony%20I%27m%20in.%20Where%20do%20I%20send%20the%20million%3F" target="_blank" class="btn-primary">I'm in. WhatsApp Tony</a>
+        <a href="mailto:artistonthehill@gmail.com?subject=Re: The million pound offer" class="btn-secondary">or email to discuss →</a>
+      </div>
+    </div>
+
+    <!-- Plan strip (serious version underneath the joke) -->
+    <div class="plan-strip">
+      <div class="plan-item">
+        <span class="plan-label">Serious version</span>
+        <span class="plan-value">Any original</span>
+      </div>
+      <div class="plan-item">
+        <span class="plan-label">First payment</span>
+        <span class="plan-value">£200</span>
+      </div>
+      <div class="plan-item">
+        <span class="plan-label">Monthly</span>
+        <span class="plan-value">£200 / month</span>
+      </div>
+      <div class="plan-item">
+        <span class="plan-label">Interest</span>
+        <span class="plan-value">0%</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2010–2026 Tony Parsons · Artist on the Hill · This page is private · <a href="index.html">Back to site</a></p>
+</footer>
+
+</body>
+</html>
