@@ -902,8 +902,9 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 function checkViewingCode() {
   const code = document.getElementById('viewing-code').value.trim().toUpperCase();
-  if (['SALTMARSH','COLLECTOR','PRIVATE'].includes(code)) {
+  if (['SALTMARSH','COLLECTOR','PRIVATE','NEONMONK','AARON'].includes(code)) {
     alert('Welcome. Redirecting to your private viewing room…');
+    window.location.href = 'private.html';
   } else {
     const inp = document.getElementById('viewing-code');
     inp.style.borderColor = 'rgba(200,80,80,0.6)';
