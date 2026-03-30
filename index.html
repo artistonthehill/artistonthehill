@@ -903,8 +903,13 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 function checkViewingCode() {
   const code = document.getElementById('viewing-code').value.trim().toUpperCase();
   if (['SALTMARSH','COLLECTOR','PRIVATE','NEONMONK','AARON','CROWBOROUGH','CAROLECBGC','JOHNCBGC','DIANE'].includes(code)) {
-    alert('Welcome. Redirecting to your private viewing room…');
-    window.location.href = 'private.html';
+    if (code === 'CROWBOROUGH' || code === 'CAROLECBGC' || code === 'JOHNCBGC' || code === 'DIANE') {
+      alert('Welcome. Redirecting to your private viewing page…');
+      window.location.href = 'crowborough.html';
+    } else {
+      alert('Welcome. Redirecting to your private viewing room…');
+      window.location.href = 'private.html';
+    }
   } else {
     const inp = document.getElementById('viewing-code');
     inp.style.borderColor = 'rgba(200,80,80,0.6)';
