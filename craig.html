@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Long Wait — A Private Offer for Craig</title>
+<meta name="robots" content="noindex, nofollow">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WE9VCP47Q8"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WE9VCP47Q8');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --accent:#8b6f47; --accent-light:#c49a6c; --white:#fff; --nav-h:72px; --parchment:#f7f4ef; --warm-mid:#e8e2d9; --ink:#1a1714; --text-body:#3a342d; --text-light:#7a6e65; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Karla',sans-serif;background:var(--parchment);color:var(--ink);font-weight:300;line-height:1.6;}
+
+  nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:rgba(247,244,239,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--warm-mid);display:flex;align-items:center;justify-content:space-between;padding:0 40px;z-index:1000;}
+  .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:400;letter-spacing:0.08em;color:var(--ink);text-decoration:none;line-height:1.2;}
+  .nav-logo span{display:block;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-light);font-family:'Karla',sans-serif;}
+  .nav-right{display:flex;align-items:center;gap:20px;}
+  .nav-badge{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(139,111,71,0.3);padding:4px 10px;font-family:'Karla',sans-serif;}
+  .nav-back{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-light);text-decoration:none;transition:color 0.2s;}
+  .nav-back:hover{color:var(--accent);}
+
+  .container{max-width:960px;margin:0 auto;padding:0 40px;}
+
+  /* Hero intro */
+  .intro{padding:calc(var(--nav-h) + 72px) 0 56px;}
+  .intro-eyebrow{font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:16px;font-family:'Karla',sans-serif;}
+  .intro-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:300;line-height:1.1;margin-bottom:20px;}
+  .intro-title em{font-style:italic;color:var(--accent);}
+  .intro-body{font-size:1rem;line-height:1.85;color:var(--text-body);max-width:600px;}
+
+  .divider{border:none;border-top:1px solid var(--warm-mid);}
+
+  /* Painting + details layout */
+  .painting-section{padding:64px 0;}
+  .painting-layout{display:grid;grid-template-columns:1fr 1.6fr;gap:56px;align-items:start;}
+  .painting-img{width:100%;display:block;box-shadow:0 8px 40px rgba(0,0,0,0.12);}
+  .painting-details{}
+  .toat-tag{display:inline-flex;align-items:center;gap:5px;font-family:'Karla',sans-serif;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(139,111,71,0.25);padding:3px 8px;margin-bottom:16px;}
+  .painting-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;color:var(--ink);margin-bottom:6px;}
+  .painting-meta{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:20px;}
+  .painting-price{font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:var(--accent);margin-bottom:6px;}
+  .painting-price-note{font-size:0.78rem;color:var(--text-light);margin-bottom:24px;}
+  .painting-desc{font-size:0.92rem;line-height:1.85;color:var(--text-body);margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--warm-mid);}
+
+  /* Plan breakdown */
+  .plan-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:18px;color:var(--ink);}
+  .plan-table{width:100%;border-collapse:collapse;margin-bottom:24px;}
+  .plan-table tr{border-bottom:1px solid var(--warm-mid);}
+  .plan-table tr:last-child{border-bottom:none;}
+  .plan-table td{padding:10px 0;font-size:0.88rem;}
+  .plan-table td:first-child{color:var(--text-light);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;width:55%;}
+  .plan-table td:last-child{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--ink);text-align:right;}
+  .plan-table tr.highlight td{color:var(--accent);}
+  .plan-table tr.highlight td:last-child{font-size:1.2rem;font-weight:500;}
+
+  .plan-note{font-size:0.82rem;line-height:1.7;color:var(--text-light);font-style:italic;margin-bottom:24px;padding:16px;background:rgba(139,111,71,0.06);border-left:3px solid rgba(139,111,71,0.3);}
+
+  /* Investment section */
+  .investment-section{background:var(--ink);color:var(--white);padding:64px 0;margin:0;}
+  .investment-inner{max-width:960px;margin:0 auto;padding:0 40px;}
+  .inv-eyebrow{font-size:0.65rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent-light);display:block;margin-bottom:14px;font-family:'Karla',sans-serif;}
+  .inv-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.6rem);font-weight:300;color:var(--white);margin-bottom:24px;}
+  .inv-title em{font-style:italic;color:var(--accent-light);}
+  .inv-body{font-size:0.92rem;line-height:1.85;color:rgba(255,255,255,0.6);max-width:700px;margin-bottom:36px;}
+  .inv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid rgba(255,255,255,0.08);}
+  .inv-stat{padding:28px 24px;border-right:1px solid rgba(255,255,255,0.08);}
+  .inv-stat:last-child{border-right:none;}
+  .inv-stat-num{font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:var(--accent-light);display:block;margin-bottom:6px;}
+  .inv-stat-label{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);font-family:'Karla',sans-serif;}
+
+  /* CTA section */
+  .cta-section{padding:64px 0;}
+  .cta-inner{background:#fff;border:1px solid var(--warm-mid);padding:48px;}
+  .cta-eyebrow{font-size:0.65rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:14px;font-family:'Karla',sans-serif;}
+  .cta-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;margin-bottom:16px;}
+  .cta-title em{font-style:italic;}
+  .cta-body{font-size:0.9rem;line-height:1.8;color:var(--text-body);margin-bottom:28px;max-width:540px;}
+  .cta-buttons{display:flex;flex-wrap:wrap;gap:14px;align-items:center;}
+  .btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--white);padding:16px 32px;font-family:'Karla',sans-serif;font-size:0.74rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;transition:background 0.2s;}
+  .btn-primary:hover{background:var(--accent);}
+  .btn-secondary{display:inline-flex;align-items:center;color:var(--text-light);font-family:'Karla',sans-serif;font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--warm-mid);padding-bottom:2px;transition:color 0.2s;}
+  .btn-secondary:hover{color:var(--accent);}
+
+  footer{background:#111;color:rgba(255,255,255,0.28);padding:40px;text-align:center;font-family:'Karla',sans-serif;font-size:0.75rem;}
+  footer a{color:rgba(255,255,255,0.28);text-decoration:none;}
+  footer a:hover{color:var(--accent-light);}
+
+  @media(max-width:750px){
+    nav{padding:0 20px;}
+    .container{padding:0 20px;}
+    .painting-layout{grid-template-columns:1fr;}
+    .inv-grid{grid-template-columns:1fr;}
+    .inv-stat{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);}
+    .cta-inner{padding:32px 24px;}
+    .investment-inner{padding:0 20px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Tony Parsons <span>Artist on the Hill</span></a>
+  <div class="nav-right">
+    <span class="nav-badge">Private offer · Craig only</span>
+    <a href="index.html" class="nav-back">← Back to site</a>
+  </div>
+</nav>
+
+<!-- Intro -->
+<div class="intro">
+  <div class="container">
+    <span class="intro-eyebrow">A private offer — not yet seen publicly</span>
+    <h1 class="intro-title">The Long <em>Wait</em></h1>
+    <p class="intro-body">This painting hasn't been shown publicly. I'm offering it to you first, at a price and on terms I've put together specifically for you. Take your time with this page — there's no rush — but I wanted you to have first refusal before it goes out into the world.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- Painting + payment plan -->
+<div class="painting-section">
+  <div class="container">
+    <div class="painting-layout">
+
+      <div>
+        <img src="images/long-wait.jpg" alt="The Long Wait — Tony Parsons" class="painting-img">
+      </div>
+
+      <div class="painting-details">
+        <div class="toat-tag">✦ TOAT Certified · Ethereum-verified provenance</div>
+        <div class="painting-title">The Long Wait</div>
+        <div class="painting-meta">Oil on stretched canvas · 100 × 30 cm · Bespoke frame included</div>
+        <div class="painting-price">£2,000</div>
+        <div class="painting-price-note">Including bespoke frame and full TOAT provenance certification</div>
+        <p class="painting-desc">A kingfisher, poised in that suspended moment before the strike. The deep blue ground gives the bird an almost electric quality — light in darkness. It's part of the same meditative wildlife series as Neon Monk, painted in the same mood of quiet intensity. 100cm tall, it commands a wall without shouting. This is a painting you'd live with for thirty years.</p>
+
+        <div class="plan-title">Your payment plan — 0% interest</div>
+        <table class="plan-table">
+          <tr>
+            <td>First payment — painting comes home with you</td>
+            <td>£30</td>
+          </tr>
+          <tr>
+            <td>Weekly standing order</td>
+            <td>£30 / week</td>
+          </tr>
+          <tr>
+            <td>Duration</td>
+            <td>~67 weeks (~15 months)</td>
+          </tr>
+          <tr>
+            <td>Total cost</td>
+            <td>£2,000</td>
+          </tr>
+          <tr>
+            <td>Interest</td>
+            <td>0%</td>
+          </tr>
+          <tr>
+            <td>TOAT registered in your name</td>
+            <td>From day one</td>
+          </tr>
+          <tr class="highlight">
+            <td>Monthly equivalent</td>
+            <td>~£130 / month</td>
+          </tr>
+        </table>
+
+        <div class="plan-note">Payment holidays available if life gets in the way — just drop me a message. The painting stays yours throughout. No contracts, no credit checks, no small print.</div>
+
+        <div class="cta-buttons">
+          <a href="https://wa.me/447880601709?text=Tony%20I%27d%20like%20to%20take%20The%20Long%20Wait%20on%20the%20payment%20plan." target="_blank" class="btn-primary">I'm in — WhatsApp Tony</a>
+          <a href="mailto:artistonthehill@gmail.com?subject=The Long Wait — payment plan" class="btn-secondary">or email →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- Investment case -->
+<div class="investment-section">
+  <div class="investment-inner">
+    <span class="inv-eyebrow">Why it matters — the investment case</span>
+    <h2 class="inv-title">A painting that works <em>harder than a savings account</em></h2>
+    <p class="inv-body">My large originals have risen over 250% in value over the last five years. The Long Wait sits in the same series as Neon Monk — a painting currently valued at £12,750 — and represents the same meditative wildlife direction that serious collectors are beginning to notice. TOAT certification means its ownership history is permanent and verifiable, making future resale straightforward and transparent. When the plan completes, you hold both the work and a blockchain-backed record of provenance that follows it forever.</p>
+    <div class="inv-grid">
+      <div class="inv-stat">
+        <span class="inv-stat-num">£2,000</span>
+        <span class="inv-stat-label">Today's price</span>
+      </div>
+      <div class="inv-stat">
+        <span class="inv-stat-num">£3,500–5,000</span>
+        <span class="inv-stat-label">Conservative estimate by 2030</span>
+      </div>
+      <div class="inv-stat">
+        <span class="inv-stat-num">£30</span>
+        <span class="inv-stat-label">Takes it off the wall today</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Final CTA -->
+<div class="cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <span class="cta-eyebrow">This offer is for Craig only</span>
+      <h2 class="cta-title">First refusal before it <em>goes public</em></h2>
+      <p class="cta-body">Once this painting goes public it will be priced at £2,000 and available to anyone. I'm coming to you first because I think it belongs with someone who'll genuinely appreciate it. If you want it, just say the word and it's yours from the first £30. If the timing isn't right, no pressure at all — just let me know and I'll move it on.</p>
+      <div class="cta-buttons">
+        <a href="https://wa.me/447880601709?text=Tony%20I%27d%20like%20to%20take%20The%20Long%20Wait%20on%20the%20payment%20plan." target="_blank" class="btn-primary">Start the plan — WhatsApp Tony</a>
+        <a href="mailto:artistonthehill@gmail.com?subject=The Long Wait — I'm interested" class="btn-secondary">or email →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2010–2026 Tony Parsons · Artist on the Hill · Private — not indexed by search engines · <a href="index.html">Back to site</a></p>
+</footer>
+
+</body>
+</html>
