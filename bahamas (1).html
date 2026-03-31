@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Bahamas Collection — Tony Parsons | Artist on the Hill</title>
+<meta name="description" content="Original oil paintings from Tony Parsons' 2024 Bahamas adventure — Spanish Wells, Harbour Island, Nassau, Eleuthera. Plein air and studio works, TOAT-certified, from £1,100.">
+<meta property="og:title" content="The Bahamas Collection — Tony Parsons">
+<meta property="og:description" content="14 original oil paintings from a painting journey through the Bahamas. From £1,100. TOAT-certified.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#1a1714; --parchment:#f7f4ef; --warm-mid:#e8e2d9;
+    --accent:#8b6f47; --accent-light:#c49a6c; --white:#fff;
+    --text-body:#3a342d; --text-light:#7a6e65; --nav-h:72px;
+    --bahamas-blue: #1a6b8a; --bahamas-sand: #e8d9b0;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Karla',sans-serif; background:var(--parchment); color:var(--ink); font-weight:300; line-height:1.6; }
+
+  nav { position:fixed; top:0; left:0; right:0; height:var(--nav-h); background:rgba(247,244,239,0.96); backdrop-filter:blur(8px); border-bottom:1px solid var(--warm-mid); display:flex; align-items:center; justify-content:space-between; padding:0 40px; z-index:1000; }
+  .nav-logo { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:400; letter-spacing:0.08em; color:var(--ink); text-decoration:none; line-height:1.2; }
+  .nav-logo span { display:block; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-light); font-family:'Karla',sans-serif; }
+  .nav-back { font-family:'Karla',sans-serif; font-size:0.72rem; font-weight:400; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-body); text-decoration:none; border-bottom:1px solid var(--warm-mid); padding-bottom:2px; transition:color 0.2s, border-color 0.2s; }
+  .nav-back:hover { color:var(--accent); border-color:var(--accent); }
+
+  /* HERO */
+  .bahamas-hero {
+    min-height: 100vh;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: calc(var(--nav-h) + 40px) 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(26,107,138,0.4) 0%, rgba(26,23,20,0.85) 70%);
+    z-index: 1;
+  }
+  .hero-bg-img {
+    position: absolute; inset: 0;
+    background: url('images/bahamas-spanish-wells-sunrise.jpg') center/cover;
+    opacity: 0.35;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 80px 80px 100px;
+    max-width: 900px;
+  }
+  .hero-eyebrow { font-family:'Karla',sans-serif; font-size:0.68rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--accent-light); display:block; margin-bottom:20px; }
+  .hero-title { font-family:'Cormorant Garamond',serif; font-size:clamp(3rem,7vw,6.5rem); font-weight:300; line-height:1.0; color:var(--white); margin-bottom:8px; }
+  .hero-subtitle { font-family:'Cormorant Garamond',serif; font-size:clamp(1.2rem,2.5vw,1.8rem); font-weight:300; font-style:italic; color:rgba(255,255,255,0.6); margin-bottom:40px; }
+  .hero-stats { display:flex; gap:48px; padding-top:32px; border-top:1px solid rgba(255,255,255,0.12); }
+  .hero-stat { }
+  .hero-stat-num { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; color:var(--accent-light); display:block; line-height:1; }
+  .hero-stat-label { font-family:'Karla',sans-serif; font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-top:4px; display:block; }
+
+  /* INTRO */
+  .intro-section { background:var(--ink); color:var(--white); padding:80px 0; }
+  .intro-inner { max-width:800px; margin:0 auto; padding:0 40px; }
+  .intro-pull { font-family:'Cormorant Garamond',serif; font-size:clamp(1.5rem,3vw,2.2rem); font-weight:300; line-height:1.5; color:var(--white); margin-bottom:32px; padding-left:24px; border-left:2px solid var(--accent-light); }
+  .intro-body { font-size:0.95rem; line-height:1.85; color:rgba(255,255,255,0.65); margin-bottom:20px; }
+
+  /* PAINTINGS */
+  .collection-section { padding:80px 0; }
+  .container { max-width:1200px; margin:0 auto; padding:0 40px; }
+  .section-eyebrow { font-family:'Karla',sans-serif; font-size:0.68rem; letter-spacing:0.24em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:12px; }
+  .section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,3.5vw,3rem); font-weight:300; line-height:1.2; margin-bottom:48px; }
+  .section-title em { font-style:italic; }
+
+  .painting-entry {
+    display:grid; grid-template-columns:1fr 1fr; gap:0;
+    margin-bottom:4px; background:var(--white);
+    transition: box-shadow 0.3s;
+  }
+  .painting-entry:hover { box-shadow: 0 8px 40px rgba(26,23,20,0.12); }
+  .painting-entry.reverse { direction:rtl; }
+  .painting-entry.reverse > * { direction:ltr; }
+  .painting-entry.wide { grid-template-columns:3fr 2fr; }
+  .painting-entry.tall { grid-template-columns:2fr 3fr; }
+
+  .painting-img {
+    overflow:hidden; background:var(--ink);
+    min-height:360px; position:relative;
+  }
+  .painting-img img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.6s ease; }
+  .painting-entry:hover .painting-img img { transform:scale(1.03); }
+  .painting-img .price-tag {
+    position:absolute; bottom:16px; left:16px;
+    background:rgba(26,23,20,0.85);
+    font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:var(--accent-light);
+    padding:8px 14px;
+  }
+  .sold-tag {
+    position:absolute; top:16px; left:16px;
+    background:rgba(139,111,71,0.9); color:#fff;
+    font-family:'Karla',sans-serif; font-size:0.6rem; letter-spacing:0.16em;
+    text-transform:uppercase; padding:5px 10px;
+  }
+
+  .painting-info { padding:48px; display:flex; flex-direction:column; justify-content:center; }
+  .painting-name { font-family:'Cormorant Garamond',serif; font-size:clamp(1.6rem,2.5vw,2.2rem); font-weight:300; line-height:1.2; margin-bottom:4px; }
+  .painting-meta { font-family:'Karla',sans-serif; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-light); margin-bottom:24px; }
+  .painting-story { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-style:italic; line-height:1.7; color:var(--text-body); margin-bottom:28px; padding-left:18px; border-left:1px solid var(--warm-mid); }
+  .painting-location { font-family:'Karla',sans-serif; font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-bottom:28px; }
+  .enquire-btn { display:inline-flex; align-items:center; gap:10px; background:var(--ink); color:var(--white); padding:13px 22px; font-family:'Karla',sans-serif; font-size:0.72rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; transition:background 0.2s; align-self:flex-start; }
+  .enquire-btn:hover { background:var(--accent); }
+
+  /* TOAT SKETCHES SECTION */
+  .sketches-section { background:var(--ink); padding:80px 0; }
+  .sketches-section .section-eyebrow { color:var(--accent-light); }
+  .sketches-section .section-title { color:var(--white); }
+  .sketches-intro { font-size:0.92rem; line-height:1.8; color:rgba(255,255,255,0.6); max-width:580px; margin-bottom:48px; }
+  .sketches-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; }
+  .sketch-card { position:relative; overflow:hidden; cursor:pointer; background:var(--ink); aspect-ratio:4/3; }
+  .sketch-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease, opacity 0.3s; opacity:0.85; }
+  .sketch-card:hover img { transform:scale(1.06); opacity:1; }
+  .sketch-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(26,23,20,0.9) 0%, transparent 55%); opacity:0; transition:opacity 0.3s; display:flex; flex-direction:column; justify-content:flex-end; padding:20px; }
+  .sketch-card:hover .sketch-overlay { opacity:1; }
+  .sketch-title { font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:#fff; margin-bottom:2px; }
+  .sketch-price { font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--accent-light); }
+
+  /* NOTE ON VALUE */
+  .value-section { padding:80px 0; background:var(--parchment); }
+  .value-inner { max-width:720px; margin:0 auto; padding:0 40px; }
+  .value-title { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:500; margin-bottom:24px; }
+  .value-text { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; line-height:1.85; color:var(--text-body); }
+  .value-sig { margin-top:32px; font-family:'Karla',sans-serif; font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-light); }
+
+  /* FOOTER */
+  footer { background:#111; color:rgba(255,255,255,0.45); padding:40px; text-align:center; font-family:'Karla',sans-serif; font-size:0.78rem; }
+  footer a { color:rgba(255,255,255,0.45); text-decoration:none; }
+  footer a:hover { color:var(--accent-light); }
+
+  /* LIGHTBOX */
+  .lightbox { display:none; position:fixed; inset:0; background:rgba(26,23,20,0.95); z-index:2000; align-items:center; justify-content:center; padding:40px; }
+  .lightbox.open { display:flex; }
+  .lightbox-inner { background:var(--parchment); max-width:1020px; width:100%; max-height:90vh; overflow-y:auto; display:grid; grid-template-columns:1.2fr 1fr; }
+  .lightbox-image { background:#111; min-height:300px; }
+  .lightbox-image img { width:100%; height:100%; object-fit:contain; display:block; }
+  .lightbox-info { padding:44px; display:flex; flex-direction:column; }
+  .lb-title { font-family:'Cormorant Garamond',serif; font-size:1.9rem; font-weight:400; line-height:1.2; margin-bottom:6px; }
+  .lb-meta { font-family:'Karla',sans-serif; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-light); margin-bottom:20px; }
+  .lb-price { font-family:'Cormorant Garamond',serif; font-size:2.2rem; font-weight:300; color:var(--accent); margin-bottom:20px; }
+  .lb-story { font-family:'Cormorant Garamond',serif; font-size:1rem; font-style:italic; line-height:1.75; color:var(--text-body); margin-bottom:24px; flex:1; }
+  .lb-details { display:flex; flex-direction:column; gap:8px; margin-bottom:24px; padding:16px; background:var(--warm-mid); }
+  .lb-detail { display:flex; justify-content:space-between; font-family:'Karla',sans-serif; font-size:0.78rem; color:var(--text-body); }
+  .lb-detail strong { font-weight:500; font-size:0.66rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-light); }
+  .lb-actions { display:flex; flex-direction:column; gap:10px; }
+  .lb-close { position:absolute; top:20px; right:28px; background:none; border:none; color:var(--white); font-size:2.2rem; cursor:pointer; font-family:'Cormorant Garamond',serif; font-weight:300; line-height:1; }
+  .btn-primary { display:inline-flex; align-items:center; gap:12px; background:var(--ink); color:var(--white); padding:14px 24px; font-family:'Karla',sans-serif; font-size:0.76rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; transition:background 0.2s; }
+  .btn-primary:hover { background:var(--accent); }
+  .btn-secondary { display:inline-flex; align-items:center; gap:8px; color:var(--text-body); font-family:'Karla',sans-serif; font-size:0.76rem; letter-spacing:0.12em; text-transform:uppercase; text-decoration:none; border-bottom:1px solid var(--warm-mid); padding-bottom:2px; align-self:flex-start; transition:color 0.2s; }
+  .btn-secondary:hover { color:var(--accent); }
+
+  @media(max-width:900px) {
+    .bahamas-hero .hero-content { padding:60px 32px 80px; }
+    .hero-stats { gap:28px; }
+    .painting-entry, .painting-entry.wide, .painting-entry.tall { grid-template-columns:1fr; }
+    .painting-entry.reverse { direction:ltr; }
+    .sketches-grid { grid-template-columns:repeat(2,1fr); }
+    .lightbox-inner { grid-template-columns:1fr; }
+    .lightbox-image { min-height:240px; }
+  }
+  @media(max-width:600px) {
+    nav { padding:0 20px; }
+    .container { padding:0 20px; }
+    .painting-info { padding:28px 24px; }
+    .intro-inner { padding:0 24px; }
+    .sketches-grid { grid-template-columns:1fr; }
+    .lightbox { padding:0; align-items:flex-start; }
+    .lightbox-inner { max-height:100vh; }
+  }
+</style>
+  <!-- Google Analytics GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WE9VCP47Q8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+    gtag('config', 'G-WE9VCP47Q8');
+  </script>
+  <!-- SEO & AI meta -->
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="author" content="Tony Parsons">
+  <meta name="keywords" content="Tony Parsons artist, plein air oil painter, original oil paintings, Artist on the Hill, Brighton artist, TOAT, commission oil painting, marine painter, landscape painter">
+  <link rel="canonical" href="https://www.artistonthehill.co.uk/bahamas.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tony Parsons — Artist on the Hill">
+  <meta property="og:url" content="https://www.artistonthehill.co.uk/bahamas.html">
+  <meta property="og:image" content="https://www.artistonthehill.co.uk/images/bahamas-spanish-wells-sunrise.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@artistonthehill">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Tony Parsons <span>Artist on the Hill</span></a>
+  <a href="index.html#works" class="nav-back">← All works</a>
+</nav>
+
+<!-- HERO -->
+<div class="bahamas-hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">November 2024 · Four Islands</span>
+    <h1 class="hero-title">The Bahamas<br>Adventure</h1>
+    <p class="hero-subtitle">Spanish Wells · Nassau · Harbour Island · Eleuthera</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num">14</span>
+        <span class="hero-stat-label">Original oils</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">4</span>
+        <span class="hero-stat-label">Islands</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">£1,100</span>
+        <span class="hero-stat-label">From</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">TOAT</span>
+        <span class="hero-stat-label">All certified</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INTRO -->
+<div class="intro-section">
+  <div style="width:100%; max-height:500px; overflow:hidden; position:relative;">
+    <img src="images/bahamas-tony-painting.jpg" alt="Tony Parsons painting in the Bahamas" style="width:100%; height:500px; object-fit:cover; object-position:center center; display:block;">
+    <div style="position:absolute; bottom:20px; left:24px; font-family:'Karla',sans-serif; font-size:0.65rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.55);">Tony Parsons · Spanish Wells, Bahamas · November 2024</div>
+  </div>
+  <div class="intro-inner">
+    <p class="intro-pull">Four islands. The heat, the wind, the sharks, the gin. One painter standing in the water with a brush.</p>
+    <p class="intro-body">This collection brings together the full breadth of the Bahamas work — large studio canvases built from sketches and memories, and plein air pieces painted directly on the sand, often with locals drifting through the composition as naturally as the tide itself.</p>
+    <p class="intro-body">Every work is a one-off oil original, TOAT-certified and ready for professional shipping worldwide. If anything catches your eye, get in touch — I'm happy to talk through any piece personally.</p>
+  </div>
+</div>
+
+<!-- LARGE WORKS -->
+<div class="collection-section">
+  <div class="container">
+    <span class="section-eyebrow">The Collection</span>
+    <h2 class="section-title">Large works & <em>plein air originals</em></h2>
+
+    <!-- Alabaster Bay -->
+    <div class="painting-entry wide" onclick="openLB('alabaster')">
+      <div class="painting-img">
+        <img src="images/bahamas-alabaster-bay.jpg" alt="Alabaster Bay">
+        <div class="price-tag">£3,000</div>
+      </div>
+      <div class="painting-info">
+        <div class="painting-name">Alabaster Bay</div>
+        <div class="painting-meta">60×42cm · Oil on board · Spanish Wells</div>
+        <p class="painting-story">"This piece was painted from the deck of the catamaran Bumble Bee with Tim and Jules. A race to record the light in a classic Bahamas sunset. When I'd finished I rowed over to 'Sapphire' where Jon, Maureen, Mike and Jess invited me aboard and filled me with Gin and Tonic by which point it was too dark to continue."</p>
+        <div class="painting-location">📍 Spanish Wells, Eleuthera</div>
+        <a href="#" class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Alabaster Bay', '£3,000')">Enquire via WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- Spanish Wells Sunrise -->
+    <div class="painting-entry reverse" onclick="openLB('sunrise')">
+      <div class="painting-img" style="min-height:480px;">
+        <img src="images/bahamas-spanish-wells-sunrise.jpg" alt="Spanish Wells Sunrise">
+        <div class="price-tag">£5,700</div>
+      </div>
+      <div class="painting-info">
+        <div class="painting-name">Spanish Wells Sunrise</div>
+        <div class="painting-meta">80×60cm · Oil on stretched canvas · Spanish Wells</div>
+        <p class="painting-story">"I was itching to get back to the studio to put this one together. Sunsets are tricky as they only do this kind of colour for a minute or two — this happened whilst I was on the local ferry to Eleuthera so I got as many photos as I could and planned out this massive canvas to work on when I got home. Photos won't do this justice, it's huge and it glows!"</p>
+        <div class="painting-location">📍 Spanish Wells, Eleuthera</div>
+        <a href="#" class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Spanish Wells Sunrise', '£5,700')">Enquire via WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- Fish-eye View -->
+    <div class="painting-entry wide" onclick="openLB('fisheye')">
+      <div class="painting-img" style="min-height:440px;">
+        <img src="images/bahamas-fish-eye-view.jpg" alt="Fish-eye View">
+        <div class="price-tag">£6,350</div>
+      </div>
+      <div class="painting-info">
+        <div class="painting-name">Fish-eye View</div>
+        <div class="painting-meta">84×60cm · Oil on birch board · Spanish Wells</div>
+        <p class="painting-story">"I spend most of my very substantial time on the shoreline staring into the water. I'm obsessed with the way light behaves in the shallows. In the Bahamas I took this obsession to a whole new level — the wildlife, the sharks, the barracudas! This concept formed during my trip and I plotted it out on a big canvas when I got back."</p>
+        <div class="painting-location">📍 Spanish Wells harbour</div>
+        <a href="#" class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Fish-eye View', '£6,350')">Enquire via WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- Wreckers View -->
+    <div class="painting-entry reverse" onclick="openLB('wreckers')">
+      <div class="painting-img">
+        <img src="images/bahamas-wreckers-view.jpg" alt="Wreckers View">
+        <div class="price-tag">£3,000</div>
+      </div>
+      <div class="painting-info">
+        <div class="painting-name">Wreckers View</div>
+        <div class="painting-meta">60×42cm · Oil on board · Spanish Wells</div>
+        <p class="painting-story">"Set up on the decking of Wreckers restaurant in Spanish Wells. I'd met Carolina, the new manager, the day before on the beach. I turned up with all my gear after doing a commission on Russell Island and wasn't expecting to do another painting but the view was magnificent! I had to eat whilst painting this piece!"</p>
+        <div class="painting-location">📍 Wreckers Restaurant, Spanish Wells</div>
+        <a href="#" class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Wreckers View', '£3,000')">Enquire via WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- Cabbage Beach -->
+    <div class="painting-entry wide" onclick="openLB('cabbage')">
+      <div class="painting-img">
+        <img src="images/bahamas-cabbage-beach.jpg" alt="Cabbage Beach">
+        <div class="price-tag">£3,000</div>
+      </div>
+      <div class="painting-info">
+        <div class="painting-name">Cabbage Beach</div>
+        <div class="painting-meta">60×42cm · Oil on board · Paradise Island, Nassau</div>
+        <p class="painting-story">"Back on Paradise Island I wanted to capture the kind of image that you'd think of when you tell someone you're flying to Nassau for a beach holiday. I had to sidle in, make a discreet arrangement with one of the hotel staff who set me up with a sun lounger so I could join the holidaymakers and paint them enjoying the beach."</p>
+        <div class="painting-location">📍 Cabbage Beach, Paradise Island</div>
+        <a href="#" class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Cabbage Beach', '£3,000')">Enquire via WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- Russell Island -->
+    <div class="painting-entry reverse" onclick="openLB('russell')">
+      <div class="painting-img">
+        <img src="images/bahamas-russell-island.jpg" alt="Russell Island">
+        <div class="price-tag">£3,000</div>
+      </div>
+      <div class="painting-info">
+        <div class="painting-name">Russell Island</div>
+        <div class="painting-meta">60×42cm · Oil on board · Russell Island</div>
+        <p class="painting-story">"This was painted knee deep on the shallow beach at the end of a friend's garden. It was classic Bahamas — I didn't try anything fancy or clever. I wanted it exactly as I found it."</p>
+        <div class="painting-location">📍 Russell Island, Eleuthera</div>
+        <a href="#" class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Russell Island', '£3,000')">Enquire via WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- Harbour Island -->
+    <div class="painting-entry wide" onclick="openLB('harbour')">
+      <div class="painting-img" style="min-height:440px;">
+        <img src="images/bahamas-harbour-island.jpg" alt="Harbour Island">
+        <div class="price-tag">£3,000</div>
+      </div>
+      <div class="painting-info">
+        <div class="painting-name">Harbour Island</div>
+        <div class="painting-meta">60×42cm · Oil on board · Harbour Island</div>
+        <p class="painting-story">"I took a day trip to Harbour Island with some friends. What I did see was incredibly beautiful. Lots of locals came to find me on the dock as I painted this piece. It was a real treat to see so many Frigate birds."</p>
+        <div class="painting-location">📍 Harbour Island, Bahamas</div>
+        <a href="#" class="enquire-btn" onclick="event.stopPropagation(); waEnquire('Harbour Island', '£3,000')">Enquire via WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAT SKETCHES -->
+<div class="sketches-section">
+  <div class="container">
+    <span class="section-eyebrow">TOAT Sketches</span>
+    <h2 class="section-title" style="color:var(--white);">A3 plein air works — <em style="color:var(--accent-light);">painted on location</em></h2>
+    <p class="sketches-intro">These small-format oils were painted directly on location across the islands — in the shade of a coconut tree, on a ferry dock, knee-deep in the shallows. Each is a TOAT-certified original. Just 30 TOAT Sketches are released each year.</p>
+    <div class="sketches-grid">
+
+      <div class="sketch-card" onclick="waEnquire('Love Beach', '£1,200')">
+        <img src="images/bahamas-love-beach.jpg" alt="Love Beach">
+        <div class="sketch-overlay">
+          <div class="sketch-title">Love Beach</div>
+          <div class="sketch-price">£1,200 · 42×30cm · New Providence</div>
+        </div>
+      </div>
+
+      <div class="sketch-card" onclick="waEnquire('Sea Swings', '£1,100')">
+        <img src="images/bahamas-sea-swings.jpg" alt="Sea Swings">
+        <div class="sketch-overlay">
+          <div class="sketch-title">Sea Swings</div>
+          <div class="sketch-price">£1,100 · 42×30cm · Spanish Wells</div>
+        </div>
+      </div>
+
+      <div class="sketch-card" onclick="waEnquire('Sandy Point Marina', '£1,100')">
+        <img src="images/bahamas-sandy-point-marina.jpg" alt="Sandy Point Marina">
+        <div class="sketch-overlay">
+          <div class="sketch-title">Sandy Point Marina</div>
+          <div class="sketch-price">£1,100 · 42×30cm · Sandy Point, Abaco</div>
+        </div>
+      </div>
+
+      <div class="sketch-card" onclick="waEnquire('The Pink House', '£1,200')">
+        <img src="images/bahamas-pink-house.jpg" alt="The Pink House">
+        <div class="sketch-overlay">
+          <div class="sketch-title">The Pink House</div>
+          <div class="sketch-price">£1,200 · 42×30cm · Spanish Wells</div>
+        </div>
+      </div>
+
+      <div class="sketch-card" onclick="waEnquire('Governors Harbour', '£1,200')">
+        <img src="images/bahamas-governors-harbour.jpg" alt="Governors Harbour">
+        <div class="sketch-overlay">
+          <div class="sketch-title">Governors Harbour</div>
+          <div class="sketch-price">£1,200 · 42×30cm · Eleuthera</div>
+        </div>
+      </div>
+
+      <div class="sketch-card" onclick="waEnquire('Paradise Ferry', '£1,100')">
+        <img src="images/bahamas-paradise-ferry.jpg" alt="Paradise Ferry">
+        <div class="sketch-overlay">
+          <div class="sketch-title">Paradise Ferry</div>
+          <div class="sketch-price">£1,100 · 42×30cm · Nassau</div>
+        </div>
+      </div>
+
+      <div class="sketch-card" onclick="waEnquire('South Canal', '£1,100')">
+        <img src="images/bahamas-south-canal.jpg" alt="South Canal">
+        <div class="sketch-overlay">
+          <div class="sketch-title">South Canal</div>
+          <div class="sketch-price">£1,100 · 42×30cm · Eleuthera</div>
+        </div>
+      </div>
+
+    </div>
+    <div style="margin-top:32px; font-family:'Karla',sans-serif; font-size:0.78rem; color:rgba(255,255,255,0.4); letter-spacing:0.1em;">
+      Tap any painting to enquire via WhatsApp · Professional shipping to the US and worldwide included
+    </div>
+  </div>
+</div>
+
+<!-- NOTE ON VALUE -->
+<div class="value-section">
+  <div class="value-inner">
+    <div class="value-title">A short note on value</div>
+    <p class="value-text">"When I'm painting I don't think about all this stuff, I just paint what I want. Since my work took off I've had to start behaving like a proper artist. The money means I can pursue my art in its purest form so I'm careful to protect my brand. I don't want to peak early, I just want to explore my freedom with the help and support of my collectors.<br><br>In 2019, I sold my first painting over the £2,000 mark. Since then, many exhibitions in the Channel Islands, ski resorts and occasionally the Caribbean have driven me to paint bigger, bolder, and more ambitious work than ever before.<br><br>Every original in this catalogue is authenticated through my TOAT system — designed to offer collectors a verified record of ownership, direct resale options, and a lasting link back to me. With each year, the gap between supply and demand grows a little wider.<br><br>I've built my practice for the long game. If you're reading this, I'd love you to be part of it."</p>
+    <p class="value-sig">— Tony Parsons, Brighton 2024</p>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" onclick="closeLB()">×</button>
+  <div class="lightbox-inner">
+    <div class="lightbox-image"><img id="lb-img" src="" alt=""></div>
+    <div class="lightbox-info">
+      <div class="lb-title" id="lb-title"></div>
+      <div class="lb-meta" id="lb-meta"></div>
+      <div class="lb-price" id="lb-price"></div>
+      <p class="lb-story" id="lb-story"></p>
+      <div class="lb-details" id="lb-details"></div>
+      <div class="lb-actions">
+        <a href="#" class="btn-primary" id="lb-wa" target="_blank">Enquire via WhatsApp</a>
+        <a href="#" class="btn-secondary" id="lb-email">or send an email →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2024–2026 Tony Parsons · Artist on the Hill · <a href="index.html">Back to site</a> · <a href="mailto:artistonthehill@gmail.com">artistonthehill@gmail.com</a></p>
+</footer>
+
+<script>
+const lbData = {
+  alabaster: { title:'Alabaster Bay', meta:'60×42cm · Oil on board · Spanish Wells', price:'£3,000', story:'Painted from the deck of the catamaran Bumble Bee with Tim and Jules. A race to record the light in a classic Bahamas sunset — then rowed to Sapphire and was filled with Gin and Tonic by which point it was too dark to continue.', img:'images/bahamas-alabaster-bay.jpg', details:{ Size:'60×42cm', Medium:'Oil on board', Location:'Spanish Wells, Eleuthera', Provenance:'TOAT certified', Shipping:'Worldwide included' } },
+  sunrise: { title:'Spanish Wells Sunrise', meta:'80×60cm · Oil on stretched canvas', price:'£5,700', story:'Painted from photographs taken on the local ferry to Eleuthera. The sunset only does this kind of colour for a minute or two. It\'s huge and it glows.', img:'images/bahamas-spanish-wells-sunrise.jpg', details:{ Size:'80×60cm', Medium:'Oil on stretched canvas', Location:'Spanish Wells, Eleuthera', Provenance:'TOAT certified', Shipping:'Worldwide included' } },
+  fisheye: { title:'Fish-eye View', meta:'84×60cm · Oil on birch board', price:'£6,350', story:'An obsession with the way light behaves in the shallows taken to a new level. The wildlife, the sharks, the barracudas. Conceived in the Bahamas, plotted out on a big canvas back in the studio.', img:'images/bahamas-fish-eye-view.jpg', details:{ Size:'84×60cm', Medium:'Oil on birch board', Location:'Spanish Wells harbour', Provenance:'TOAT certified', Shipping:'Worldwide, crated' } },
+  wreckers: { title:"Wreckers View", meta:'60×42cm · Oil on board · Spanish Wells', price:'£3,000', story:"Set up on the decking of Wreckers restaurant in Spanish Wells. The view was magnificent. I had to eat whilst painting this piece.", img:'images/bahamas-wreckers-view.jpg', details:{ Size:'60×42cm', Medium:'Oil on board', Location:"Wreckers Restaurant, Spanish Wells", Provenance:'TOAT certified', Shipping:'Worldwide included' } },
+  cabbage: { title:'Cabbage Beach', meta:'60×42cm · Oil on board · Paradise Island', price:'£3,000', story:"Had to sidle in and make a discreet arrangement with one of the hotel staff who set me up with a sun lounger so I could join the holidaymakers and paint them enjoying the beach.", img:'images/bahamas-cabbage-beach.jpg', details:{ Size:'60×42cm', Medium:'Oil on board', Location:'Cabbage Beach, Paradise Island', Provenance:'TOAT certified', Shipping:'Worldwide included' } },
+  russell: { title:'Russell Island', meta:'60×42cm · Oil on board · Russell Island', price:'£3,000', story:"Painted knee deep on the shallow beach at the end of a friend's garden. Classic Bahamas — I didn't try anything fancy or clever. I wanted it exactly as I found it.", img:'images/bahamas-russell-island.jpg', details:{ Size:'60×42cm', Medium:'Oil on board', Location:'Russell Island, Eleuthera', Provenance:'TOAT certified', Shipping:'Worldwide included' } },
+  harbour: { title:'Harbour Island', meta:'60×42cm · Oil on board · Harbour Island', price:'£3,000', story:"A day trip with friends. Incredibly beautiful. Lots of locals came to find me on the dock as I painted this piece. A real treat to see so many Frigate birds.", img:'images/bahamas-harbour-island.jpg', details:{ Size:'60×42cm', Medium:'Oil on board', Location:'Harbour Island, Bahamas', Provenance:'TOAT certified', Shipping:'Worldwide included' } },
+};
+
+function openLB(id) {
+  const d = lbData[id]; if(!d) return;
+  document.getElementById('lb-img').src = d.img;
+  document.getElementById('lb-title').textContent = d.title;
+  document.getElementById('lb-meta').textContent = d.meta;
+  document.getElementById('lb-price').textContent = d.price;
+  document.getElementById('lb-story').textContent = d.story;
+  document.getElementById('lb-details').innerHTML = Object.entries(d.details).map(([k,v])=>`<div class="lb-detail"><strong>${k}</strong><span>${v}</span></div>`).join('');
+  const msg = encodeURIComponent(`Hello Tony, I'm interested in "${d.title}" (${d.price}) from the Bahamas Collection. Could you tell me more?`);
+  document.getElementById('lb-wa').href = `https://wa.me/447880601709?text=${msg}`;
+  document.getElementById('lb-email').href = `mailto:artistonthehill@gmail.com?subject=Bahamas Collection: ${d.title}`;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLB() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow=''; }
+function waEnquire(title, price) {
+  const msg = encodeURIComponent(`Hello Tony, I'm interested in "${title}" (${price}) from the Bahamas Collection.`);
+  window.open(`https://wa.me/447880601709?text=${msg}`,
