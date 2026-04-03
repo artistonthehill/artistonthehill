@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Artist on the Hill — Upload Painting</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Karla:wght@400;500&display=swap');
+
+  :root {
+    --bg: #f7f4ef;
+    --card: #ffffff;
+    --border: #e8e2d9;
+    --text: #1a1714;
+    --muted: #7a6e65;
+    --accent: #8b6f47;
+    --accent-dark: #1a1714;
+    --success: #3a7d44;
+    --error: #b94040;
+    --warm: #c47f2a;
+    --radius: 4px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Karla', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 80px 0;
+  }
+
+  header {
+    background: var(--accent-dark);
+    padding: 20px 24px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.4rem;
+    color: #fff;
+  }
+
+  header p {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+  }
+
+  .header-tab-wrap { display: flex; gap: 6px; }
+
+  .header-tab {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    padding: 6px 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--radius);
+    cursor: pointer;
+    background: transparent;
+    font-family: 'Karla', sans-serif;
+    transition: all 0.15s;
+  }
+  .header-tab.active, .header-tab:hover {
+    color: #fff;
+    border-color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.1);
+  }
+
+  .screen { display: none; padding: 20px; max-width: 520px; margin: 0 auto; }
+  .screen.active { display: block; }
+
+  .auth-note {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .auth-note h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 1.2rem; margin-bottom: 8px; }
+  .auth-note p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
+  .auth-note a { color: var(--accent); font-size: 0.75rem; }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--muted);
+    margin: 28px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 0.04em;
+  }
+  .section-title:first-child { margin-top: 8px; }
+
+  .field { margin-bottom: 16px; }
+
+  label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  label span.req { color: var(--accent); }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="url"],
+  input[type="password"],
+  input[type="email"],
+  input[type="tel"],
+  textarea {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-family: 'Karla', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 70px; }
+
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .img-upload-wrap {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    background: var(--card);
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .img-upload-wrap:hover { border-color: var(--accent); background: #fdf9f5; }
+  .img-upload-wrap input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .img-upload-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+  .img-upload-wrap p { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+
+  #img-preview {
+    display: none; width: 100%; max-height: 220px; object-fit: contain;
+    border-radius: var(--radius); margin-top: 14px; border: 1px solid var(--border);
+  }
+  #img-info { font-size: 0.72rem; color: var(--muted); margin-top: 8px; display: none; }
+
+  .collection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .coll-btn {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 10px 6px; text-align: center;
+    cursor: pointer; transition: all 0.15s; font-family: 'Karla', sans-serif;
+  }
+  .coll-btn:hover { border-color: var(--accent); }
+  .coll-btn.active { border-color: var(--accent-dark); background: var(--accent-dark); color: #fff; }
+  .coll-btn .coll-icon { font-size: 1.4rem; display: block; margin-bottom: 3px; }
+  .coll-btn .coll-name { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .coords-hint { font-size: 0.7rem; color: var(--muted); margin-top: -8px; margin-bottom: 14px; line-height: 1.5; }
+  .coords-hint a { color: var(--accent); }
+
+  /* ── PEOPLE MET ── */
+  .people-hint {
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.6;
+    background: #fdf9f5;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+
+  .person-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .person-card-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+  }
+  .person-num { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .person-remove {
+    background: none; border: none; color: var(--muted); font-size: 1.2rem;
+    cursor: pointer; padding: 0 4px; line-height: 1;
+  }
+  .person-remove:hover { color: var(--error); }
+  .person-card .field { margin-bottom: 10px; }
+  .person-card .field:last-child { margin-bottom: 0; }
+  .person-card input, .person-card textarea { font-size: 0.85rem; padding: 10px 12px; }
+
+  .add-person-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed var(--accent);
+    color: var(--accent);
+    border-radius: var(--radius);
+    padding: 12px;
+    font-family: 'Karla', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .add-person-btn:hover { background: #fdf9f5; }
+
+  /* ── SUBMIT / STATUS ── */
+  #submit-btn {
+    width: 100%; background: var(--accent-dark); color: #fff; border: none;
+    border-radius: var(--radius); padding: 16px; font-family: 'Karla', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    cursor: pointer; margin-top: 28px; transition: background 0.15s;
+  }
+  #submit-btn:hover { background: var(--accent); }
+  #submit-btn:disabled { background: var(--muted); cursor: not-allowed; }
+
+  #status-wrap { display: none; margin-top: 20px; border-radius: var(--radius); overflow: hidden; }
+  .status-step {
+    display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+    background: var(--card); border: 1px solid var(--border); border-bottom: none; font-size: 0.78rem;
+  }
+  .status-step:last-child { border-bottom: 1px solid var(--border); }
+  .step-icon { font-size: 1rem; width: 24px; text-align: center; flex-shrink: 0; }
+  .step-text { flex: 1; color: var(--muted); }
+  .step-text.active { color: var(--text); font-weight: 500; }
+  .step-text.done { color: var(--success); }
+  .step-text.error { color: var(--error); }
+  .spinner {
+    width: 16px; height: 16px; border: 2px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%;
+    animation: spin 0.7s linear infinite; flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #success-card {
+    display: none; background: var(--card); border: 1px solid #a8d5b0;
+    border-radius: var(--radius); padding: 24px; text-align: center; margin-top: 20px;
+  }
+  #success-card h2 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 1.5rem; margin-bottom: 8px;
+  }
+  #success-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+
+  .btn {
+    display: inline-block; background: var(--accent-dark); color: #fff; border: none;
+    border-radius: var(--radius); padding: 12px 20px; font-family: 'Karla', sans-serif;
+    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none; transition: background 0.15s; margin: 4px;
+  }
+  .btn:hover { background: var(--accent); }
+
+  .btn-ghost {
+    display: inline-block; background: transparent;
+    border: 1px solid var(--accent-dark); color: var(--accent-dark); padding: 10px 20px;
+    font-family: 'Karla', sans-serif; font-size: 0.68rem; letter-spacing: 0.14em;
+    text-transform: uppercase; cursor: pointer; border-radius: var(--radius);
+    margin: 4px; text-decoration: none;
+  }
+  .btn-ghost:hover { background: var(--accent-dark); color: #fff; }
+
+  .btn-csv {
+    width: 100%; background: #1a5276; color: #fff; border: none;
+    border-radius: var(--radius); padding: 13px; font-family: 'Karla', sans-serif;
+    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+    cursor: pointer; margin-top: 8px; transition: background 0.15s;
+  }
+  .btn-csv:hover { background: #154360; }
+
+  #token-stored {
+    background: #f0f7f1; border: 1px solid #a8d5b0; border-radius: var(--radius);
+    padding: 10px 14px; font-size: 0.75rem; color: var(--success); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  /* ── TRACKER ── */
+  .tracker-toolbar {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 10px;
+  }
+  .tracker-toolbar h2 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 1.3rem;
+  }
+  .filter-btns { display: flex; gap: 6px; }
+  .filter-btn {
+    font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 5px 10px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--card); color: var(--muted); cursor: pointer; font-family: 'Karla', sans-serif;
+  }
+  .filter-btn.active { background: var(--accent-dark); color: #fff; border-color: var(--accent-dark); }
+
+  .tracker-empty { text-align: center; padding: 48px 20px; color: var(--muted); }
+  .tracker-empty .big-icon { font-size: 3rem; margin-bottom: 12px; }
+  .tracker-empty p { font-size: 0.85rem; line-height: 1.6; }
+
+  .painting-group {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 16px; overflow: hidden;
+  }
+  .painting-group-header {
+    padding: 14px 16px; background: var(--accent-dark); color: #fff;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .painting-group-header h3 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 1.05rem; flex: 1;
+  }
+  .painting-group-meta { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+  .pending-badge {
+    display: inline-block; background: var(--warm); color: #fff;
+    font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 3px 7px; border-radius: 20px; flex-shrink: 0;
+  }
+
+  .contact-row {
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .contact-row:last-child { border-bottom: none; }
+
+  .contact-tick {
+    width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 50%;
+    cursor: pointer; flex-shrink: 0; margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; transition: all 0.15s; background: #fff;
+  }
+  .contact-tick:hover { border-color: var(--success); }
+  .contact-tick.ticked { background: var(--success); border-color: var(--success); color: #fff; }
+
+  .contact-info { flex: 1; min-width: 0; }
+  .contact-name { font-weight: 500; font-size: 0.9rem; margin-bottom: 2px; }
+  .contact-detail { font-size: 0.75rem; color: var(--muted); margin-bottom: 2px; }
+  .contact-note { font-size: 0.72rem; color: var(--accent); font-style: italic; }
+
+  .ticked-row .contact-name { text-decoration: line-through; color: var(--muted); }
+  .ticked-row .contact-detail { text-decoration: line-through; }
+
+  .contact-actions { display: flex; gap: 6px; flex-shrink: 0; margin-top: 2px; flex-direction: column; }
+
+  .micro-btn {
+    font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 5px 8px; border-radius: var(--radius); border: 1px solid var(--border);
+    background: var(--bg); color: var(--muted); cursor: pointer; text-decoration: none;
+    font-family: 'Karla', sans-serif; transition: all 0.12s; white-space: nowrap; text-align: center;
+  }
+  .micro-btn:hover { border-color: var(--accent); color: var(--accent); background: #fdf9f5; }
+  .micro-btn.wa { background: #e8f5e9; border-color: #a5d6a7; color: #2e7d32; }
+  .micro-btn.email-btn { background: #e8f0fe; border-color: #90b4f5; color: #1a56c4; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Artist on the Hill</h1>
+    <p>Painting uploader</p>
+  </div>
+  <div class="header-tab-wrap" id="nav-tabs" style="display:none">
+    <button class="header-tab active" onclick="showScreen('upload')">Upload</button>
+    <button class="header-tab" onclick="showScreen('tracker')">Follow-up</button>
+  </div>
+</header>
+
+<!-- AUTH -->
+<div id="auth-screen" class="screen active" style="padding-top:32px">
+  <div id="token-stored" style="display:none">✓ &nbsp;GitHub token saved — you're ready to upload</div>
+  <div class="auth-note">
+    <h2>One-time setup</h2>
+    <p>This app uses your GitHub account to add paintings directly to your website. You need a GitHub Personal Access Token with repo access. You only do this once — saved in your browser.</p>
+    <p><a href="https://github.com/settings/tokens/new?scopes=repo&description=ArtistOnTheHill+Uploader" target="_blank">→ Create a token on GitHub (tap here)</a></p>
+    <p style="margin-top:8px; font-size:0.7rem;">Scroll down on that page and click <strong>Generate token</strong>. Copy it and paste below.</p>
+  </div>
+  <div class="field">
+    <label>GitHub Personal Access Token <span class="req">*</span></label>
+    <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+  </div>
+  <button class="btn" style="width:100%; padding:14px; margin:0;" onclick="saveToken()">Save token & continue →</button>
+  <p style="font-size:0.68rem; color:var(--muted); margin-top:12px; line-height:1.5; text-align:center;">
+    Stored only in this browser — never sent anywhere except directly to GitHub.
+  </p>
+</div>
+
+<!-- UPLOAD -->
+<div id="upload-screen" class="screen">
+
+  <p class="section-title">The painting</p>
+
+  <div class="field">
+    <label>Photo <span class="req">*</span></label>
+    <div class="img-upload-wrap">
+      <input type="file" id="img-file" accept="image/*" onchange="handleImage(this)">
+      <span class="img-upload-icon">🖼</span>
+      <p>Tap to choose from camera roll<br><span style="font-size:0.65rem">Will be resized to 1200px wide automatically</span></p>
+    </div>
+    <img id="img-preview" alt="Preview">
+    <p id="img-info"></p>
+  </div>
+
+  <div class="field">
+    <label>Title <span class="req">*</span></label>
+    <input type="text" id="f-title" placeholder="e.g. Burgh Island at Dusk" oninput="autoId()">
+  </div>
+
+  <div class="row-2">
+    <div class="field">
+      <label>Price <span class="req">*</span></label>
+      <input type="text" id="f-price" placeholder="£2,300">
+    </div>
+    <div class="field">
+      <label>Size / medium <span class="req">*</span></label>
+      <input type="text" id="f-size" placeholder="80×30cm · Oil on board">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Gillan Gallery print link</label>
+    <input type="url" id="f-prints" placeholder="https://www.thegillangallery.com/product-page/...">
+  </div>
+
+  <p class="section-title">Collection</p>
+
+  <div class="collection-grid">
+    <div class="coll-btn" data-coll="uk" onclick="selectColl(this)">
+      <span class="coll-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="coll-name">UK</span>
+    </div>
+    <div class="coll-btn" data-coll="bahamas" onclick="selectColl(this)">
+      <span class="coll-icon">🌊</span><span class="coll-name">Bahamas</span>
+    </div>
+    <div class="coll-btn" data-coll="amalfi" onclick="selectColl(this)">
+      <span class="coll-icon">🍋</span><span class="coll-name">Amalfi</span>
+    </div>
+    <div class="coll-btn" data-coll="alps" onclick="selectColl(this)">
+      <span class="coll-icon">⛷</span><span class="coll-name">Alps</span>
+    </div>
+    <div class="coll-btn" data-coll="worldwide" onclick="selectColl(this)">
+      <span class="coll-icon">🌍</span><span class="coll-name">Worldwide</span>
+    </div>
+    <div class="coll-btn" data-coll="large-animals" onclick="selectColl(this)">
+      <span class="coll-icon">🦅</span><span class="coll-name">Large Animals</span>
+    </div>
+  </div>
+
+  <p class="section-title">Location</p>
+
+  <p class="coords-hint">Open <a href="https://maps.google.com" target="_blank">Google Maps</a>, long-press the exact spot, and the lat/lng appears at the top.</p>
+
+  <div class="row-2">
+    <div class="field">
+      <label>Latitude <span class="req">*</span></label>
+      <input type="number" id="f-lat" placeholder="50.8139" step="any">
+    </div>
+    <div class="field">
+      <label>Longitude <span class="req">*</span></label>
+      <input type="number" id="f-lng" placeholder="-0.1358" step="any">
+    </div>
+  </div>
+
+  <!-- PEOPLE MET -->
+  <p class="section-title">People I met here</p>
+
+  <div class="people-hint">
+    📱 Add contacts while they're fresh — name, email or WhatsApp, and a note about what they said. They go straight to your follow-up tracker and can be exported to Airtable.
+  </div>
+
+  <div id="people-list"></div>
+  <button class="add-person-btn" onclick="addPerson()">+ Add person</button>
+
+  <p class="section-title" style="margin-top:28px">Advanced</p>
+
+  <div class="field">
+    <label>Image filename (auto-filled)</label>
+    <input type="text" id="f-imgid" placeholder="burgh-island-dusk">
+  </div>
+  <div class="field">
+    <label>Painting ID (auto-filled)</label>
+    <input type="text" id="f-id" placeholder="auto">
+  </div>
+
+  <button id="submit-btn" onclick="uploadPainting()">Upload painting to website →</button>
+
+  <div id="status-wrap">
+    <div class="status-step">
+      <span class="step-icon">🖼</span>
+      <span class="step-text" id="st-resize">Resize image for web</span>
+      <span id="si-resize"></span>
+    </div>
+    <div class="status-step">
+      <span class="step-icon">⬆️</span>
+      <span class="step-text" id="st-img">Upload image to GitHub</span>
+      <span id="si-img"></span>
+    </div>
+    <div class="status-step">
+      <span class="step-icon">📋</span>
+      <span class="step-text" id="st-json">Update paintings.json</span>
+      <span id="si-json"></span>
+    </div>
+  </div>
+
+  <div id="success-card">
+    <div style="font-size:2.5rem; margin-bottom:12px;">🎨</div>
+    <h2>Painting uploaded!</h2>
+    <p id="success-msg">Your website will update in about 2–3 minutes. Use Cmd+Shift+R to see it.</p>
+    <div style="margin-top:8px;">
+      <a href="https://www.artistonthehill.co.uk/map.html" target="_blank" class="btn-ghost">View map →</a>
+      <button class="btn-ghost" onclick="resetForm()">Upload another</button>
+    </div>
+    <div id="csv-section" style="display:none; margin-top:16px; border-top:1px solid var(--border); padding-top:16px;">
+      <p style="font-size:0.8rem; color:var(--muted); margin-bottom:10px;">
+        <strong style="color:var(--text)">Contacts from this painting</strong> are ready for Airtable.
+      </p>
+      <button class="btn-csv" onclick="downloadCSV()">⬇ Download Airtable CSV</button>
+      <p style="font-size:0.68rem; color:var(--muted); margin-top:8px; line-height:1.5;">
+        Airtable → Collectors → Grid view → ··· → Import CSV. Columns match exactly.
+      </p>
+      <button class="btn-ghost" style="width:100%; margin:10px 0 0 0;" onclick="showScreen('tracker')">Go to follow-up tracker →</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- TRACKER -->
+<div id="tracker-screen" class="screen">
+  <div class="tracker-toolbar">
+    <h2>Follow-up tracker</h2>
+    <div class="filter-btns">
+      <button class="filter-btn active" onclick="setFilter('pending',this)">Pending</button>
+      <button class="filter-btn" onclick="setFilter('all',this)">All</button>
+    </div>
+  </div>
+  <div id="tracker-list"></div>
+</div>
+
+<script>
+const GITHUB_OWNER   = 'artistonthehill';
+const GITHUB_REPO    = 'artistonthehill';
+const PAINTINGS_PATH = 'paintings.json';
+const IMAGES_PATH    = 'images/';
+const BRANCH         = 'main';
+
+let resizedBase64 = null;
+let selectedColl  = null;
+let peopleCount   = 0;
+let lastPainting  = null;
+let trackerFilter = 'pending';
+
+// ── SCREENS ──────────────────────────────────────────────────────────────────
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(name + '-screen').classList.add('active');
+  document.querySelectorAll('.header-tab').forEach(t => {
+    t.classList.toggle('active',
+      (name === 'upload' && t.textContent === 'Upload') ||
+      (name === 'tracker' && t.textContent === 'Follow-up'));
+  });
+  if (name === 'tracker') renderTracker();
+}
+
+// ── AUTH ─────────────────────────────────────────────────────────────────────
+function getToken() { return localStorage.getItem('gh_token_aoth'); }
+
+function saveToken() {
+  const t = document.getElementById('token-input').value.trim();
+  if (!t.startsWith('ghp_') && !t.startsWith('github_pat_')) {
+    alert('That doesn\'t look like a valid token — should start with ghp_ or github_pat_');
+    return;
+  }
+  localStorage.setItem('gh_token_aoth', t);
+  showMainApp();
+}
+
+function showMainApp() {
+  document.getElementById('auth-screen').classList.remove('active');
+  document.getElementById('upload-screen').classList.add('active');
+  document.getElementById('nav-tabs').style.display = 'flex';
+}
+
+function checkAuth() {
+  if (getToken()) showMainApp();
+}
+
+// ── IMAGE ─────────────────────────────────────────────────────────────────────
+function handleImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX_W = 1200;
+      let w = img.width, h = img.height;
+      if (w > MAX_W) { h = Math.round(h * MAX_W / w); w = MAX_W; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resizedBase64 = canvas.toDataURL('image/jpeg', 0.82).split(',')[1];
+      const preview = document.getElementById('img-preview');
+      preview.src = 'data:image/jpeg;base64,' + resizedBase64;
+      preview.style.display = 'block';
+      const kb = Math.round(resizedBase64.length * 0.75 / 1024);
+      document.getElementById('img-info').style.display = 'block';
+      document.getElementById('img-info').textContent = `Resized to ${w}×${h}px · ~${kb}KB`;
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── COLLECTION ───────────────────────────────────────────────────────────────
+function selectColl(el) {
+  document.querySelectorAll('.coll-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedColl = el.dataset.coll;
+}
+
+function autoId() {
+  const slug = document.getElementById('f-title').value
+    .toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');
+  document.getElementById('f-id').value = slug;
+  document.getElementById('f-imgid').value = slug;
+}
+
+// ── PEOPLE ───────────────────────────────────────────────────────────────────
+function addPerson() {
+  peopleCount++;
+  const n = peopleCount;
+  const div = document.createElement('div');
+  div.className = 'person-card';
+  div.id = 'person-' + n;
+  div.innerHTML = `
+    <div class="person-card-header">
+      <span class="person-num">Person ${n}</span>
+      <button class="person-remove" onclick="removePerson(${n})">×</button>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" id="p${n}-name" placeholder="e.g. Sarah">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="p${n}-email" placeholder="sarah@...">
+      </div>
+    </div>
+    <div class="field">
+      <label>WhatsApp / mobile</label>
+      <input type="tel" id="p${n}-wa" placeholder="+44 7700...">
+    </div>
+    <div class="field">
+      <label>Note — what they said, what interested them</label>
+      <textarea id="p${n}-note" placeholder="e.g. Loved the dog in it. Moving to Cornwall. Asked about payment plans."></textarea>
+    </div>`;
+  document.getElementById('people-list').appendChild(div);
+  document.getElementById('p' + n + '-name').focus();
+}
+
+function removePerson(n) {
+  const el = document.getElementById('person-' + n);
+  if (el) el.remove();
+}
+
+function collectPeople() {
+  const people = [];
+  document.querySelectorAll('.person-card').forEach(card => {
+    const n = card.id.replace('person-','');
+    const name  = (document.getElementById('p'+n+'-name')?.value||'').trim();
+    const email = (document.getElementById('p'+n+'-email')?.value||'').trim();
+    const wa    = (document.getElementById('p'+n+'-wa')?.value||'').trim();
+    const note  = (document.getElementById('p'+n+'-note')?.value||'').trim();
+    if (name || email || wa) people.push({name, email, wa, note});
+  });
+  return people;
+}
+
+// ── STEP UI ───────────────────────────────────────────────────────────────────
+function setStep(id, state, msg) {
+  const textEl = document.getElementById('st-'+id);
+  const iconEl = document.getElementById('si-'+id);
+  textEl.className = 'step-text ' + state;
+  if (msg) textEl.textContent = msg;
+  if (state==='active')     iconEl.innerHTML = '<div class="spinner"></div>';
+  else if (state==='done')  { iconEl.innerHTML = '✓'; iconEl.style.color = 'var(--success)'; }
+  else if (state==='error') { iconEl.innerHTML = '✗'; iconEl.style.color = 'var(--error)'; }
+  else iconEl.innerHTML = '';
+}
+
+// ── GITHUB ────────────────────────────────────────────────────────────────────
+async function ghGet(path) {
+  const r = await fetch(
+    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}?ref=${BRANCH}`,
+    { headers: { Authorization: 'token '+getToken(), Accept: 'application/vnd.github.v3+json' } }
+  );
+  if (!r.ok) throw new Error('GitHub GET failed: '+r.status+' '+await r.text());
+  return r.json();
+}
+
+async function ghPut(path, content, sha, message) {
+  const body = {message, content, branch: BRANCH};
+  if (sha) body.sha = sha;
+  const r = await fetch(
+    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`,
+    {
+      method: 'PUT',
+      headers: { Authorization: 'token '+getToken(), Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }
+  );
+  if (!r.ok) throw new Error('GitHub PUT failed: '+r.status+' '+await r.text());
+  return r.json();
+}
+
+// ── UPLOAD ────────────────────────────────────────────────────────────────────
+async function uploadPainting() {
+  const title   = document.getElementById('f-title').value.trim();
+  const price   = document.getElementById('f-price').value.trim();
+  const size    = document.getElementById('f-size').value.trim();
+  const lat     = parseFloat(document.getElementById('f-lat').value);
+  const lng     = parseFloat(document.getElementById('f-lng').value);
+  const prints  = document.getElementById('f-prints').value.trim();
+  const imgId   = document.getElementById('f-imgid').value.trim();
+  const paintId = document.getElementById('f-id').value.trim();
+  const people  = collectPeople();
+
+  if (!title)          return alert('Please enter a title.');
+  if (!price)          return alert('Please enter a price.');
+  if (!size)           return alert('Please enter size / medium.');
+  if (!selectedColl)   return alert('Please select a collection.');
+  if (isNaN(lat)||isNaN(lng)) return alert('Please enter coordinates.');
+  if (!resizedBase64)  return alert('Please choose a photo.');
+  if (!imgId)          return alert('Image filename missing — re-enter the title.');
+
+  const imgFilename = IMAGES_PATH + imgId + '.jpg';
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('status-wrap').style.display = 'block';
+
+  try {
+    setStep('resize','done','Image resized ('+Math.round(resizedBase64.length*0.75/1024)+'KB)');
+
+    setStep('img','active','Uploading image to GitHub…');
+    let imgSha = null;
+    try { imgSha = (await ghGet(imgFilename)).sha; } catch(e) {}
+    await ghPut(imgFilename, resizedBase64, imgSha, 'Add painting image: '+title);
+    setStep('img','done','Image uploaded');
+
+    setStep('json','active','Updating paintings.json…');
+    const jsonFile  = await ghGet(PAINTINGS_PATH);
+    const paintings = JSON.parse(atob(jsonFile.content.replace(/\n/g,'')));
+
+    const newPainting = {
+      id: paintId||imgId, title, img: imgFilename, price, size, lat, lng,
+      collection: selectedColl,
+      datePainted: new Date().toISOString().split('T')[0]
+    };
+    if (prints)         newPainting.prints = prints;
+    if (people.length)  newPainting.peopleMet = people;
+
+    paintings.push(newPainting);
+    const updated = btoa(unescape(encodeURIComponent(JSON.stringify(paintings, null, 2))));
+    await ghPut(PAINTINGS_PATH, updated, jsonFile.sha, 'Add painting: '+title);
+    setStep('json','done','paintings.json updated');
+
+    if (people.length) saveToTracker(newPainting.id, title, people, newPainting.datePainted);
+
+    lastPainting = {title, paintingId: newPainting.id, people};
+    showSuccess(people.length);
+
+  } catch(err) {
+    console.error(err);
+    const msg = err.message||String(err);
+    if (msg.includes('image')||msg.includes('img')) setStep('img','error','Failed — '+msg);
+    else setStep('json','error','Failed — '+msg);
+    document.getElementById('submit-btn').disabled = false;
+    alert('Something went wrong:\n\n'+msg+'\n\nIf 401/403, your token may have expired.');
+  }
+}
+
+function showSuccess(count) {
+  document.getElementById('success-card').style.display = 'block';
+  if (count > 0) {
+    document.getElementById('success-msg').innerHTML =
+      `Painting live in ~2 mins. <strong>${count} contact${count>1?'s':''}</strong> added to your follow-up tracker.`;
+    document.getElementById('csv-section').style.display = 'block';
+  }
+}
+
+// ── TRACKER STORAGE ───────────────────────────────────────────────────────────
+function getTrackerData() {
+  try { return JSON.parse(localStorage.getItem('aoth_followups')||'[]'); }
+  catch(e) { return []; }
+}
+function saveTrackerData(d) { localStorage.setItem('aoth_followups', JSON.stringify(d)); }
+
+function saveToTracker(paintingId, paintingTitle, people, date) {
+  const data = getTrackerData();
+  const idx = data.findIndex(e => e.paintingId === paintingId);
+  const entry = {
+    paintingId, paintingTitle, date,
+    people: people.map((p,i) => ({...p, id: paintingId+'-'+i, contacted: false}))
+  };
+  if (idx >= 0) data[idx] = entry;
+  else data.unshift(entry);
+  saveTrackerData(data);
+}
+
+function toggleContacted(paintingId, personId) {
+  const data = getTrackerData();
+  const entry = data.find(e => e.paintingId === paintingId);
+  if (!entry) return;
+  const person = entry.people.find(p => p.id === personId);
+  if (person) person.contacted = !person.contacted;
+  saveTrackerData(data);
+  renderTracker();
+}
+
+// ── RENDER TRACKER ────────────────────────────────────────────────────────────
+function setFilter(f, btn) {
+  trackerFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTracker();
+}
+
+function renderTracker() {
+  const list = document.getElementById('tracker-list');
+  const data = getTrackerData();
+
+  if (!data.length) {
+    list.innerHTML = `<div class="tracker-empty"><div class="big-icon">📭</div>
+      <p>No contacts yet.<br>Upload a painting and add people you met — they'll appear here.</p></div>`;
+    return;
+  }
+
+  let html = '';
+  let shown = 0;
+
+  data.forEach(entry => {
+    const toShow = trackerFilter === 'pending'
+      ? entry.people.filter(p => !p.contacted)
+      : entry.people;
+    if (!toShow.length) return;
+    shown++;
+
+    const pending = entry.people.filter(p => !p.contacted).length;
+
+    html += `<div class="painting-group">
+      <div class="painting-group-header">
+        <h3>${entry.paintingTitle}</h3>
+        <span class="painting-group-meta">${entry.date}</span>
+        ${pending > 0 ? `<span class="pending-badge">${pending} to do</span>` : ''}
+      </div>`;
+
+    toShow.forEach(person => {
+      const ticked = person.contacted;
+      const waNum = (person.wa||'').replace(/\s/g,'').replace(/^\+/,'');
+      const waMsg = encodeURIComponent(`Hi ${person.name||'there'} — it's Tony, the painter! I wanted to send you a photo of the painting from ${entry.paintingTitle}. You can see it here: https://www.artistonthehill.co.uk/map.html 🎨`);
+      const emailSubject = encodeURIComponent(`Your painting — ${entry.paintingTitle}`);
+      const emailBody = encodeURIComponent(`Hi ${person.name||'there'},\n\nIt was great to meet you while I was painting ${entry.paintingTitle}!\n\nHere's a link to see it on my website: https://www.artistonthehill.co.uk/map.html\n\nBest,\nTony`);
+
+      html += `<div class="contact-row ${ticked?'ticked-row':''}">
+        <div class="contact-tick ${ticked?'ticked':''}"
+          onclick="toggleContacted('${entry.paintingId}','${person.id}')"
+          title="${ticked?'Mark as not contacted':'Mark as contacted'}">${ticked?'✓':''}</div>
+        <div class="contact-info">
+          <div class="contact-name">${person.name||'Unnamed'}</div>
+          ${person.email ? `<div class="contact-detail">✉ ${person.email}</div>` : ''}
+          ${person.wa    ? `<div class="contact-detail">📱 ${person.wa}</div>` : ''}
+          ${person.note  ? `<div class="contact-note">${person.note}</div>` : ''}
+        </div>
+        <div class="contact-actions">
+          ${person.wa    ? `<a class="micro-btn wa" href="https://wa.me/${waNum}?text=${waMsg}" target="_blank">WhatsApp</a>` : ''}
+          ${person.email ? `<a class="micro-btn email-btn" href="mailto:${person.email}?subject=${emailSubject}&body=${emailBody}">Email</a>` : ''}
+        </div>
+      </div>`;
+    });
+
+    html += `</div>`;
+  });
+
+  if (!shown) {
+    list.innerHTML = `<div class="tracker-empty"><div class="big-icon">✅</div>
+      <p>All done — no pending follow-ups!</p></div>`;
+    return;
+  }
+
+  list.innerHTML = html;
+}
+
+// ── AIRTABLE CSV ──────────────────────────────────────────────────────────────
+function downloadCSV() {
+  if (!lastPainting?.people?.length) return;
+  const today = new Date().toISOString().split('T')[0];
+  const rows = [['Name','Email','Phone/WhatsApp','Location','Contact Type','Engagement Status','Last Contact','Next Actions','Source','Notes']];
+  lastPainting.people.forEach(p => {
+    rows.push([
+      p.name||'',
+      p.email||'',
+      p.wa||'',
+      '',
+      'Collector Lead',
+      'Warm — met in person',
+      today,
+      'Send follow-up with painting photo and price',
+      'Met at painting location',
+      `Met while painting "${lastPainting.title}". ${p.note||''}`.trim()
+    ]);
+  });
+  const csv = rows.map(r => r.map(c => '"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  a.download = `airtable-${lastPainting.paintingId}-${today}.csv`;
+  a.click();
+}
+
+// ── RESET ─────────────────────────────────────────────────────────────────────
+function resetForm() {
+  ['f-title','f-price','f-size','f-prints','f-lat','f-lng','f-id','f-imgid'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('img-preview').style.display = 'none';
+  document.getElementById('img-info').style.display = 'none';
+  document.getElementById('people-list').innerHTML = '';
+  document.querySelectorAll('.coll-btn').forEach(b => b.classList.remove('active'));
+  selectedColl = null; resizedBase64 = null; peopleCount = 0; lastPainting = null;
+  document.getElementById('status-wrap').style.display = 'none';
+  document.getElementById('success-card').style.display = 'none';
+  document.getElementById('csv-section').style.display = 'none';
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('st-resize').textContent = 'Resize image for web';
+  document.getElementById('st-img').textContent    = 'Upload image to GitHub';
+  document.getElementById('st-json').textContent   = 'Update paintings.json';
+  ['resize','img','json'].forEach(id => { document.getElementById('si-'+id).innerHTML = ''; document.getElementById('st-'+id).className = 'step-text'; });
+}
+
+checkAuth();
+</script>
+</body>
+</html>
