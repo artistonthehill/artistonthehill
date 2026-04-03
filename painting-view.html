@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painting — Tony Parsons · Artist on the Hill</title>
+<meta name="robots" content="noindex, nofollow">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WE9VCP47Q8"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WE9VCP47Q8');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #8b6f47;
+    --accent-light: #c49a6c;
+    --white: #fff;
+    --nav-h: 64px;
+    --parchment: #f7f4ef;
+    --warm-mid: #e8e2d9;
+    --ink: #1a1714;
+    --text-body: #3a342d;
+    --text-light: #7a6e65;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Karla', sans-serif;
+    background: var(--ink);
+    color: var(--white);
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    background: rgba(26,23,20,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    z-index: 100;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    text-decoration: none;
+    line-height: 1.2;
+  }
+  .nav-logo span {
+    display: block;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Karla', sans-serif;
+  }
+  .nav-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Karla', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--accent-light); }
+  .nav-back svg {
+    width: 14px; height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    flex: 1;
+    padding-top: var(--nav-h);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── PAINTING STAGE ── */
+  .painting-stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px 32px;
+    min-height: calc(100vh - var(--nav-h) - 200px);
+    position: relative;
+  }
+  .painting-img-wrap {
+    position: relative;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #painting-img {
+    display: block;
+    max-width: 100%;
+    max-height: calc(100vh - var(--nav-h) - 260px);
+    width: auto;
+    height: auto;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.65), 0 4px 20px rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  #painting-img.loaded { opacity: 1; }
+
+  /* Loading shimmer */
+  .img-placeholder {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    display: none;
+  }
+  .img-placeholder.active { display: block; }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+  /* ── INFO STRIP ── */
+  .info-strip {
+    background: rgba(255,255,255,0.03);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 28px 32px 32px;
+  }
+  .info-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: start;
+  }
+  .info-left {}
+  .info-location {
+    font-family: 'Karla', sans-serif;
+    font-size: 0.64rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .info-location svg {
+    width: 10px; height: 10px;
+    fill: currentColor;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+  #info-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  #info-meta {
+    font-family: 'Karla', sans-serif;
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.38);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  #info-desc {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.55);
+    max-width: 620px;
+    display: none; /* shown if description provided */
+  }
+  #info-desc.has-text { display: block; }
+
+  .info-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  #info-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--accent-light);
+    line-height: 1;
+    display: none;
+  }
+  #info-price.has-price { display: block; }
+
+  .enquire-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: var(--white);
+    padding: 14px 28px;
+    font-family: 'Karla', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .enquire-btn:hover { background: var(--accent-light); }
+  .enquire-btn svg {
+    width: 15px; height: 15px;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* ── ERROR STATE ── */
+  .error-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 32px;
+    text-align: center;
+    display: none;
+  }
+  .error-state.visible { display: flex; }
+  .error-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 14px;
+    color: rgba(255,255,255,0.6);
+  }
+  .error-body {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.7;
+    max-width: 380px;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 20px; }
+    .painting-stage { padding: 24px 16px 20px; }
+    #painting-img { max-height: calc(60vh); }
+    .info-strip { padding: 20px 20px 28px; }
+    .info-inner { grid-template-columns: 1fr; gap: 20px; }
+    .info-right { align-items: flex-start; flex-direction: row; align-items: center; flex-wrap: wrap; }
+    #info-price { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Tony Parsons <span>Artist on the Hill</span></a>
+  <a href="javascript:history.back()" class="nav-back" id="back-btn">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to map
+  </a>
+</nav>
+
+<main id="main-content">
+
+  <!-- Painting display -->
+  <div class="painting-stage" id="painting-stage">
+    <div class="painting-img-wrap">
+      <div class="img-placeholder active" id="placeholder"></div>
+      <img id="painting-img" src="" alt="" onload="onImgLoad()" onerror="onImgError()">
+    </div>
+  </div>
+
+  <div class="info-strip" id="info-strip">
+    <div class="info-inner">
+      <div class="info-left">
+        <div class="info-location">
+          <svg viewBox="0 0 12 16"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>
+          <span id="info-location-text">—</span>
+        </div>
+        <div id="info-title">—</div>
+        <div id="info-meta">—</div>
+        <p id="info-desc"></p>
+      </div>
+      <div class="info-right">
+        <div id="info-price"></div>
+        <a href="#" class="enquire-btn" id="enquire-btn" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          Enquire via WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error state -->
+  <div class="error-state" id="error-state">
+    <div class="error-title">Painting not found</div>
+    <p class="error-body">This painting may have moved or the link may be incomplete. Head back to the map to explore all locations.</p>
+    <a href="map.html" class="enquire-btn" style="align-self:center;">← Back to the map</a>
+  </div>
+
+</main>
+
+<script>
+// ── URL PARAM PARSING ──
+// Expects: painting-view.html?img=images/alps-sauze-church.jpg&title=Church+Square&location=Sauze+d%27Oulx&meta=Oil+on+canvas+%C2%B7+80%C3%9730cm&price=%C2%A32%2C300&desc=Optional+description
+// Only img is required. All others are optional.
+
+function getParam(name) {
+  return new URLSearchParams(window.location.search).get(name) || '';
+}
+
+function init() {
+  const img     = getParam('img');
+  const title   = getParam('title')    || 'Untitled';
+  const location= getParam('location') || '';
+  const meta    = getParam('meta')     || '';
+  const price   = getParam('price')    || '';
+  const desc    = getParam('desc')     || '';
+  const back    = getParam('back')     || ''; // optional explicit back URL
+
+  // Update page title
+  if (title) document.title = title + ' — Tony Parsons · Artist on the Hill';
+
+  // Back button destination
+  if (back) {
+    document.getElementById('back-btn').href = back;
+    document.getElementById('back-btn').removeAttribute('href'); // use JS
+    document.getElementById('back-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = back;
+    });
+  }
+
+  if (!img) {
+    showError();
+    return;
+  }
+
+  // Set image
+  const imgEl = document.getElementById('painting-img');
+  imgEl.src = img;
+  imgEl.alt = title;
+
+  // Populate info
+  document.getElementById('info-title').textContent = title;
+  document.getElementById('info-location-text').textContent = location || 'Tony Parsons';
+  document.getElementById('info-meta').textContent = meta;
+
+  if (price) {
+    const priceEl = document.getElementById('info-price');
+    priceEl.textContent = price;
+    priceEl.classList.add('has-price');
+  }
+
+  if (desc) {
+    const descEl = document.getElementById('info-desc');
+    descEl.textContent = desc;
+    descEl.classList.add('has-text');
+  }
+
+  // Enquire button
+  const msg = encodeURIComponent('Hello Tony, I\'m interested in "' + title + '"' + (price ? ' (' + price + ')' : '') + '. Could you tell me more?');
+  document.getElementById('enquire-btn').href = 'https://wa.me/447880601709?text=' + msg;
+}
+
+function onImgLoad() {
+  document.getElementById('placeholder').classList.remove('active');
+  document.getElementById('painting-img').classList.add('loaded');
+}
+
+function onImgError() {
+  showError();
+}
+
+function showError() {
+  document.getElementById('painting-stage').style.display = 'none';
+  document.getElementById('info-strip').style.display = 'none';
+  document.getElementById('error-state').classList.add('visible');
+}
+
+init();
+</script>
+
+</body>
+</html>
