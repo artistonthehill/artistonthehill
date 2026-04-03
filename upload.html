@@ -929,6 +929,8 @@ async function uploadPainting() {
 
   if (!title)          return alert('Please enter a title.');
   if (!price)          return alert('Please enter a price.');
+  // Normalise price — add £ if missing, add commas
+  const priceClean = price.startsWith('£') ? price : '£' + Number(price.replace(/[^0-9]/g,'')).toLocaleString('en-GB');
   if (!size)           return alert('Please enter size / medium.');
   if (!selectedColl)   return alert('Please select a collection.');
   if (isNaN(lat)||isNaN(lng)) return alert('Please enter coordinates.');
@@ -953,7 +955,7 @@ async function uploadPainting() {
     const paintings = JSON.parse(atob(jsonFile.content.replace(/\n/g,'')));
 
     const newPainting = {
-      id: paintId||imgId, title, img: imgFilename, price, size, lat, lng,
+      id: paintId||imgId, title, img: imgFilename, price: priceClean, size, lat, lng,
       collection: selectedColl,
       datePainted: getPaintingDate()
     };
@@ -961,7 +963,9 @@ async function uploadPainting() {
     if (people.length)  newPainting.peopleMet = people;
 
     paintings.push(newPainting);
-    const updated = btoa(unescape(encodeURIComponent(JSON.stringify(paintings, null, 2))));
+    const jsonStr = JSON.stringify(paintings, null, 2);
+    const bytes = new TextEncoder().encode(jsonStr);
+    const updated = btoa(String.fromCharCode(...bytes));
     await ghPut(PAINTINGS_PATH, updated, jsonFile.sha, 'Add painting: '+title);
     setStep('json','done','paintings.json updated');
 
