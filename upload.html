@@ -513,7 +513,7 @@
 
   <!-- Option 2: Paste Maps link -->
   <div class="field" style="margin-top:14px">
-    <label>Or paste a Google Maps link</label>
+    <label>Or paste a full Google Maps URL <span style="color:var(--muted); font-size:0.6rem; letter-spacing:0; text-transform:none; font-style:italic;">— short links (goo.gl) won't work, see below</span></label>
     <div style="display:flex; gap:8px; align-items:flex-start;">
       <input type="url" id="maps-link" placeholder="https://maps.app.goo.gl/..." oninput="parseMapsLink(this.value)" style="flex:1">
       <button class="decode-btn" onclick="fetchAndDecode()">Decode</button>
@@ -760,70 +760,52 @@ function getGPS() {
 
 // Option 2: parse coords directly from a maps URL (works for full URLs)
 function parseMapsLink(url) {
-  if (!url) return;
-  // Try to extract @lat,lng or ll=lat,lng or query=lat,lng patterns
-  let m =
-    url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) ||
-    url.match(/ll=(-?\d+\.\d+),(-?\d+\.\d+)/) ||
-    url.match(/query=(-?\d+\.\d+),(-?\d+\.\d+)/) ||
-    url.match(/place\/(-?\d+\.\d+),(-?\d+\.\d+)/) ||
-    url.match(/\?q=(-?\d+\.\d+),(-?\d+\.\d+)/);
-  if (m) {
-    setCoords(parseFloat(m[1]), parseFloat(m[2]), 'Coords from Maps link ✓');
-    const s = document.getElementById('maps-status');
-    s.style.display = 'block';
-    s.textContent = `Found: ${m[1]}, ${m[2]}`;
-    s.style.color = 'var(--success)';
+  if (!url) return false;
+  // Try all known coordinate patterns in Google Maps URLs
+  const patterns = [
+    /@(-?\d+\.\d+),(-?\d+\.\d+)/,
+    /ll=(-?\d+\.\d+),(-?\d+\.\d+)/,
+    /query=(-?\d+\.\d+),(-?\d+\.\d+)/,
+    /place\/(-?\d+\.\d+),(-?\d+\.\d+)/,
+    /\?q=(-?\d+\.\d+),(-?\d+\.\d+)/,
+    /center=(-?\d+\.\d+)%2C(-?\d+\.\d+)/,
+    /!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/
+  ];
+  for (const re of patterns) {
+    const m = url.match(re);
+    if (m) {
+      setCoords(parseFloat(m[1]), parseFloat(m[2]), 'Coords from Maps link ✓');
+      const s = document.getElementById('maps-status');
+      s.style.display = 'block';
+      s.style.color = 'var(--success)';
+      s.textContent = `Found: ${m[1]}, ${m[2]}`;
+      return true;
+    }
   }
+  return false;
 }
 
-// Option 2b: follow the short link to get the real URL, then parse it
+// Option 2b: attempt to resolve short link, fall back to clear instructions
 async function fetchAndDecode() {
   const url = document.getElementById('maps-link').value.trim();
   const status = document.getElementById('maps-status');
   if (!url) return;
 
-  // Try parsing directly first (in case they pasted a full URL)
-  parseMapsLink(url);
-  const latNow = document.getElementById('f-lat').value;
-  if (latNow) return; // already worked
+  // Try parsing directly first (works for full Google Maps URLs)
+  if (parseMapsLink(url)) return;
 
-  // Short link — we need to resolve it
-  // We can't follow redirects cross-origin directly, but we can try a CORS proxy
-  // or instruct the user. Try a no-cors ping first to see if it expands in the URL.
+  // It's a short link (maps.app.goo.gl) — these can't be resolved cross-origin
+  // Show the user exactly how to get the coordinates from the Maps app instead
   status.style.display = 'block';
-  status.style.color = 'var(--muted)';
-  status.textContent = 'Resolving link…';
-
-  try {
-    // Use a public redirect resolver
-    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
-    const r = await fetch(proxyUrl, { redirect: 'follow', signal: AbortSignal.timeout(8000) });
-    const finalUrl = r.url;
-    parseMapsLink(decodeURIComponent(finalUrl));
-    const lat = document.getElementById('f-lat').value;
-    if (!lat) {
-      // Try parsing the page text for coords
-      const text = await r.text();
-      const m = text.match(/(-?\d{1,3}\.\d{4,}),(-?\d{1,3}\.\d{4,})/);
-      if (m) {
-        setCoords(parseFloat(m[1]), parseFloat(m[2]), 'Coords decoded ✓');
-        status.textContent = `Decoded: ${m[1]}, ${m[2]}`;
-        status.style.color = 'var(--success)';
-      } else {
-        showMapsInstructions(status);
-      }
-    }
-  } catch(e) {
-    showMapsInstructions(status);
-  }
-}
-
-function showMapsInstructions(status) {
   status.style.color = 'var(--warm)';
-  status.innerHTML = `Couldn't auto-decode that link. Quick workaround:<br>
-    In Google Maps app → tap & hold your spot → the coordinates appear at the top (e.g. <em>50.8139, -0.1358</em>) → tap them → copy → paste into the Lat/Lng boxes below.`;
-  status.style.display = 'block';
+  status.innerHTML = `
+    <strong>Short links can't be decoded automatically.</strong><br><br>
+    To get exact coordinates from the Google Maps app:<br>
+    1. Find your spot in Maps<br>
+    2. <strong>Tap and hold</strong> on the exact location<br>
+    3. A pin drops and coordinates appear at the top (e.g. <em>50.7509, -1.2927</em>)<br>
+    4. <strong>Tap those numbers</strong> to copy them<br>
+    5. Paste into the Lat / Lng boxes below`;
 }
 
 // ── PEOPLE ───────────────────────────────────────────────────────────────────
