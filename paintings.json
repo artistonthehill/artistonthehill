@@ -820,10 +820,10 @@
     "id": "seat-of-power",
     "title": "Seat of Power",
     "img": "images/seat-of-power.jpg",
-    "price": "£2300",
-    "size": "80x30",
-    "lat": 504950,
-    "lng": 1417.1,
+    "price": "£2,300",
+    "size": "80×30cm · Oil on board",
+    "lat": 50.8294,
+    "lng": -0.2765,
     "collection": "uk",
     "datePainted": "2026-04-03"
   }
