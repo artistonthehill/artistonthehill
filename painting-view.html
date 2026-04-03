@@ -212,6 +212,23 @@
   }
   #info-price.has-price { display: block; }
 
+  .prints-link {
+    display: none;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Karla', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .prints-link.visible { display: inline-flex; align-items: center; gap: 7px; }
+  .prints-link:hover { color: var(--accent-light); border-color: rgba(196,154,108,0.4); }
+
   .enquire-btn {
     display: inline-flex;
     align-items: center;
@@ -306,6 +323,9 @@
       </div>
       <div class="info-right">
         <div id="info-price"></div>
+        <a href="#" class="prints-link" id="prints-link" target="_blank">
+          Giclée prints available at The Gillan Gallery ↗
+        </a>
         <a href="#" class="enquire-btn" id="enquire-btn" target="_blank">
           <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
           Enquire via WhatsApp
@@ -339,6 +359,7 @@ function init() {
   const meta    = getParam('meta')     || '';
   const price   = getParam('price')    || '';
   const desc    = getParam('desc')     || '';
+  const prints  = getParam('prints')   || '';
   const back    = getParam('back')     || ''; // optional explicit back URL
 
   // Update page title
@@ -379,6 +400,12 @@ function init() {
     const descEl = document.getElementById('info-desc');
     descEl.textContent = desc;
     descEl.classList.add('has-text');
+  }
+
+  if (prints) {
+    const printsEl = document.getElementById('prints-link');
+    printsEl.href = prints;
+    printsEl.classList.add('visible');
   }
 
   // Enquire button
