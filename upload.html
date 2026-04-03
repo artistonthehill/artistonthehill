@@ -178,6 +178,42 @@
   .coords-hint { font-size: 0.7rem; color: var(--muted); margin-top: -8px; margin-bottom: 14px; line-height: 1.5; }
   .coords-hint a { color: var(--accent); }
 
+  .gps-btn {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-family: 'Karla', sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .gps-btn:hover { background: #fdf9f5; }
+  .gps-btn.got { background: #f0f7f1; border-color: var(--success); color: var(--success); }
+  .gps-btn.loading { color: var(--muted); border-color: var(--border); cursor: wait; }
+
+  .decode-btn {
+    background: var(--accent-dark);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-family: 'Karla', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .decode-btn:hover { background: var(--accent); }
+
   /* ── PEOPLE MET ── */
   .people-hint {
     font-size: 0.75rem;
@@ -420,6 +456,14 @@
     <input type="text" id="f-title" placeholder="e.g. Burgh Island at Dusk" oninput="autoId()">
   </div>
 
+  <div class="field">
+    <label>Date painted <span style="color:var(--muted); font-size:0.6rem; letter-spacing:0; text-transform:none; font-style:italic;">— leave blank for today</span></label>
+    <input type="date" id="f-date" oninput="onDateChange()">
+    <p id="date-warning" style="display:none; margin-top:6px; font-size:0.72rem; color:var(--warm); line-height:1.5;">
+      📅 Historical painting — people met will be marked as <strong>historical contacts</strong> in your tracker (no urgent follow-up flagged).
+    </p>
+  </div>
+
   <div class="row-2">
     <div class="field">
       <label>Price <span class="req">*</span></label>
@@ -461,8 +505,23 @@
 
   <p class="section-title">Location</p>
 
-  <p class="coords-hint">Open <a href="https://maps.google.com" target="_blank">Google Maps</a>, long-press the exact spot, and the lat/lng appears at the top.</p>
+  <!-- Option 1: GPS -->
+  <button class="gps-btn" onclick="getGPS()" id="gps-btn">
+    📍 Use my current location
+  </button>
+  <p id="gps-status" class="coords-hint" style="display:none"></p>
 
+  <!-- Option 2: Paste Maps link -->
+  <div class="field" style="margin-top:14px">
+    <label>Or paste a Google Maps link</label>
+    <div style="display:flex; gap:8px; align-items:flex-start;">
+      <input type="url" id="maps-link" placeholder="https://maps.app.goo.gl/..." oninput="parseMapsLink(this.value)" style="flex:1">
+      <button class="decode-btn" onclick="fetchAndDecode()">Decode</button>
+    </div>
+    <p id="maps-status" class="coords-hint" style="margin-top:6px; display:none"></p>
+  </div>
+
+  <!-- Coordinates (filled by either method, editable) -->
   <div class="row-2">
     <div class="field">
       <label>Latitude <span class="req">*</span></label>
@@ -638,6 +697,135 @@ function autoId() {
   document.getElementById('f-imgid').value = slug;
 }
 
+function onDateChange() {
+  const val = document.getElementById('f-date').value;
+  const warning = document.getElementById('date-warning');
+  if (!val) { warning.style.display = 'none'; return; }
+  const painted = new Date(val);
+  const today = new Date();
+  const daysDiff = Math.floor((today - painted) / (1000 * 60 * 60 * 24));
+  warning.style.display = daysDiff > 7 ? 'block' : 'none';
+}
+
+function getPaintingDate() {
+  const val = document.getElementById('f-date').value;
+  return val || new Date().toISOString().split('T')[0];
+}
+
+function isHistorical() {
+  const val = document.getElementById('f-date').value;
+  if (!val) return false;
+  const daysDiff = Math.floor((new Date() - new Date(val)) / (1000 * 60 * 60 * 24));
+  return daysDiff > 7;
+}
+
+// ── LOCATION ──────────────────────────────────────────────────────────────────
+
+function setCoords(lat, lng, label) {
+  document.getElementById('f-lat').value = lat.toFixed(6);
+  document.getElementById('f-lng').value = lng.toFixed(6);
+  const btn = document.getElementById('gps-btn');
+  btn.classList.remove('loading');
+  btn.classList.add('got');
+  btn.textContent = '✓ ' + label;
+}
+
+// Option 1: device GPS
+function getGPS() {
+  const btn = document.getElementById('gps-btn');
+  const status = document.getElementById('gps-status');
+  if (!navigator.geolocation) {
+    status.style.display = 'block';
+    status.textContent = 'GPS not available on this device.';
+    return;
+  }
+  btn.classList.add('loading');
+  btn.textContent = '⏳ Getting your location…';
+  status.style.display = 'none';
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      setCoords(pos.coords.latitude, pos.coords.longitude, 'Location captured ✓');
+      status.style.display = 'block';
+      status.textContent = `GPS: ${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)} (accuracy ~${Math.round(pos.coords.accuracy)}m)`;
+    },
+    err => {
+      btn.classList.remove('loading');
+      btn.textContent = '📍 Use my current location';
+      status.style.display = 'block';
+      status.textContent = 'Could not get location — try the Maps link option below.';
+    },
+    { enableHighAccuracy: true, timeout: 12000 }
+  );
+}
+
+// Option 2: parse coords directly from a maps URL (works for full URLs)
+function parseMapsLink(url) {
+  if (!url) return;
+  // Try to extract @lat,lng or ll=lat,lng or query=lat,lng patterns
+  let m =
+    url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) ||
+    url.match(/ll=(-?\d+\.\d+),(-?\d+\.\d+)/) ||
+    url.match(/query=(-?\d+\.\d+),(-?\d+\.\d+)/) ||
+    url.match(/place\/(-?\d+\.\d+),(-?\d+\.\d+)/) ||
+    url.match(/\?q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (m) {
+    setCoords(parseFloat(m[1]), parseFloat(m[2]), 'Coords from Maps link ✓');
+    const s = document.getElementById('maps-status');
+    s.style.display = 'block';
+    s.textContent = `Found: ${m[1]}, ${m[2]}`;
+    s.style.color = 'var(--success)';
+  }
+}
+
+// Option 2b: follow the short link to get the real URL, then parse it
+async function fetchAndDecode() {
+  const url = document.getElementById('maps-link').value.trim();
+  const status = document.getElementById('maps-status');
+  if (!url) return;
+
+  // Try parsing directly first (in case they pasted a full URL)
+  parseMapsLink(url);
+  const latNow = document.getElementById('f-lat').value;
+  if (latNow) return; // already worked
+
+  // Short link — we need to resolve it
+  // We can't follow redirects cross-origin directly, but we can try a CORS proxy
+  // or instruct the user. Try a no-cors ping first to see if it expands in the URL.
+  status.style.display = 'block';
+  status.style.color = 'var(--muted)';
+  status.textContent = 'Resolving link…';
+
+  try {
+    // Use a public redirect resolver
+    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
+    const r = await fetch(proxyUrl, { redirect: 'follow', signal: AbortSignal.timeout(8000) });
+    const finalUrl = r.url;
+    parseMapsLink(decodeURIComponent(finalUrl));
+    const lat = document.getElementById('f-lat').value;
+    if (!lat) {
+      // Try parsing the page text for coords
+      const text = await r.text();
+      const m = text.match(/(-?\d{1,3}\.\d{4,}),(-?\d{1,3}\.\d{4,})/);
+      if (m) {
+        setCoords(parseFloat(m[1]), parseFloat(m[2]), 'Coords decoded ✓');
+        status.textContent = `Decoded: ${m[1]}, ${m[2]}`;
+        status.style.color = 'var(--success)';
+      } else {
+        showMapsInstructions(status);
+      }
+    }
+  } catch(e) {
+    showMapsInstructions(status);
+  }
+}
+
+function showMapsInstructions(status) {
+  status.style.color = 'var(--warm)';
+  status.innerHTML = `Couldn't auto-decode that link. Quick workaround:<br>
+    In Google Maps app → tap & hold your spot → the coordinates appear at the top (e.g. <em>50.8139, -0.1358</em>) → tap them → copy → paste into the Lat/Lng boxes below.`;
+  status.style.display = 'block';
+}
+
 // ── PEOPLE ───────────────────────────────────────────────────────────────────
 function addPerson() {
   peopleCount++;
@@ -767,7 +955,7 @@ async function uploadPainting() {
     const newPainting = {
       id: paintId||imgId, title, img: imgFilename, price, size, lat, lng,
       collection: selectedColl,
-      datePainted: new Date().toISOString().split('T')[0]
+      datePainted: getPaintingDate()
     };
     if (prints)         newPainting.prints = prints;
     if (people.length)  newPainting.peopleMet = people;
@@ -777,7 +965,7 @@ async function uploadPainting() {
     await ghPut(PAINTINGS_PATH, updated, jsonFile.sha, 'Add painting: '+title);
     setStep('json','done','paintings.json updated');
 
-    if (people.length) saveToTracker(newPainting.id, title, people, newPainting.datePainted);
+    if (people.length) saveToTracker(newPainting.id, title, people, newPainting.datePainted, isHistorical());
 
     lastPainting = {title, paintingId: newPainting.id, people};
     showSuccess(people.length);
@@ -808,11 +996,11 @@ function getTrackerData() {
 }
 function saveTrackerData(d) { localStorage.setItem('aoth_followups', JSON.stringify(d)); }
 
-function saveToTracker(paintingId, paintingTitle, people, date) {
+function saveToTracker(paintingId, paintingTitle, people, date, historical) {
   const data = getTrackerData();
   const idx = data.findIndex(e => e.paintingId === paintingId);
   const entry = {
-    paintingId, paintingTitle, date,
+    paintingId, paintingTitle, date, historical: !!historical,
     people: people.map((p,i) => ({...p, id: paintingId+'-'+i, contacted: false}))
   };
   if (idx >= 0) data[idx] = entry;
@@ -859,12 +1047,14 @@ function renderTracker() {
     shown++;
 
     const pending = entry.people.filter(p => !p.contacted).length;
+    const histBadge = entry.historical ? `<span class="pending-badge" style="background:var(--muted)">Historical</span>` : '';
 
     html += `<div class="painting-group">
       <div class="painting-group-header">
         <h3>${entry.paintingTitle}</h3>
         <span class="painting-group-meta">${entry.date}</span>
-        ${pending > 0 ? `<span class="pending-badge">${pending} to do</span>` : ''}
+        ${histBadge}
+        ${!entry.historical && pending > 0 ? `<span class="pending-badge">${pending} to do</span>` : ''}
       </div>`;
 
     toShow.forEach(person => {
@@ -931,9 +1121,14 @@ function downloadCSV() {
 
 // ── RESET ─────────────────────────────────────────────────────────────────────
 function resetForm() {
-  ['f-title','f-price','f-size','f-prints','f-lat','f-lng','f-id','f-imgid'].forEach(id => {
-    document.getElementById(id).value = '';
+  ['f-title','f-price','f-size','f-prints','f-lat','f-lng','f-id','f-imgid','maps-link','f-date'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
   });
+  const gpsBtn = document.getElementById('gps-btn');
+  gpsBtn.classList.remove('got','loading');
+  gpsBtn.textContent = '📍 Use my current location';
+  document.getElementById('gps-status').style.display = 'none';
+  document.getElementById('maps-status').style.display = 'none';
   document.getElementById('img-preview').style.display = 'none';
   document.getElementById('img-info').style.display = 'none';
   document.getElementById('people-list').innerHTML = '';
