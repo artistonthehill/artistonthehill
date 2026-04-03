@@ -505,33 +505,32 @@
 
   <p class="section-title">Location</p>
 
-  <!-- Option 1: GPS -->
+  <!-- Option 1: GPS (best when standing at the spot) -->
   <button class="gps-btn" onclick="getGPS()" id="gps-btn">
     📍 Use my current location
   </button>
   <p id="gps-status" class="coords-hint" style="display:none"></p>
 
-  <!-- Option 2: Paste Maps link -->
+  <!-- Option 2: Paste coordinates directly -->
   <div class="field" style="margin-top:14px">
-    <label>Or paste a full Google Maps URL <span style="color:var(--muted); font-size:0.6rem; letter-spacing:0; text-transform:none; font-style:italic;">— short links (goo.gl) won't work, see below</span></label>
-    <div style="display:flex; gap:8px; align-items:flex-start;">
-      <input type="url" id="maps-link" placeholder="https://maps.app.goo.gl/..." oninput="parseMapsLink(this.value)" style="flex:1">
-      <button class="decode-btn" onclick="fetchAndDecode()">Decode</button>
-    </div>
-    <p id="maps-status" class="coords-hint" style="margin-top:6px; display:none"></p>
+    <label>Or paste coordinates <span class="req">*</span></label>
+    <input type="text" id="f-coords"
+      placeholder="50.8294, -0.2765"
+      oninput="splitCoords(this.value)"
+      autocomplete="off" inputmode="decimal"
+      style="font-size:1rem; letter-spacing:0.04em;">
+    <p style="font-size:0.7rem; color:var(--muted); margin-top:6px; line-height:1.6;">
+      In Google Maps app: tap &amp; hold your spot → coordinates appear at the top → tap them to copy → paste here.<br>
+      Both numbers go in this one box — they'll be split automatically.
+    </p>
+    <p id="coords-confirm" style="display:none; font-size:0.75rem; color:var(--success); margin-top:6px;">
+      ✓ <span id="coords-confirm-text"></span>
+    </p>
   </div>
 
-  <!-- Coordinates (filled by either method, editable) -->
-  <div class="row-2">
-    <div class="field">
-      <label>Latitude <span class="req">*</span></label>
-      <input type="number" id="f-lat" placeholder="50.8139" step="any">
-    </div>
-    <div class="field">
-      <label>Longitude <span class="req">*</span></label>
-      <input type="number" id="f-lng" placeholder="-0.1358" step="any">
-    </div>
-  </div>
+  <!-- Hidden fields used by upload logic -->
+  <input type="hidden" id="f-lat">
+  <input type="hidden" id="f-lng">
 
   <!-- PEOPLE MET -->
   <p class="section-title">People I met here</p>
@@ -724,10 +723,48 @@ function isHistorical() {
 function setCoords(lat, lng, label) {
   document.getElementById('f-lat').value = lat.toFixed(6);
   document.getElementById('f-lng').value = lng.toFixed(6);
+  // Also fill the visible coords box
+  const coordsBox = document.getElementById('f-coords');
+  if (coordsBox) coordsBox.value = lat.toFixed(6) + ', ' + lng.toFixed(6);
   const btn = document.getElementById('gps-btn');
   btn.classList.remove('loading');
   btn.classList.add('got');
   btn.textContent = '✓ ' + label;
+  const confirm = document.getElementById('coords-confirm');
+  const confirmText = document.getElementById('coords-confirm-text');
+  if (confirm && confirmText) {
+    confirmText.textContent = lat.toFixed(5) + ', ' + lng.toFixed(5);
+    confirm.style.display = 'block';
+  }
+}
+
+// Split "50.8294, -0.2765" or "50.8294 -0.2765" into lat + lng
+function splitCoords(val) {
+  if (!val) return;
+  // Accept comma, space, or tab as separator. Strip any stray characters.
+  const clean = val.replace(/[°NSEW]/gi, '').trim();
+  const parts = clean.split(/[\s,;]+/).filter(p => p.match(/^-?\d+\.?\d*$/));
+  if (parts.length >= 2) {
+    const lat = parseFloat(parts[0]);
+    const lng = parseFloat(parts[1]);
+    if (!isNaN(lat) && !isNaN(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180) {
+      document.getElementById('f-lat').value = lat.toFixed(6);
+      document.getElementById('f-lng').value = lng.toFixed(6);
+      const confirm = document.getElementById('coords-confirm');
+      const confirmText = document.getElementById('coords-confirm-text');
+      confirmText.textContent = lat.toFixed(5) + ', ' + lng.toFixed(5);
+      confirm.style.display = 'block';
+      confirm.style.color = 'var(--success)';
+    } else {
+      // Numbers out of range — warn
+      const confirm = document.getElementById('coords-confirm');
+      confirm.style.display = 'block';
+      confirm.style.color = 'var(--error)';
+      document.getElementById('coords-confirm-text').textContent = 'Those numbers don\'t look right — lat should be ~50, lng should be negative for UK';
+    }
+  } else {
+    document.getElementById('coords-confirm').style.display = 'none';
+  }
 }
 
 // Option 1: device GPS
@@ -915,7 +952,7 @@ async function uploadPainting() {
   const priceClean = price.startsWith('£') ? price : '£' + Number(price.replace(/[^0-9]/g,'')).toLocaleString('en-GB');
   if (!size)           return alert('Please enter size / medium.');
   if (!selectedColl)   return alert('Please select a collection.');
-  if (isNaN(lat)||isNaN(lng)) return alert('Please enter coordinates.');
+  if (isNaN(lat)||isNaN(lng)) return alert('Please enter coordinates — paste them into the coordinates box in the format: 50.8294, -0.2765');
   if (!resizedBase64)  return alert('Please choose a photo.');
   if (!imgId)          return alert('Image filename missing — re-enter the title.');
 
@@ -1107,14 +1144,14 @@ function downloadCSV() {
 
 // ── RESET ─────────────────────────────────────────────────────────────────────
 function resetForm() {
-  ['f-title','f-price','f-size','f-prints','f-lat','f-lng','f-id','f-imgid','maps-link','f-date'].forEach(id => {
+  ['f-title','f-price','f-size','f-prints','f-lat','f-lng','f-id','f-imgid','f-date','f-coords'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
   });
   const gpsBtn = document.getElementById('gps-btn');
   gpsBtn.classList.remove('got','loading');
   gpsBtn.textContent = '📍 Use my current location';
   document.getElementById('gps-status').style.display = 'none';
-  document.getElementById('maps-status').style.display = 'none';
+  document.getElementById('coords-confirm').style.display = 'none';
   document.getElementById('img-preview').style.display = 'none';
   document.getElementById('img-info').style.display = 'none';
   document.getElementById('people-list').innerHTML = '';
