@@ -791,10 +791,10 @@
     "id": "east-cowes-marina",
     "title": "East Cowes Marina",
     "img": "images/east-cowes-marina.jpg",
-    "price": "1100",
+    "price": "Â£1,100",
     "size": "42x30",
     "lat": 50.791115,
-    "lng": -0.003477,
+    "lng": -1.285106,
     "collection": "uk",
     "datePainted": "2025-05-17",
     "peopleMet": [
