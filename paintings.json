@@ -1,5 +1,15 @@
 [
   {
+    "id": "boatrace-2026",
+    "title": "The Boat Race 2026",
+    "img": "images/boatrace-2026.jpg",
+    "price": "£3,000",
+    "size": "60×42cm · Oil on canvas board",
+    "lat": 51.47006,
+    "lng": -0.21733,
+    "collection": "uk"
+  },
+  {
     "id": "itchenor",
     "title": "Itchenor in the Sun",
     "img": "images/itchenor.jpg",
