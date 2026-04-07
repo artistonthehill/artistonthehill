@@ -792,6 +792,7 @@
       <div class="lightbox-price" id="lb-price"></div>
       <p class="lightbox-desc" id="lb-desc"></p>
       <div class="lightbox-details" id="lb-details"></div>
+      <a href="#" class="prints-link" id="lb-prints" target="_blank" style="display:none; font-family:'Karla',sans-serif; font-size:0.75rem; letter-spacing:0.08em; color:#7a6e65; text-decoration:none; border-bottom:1px solid #e8e2d9; padding-bottom:2px; margin-bottom:4px; width:fit-content;">Giclée prints available at The Gillan Gallery ↗</a>
       <div class="lightbox-actions">
         <a href="#" class="btn-primary" id="lb-whatsapp" target="_blank">Enquire via WhatsApp</a>
         <a href="#" class="btn-secondary" id="lb-email">or send an email →</a>
@@ -867,6 +868,9 @@ function openLightbox(id) {
   const msg = encodeURIComponent(`Hello Tony, I'm interested in "${p.title}" (${p.price}). Could you tell me more?`);
   document.getElementById('lb-whatsapp').href = `https://wa.me/447880601709?text=${msg}`;
   document.getElementById('lb-email').href = `mailto:artistonthehill@gmail.com?subject=Enquiry: ${p.title}`;
+  const printsEl = document.getElementById('lb-prints');
+  if (p.prints) { printsEl.href = p.prints; printsEl.style.display = 'inline-block'; }
+  else { printsEl.style.display = 'none'; }
   document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
