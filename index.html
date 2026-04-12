@@ -533,12 +533,12 @@
         <a href="https://toat.art/" target="_blank" class="work-badge" onclick="event.stopPropagation()">TOAT</a>
       </div>
 
-      <div class="work-card standard" data-category="landscape" onclick="openLightbox('richmond')">
-        <img src="images/richmond.jpg" alt="Richmond Bridge">
+      <div class="work-card standard" data-category="marine" onclick="openLightbox('henley')">
+        <img src="images/henley-royalty.jpg" alt="Henley Royalty">
         <div class="work-overlay">
-          <div class="work-title">Richmond Bridge</div>
-          <div class="work-meta">60×30cm · Oil on canvas · Richmond</div>
-          <div class="work-price">£1,700</div>
+          <div class="work-title">Henley Royalty</div>
+          <div class="work-meta">42×30cm · Oil on board · Henley-on-Thames</div>
+          <div class="work-price">£1,100</div>
         </div>
         <a href="https://toat.art/" target="_blank" class="work-badge" onclick="event.stopPropagation()">TOAT</a>
       </div>
@@ -563,22 +563,22 @@
         <a href="https://toat.art/" target="_blank" class="work-badge" onclick="event.stopPropagation()">TOAT</a>
       </div>
 
-      <div class="work-card standard" data-category="marine" onclick="openLightbox('palma')">
-        <img src="images/palma.jpg" alt="Palma Marina Diptych">
+      <div class="work-card standard" data-category="landscape" onclick="openLightbox('wulfrans')">
+        <img src="images/st-wulfrans-ovingdean.jpg" alt="St Wulfrans, Ovingdean">
         <div class="work-overlay">
-          <div class="work-title">Palma Marina</div>
-          <div class="work-meta">2 × A3 · Oil on board · Mallorca</div>
-          <div class="work-price">£2,300</div>
+          <div class="work-title">St Wulfrans, Ovingdean</div>
+          <div class="work-meta">42×30cm · Oil on canvas board · Brighton</div>
+          <div class="work-price">£1,100</div>
         </div>
         <a href="https://toat.art/" target="_blank" class="work-badge" onclick="event.stopPropagation()">TOAT</a>
       </div>
 
-      <div class="work-card pano" data-category="landscape" onclick="openLightbox('porchester')">
-        <img src="images/porchester.jpg" alt="Portchester Creek" style="object-position:center 50%;">
+      <div class="work-card pano" data-category="landscape" onclick="openLightbox('cowdray')">
+        <img src="images/cowdray-ruins.jpg" alt="Cowdray Ruins">
         <div class="work-overlay">
-          <div class="work-title">Portchester Creek</div>
-          <div class="work-meta">80×30cm · Oil on board · Fareham</div>
-          <div class="work-price">£2,300</div>
+          <div class="work-title">Cowdray Ruins</div>
+          <div class="work-meta">80×30cm · Oil on board · Midhurst, West Sussex</div>
+          <div class="work-price">£2,200</div>
         </div>
         <a href="https://toat.art/" target="_blank" class="work-badge" onclick="event.stopPropagation()">TOAT</a>
       </div>
@@ -836,6 +836,9 @@ const paintings = {
   saltdean: { title:"Saltdean & Peacehaven Cliffs", subtitle:"Sussex Coast", price:"£1,100", desc:"The white chalk cliffs between Saltdean and Peacehaven — a view I've returned to many times, the light never quite the same twice. Prints available at The Gillan Gallery.", img:"images/saltdeanandpeacehaven.jpg", details:{ Size:"A3", Medium:"Oil on board", Framing:"Framed", Location:"Saltdean, East Sussex", Provenance:"TOAT certified", Prints:"thegillangallery.com", Payment:"0% over up to 24 months" } },
   palma: { title:"Palma Marina Diptych", subtitle:"Mallorca, Spain", price:"£2,300", desc:"Two A3 boards painted in sequence at Palma Marina — the diptych captures the sweep of the harbour in the late afternoon. Sold as a pair.", img:"images/palma.jpg", details:{ Size:"2 × A3", Medium:"Oil on board", Framing:"Framed pair", Location:"Palma de Mallorca", Provenance:"TOAT certified", Payment:"0% over up to 24 months" } },
   porchester: { title:"Portchester Creek", subtitle:"Fareham, Hampshire", price:"£2,300", desc:"The tidal creek at Portchester — mud, light, and the skeletal forms of moored boats at low water. A quiet, luminous painting.", img:"images/porchester.jpg", details:{ Size:"80×30cm", Medium:"Oil on board", Framing:"Framed", Location:"Fareham, Hampshire", Provenance:"TOAT certified", Payment:"0% over up to 24 months" } },
+  cowdray: { title:"Cowdray Ruins", subtitle:"Midhurst, West Sussex", price:"£2,200", desc:"The ruins of Cowdray House — one of the finest Tudor buildings in England — painted plein air on a summer's day. Figures on the path, jackdaws in the towers. Oil on board, framed, TOAT certified.", img:"images/cowdray-ruins.jpg", details:{ Size:"80×30cm", Medium:"Oil on board", Framing:"Framed", Location:"Midhurst, West Sussex", Provenance:"TOAT certified", Payment:"0% over up to 24 months" } },
+  wulfrans: { title:"St Wulfrans, Ovingdean", subtitle:"Ovingdean, Brighton", price:"£1,100", desc:"St Wulfran's Church at Ovingdean in full summer — the medieval flint tower rising from a sea of yellow-green meadow. Painted on location just outside Brighton. Oil on canvas board, framed, TOAT certified.", img:"images/st-wulfrans-ovingdean.jpg", details:{ Size:"42×30cm", Medium:"Oil on canvas board", Framing:"Framed", Location:"Ovingdean, Brighton", Provenance:"TOAT certified", Payment:"0% over up to 24 months" } },
+  henley: { title:"Henley Royalty", subtitle:"Henley-on-Thames, Oxfordshire", price:"£1,100", desc:"Hobbs of Henley's paddle steamer at its moorings — the gold-crowned masts rising against a summer sky, with the bridge behind. Painted on location at Hobbs Quay. Oil on board, white bespoke tray frame, TOAT certified.", img:"images/henley-royalty.jpg", details:{ Size:"42×30cm", Medium:"Oil on board", Framing:"White bespoke tray frame", Location:"Henley-on-Thames, Oxfordshire", Provenance:"TOAT certified", Payment:"0% over up to 24 months" } },
   hengistbury: { title:"Hengistbury Head", subtitle:"Dorset", price:"£2,000", desc:"Hengistbury Head from the spit — the long headland against a wide Dorset sky. Available as an original; auction deadline May 2026.", img:"images/hengistbury.jpg", details:{ Size:"80×30cm", Medium:"Oil on board", Framing:"Framed", Location:"Hengistbury Head, Dorset", Provenance:"TOAT certified", Note:"Auction deadline May 2026", Payment:"0% over up to 24 months" } }
 };
 

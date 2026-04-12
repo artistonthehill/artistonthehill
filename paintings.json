@@ -1,5 +1,45 @@
 [
   {
+    "id": "henley-royalty",
+    "title": "Henley Royalty",
+    "img": "images/henley-royalty.jpg",
+    "price": "£1,100",
+    "size": "42×30cm · Oil on board",
+    "lat": 51.536636,
+    "lng": -0.900656,
+    "collection": "uk"
+  },
+  {
+    "id": "foil-river",
+    "title": "Foil River",
+    "img": "images/foil-river.jpg",
+    "price": "£2,800",
+    "size": "60×42cm · Oil on canvas board",
+    "lat": 50.774295,
+    "lng": 0.156019,
+    "collection": "uk"
+  },
+  {
+    "id": "cowdray-ruins",
+    "title": "Cowdray Ruins",
+    "img": "images/cowdray-ruins.jpg",
+    "price": "£2,200",
+    "size": "80×30cm · Oil on board",
+    "lat": 50.988333,
+    "lng": -0.734889,
+    "collection": "uk"
+  },
+  {
+    "id": "st-wulfrans-ovingdean",
+    "title": "St Wulfrans, Ovingdean",
+    "img": "images/st-wulfrans-ovingdean.jpg",
+    "price": "£1,100",
+    "size": "42×30cm · Oil on canvas board",
+    "lat": 50.816775,
+    "lng": -0.076976,
+    "collection": "uk"
+  },
+  {
     "id": "boatrace-2026",
     "title": "The Boat Race 2026",
     "img": "images/boatrace-2026.jpg",
