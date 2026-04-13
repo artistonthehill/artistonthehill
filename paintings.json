@@ -1,5 +1,15 @@
 [
   {
+    "id": "ovingdean-panoramic",
+    "title": "Ovingdean",
+    "img": "images/ovingdean-panoramic.jpg",
+    "price": "£2,300",
+    "size": "80×30cm · Oil on board",
+    "lat": 50.812029,
+    "lng": -0.066723,
+    "collection": "uk"
+  },
+  {
     "id": "henley-royalty",
     "title": "Henley Royalty",
     "img": "images/henley-royalty.jpg",
