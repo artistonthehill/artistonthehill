@@ -1,5 +1,15 @@
 [
   {
+    "id": "panoramic-peace",
+    "title": "Panoramic Peace",
+    "img": "images/panoramic-peace.jpg",
+    "price": "£2,300",
+    "size": "80×30cm · Oil on board",
+    "lat": 50.822533,
+    "lng": -0.156471,
+    "collection": "uk"
+  },
+  {
     "id": "ovingdean-panoramic",
     "title": "Ovingdean",
     "img": "images/ovingdean-panoramic.jpg",
