@@ -212,8 +212,19 @@
     .explorer-actions { justify-content: flex-start; }
   }
   @media (max-width: 600px) {
-    .explorer-strip { grid-template-columns: repeat(2, 1fr); height: 70vw; }
+    .explorer-strip {
+      grid-template-columns: 1fr;
+      height: auto;
+    }
+    .explorer-panel { height: 300px; }
     .explorer-panel:nth-child(n+5) { display: none; }
+
+    /* swap portrait crops for lateral crops on mobile */
+    .explorer-panel:nth-child(1) img { content: url('images/explorer-egypt-lat.jpg'); object-position: center; }
+    .explorer-panel:nth-child(2) img { content: url('images/explorer-alps-lat.jpg'); object-position: center; }
+    .explorer-panel:nth-child(3) img { content: url('images/explorer-bahamas-lat.jpg'); object-position: center; }
+    .explorer-panel:nth-child(4) img { content: url('images/explorer-oldharry-lat.jpg'); object-position: center; }
+
     .explorer-title-bar { padding: 24px 20px 32px; flex-direction: column; gap: 16px; }
     .explorer-credentials { gap: 16px; }
   }
