@@ -180,23 +180,43 @@
   .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
   .hamburger span { display: block; width: 24px; height: 1px; background: var(--ink); }
 
-  #home { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: var(--nav-h); }
-  .hero-image-panel { position: relative; overflow: hidden; background: var(--ink); min-height: calc(100vh - var(--nav-h)); }
-  .hero-image-panel img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; opacity: 0.92; transition: transform 8s ease; transform: scale(1.03); }
-  .hero-image-panel:hover img { transform: scale(1); }
-  .hero-image-caption { position: absolute; bottom: 24px; left: 24px; font-family: 'Karla', sans-serif; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
-  .hero-text-panel { display: flex; flex-direction: column; justify-content: center; padding: 80px 60px 160px; position: relative; }
-  .hero-eyebrow { font-family: 'Karla', sans-serif; font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
-  .hero-headline { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 4.5vw, 5rem); font-weight: 300; line-height: 1.1; margin-bottom: 32px; }
-  .hero-headline em { font-style: italic; color: var(--accent); }
-  .hero-body { font-size: 1rem; line-height: 1.75; color: var(--text-body); max-width: 420px; margin-bottom: 48px; }
-  .hero-actions { display: flex; flex-direction: column; gap: 14px; }
-  .btn-primary { display: inline-flex; align-items: center; gap: 12px; background: var(--ink); color: var(--white); padding: 16px 28px; font-family: 'Karla', sans-serif; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; align-self: flex-start; }
-  .btn-primary:hover { background: var(--accent); }
-  .btn-secondary { display: inline-flex; align-items: center; gap: 10px; color: var(--text-body); font-family: 'Karla', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid var(--warm-dark); padding-bottom: 2px; align-self: flex-start; transition: color 0.2s, border-color 0.2s; }
-  .btn-secondary:hover { color: var(--accent); border-color: var(--accent); }
-  .hero-credentials { position: absolute; bottom: 40px; left: 60px; right: 60px; display: flex; gap: 32px; padding-top: 24px; border-top: 1px solid var(--warm-mid); }
-  .credential { font-family: 'Karla', sans-serif; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-light); line-height: 1.4; }
+  /* ── EXPLORER HERO ── */
+  #home { padding-top: var(--nav-h); background: var(--ink); }
+  .explorer-strip { display: grid; grid-template-columns: 1.2fr 0.8fr 0.9fr 1.1fr 0.8fr 0.9fr; height: calc(100vh - var(--nav-h)); min-height: 500px; overflow: hidden; }
+  .explorer-panel { position: relative; overflow: hidden; cursor: default; }
+  .explorer-panel img { width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0.82; transition: opacity 0.4s ease, transform 0.6s ease; transform: scale(1.03); display: block; }
+  .explorer-panel:hover img { opacity: 1; transform: scale(1); }
+  .explorer-label { position: absolute; bottom: 18px; left: 16px; font-family: 'Karla', sans-serif; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.5); writing-mode: vertical-rl; transform: rotate(180deg); opacity: 0; transition: opacity 0.3s; }
+  .explorer-panel:hover .explorer-label { opacity: 1; }
+
+  .explorer-title-bar { background: var(--ink); padding: 40px 60px 48px; display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 24px; border-top: 1px solid rgba(255,255,255,0.07); }
+  .explorer-headline { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 4vw, 4.2rem); font-weight: 300; color: var(--white); line-height: 1; letter-spacing: -0.01em; }
+  .explorer-headline em { font-style: italic; color: var(--accent-light); }
+  .explorer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
+  .explorer-sub { font-family: 'Karla', sans-serif; font-size: 0.8rem; color: rgba(255,255,255,0.45); letter-spacing: 0.08em; text-align: right; max-width: 320px; line-height: 1.7; }
+  .explorer-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+  .explorer-credentials { display: flex; gap: 32px; padding-top: 20px; margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap; }
+  .explorer-credential { font-family: 'Karla', sans-serif; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.3); line-height: 1.5; }
+
+  /* keep btn styles used elsewhere */
+  .btn-primary { display: inline-flex; align-items: center; gap: 12px; background: var(--white); color: var(--ink); padding: 14px 28px; font-family: 'Karla', sans-serif; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: background 0.2s, color 0.2s; align-self: flex-start; }
+  .btn-primary:hover { background: var(--accent-light); color: var(--white); }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.5); font-family: 'Karla', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 2px; align-self: flex-start; transition: color 0.2s, border-color 0.2s; }
+  .btn-secondary:hover { color: var(--accent-light); border-color: var(--accent-light); }
+
+  @media (max-width: 960px) {
+    .explorer-strip { grid-template-columns: repeat(3, 1fr); height: 55vw; min-height: 300px; }
+    .explorer-title-bar { padding: 28px 32px 36px; }
+    .explorer-right { align-items: flex-start; }
+    .explorer-sub { text-align: left; }
+    .explorer-actions { justify-content: flex-start; }
+  }
+  @media (max-width: 600px) {
+    .explorer-strip { grid-template-columns: repeat(2, 1fr); height: 70vw; }
+    .explorer-panel:nth-child(n+5) { display: none; }
+    .explorer-title-bar { padding: 24px 20px 32px; flex-direction: column; gap: 16px; }
+    .explorer-credentials { gap: 16px; }
+  }
 
   section { padding: 100px 0; }
   .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
@@ -458,25 +478,56 @@
   <a href="#" onclick="openEnquiry(event)">Enquire →</a>
 </div>
 
-<section id="home" aria-label="Tony Parsons — British plein air oil painter, Brighton">
-  <div class="hero-image-panel">
-    <img src="images/itchenor.jpg" alt="Itchenor in the Sun — Tony Parsons">
-    <div class="hero-image-caption">Itchenor in the Sun — Oil on canvas, 60×30cm</div>
-  </div>
-  <div class="hero-text-panel">
-    <p class="hero-eyebrow">Plein Air Oil Painter — Brighton</p>
-    <h1 class="hero-headline">Painting the world<br><em>one shore at a time</em></h1>
-    <p class="hero-body">I paint on location — on clifftops, shorelines, harbours and hillsides — chasing the light before it changes. Each work is a single session, painted in oil direct from life.</p>
-    <div class="hero-actions">
-      <a href="#works" class="btn-primary">View Available Works</a>
-      <a href="#commission" class="btn-secondary">Commission a painting →</a>
+<section id="home" aria-label="Tony Parsons — British plein air oil painter, Explorer Artist">
+
+  <!-- Six-panel photo strip -->
+  <div class="explorer-strip">
+    <div class="explorer-panel">
+      <img src="images/explorer-egypt.jpg" alt="Painting at the Pyramids of Giza, Egypt">
+      <span class="explorer-label">Egypt</span>
     </div>
-    <div class="hero-credentials">
-      <div class="credential">Portrait Artist<br>of the Year</div>
-      <div class="credential">RAF S&R Commission<br>· Prince William</div>
-      <div class="credential">Artist in Residence<br>London TV Centre</div>
+    <div class="explorer-panel">
+      <img src="images/explorer-alps.jpg" alt="Painting on a glacier in the Alps" style="object-position:center 30%;">
+      <span class="explorer-label">Alps</span>
+    </div>
+    <div class="explorer-panel">
+      <img src="images/explorer-amalfi.jpg" alt="Painting on the harbour at Amalfi, Italy" style="object-position:center 40%;">
+      <span class="explorer-label">Amalfi</span>
+    </div>
+    <div class="explorer-panel">
+      <img src="images/explorer-bahamas.jpg" alt="Painting standing in the sea, Bahamas" style="object-position:center 30%;">
+      <span class="explorer-label">Bahamas</span>
+    </div>
+    <div class="explorer-panel">
+      <img src="images/explorer-madeira.jpg" alt="Painting on the beach in Madeira" style="object-position:center 30%;">
+      <span class="explorer-label">Madeira</span>
+    </div>
+    <div class="explorer-panel">
+      <img src="images/explorer-oldharry.jpg" alt="Painting on the clifftop at Old Harry Rocks, Dorset" style="object-position:center 40%;">
+      <span class="explorer-label">Dorset</span>
     </div>
   </div>
+
+  <!-- Title bar -->
+  <div class="explorer-title-bar">
+    <div>
+      <h1 class="explorer-headline">The world is <em>the studio.</em></h1>
+      <div class="explorer-credentials">
+        <div class="explorer-credential">Portrait Artist<br>of the Year</div>
+        <div class="explorer-credential">RAF S&R Commission<br>· Prince William</div>
+        <div class="explorer-credential">Artist in Residence<br>London TV Centre</div>
+        <div class="explorer-credential">Brighton<br>Lifeboat · 26 years</div>
+      </div>
+    </div>
+    <div class="explorer-right">
+      <p class="explorer-sub">Tony Parsons paints on location — deserts, glaciers, harbours, clifftops. Each work is a single session in oils, made in the place it depicts. Nothing is finished in the studio.</p>
+      <div class="explorer-actions">
+        <a href="#works" class="btn-primary">View Available Works</a>
+        <a href="#commission" class="btn-secondary">Commission a painting →</a>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 <section id="works" aria-label="Available original oil paintings for sale">
