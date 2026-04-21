@@ -104,7 +104,6 @@
     align-items: center;
     justify-content: center;
     padding: 40px 32px 32px;
-    min-height: calc(100vh - var(--nav-h) - 200px);
     position: relative;
   }
   .painting-img-wrap {
@@ -116,20 +115,12 @@
   }
   #painting-img {
     display: block;
-    max-width: 100%;
-    max-height: calc(100vh - var(--nav-h) - 260px);
-    width: auto;
+    max-width: min(100%, 1100px);
     height: auto;
-    object-fit: contain;
+    width: auto;
     box-shadow: 0 24px 80px rgba(0,0,0,0.65), 0 4px 20px rgba(0,0,0,0.4);
     opacity: 0;
     transition: opacity 0.5s ease;
-  }
-  /* Panoramic paintings: let wide images breathe on desktop */
-  @media (min-width: 641px) {
-    #painting-img {
-      max-width: min(100%, calc((100vh - var(--nav-h) - 260px) * 4));
-    }
   }
   #painting-img.loaded { opacity: 1; }
 
@@ -289,7 +280,7 @@
   @media (max-width: 640px) {
     nav { padding: 0 20px; }
     .painting-stage { padding: 24px 16px 20px; }
-    #painting-img { max-height: calc(60vh); }
+    #painting-img { max-width: 100%; }
     .info-strip { padding: 20px 20px 28px; }
     .info-inner { grid-template-columns: 1fr; gap: 20px; }
     .info-right { align-items: flex-start; flex-direction: row; align-items: center; flex-wrap: wrap; }
@@ -422,7 +413,15 @@ function init() {
 
 function onImgLoad() {
   document.getElementById('placeholder').classList.remove('active');
-  document.getElementById('painting-img').classList.add('loaded');
+  const img = document.getElementById('painting-img');
+  // For portrait paintings, reduce the stage min-height so the info strip isn't pushed off screen
+  const ratio = img.naturalWidth / img.naturalHeight;
+  if (ratio < 1) {
+    // Portrait — let the image be height-constrained, stage doesn't need to fill viewport
+    document.getElementById('painting-stage').style.minHeight = '0';
+    document.getElementById('painting-stage').style.padding = '32px 32px 24px';
+  }
+  img.classList.add('loaded');
 }
 
 function onImgError() {
