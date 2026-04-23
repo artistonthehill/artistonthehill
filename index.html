@@ -993,7 +993,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 function checkViewingCode() {
   const code = document.getElementById('viewing-code').value.trim().toUpperCase();
-  if (['SALTMARSH','COLLECTOR','PRIVATE','NEONMONK','AARON','CROWBOROUGH','CAROLECBGC','JOHNCBGC','DIANE','FAYE','CRAIG','BOATRACE','HAWKHURST'].includes(code)) {
+  if (['SALTMARSH','COLLECTOR','PRIVATE','NEONMONK','AARON','CROWBOROUGH','CAROLECBGC','JOHNCBGC','DIANE','FAYE','CRAIG','BOATRACE','HAWKHURST','OAST'].includes(code)) {
     if (code === 'CRAIG') {
       alert('Welcome. Redirecting to your private viewing…');
       window.location.href = 'craig.html';
@@ -1006,6 +1006,9 @@ function checkViewingCode() {
     } else if (code === 'HAWKHURST') {
       alert('Welcome. Redirecting to your private viewing page…');
       window.location.href = 'hawkhurst.html';
+    } else if (code === 'OAST') {
+      alert('Welcome. Redirecting to your private viewing page…');
+      window.location.href = 'oast.html';
     } else if (code === 'CROWBOROUGH' || code === 'CAROLECBGC' || code === 'JOHNCBGC' || code === 'DIANE') {
       alert('Welcome. Redirecting to your private viewing page…');
       window.location.href = 'crowborough.html';
