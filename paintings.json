@@ -177,7 +177,7 @@
   {
     "id": "ripley-queen",
     "title": "Ripley and the Queen",
-    "img": "https://static.wixstatic.com/media/9dfbf6_b1f1e1bbd656441a847d94b01ae32588~mv2.jpg/v1/fit/w_1200,h_600,al_c,q_80,enc_avif,quality_auto/9dfbf6_b1f1e1bbd656441a847d94b01ae32588~mv2.jpg",
+    "img": "https://static.wixstatic.com/media/9dfbf6_b1f1e1bbd656441a847d94b01ae32588~mv2.jpg/v1/fill/w_600,h_450,al_c,q_80,enc_avif,quality_auto/9dfbf6_b1f1e1bbd656441a847d94b01ae32588~mv2.jpg",
     "price": "\u00a32,300",
     "size": "80\u00d730cm \u00b7 Oil on board",
     "lat": 51.300583,
@@ -197,7 +197,7 @@
   {
     "id": "horsley",
     "title": "Horsley",
-    "img": "https://static.wixstatic.com/media/9dfbf6_68940bce9ab54156b6cc9bca1a471b61~mv2.jpg/v1/fit/w_1200,h_600,al_c,q_80,enc_avif,quality_auto/9dfbf6_68940bce9ab54156b6cc9bca1a471b61~mv2.jpg",
+    "img": "https://static.wixstatic.com/media/9dfbf6_68940bce9ab54156b6cc9bca1a471b61~mv2.jpg/v1/fill/w_600,h_450,al_c,q_80,enc_avif,quality_auto/9dfbf6_68940bce9ab54156b6cc9bca1a471b61~mv2.jpg",
     "price": "\u00a32,300",
     "size": "80\u00d730cm \u00b7 Oil on board",
     "lat": 51.262669,
@@ -207,7 +207,7 @@
   {
     "id": "guildford-guildhall",
     "title": "Guildford Guild Hall",
-    "img": "https://static.wixstatic.com/media/9dfbf6_25b9aed0bddd43d6b3e969b68fad0745~mv2.jpg/v1/fit/w_1200,h_600,al_c,q_80,enc_avif,quality_auto/9dfbf6_25b9aed0bddd43d6b3e969b68fad0745~mv2.jpg",
+    "img": "https://static.wixstatic.com/media/9dfbf6_25b9aed0bddd43d6b3e969b68fad0745~mv2.jpg/v1/fill/w_600,h_450,al_c,q_80,enc_avif,quality_auto/9dfbf6_25b9aed0bddd43d6b3e969b68fad0745~mv2.jpg",
     "price": "\u00a31,100",
     "size": "42\u00d730cm \u00b7 Oil on board",
     "lat": 51.235832,
@@ -886,5 +886,13 @@
         "contacted": false
       }
     ]
+  },
+  {
+    "title": "Horsmonden Heath",
+    "lat": 51.1196,
+    "lng": 0.4089,
+    "img": "images/horsmonden.jpg",
+    "price": "\u00a31,100",
+    "size": "A3 \u00b7 Oil on canvas \u00b7 Framed"
   }
 ]
