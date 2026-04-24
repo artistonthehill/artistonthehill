@@ -307,5 +307,21 @@ function closePlan() { document.getElementById('plan-modal').classList.remove('o
 document.getElementById('plan-modal').addEventListener('click',function(e){if(e.target===this)closePlan();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closePlan();});
 </script>
+<script>
+// Private view alert — fires silently when page loads
+(function(){
+  var page = document.title;
+  fetch("https://formspree.io/f/xkokklyw", {
+    method: "POST",
+    headers: {"Content-Type": "application/json", "Accept": "application/json"},
+    body: JSON.stringify({
+      _subject: "Private view opened: " + page,
+      page: page,
+      url: window.location.href,
+      time: new Date().toLocaleString("en-GB", {timeZone:"Europe/London"})
+    })
+  });
+})();
+</script>
 </body>
 </html>

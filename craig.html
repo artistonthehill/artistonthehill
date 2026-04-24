@@ -222,5 +222,21 @@
   <p>© 2010–2026 Tony Parsons · Artist on the Hill · Private — not indexed by search engines · <a href="index.html">Back to site</a></p>
 </footer>
 
+<script>
+// Private view alert — fires silently when page loads
+(function(){
+  var page = document.title;
+  fetch("https://formspree.io/f/xkokklyw", {
+    method: "POST",
+    headers: {"Content-Type": "application/json", "Accept": "application/json"},
+    body: JSON.stringify({
+      _subject: "Private view opened: " + page,
+      page: page,
+      url: window.location.href,
+      time: new Date().toLocaleString("en-GB", {timeZone:"Europe/London"})
+    })
+  });
+})();
+</script>
 </body>
 </html>
