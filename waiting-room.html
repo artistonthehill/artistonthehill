@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Waiting Room — Artist on the Hill</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #f7f4ef;
+      --warm-white: #faf8f4;
+      --dark: #1c1a18;
+      --mid: #5a5550;
+      --light: #a09890;
+      --accent: #8b6f47;
+      --accent-light: #c9a97a;
+      --rule: #ddd8d0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--warm-white); color: var(--dark); font-family: 'Karla', sans-serif; font-weight: 300; }
+
+    nav {
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--rule);
+      background: var(--warm-white);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--dark);
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--mid);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--dark); }
+
+    .hero {
+      padding: 6rem 3rem 3rem;
+      max-width: 820px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero-intro {
+      font-size: 1.15rem;
+      line-height: 1.85;
+      color: var(--mid);
+      max-width: 640px;
+      margin: 0 auto;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* CAROUSEL */
+    .carousel-wrap {
+      margin: 3rem 0 0;
+      position: relative;
+      overflow: hidden;
+      background: var(--dark);
+    }
+    .carousel-track { display: flex; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
+    .carousel-slide { min-width: 33.333%; aspect-ratio: 4/3; overflow: hidden; flex-shrink: 0; }
+    .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.85; transition: opacity 0.3s; }
+    .carousel-slide:hover img { opacity: 1; }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(250,248,244,0.15);
+      border: 1px solid rgba(250,248,244,0.3);
+      color: var(--warm-white);
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      z-index: 10;
+    }
+    .carousel-btn:hover { background: rgba(250,248,244,0.3); }
+    .carousel-btn.prev { left: 1.5rem; }
+    .carousel-btn.next { right: 1.5rem; }
+    .carousel-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem 2rem;
+      background: linear-gradient(transparent, rgba(28,26,24,0.6));
+      color: rgba(250,248,244,0.75);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .divider { width: 40px; height: 1px; background: var(--accent-light); margin: 4rem auto; }
+
+    .ethos { max-width: 760px; margin: 0 auto; padding: 0 3rem 2rem; }
+    .ethos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem 5rem; }
+    .ethos-item h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+    .ethos-item p { font-size: 0.9rem; line-height: 1.8; color: var(--mid); }
+    .ethos-item p em { font-style: italic; color: var(--dark); }
+
+    .rolex-story {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 3rem 4rem;
+      text-align: center;
+    }
+    .rolex-story blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.7;
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+    .rolex-story .attribution {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.75rem;
+    }
+    .rolex-story .story-body {
+      font-size: 0.875rem;
+      line-height: 1.8;
+      color: var(--mid);
+      text-align: left;
+    }
+
+    .for-whom {
+      background: var(--cream);
+      padding: 5rem 3rem;
+      text-align: center;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+    .for-whom h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 300;
+      margin-bottom: 0.75rem;
+    }
+    .for-whom .subtitle { font-size: 0.78rem; color: var(--light); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2.5rem; }
+    .roles { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; max-width: 620px; margin: 0 auto 2.5rem; }
+    .role-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      padding: 0.45rem 1rem;
+      border: 1px solid var(--accent-light);
+      color: var(--accent);
+    }
+    .for-whom .note {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--mid);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .how { max-width: 680px; margin: 0 auto; padding: 6rem 3rem; }
+    .how h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 300;
+      margin-bottom: 3.5rem;
+      text-align: center;
+    }
+    .steps { display: grid; gap: 3rem; }
+    .step { display: grid; grid-template-columns: 3rem 1fr; gap: 1.5rem; align-items: start; }
+    .step-num { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300; color: var(--accent-light); line-height: 1; }
+    .step-text h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .step-text p { font-size: 0.875rem; line-height: 1.8; color: var(--mid); }
+    .step-text p em { font-style: italic; }
+
+    .purchase-note {
+      max-width: 680px;
+      margin: 0 auto 5rem;
+      padding: 2.5rem 3rem;
+      border: 1px solid var(--rule);
+      background: var(--cream);
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+    .purchase-note .icon { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--accent-light); line-height: 1; flex-shrink: 0; }
+    .purchase-note p { font-size: 0.875rem; line-height: 1.8; color: var(--mid); }
+    .purchase-note strong { color: var(--dark); font-weight: 500; }
+
+    .gallery-section { padding: 0 2rem 6rem; max-width: 1200px; margin: 0 auto; }
+    .gallery-header { text-align: center; padding: 5rem 1rem 3rem; border-top: 1px solid var(--rule); }
+    .gallery-header h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 300; margin-bottom: 0.5rem; }
+    .gallery-header .gallery-intro { font-size: 0.78rem; color: var(--light); letter-spacing: 0.08em; text-transform: uppercase; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
+    .painting-card { background: var(--cream); overflow: hidden; transition: transform 0.3s ease; }
+    .painting-card:hover { transform: translateY(-4px); }
+    .painting-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+    .card-info { padding: 1.2rem 1.4rem 1.5rem; border-top: 1px solid var(--rule); }
+    .card-info h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; margin-bottom: 0.2rem; }
+    .card-meta { font-size: 0.72rem; color: var(--light); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+    .card-prices { display: flex; justify-content: space-between; align-items: baseline; }
+    .price-main { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--dark); }
+    .price-plan { font-size: 0.7rem; color: var(--accent); letter-spacing: 0.06em; }
+    .enquire-btn {
+      display: block;
+      margin-top: 1rem;
+      text-align: center;
+      padding: 0.65rem 1rem;
+      background: var(--dark);
+      color: var(--warm-white);
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .enquire-btn:hover { background: var(--accent); }
+
+    .cta-strip { background: var(--dark); color: var(--warm-white); padding: 5rem 3rem; text-align: center; }
+    .cta-strip h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 300; margin-bottom: 1rem; }
+    .cta-strip p { font-size: 0.875rem; color: rgba(255,255,255,0.55); margin-bottom: 2.5rem; max-width: 460px; margin-left: auto; margin-right: auto; line-height: 1.75; }
+    .cta-btn {
+      display: inline-block;
+      padding: 0.9rem 2.5rem;
+      border: 1px solid rgba(255,255,255,0.35);
+      color: var(--warm-white);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .cta-btn:hover { background: var(--warm-white); color: var(--dark); border-color: var(--warm-white); }
+
+    @media (max-width: 700px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 3.5rem 1.5rem 2rem; }
+      .carousel-slide { min-width: 85%; }
+      .ethos { padding: 0 1.5rem 2rem; }
+      .ethos-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .rolex-story { padding: 2.5rem 1.5rem; }
+      .for-whom { padding: 4rem 1.5rem; }
+      .how { padding: 4rem 1.5rem; }
+      .purchase-note { margin: 0 1.5rem 4rem; padding: 1.5rem; flex-direction: column; }
+      .gallery-section { padding: 0 1rem 4rem; }
+      .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem; }
+      .cta-strip { padding: 4rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">Artist on the Hill</a>
+  <ul class="nav-links">
+    <li><a href="/paintings.html">Paintings</a></li>
+    <li><a href="/map.html">Map</a></li>
+    <li><a href="/waiting-room.html" class="active">The Waiting Room</a></li>
+    <li><a href="/contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <p class="hero-label">Original oil paintings · NHS &amp; key workers</p>
+  <h1>The <em>Waiting Room</em></h1>
+  <p class="hero-intro">Original oil paintings for NHS staff and the key workers — those who hold everything together — available immediately, paid for gradually, owned completely.</p>
+</section>
+
+<div class="carousel-wrap">
+  <div class="carousel-track" id="carouselTrack">
+    <div class="carousel-slide"><img src="IMG_3528.jpeg" alt="Aiguille du Midi"></div>
+    <div class="carousel-slide"><img src="IMG_3527.jpeg" alt="Queens Park Brighton"></div>
+    <div class="carousel-slide"><img src="IMG_3526.jpeg" alt="Gillan Creek"></div>
+    <div class="carousel-slide"><img src="IMG_3525.jpeg" alt="Hove Beach Festival"></div>
+    <div class="carousel-slide"><img src="IMG_3524.jpeg" alt="Grève d'Lecq Jersey"></div>
+    <div class="carousel-slide"><img src="IMG_3523.jpeg" alt="Swiss Alps"></div>
+    <div class="carousel-slide"><img src="IMG_3522.jpeg" alt="Brighton Bandstand"></div>
+    <div class="carousel-slide"><img src="IMG_3521.jpeg" alt="Roedean"></div>
+    <div class="carousel-slide"><img src="IMG_3520.jpeg" alt="Bosham"></div>
+    <div class="carousel-slide"><img src="IMG_3519.jpeg" alt="Peacehaven Cliffs"></div>
+    <div class="carousel-slide"><img src="IMG_3518.jpeg" alt="King Alfred Hove"></div>
+    <div class="carousel-slide"><img src="IMG_3517.jpeg" alt="Mullion Cove"></div>
+    <div class="carousel-slide"><img src="IMG_3516.jpeg" alt="Bedruthan Steps"></div>
+    <div class="carousel-slide"><img src="IMG_3515.jpeg" alt="Morston"></div>
+    <div class="carousel-slide"><img src="IMG_3514.jpeg" alt="Buttermere"></div>
+    <div class="carousel-slide"><img src="IMG_3513.jpeg" alt="Newhaven River"></div>
+  </div>
+  <button class="carousel-btn prev" onclick="moveCarousel(-1)">&#8592;</button>
+  <button class="carousel-btn next" onclick="moveCarousel(1)">&#8594;</button>
+  <div class="carousel-caption">16 original oils · browse the collection below</div>
+</div>
+
+<div class="divider"></div>
+
+<section class="ethos">
+  <div class="ethos-grid">
+    <div class="ethos-item">
+      <h3>Why it exists</h3>
+      <p>One of the most common things people say in front of my work is <em>"I wish I could afford one of your paintings."</em> If you're a real person — keeping society rolling — I want you to have my work too. I was a volunteer lifeboatman for 26 years, broke for much of it. I know what key workers look like up close. These paintings belong on their walls as much as anyone else's — and I didn't want money to be the thing that stopped that.</p>
+    </div>
+    <div class="ethos-item">
+      <h3>What it is</h3>
+      <p>A deferred payment scheme, nothing more complicated than that. You choose a painting, set up a standing order for whatever you can manage each month, and it comes to live with you straight away.</p>
+    </div>
+    <div class="ethos-item">
+      <h3>The terms</h3>
+      <p>Minimum £30 a month. No interest, ever. No fixed end date — you pay until it's paid off. There's a dashboard to keep tabs on where you are, and you can take payment holidays if life gets in the way. The painting goes home with you after the first payment, registered with a TOAT token as proof of ownership. When your payments are done the painting will probably be worth more than you paid — the definition of an investment — and the TOAT will acknowledge it's entirely yours. You've started your original art collection.</p>
+    </div>
+    <div class="ethos-item">
+      <h3>The paintings</h3>
+      <p>All originals, oil on canvas board. Professionally framed in white with the TOAT ownership token fitted before it goes out the door. Every one is a place I was actually standing when I painted it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="rolex-story">
+  <div class="divider"></div>
+  <blockquote>
+    "In 1945, Hans Wilsdorf — founder of Rolex — wrote to Allied POW officers whose watches had been confiscated. He offered to replace them with a simple note: pay whatever you can, whenever you can, after the war. No contract, no deadline, no penalty. Most did. Some couldn't. He never chased a single one."
+  </blockquote>
+  <p class="attribution">The original done-on-trust business</p>
+  <p class="story-body">The Waiting Room works the same way. There's no credit check, no legal document, no penalty clause. Just a standing order you set up yourself and a painting that comes home with you. Miserable people don't buy my art — and people who buy my art don't let me down.</p>
+</section>
+
+<section class="for-whom">
+  <h2>Who can join the Waiting Room</h2>
+  <p class="subtitle">Open to anyone working in one of these roles</p>
+  <div class="roles">
+    <span class="role-tag">NHS — all staff</span>
+    <span class="role-tag">Paramedics</span>
+    <span class="role-tag">Firefighters</span>
+    <span class="role-tag">Police</span>
+    <span class="role-tag">Teachers</span>
+    <span class="role-tag">Social workers</span>
+    <span class="role-tag">Care workers</span>
+    <span class="role-tag">Unpaid carers</span>
+    <span class="role-tag">Armed forces</span>
+    <span class="role-tag">Coastguard &amp; RNLI</span>
+    <span class="role-tag">Civil servants</span>
+    <span class="role-tag">Delivery drivers</span>
+  </div>
+  <p class="note">"If you're not sure whether you qualify, just ask. I'd rather include someone than turn them away."</p>
+</section>
+
+<section class="how">
+  <h2>How it works</h2>
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-text">
+        <h4>Choose your painting</h4>
+        <p>Browse the gallery below. The collection is always changing. When you've found the one you want, drop me a message — WhatsApp, email, whatever's easiest.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-text">
+        <h4>Set up a standing order</h4>
+        <p>Minimum £30 a month, whatever suits your budget. No credit checks, no paperwork — just a simple agreement between us and a bank transfer set up on your side. <em>It's all done on trust — miserable people don't buy my art.</em></p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-text">
+        <h4>It comes home with you</h4>
+        <p>I'll frame it in white and fit the TOAT ownership token. The painting ships to you as soon as you've made your first payment.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-text">
+        <h4>Pay at your own pace</h4>
+        <p>No interest, no deadline, no penalty for paying slowly or quickly — it's already yours either way. More sizes coming soon.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="purchase-note">
+  <span class="icon">◇</span>
+  <p><strong>Prefer to buy outright?</strong> Every painting in the Waiting Room is also available for immediate purchase at the full price of £700. You don't need to be a key worker to buy outright — get in touch and it's yours, framed, TOAT-registered, and posted within the week.</p>
+</div>
+
+<section class="gallery-section">
+  <div class="gallery-header">
+    <h2>Available now</h2>
+    <p class="gallery-intro">16 originals · Oil on canvas board · £700 each · Framed in white · TOAT registered</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="painting-card"><img src="IMG_3528.jpeg" alt="Aiguille du Midi"><div class="card-info"><h4>Aiguille du Midi</h4><div class="card-meta">Chamonix, French Alps</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Aiguille du Midi">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3527.jpeg" alt="Queens Park, Brighton"><div class="card-info"><h4>Queens Park, Brighton</h4><div class="card-meta">Brighton, East Sussex</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Queens Park Brighton">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3526.jpeg" alt="Gillan Creek Entrance"><div class="card-info"><h4>Gillan Creek Entrance</h4><div class="card-meta">Cornwall</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Gillan Creek">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3525.jpeg" alt="Hove Beach Festival"><div class="card-info"><h4>Hove Beach Festival</h4><div class="card-meta">Hove, East Sussex</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Hove Beach Festival">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3524.jpeg" alt="Grève d'Lecq, Jersey"><div class="card-info"><h4>Grève d'Lecq, Jersey</h4><div class="card-meta">Jersey, Channel Islands</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Greve dLecq">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3523.jpeg" alt="Swiss Alps"><div class="card-info"><h4>Swiss Alps</h4><div class="card-meta">Switzerland</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Swiss Alps">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3522.jpeg" alt="Brighton Bandstand"><div class="card-info"><h4>Brighton Bandstand</h4><div class="card-meta">Brighton, East Sussex</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Brighton Bandstand">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3521.jpeg" alt="Roedean"><div class="card-info"><h4>Roedean</h4><div class="card-meta">East Sussex</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Roedean">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3520.jpeg" alt="Bosham"><div class="card-info"><h4>Bosham</h4><div class="card-meta">West Sussex</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Bosham">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3519.jpeg" alt="Peacehaven Cliffs"><div class="card-info"><h4>Peacehaven Cliffs</h4><div class="card-meta">East Sussex</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Peacehaven Cliffs">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3518.jpeg" alt="King Alfred, Hove"><div class="card-info"><h4>King Alfred, Hove</h4><div class="card-meta">Hove, East Sussex</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — King Alfred Hove">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3517.jpeg" alt="Mullion Cove"><div class="card-info"><h4>Mullion Cove</h4><div class="card-meta">Cornwall</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Mullion Cove">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3516.jpeg" alt="Bedruthan Steps"><div class="card-info"><h4>Bedruthan Steps</h4><div class="card-meta">Cornwall</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Bedruthan Steps">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3515.jpeg" alt="Morston"><div class="card-info"><h4>Morston</h4><div class="card-meta">Norfolk</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Morston">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3514.jpeg" alt="Buttermere"><div class="card-info"><h4>Buttermere</h4><div class="card-meta">Lake District, Cumbria</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Buttermere">Enquire</a></div></div>
+    <div class="painting-card"><img src="IMG_3513.jpeg" alt="Newhaven River"><div class="card-info"><h4>Newhaven River</h4><div class="card-meta">East Sussex</div><div class="card-prices"><span class="price-main">£700</span><span class="price-plan">or from £30/month</span></div><a class="enquire-btn" href="mailto:tony@artistonthehill.co.uk?subject=Waiting Room — Newhaven River">Enquire</a></div></div>
+  </div>
+</section>
+
+<section class="cta-strip">
+  <h2>Ready to start?</h2>
+  <p>Drop me a message about any painting that's caught your eye. No commitment — just a conversation.</p>
+  <a class="cta-btn" href="mailto:tony@artistonthehill.co.uk?subject=The Waiting Room">Get in touch</a>
+</section>
+
+<script>
+  const track = document.getElementById('carouselTrack');
+  const slides = track.children;
+  let current = 0;
+  const visibleSlides = () => window.innerWidth < 700 ? 1 : 3;
+
+  function moveCarousel(dir) {
+    const max = slides.length - visibleSlides();
+    current = Math.max(0, Math.min(current + dir, max));
+    track.style.transform = `translateX(-${(100 / visibleSlides()) * current}%)`;
+  }
+
+  setInterval(() => {
+    const max = slides.length - visibleSlides();
+    current = current >= max ? 0 : current + 1;
+    track.style.transform = `translateX(-${(100 / visibleSlides()) * current}%)`;
+  }, 4000);
+</script>
+</body>
+</html>
