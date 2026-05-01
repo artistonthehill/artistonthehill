@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hope Cove — A Private Viewing</title>
+<meta name="robots" content="noindex, nofollow">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WE9VCP47Q8"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WE9VCP47Q8');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --accent:#8b6f47; --accent-light:#c49a6c; --white:#fff; --nav-h:72px; --parchment:#f7f4ef; --warm-mid:#e8e2d9; --ink:#1a1714; --text-body:#3a342d; --text-light:#7a6e65; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Karla',sans-serif;background:var(--parchment);color:var(--ink);font-weight:300;line-height:1.6;}
+
+  nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:rgba(247,244,239,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--warm-mid);display:flex;align-items:center;justify-content:space-between;padding:0 40px;z-index:1000;}
+  .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:400;letter-spacing:0.08em;color:var(--ink);text-decoration:none;line-height:1.2;}
+  .nav-logo span{display:block;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-light);font-family:'Karla',sans-serif;}
+  .nav-right{display:flex;align-items:center;gap:20px;}
+  .nav-badge{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(139,111,71,0.3);padding:4px 10px;font-family:'Karla',sans-serif;}
+  .nav-back{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-light);text-decoration:none;transition:color 0.2s;}
+  .nav-back:hover{color:var(--accent);}
+
+  .container{max-width:1000px;margin:0 auto;padding:0 40px;}
+
+  .intro{padding:calc(var(--nav-h) + 72px) 0 48px;}
+  .intro-eyebrow{font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:16px;font-family:'Karla',sans-serif;}
+  .intro-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:300;line-height:1.1;margin-bottom:20px;}
+  .intro-title em{font-style:italic;color:var(--accent);}
+  .intro-body{font-size:1rem;line-height:1.85;color:var(--text-body);max-width:640px;}
+
+  .divider{border:none;border-top:1px solid var(--warm-mid);}
+
+  /* Full-width painting then details below */
+  .painting-full{padding:56px 0 0;}
+  .painting-img{width:100%;display:block;box-shadow:0 8px 40px rgba(0,0,0,0.12);}
+
+  .details-section{padding:56px 0;}
+  .details-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+
+  .toat-tag{display:inline-flex;align-items:center;gap:5px;font-family:'Karla',sans-serif;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(139,111,71,0.25);padding:3px 8px;margin-bottom:16px;}
+  .painting-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:400;color:var(--ink);margin-bottom:6px;}
+  .painting-meta{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:24px;}
+  .painting-price{font-family:'Cormorant Garamond',serif;font-size:2.8rem;color:var(--accent);margin-bottom:6px;}
+  .painting-price-note{font-size:0.78rem;color:var(--text-light);margin-bottom:24px;line-height:1.6;}
+  .painting-desc{font-size:0.95rem;line-height:1.85;color:var(--text-body);margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid var(--warm-mid);}
+
+  .spec-list{display:flex;flex-direction:column;gap:0;margin-bottom:32px;}
+  .spec-row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--warm-mid);}
+  .spec-row:first-child{border-top:1px solid var(--warm-mid);}
+  .spec-label{font-family:'Karla',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);}
+  .spec-value{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--ink);text-align:right;}
+
+  .cta-buttons{display:flex;flex-wrap:wrap;gap:14px;align-items:center;}
+  .btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--white);padding:16px 32px;font-family:'Karla',sans-serif;font-size:0.74rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;transition:background 0.2s;}
+  .btn-primary:hover{background:var(--accent);}
+  .btn-secondary{display:inline-flex;align-items:center;color:var(--text-light);font-family:'Karla',sans-serif;font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--warm-mid);padding-bottom:2px;transition:color 0.2s;}
+  .btn-secondary:hover{color:var(--accent);}
+
+  /* Payment plan column */
+  .plan-heading{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;margin-bottom:8px;color:var(--ink);}
+  .plan-heading em{font-style:italic;color:var(--accent);}
+  .plan-subhead{font-size:0.82rem;color:var(--text-light);margin-bottom:28px;line-height:1.6;}
+
+  .plan-table{width:100%;border-collapse:collapse;margin-bottom:24px;}
+  .plan-table thead tr{border-bottom:2px solid var(--warm-mid);}
+  .plan-table tbody tr{border-bottom:1px solid var(--warm-mid);}
+  .plan-table tbody tr:last-child{border-bottom:none;}
+  .plan-table th{font-family:'Karla',sans-serif;font-size:0.64rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-light);padding:8px 0;text-align:left;font-weight:400;}
+  .plan-table th:last-child{text-align:right;}
+  .plan-table td{padding:10px 0;font-size:0.88rem;color:var(--text-body);}
+  .plan-table td:last-child{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--ink);text-align:right;}
+  .plan-table tr.highlight td{color:var(--accent);font-weight:400;}
+  .plan-table tr.highlight td:last-child{font-size:1.15rem;}
+  .plan-table tr.total td{color:var(--ink);}
+  .plan-table tr.total td:last-child{font-size:1.2rem;color:var(--accent);}
+
+  .plan-note{font-size:0.82rem;line-height:1.75;color:var(--text-light);font-style:italic;padding:16px 20px;background:rgba(139,111,71,0.06);border-left:3px solid rgba(139,111,71,0.3);margin-bottom:0;}
+
+  /* Dark TOAT section */
+  .toat-section{background:var(--ink);color:var(--white);padding:56px 0;}
+  .toat-inner{max-width:1000px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+  .toat-eyebrow{font-size:0.65rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent-light);display:block;margin-bottom:14px;font-family:'Karla',sans-serif;}
+  .toat-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2.2rem);font-weight:300;color:var(--white);margin-bottom:20px;line-height:1.2;}
+  .toat-title em{font-style:italic;color:var(--accent-light);}
+  .toat-body{font-size:0.9rem;line-height:1.85;color:rgba(255,255,255,0.6);}
+  .toat-stats{display:flex;flex-direction:column;gap:0;border:1px solid rgba(255,255,255,0.08);}
+  .toat-stat{padding:22px 24px;border-bottom:1px solid rgba(255,255,255,0.08);}
+  .toat-stat:last-child{border-bottom:none;}
+  .toat-stat-num{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--accent-light);display:block;margin-bottom:4px;}
+  .toat-stat-label{font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);font-family:'Karla',sans-serif;}
+
+  footer{background:#111;color:rgba(255,255,255,0.28);padding:40px;text-align:center;font-family:'Karla',sans-serif;font-size:0.75rem;}
+  footer a{color:rgba(255,255,255,0.28);text-decoration:none;}
+  footer a:hover{color:var(--accent-light);}
+
+  @media(max-width:750px){
+    nav{padding:0 20px;}
+    .container{padding:0 20px;}
+    .details-layout{grid-template-columns:1fr;}
+    .toat-inner{grid-template-columns:1fr;padding:0 20px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Tony Parsons <span>Artist on the Hill</span></a>
+  <div class="nav-right">
+    <span class="nav-badge">Private Viewing</span>
+    <a href="index.html" class="nav-back">← Back to site</a>
+  </div>
+</nav>
+
+<!-- Intro -->
+<div class="intro">
+  <div class="container">
+    <span class="intro-eyebrow">Plein air oil · Hope Cove, Devon · 1 May 2026</span>
+    <h1 class="intro-title">Hope <em>Inner Harbour</em></h1>
+    <p class="intro-body">Painted this afternoon on the beach at Hope Cove — the inner harbour at low tide, dinghies beached in the sand, the headland and sea stacks beyond. One of those afternoons where the light does everything. Painted plein air in a single session on 1 May 2026.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- Full-width painting -->
+<div class="painting-full">
+  <div class="container">
+    <img src="images/hope-inner-harbour.jpg" alt="Hope Inner Harbour — Tony Parsons" class="painting-img">
+  </div>
+</div>
+
+<!-- Details + Payment plan -->
+<div class="details-section">
+  <div class="container">
+    <div class="details-layout">
+
+      <!-- Left: painting details -->
+      <div>
+        <div class="toat-tag">✦ TOAT Certified · Ethereum-verified provenance</div>
+        <div class="painting-title">Hope Inner Harbour</div>
+        <div class="painting-meta">Oil on board · 80×30cm · Hope Cove, Devon</div>
+        <div class="painting-price">£2,300</div>
+        <div class="painting-price-note">Framed to taste · TOAT provenance included · Delivered worldwide</div>
+
+        <p class="painting-desc">Four oast house cowls on this beautiful conversion near Tonbridge — dogs in the foreground, a floating duck house in the dappled shade of spring trees. One of those afternoons where the light does everything. Painted plein air in oils on board, 80×30cm panoramic format.</p>
+
+        <div class="spec-list">
+          
+          <div class="spec-row"><span class="spec-label">Size</span><span class="spec-value">80×30cm</span></div>
+          <div class="spec-row"><span class="spec-label">Medium</span><span class="spec-value">Oil on board</span></div>
+          <div class="spec-row"><span class="spec-label">Framing</span><span class="spec-value">To your specification</span></div>
+          <div class="spec-row"><span class="spec-label">Provenance</span><span class="spec-value">TOAT certified</span></div>
+          <div class="spec-row"><span class="spec-label">Delivery</span><span class="spec-value">Worldwide · insured</span></div>
+        </div>
+
+        <div class="cta-buttons">
+          <a href="https://wa.me/447880601709?text=Tony%20I%27d%20like%20to%20enquire%20about%20Hope%20Inner%20Harbour." target="_blank" class="btn-primary">Enquire via WhatsApp</a>
+          <a href="mailto:artistonthehill@gmail.com?subject=Hope Inner Harbour — enquiry" class="btn-secondary">or email →</a>
+        </div>
+      </div>
+
+      <!-- Right: payment plan -->
+      <div>
+        <div class="plan-heading">Own it for <em>£100 a month</em></div>
+        <p class="plan-subhead">A simple standing order to CreatedFX Ltd — no credit checks, no contracts, no interest. The painting comes home with you after the first payment. Payment holidays available whenever life gets in the way.</p>
+
+        <table class="plan-table">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Payment</th>
+              <th style="text-align:right;">Running total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight">
+              <td>Month 1 — painting delivered</td>
+              <td>£100</td>
+              <td>£100</td>
+            </tr>
+            <tr><td>Month 6</td><td>£100</td><td>£600</td></tr>
+            <tr><td>Month 12</td><td>£100</td><td>£1,200</td></tr>
+            <tr><td>Month 18</td><td>£100</td><td>£1,800</td></tr>
+            <tr><td>Month 23 — final payment</td><td>£100</td><td>£2,300</td></tr>
+            <tr class="total">
+              <td><strong>Total</strong></td>
+              <td></td>
+              <td>£2,300</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="plan-note">23 months at £100 — the painting is yours from day one. No contract, no fixed end date. Need to pause for a month? Just drop me a message. Interest: 0%. Always.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- TOAT section -->
+<div class="toat-section">
+  <div class="toat-inner">
+    <div>
+      <span class="toat-eyebrow">Provenance for life</span>
+      <h2 class="toat-title">Your painting comes with a <em>permanent record</em></h2>
+      <p class="toat-body">Every painting I sell carries a TOAT — The Original Art Trust — certification. A physical aluminium token is attached to the back of the painting, linked to a permanent Ethereum blockchain ownership record. It travels with the work forever: through resales, gifts, inheritances. Your name goes on it from the moment we agree the sale.</p>
+    </div>
+    <div class="toat-stats">
+      <div class="toat-stat">
+        <span class="toat-stat-num">1 of 1</span>
+        <span class="toat-stat-label">Unique original — never reproduced</span>
+      </div>
+      <div class="toat-stat">
+        <span class="toat-stat-num">0%</span>
+        <span class="toat-stat-label">Interest on payment plans. Always.</span>
+      </div>
+      <div class="toat-stat">
+        <span class="toat-stat-num">Forever</span>
+        <span class="toat-stat-label">Provenance on the blockchain</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2010–2026 Tony Parsons · Artist on the Hill · Private — not indexed by search engines · <a href="index.html">Back to site</a></p>
+</footer>
+
+<script>
+// Private view alert — fires silently when page loads
+(function(){
+  var page = document.title;
+  fetch("https://formspree.io/f/xkokklyw", {
+    method: "POST",
+    headers: {"Content-Type": "application/json", "Accept": "application/json"},
+    body: JSON.stringify({
+      _subject: "Private view opened: " + page,
+      page: page,
+      url: window.location.href,
+      time: new Date().toLocaleString("en-GB", {timeZone:"Europe/London"})
+    })
+  });
+})();
+</script>
+<script>
+(function(){
+  fetch("https://formspree.io/f/xkokklyw", {
+    method: "POST",
+    headers: {"Content-Type": "application/json", "Accept": "application/json"},
+    body: JSON.stringify({
+      _subject: "Private view opened: Hope Inner Harbour",
+      page: "Hope Cove — A Private Viewing",
+      url: window.location.href,
+      time: new Date().toLocaleString("en-GB", {timeZone:"Europe/London"})
+    })
+  });
+})();
+</script>
+</body>
+</html>
