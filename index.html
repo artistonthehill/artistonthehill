@@ -1010,7 +1010,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 function checkViewingCode() {
   const code = document.getElementById('viewing-code').value.trim().toUpperCase();
-  if (['SALTMARSH','COLLECTOR','PRIVATE','NEONMONK','AARON','CROWBOROUGH','CAROLECBGC','JOHNCBGC','DIANE','FAYE','CRAIG','BOATRACE','HAWKHURST','OAST','TONBRIDGEOAST','HOPE'].includes(code)) {
+  if (['SALTMARSH','COLLECTOR','PRIVATE','NEONMONK','AARON','CROWBOROUGH','CAROLECBGC','JOHNCBGC','DIANE','FAYE','CRAIG','BOATRACE','HAWKHURST','OAST','TONBRIDGEOAST','HOPE','BURGHBAR'].includes(code)) {
     if (code === 'CRAIG') {
       alert('Welcome. Redirecting to your private viewing…');
       window.location.href = 'craig.html';
@@ -1032,6 +1032,9 @@ function checkViewingCode() {
     } else if (code === 'HOPE') {
       alert('Welcome. Redirecting to your private viewing page…');
       window.location.href = 'hope-inner-harbour.html';
+    } else if (code === 'BURGHBAR') {
+      alert('Welcome. Redirecting to your private viewing page…');
+      window.location.href = 'burgh-island-bar.html';
     } else if (code === 'CROWBOROUGH' || code === 'CAROLECBGC' || code === 'JOHNCBGC' || code === 'DIANE') {
       alert('Welcome. Redirecting to your private viewing page…');
       window.location.href = 'crowborough.html';
