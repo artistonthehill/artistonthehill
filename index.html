@@ -968,7 +968,7 @@ function openLightbox(id) {
   document.getElementById('lb-title').textContent = p.title;
   document.getElementById('lb-subtitle').textContent = p.subtitle;
   document.getElementById('lb-price').textContent = p.price;
-  document.getElementById('lb-desc').textContent = p.desc;
+  document.getElementById('lb-desc').innerHTML = p.desc;
   document.getElementById('lb-details').innerHTML = Object.entries(p.details).map(([k,v]) => `<div class="lightbox-detail"><strong>${k}</strong><span>${v}</span></div>`).join('');
   const msg = encodeURIComponent(`Hello Tony, I'm interested in "${p.title}" (${p.price}). Could you tell me more?`);
   document.getElementById('lb-whatsapp').href = `https://wa.me/447880601709?text=${msg}`;
