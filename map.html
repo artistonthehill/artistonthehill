@@ -98,17 +98,23 @@ function initMap() {
   paintingsData.forEach(p => {
     const isUK = p.lat > 49 && p.lat < 62 && p.lng > -9 && p.lng < 2.5;
     if (isUK) bounds.extend({lat:p.lat, lng:p.lng});
+    const pinColor = p.sold ? '#9e9e9e' : '#8b6f47';
     const marker = new google.maps.Marker({
       position:{lat:p.lat, lng:p.lng}, map:map, title:p.title,
-      icon:{path:google.maps.SymbolPath.CIRCLE, scale:9, fillColor:'#8b6f47', fillOpacity:0.9, strokeColor:'#ffffff', strokeWeight:2}
+      icon:{path:google.maps.SymbolPath.CIRCLE, scale:9, fillColor:pinColor, fillOpacity:0.9, strokeColor:'#ffffff', strokeWeight:2}
     });
     marker.addListener('click', () => {
-      const msg = encodeURIComponent('Hello Tony, I am interested in ' + p.title + ' (' + p.price + ').');
-      const viewParams = new URLSearchParams({ img: p.img || '', title: p.title, meta: p.size, price: p.price, back: 'map.html' });
+      const viewParams = new URLSearchParams({ img: p.img || '', title: p.title, meta: p.size, price: p.sold ? 'Sold' : p.price, back: 'map.html' });
       if (p.prints) viewParams.set('prints', p.prints);
       const viewUrl = 'painting-view.html?' + viewParams.toString();
       const imgHtml = p.img ? '<a href="' + viewUrl + '"><img class="iw-img" src="' + p.img + '" alt="' + p.title + '" style="cursor:pointer;" title="Click to view full size"></a>' : '';
-      infoWindow.setContent('<div class="iw-wrap">' + imgHtml + '<div class="iw-title">' + p.title + '</div><div class="iw-size">' + p.size + '</div><div class="iw-price">' + p.price + '</div><a class="iw-btn" href="' + viewUrl + '" style="margin-bottom:6px;">View painting →</a><a class="iw-btn" href="https://wa.me/447880601709?text=' + msg + '" target="_blank" style="background:#8b6f47;">Enquire via WhatsApp</a></div>');
+      const priceHtml = p.sold
+        ? '<div class="iw-price" style="font-size:0.8rem;"><span style="text-decoration:line-through;opacity:0.4;">' + p.price + '</span> <span style="background:#1a1714;color:#fff;font-size:0.62rem;letter-spacing:0.12em;padding:2px 6px;font-family:Arial,sans-serif;">SOLD</span></div>'
+        : '<div class="iw-price">' + p.price + '</div>';
+      const actionBtns = p.sold && p.prints
+        ? '<a class="iw-btn" href="' + p.prints + '" target="_blank" style="background:#8b6f47;">Order a print →</a>'
+        : '<a class="iw-btn" href="' + viewUrl + '" style="margin-bottom:6px;">View painting →</a><a class="iw-btn" href="https://wa.me/447880601709?text=' + encodeURIComponent('Hello Tony, I am interested in ' + p.title + ' (' + p.price + ').') + '" target="_blank" style="background:#8b6f47;">Enquire via WhatsApp</a>';
+      infoWindow.setContent('<div class="iw-wrap">' + imgHtml + '<div class="iw-title">' + p.title + '</div><div class="iw-size">' + p.size + '</div>' + priceHtml + actionBtns + '</div>');
       infoWindow.open(map, marker);
     });
   });
