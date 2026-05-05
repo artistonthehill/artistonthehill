@@ -343,6 +343,36 @@ body {
   display: inline-block;
 }
 
+.toat-row {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.toat-label {
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--light);
+}
+.toat-value {
+  font-size: 11px;
+  color: var(--accent);
+  font-style: italic;
+  font-family: 'Courier New', monospace;
+  flex: 1;
+}
+.toat-edit {
+  font-size: 9px;
+  color: var(--light);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.toat-edit:hover { color: var(--accent); }
+
 .footer {
   padding: 20px 18px 30px;
   text-align: center;
@@ -429,6 +459,7 @@ async function loadCollectors() {
     const res = await fetch('collectors.json?t=' + Date.now());
     const data = await res.json();
     collectors = data.collectors;
+    applyToatOverrides();
     document.getElementById('lastUpdated').textContent = 'Last updated ' + formatDate(data.lastUpdated);
     render();
   } catch (e) {
@@ -594,6 +625,12 @@ function renderCard(c, s) {
           ${s.matched.map(p => `<div class="item">${p.date} — £${p.amount.toFixed(2)} — ${p.details.substring(0,40)}</div>`).join('')}
         </div>
       ` : ''}
+
+      <div class="toat-row">
+        <span class="toat-label">TOAT</span>
+        <span class="toat-value" id="toat-${c.id}">${c.toat || '—'}</span>
+        <span class="toat-edit" onclick="editToat('${c.id}')">edit</span>
+      </div>
     </div>
   `;
   return card;
@@ -610,6 +647,42 @@ function togglePayments(toggle) {
   } else {
     toggle.textContent = `Show ${count} matched payment${count > 1 ? 's' : ''} ▾`;
   }
+}
+
+// TOAT editing — saves to localStorage so changes persist between sessions
+// without needing to edit collectors.json every time
+function loadToatOverrides() {
+  try {
+    return JSON.parse(localStorage.getItem('toatOverrides') || '{}');
+  } catch { return {}; }
+}
+
+function saveToatOverride(collectorId, value) {
+  const overrides = loadToatOverrides();
+  if (value && value.trim()) {
+    overrides[collectorId] = value.trim().toUpperCase();
+  } else {
+    delete overrides[collectorId];
+  }
+  localStorage.setItem('toatOverrides', JSON.stringify(overrides));
+}
+
+function applyToatOverrides() {
+  const overrides = loadToatOverrides();
+  collectors.forEach(c => {
+    if (overrides[c.id] !== undefined) c.toat = overrides[c.id];
+  });
+}
+
+function editToat(collectorId) {
+  const c = collectors.find(x => x.id === collectorId);
+  if (!c) return;
+  const current = c.toat || '';
+  const next = prompt(`TOAT ID for ${c.name}\n(format e.g. EWDF-6DVA, leave blank to clear)`, current);
+  if (next === null) return; // cancelled
+  c.toat = next.trim().toUpperCase();
+  saveToatOverride(collectorId, c.toat);
+  document.getElementById(`toat-${collectorId}`).textContent = c.toat || '—';
 }
 
 document.getElementById('pdfInput').addEventListener('change', async (e) => {
