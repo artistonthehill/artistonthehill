@@ -1011,7 +1011,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 function checkViewingCode() {
   const code = document.getElementById('viewing-code').value.trim().toUpperCase();
-  if (['SALTMARSH','COLLECTOR','PRIVATE','NEONMONK','AARON','CROWBOROUGH','CAROLECBGC','JOHNCBGC','DIANE','FAYE','CRAIG','BOATRACE','HAWKHURST','OAST','TONBRIDGEOAST','HOPE','BURGHBAR','GALLEON','CAUSEWAY','BEACH4'].includes(code)) {
+  if (['SALTMARSH','COLLECTOR','PRIVATE','NEONMONK','AARON','CROWBOROUGH','CAROLECBGC','JOHNCBGC','DIANE','FAYE','CRAIG','BOATRACE','HAWKHURST','OAST','TONBRIDGEOAST','HOPE','BURGHBAR','GALLEON','CAUSEWAY','BEACH4','MERMAID'].includes(code)) {
     if (code === 'CRAIG') {
       alert('Welcome. Redirecting to your private viewing…');
       window.location.href = 'craig.html';
@@ -1045,6 +1045,9 @@ function checkViewingCode() {
     } else if (code === 'BEACH4') {
       alert('Welcome. Redirecting to your private viewing page…');
       window.location.href = 'causeway-beach-day.html';
+    } else if (code === 'MERMAID') {
+      alert('Welcome. Redirecting to your private viewing page…');
+      window.location.href = 'mermaids-pool.html';
     } else if (code === 'CROWBOROUGH' || code === 'CAROLECBGC' || code === 'JOHNCBGC' || code === 'DIANE') {
       alert('Welcome. Redirecting to your private viewing page…');
       window.location.href = 'crowborough.html';
