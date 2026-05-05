@@ -120,21 +120,6 @@
       "notes": "NEEDS CONFIRMATION. Bank ref ODELL E C / ELLIE ODELL. Possible link: Laura Odell (laura.odell@outlook.com) bought a print in Nov 2022, Cornwall/Gillan/Flushing connection \u2014 could be a relative. Pattern matches a 10-month NHS-style instalment for a \u00a3433 painting. Bank shows 8 payments (May-Dec 2025) totalling \u00a3346.64, then NO PAYMENTS Jan-Apr 2026 \u2014 either complete-at-8 or stopped early. Tony to verify painting and total.",
       "status": "needs-confirmation",
       "toat": ""
-    },
-    {
-      "id": "l-friend",
-      "name": "Lily Friend",
-      "painting": "Hope Cove Harbour",
-      "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAB4AHgDASIAAhEBAxEB/8QAGgABAQADAQEAAAAAAAAAAAAAAAMEBQYBAv/EACcQAAICAgEDAwUBAQAAAAAAAAASAQIDBBEFITEGE0EUIlFhkTKB/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAGhEBAQEBAQEBAAAAAAAAAAAAAAERAkEhUf/aAAwDAQACEQMRAD8A4RgxJgxhtVgxJgwFWDEmDAVYMSYMBVgxJgwFWDEmDAVYMSYMBVgSYASYMRYMBZgxFgwFmDEWDAWYMRYMBZgxFgwFmDEWDAWYMRYMBZgRYASYMSYMEVYMSYMBVgxJgwFWDEmDAVYMSYMBVgxJgwFWDEmDAVYEmAEWDEmDAVYMSYMBVgxJgwFWDEmDAVYMSYMBVgxJgwFWDEmDAVYEmAEmDEmDAVYMSYMBVgxJgwFWDEmDAVYMSYMBVgxJgwFWDEmDAVYEmAEmDEWDFFmDEWDAWYMRYMBZgxFgwFmDEWDAWYMRYMBZgxFgwFmBFgBFgxJgwFWDEmDAbv03iwZtzYvt4a5sGDVzZrVta0RzFJXvExP+lj/pgatbbG5hxY6Vm2TJFa078TMz4/I6f1TZ6fXPXWtiiueiZIvhpkavMTx90T8xH8PqnV9um/r7tL4q7Gvx7UxhpFacTzHFeF89/Hkzl2r8x0XWNbpk9Sy6fT8enNc21OthnBbNbJiiL1hrRe3E8xPH489+xhZel61NPdtqbP1eXFmprRE4Zr91rTxNJbvzFLeY/PbxJpMO/nw9Qpu4r1ps0yRlraKRxFonmJ4448/o9xdQ2MWrbXx5FxWyVzTCxy9eeJifMccz8/Jmc9T1dl8dHb0tOLarrbO57OWM04bvi47Vra1r1782pC8TPEeY45MW/RcddWm5O3b6KdeM9rzi++JnJbHFYq3EzM0mfMdu/wCjWZOs7mTYvnm+OuW8ZItamKlW9ys1vzxHmYmf72PqvXN6uGMPuY7YvariS2GloWszNe0x5iZnv57yM7/V3llep8WHV6p9PrxWIxYcVbTWOGvNIm08fHeZ/hqWPd3czbu3m2tq/uZ815ve3ERzM+e0doIsb5mTKzbtVYMSYMVFWBJgBJgwABgwABgwABgwABgwABgwABgwABgAB//Z",
-      "type": "Waiting Room (proto)",
-      "total": 515.0,
-      "monthly": 52.0,
-      "totalPayments": 5,
-      "startDate": "2025-06-01",
-      "bankRef": "FRIEND L",
-      "notes": "Wings Cottage, 105 Blore Road, Hales, Market Drayton, Shropshire TF9 2PR. Email: lilybfriend@hotmail.com. Original price \u00a3650 with \u00a3135 print credit deducted. \u00a3255 upfront paid 9/5/25, plus 5\u00d7\u00a352 SO starting June 2025. SCHEDULE COMPLETE \u2014 last payment Oct 2025.",
-      "status": "completed",
-      "toat": ""
     }
   ],
   "excludeFromCollectors": [
