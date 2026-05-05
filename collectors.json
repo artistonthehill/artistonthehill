@@ -1,0 +1,145 @@
+{
+  "lastUpdated": "2026-05-05",
+  "collectors": [
+    {
+      "id": "prim-bright",
+      "name": "Prim Bright",
+      "painting": "Tom & Manon — Henley/Putney Diptych",
+      "image": "",
+      "type": "Commission",
+      "total": 15600,
+      "monthly": 1560,
+      "totalPayments": 10,
+      "startDate": "2025-08-07",
+      "bankRef": "P Bright",
+      "notes": "Diptych. £7,800 each. Final payment due on delivery (~June 2026 when Prim visits studio). Tom (Putney/Henley rowing) + Manon. Family — Australian great aunt.",
+      "status": "active"
+    },
+    {
+      "id": "craig-peters",
+      "name": "Craig Peters",
+      "painting": "The Long Wait (Kingfisher)",
+      "image": "",
+      "type": "Waiting Room",
+      "total": 2000,
+      "monthly": 30,
+      "totalPayments": 67,
+      "startDate": "2026-05-01",
+      "bankRef": "Peters",
+      "notes": "Collector #1 of Waiting Room scheme. ~1m tall kingfisher on dark background. Will collect in person. Bexhill.",
+      "status": "active"
+    },
+    {
+      "id": "julie-white",
+      "name": "Julie White",
+      "painting": "The Causeway (Burgh Island)",
+      "image": "",
+      "type": "Waiting Room",
+      "total": 2300,
+      "monthly": 60,
+      "totalPayments": 39,
+      "startDate": "2026-06-01",
+      "bankRef": "White",
+      "notes": "Teaching assistant. Daughter Elspeth + best friend Cath in painting. Burgh Island residency contact.",
+      "status": "pending-first-payment"
+    },
+    {
+      "id": "kate-duncan",
+      "name": "Kate Duncan",
+      "painting": "Penny Lift / Volks Railway",
+      "image": "",
+      "type": "Waiting Room",
+      "total": 2300,
+      "monthly": 110,
+      "totalPayments": 21,
+      "startDate": "2026-05-05",
+      "bankRef": "Duncan",
+      "notes": "Invoice 0643 raised 5/5/26 to lock pre-VAT tax point. SO start date TBC. Asked for overpay button.",
+      "status": "pending-first-payment"
+    },
+    {
+      "id": "alex-moore",
+      "name": "Alex Moore",
+      "painting": "Macaw + Rolling Wave (TOAT only)",
+      "image": "",
+      "type": "TOAT-only Monthly",
+      "total": null,
+      "monthly": 100,
+      "totalPayments": null,
+      "startDate": "2026-02-07",
+      "bankRef": "MOORE A",
+      "notes": "Already owns paintings (Macaw bought via Peter Barker FA long ago, Rolling Wave bought direct via Instagram for A3). £100/month is for TOAT tokens — ongoing, no end date. Two physical TOATs still to be posted. Tarporley, Cheshire.",
+      "status": "active-ongoing"
+    },
+    {
+      "id": "romanie-dobbs",
+      "name": "Romanie & Richard Dobbs",
+      "painting": "Chapel Porth Beach (Cornwall)",
+      "image": "",
+      "type": "Waiting Room (proto)",
+      "total": 1680,
+      "monthly": 70,
+      "totalPayments": 24,
+      "startDate": "2025-03-27",
+      "bankRef": "DOBBS",
+      "notes": "Inv 0559. Met on Chapel Porth Beach 26/3/25 — the original genesis of the Waiting Room concept. Painting collected wet, framed.",
+      "status": "active"
+    },
+    {
+      "id": "odessa-scrivo",
+      "name": "Odessa Wilson (Scrivo Social)",
+      "painting": "Charmouth Canvas",
+      "image": "",
+      "type": "Waiting Room",
+      "total": null,
+      "monthly": 70,
+      "totalPayments": null,
+      "startDate": "2025-03-01",
+      "bankRef": "Scrivo Social",
+      "notes": "Met Charmouth beach March 2025 — painted her & son. Genesis of Waiting Room scheme alongside Dobbs. Total/end date to be confirmed. Separate £400 payments are work invoices (winter social media work) — not part of this scheme.",
+      "status": "needs-confirmation"
+    },
+    {
+      "id": "ellie-odell",
+      "name": "Ellie Odell",
+      "painting": "(needs lookup)",
+      "image": "",
+      "type": "Waiting Room (legacy)",
+      "total": null,
+      "monthly": 43.33,
+      "totalPayments": null,
+      "startDate": null,
+      "bankRef": "ODELL",
+      "notes": "£43.33/month — odd amount suggests a specific total ÷ months. Needs confirmation from email history.",
+      "status": "needs-confirmation"
+    },
+    {
+      "id": "l-friend",
+      "name": "L Friend",
+      "painting": "(needs lookup)",
+      "image": "",
+      "type": "Waiting Room (legacy)",
+      "total": null,
+      "monthly": 52,
+      "totalPayments": null,
+      "startDate": null,
+      "bankRef": "FRIEND L",
+      "notes": "£52/month. Needs confirmation from email history.",
+      "status": "needs-confirmation"
+    }
+  ],
+  "excludeFromCollectors": [
+    {
+      "name": "Maia Wolf",
+      "reason": "Marketing/CRM contractor — £300/month is wages, not painting payments"
+    },
+    {
+      "name": "Valerie Clark",
+      "reason": "Aunt — £250/month is loan repayment for £5k Greek yacht share, not painting"
+    },
+    {
+      "name": "P Bright (final payment)",
+      "reason": "10th payment will be on delivery, expected June 2026"
+    }
+  ]
+}

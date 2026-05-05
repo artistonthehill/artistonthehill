@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collectors — Artist on the Hill</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+:root {
+  --dark: #1c1a18;
+  --mid: #5a5550;
+  --light: #a09890;
+  --accent: #8b6f47;
+  --accent-l: #c9a97a;
+  --cream: #f7f4ef;
+  --warm: #faf8f4;
+  --rule: #ddd8d0;
+  --green: #4a7c59;
+  --amber: #c98a3a;
+  --red: #b85042;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Georgia, 'Cormorant Garamond', serif;
+  background: var(--warm);
+  color: var(--dark);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.gold-rule {
+  height: 3px;
+  background: linear-gradient(90deg, var(--dark), var(--accent-l), var(--dark));
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.header {
+  padding: 20px 18px 16px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--warm);
+}
+.header .eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.header h1 {
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+.header .updated {
+  font-size: 10px;
+  color: var(--light);
+  margin-top: 4px;
+  letter-spacing: 0.05em;
+}
+
+.summary {
+  background: var(--cream);
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+.summary-tile .label {
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--light);
+  margin-bottom: 4px;
+}
+.summary-tile .value {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--dark);
+}
+.summary-tile .sub {
+  font-size: 9px;
+  color: var(--light);
+  margin-top: 2px;
+}
+
+.upload-section {
+  padding: 14px 18px 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.upload-label {
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--light);
+  margin-bottom: 8px;
+  display: block;
+}
+.upload-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: var(--cream);
+  border: 1px solid var(--rule);
+  color: var(--dark);
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.upload-btn:hover { background: white; }
+.upload-btn .arrow { color: var(--accent-l); font-size: 16px; }
+.upload-btn input { display: none; }
+
+.parse-status {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--cream);
+  border-left: 3px solid var(--accent-l);
+  font-size: 11px;
+  color: var(--mid);
+  font-style: italic;
+  display: none;
+}
+.parse-status.visible { display: block; }
+
+.unmatched {
+  margin-top: 12px;
+  padding: 12px;
+  background: #fdf6e3;
+  border-left: 3px solid var(--amber);
+  display: none;
+}
+.unmatched.visible { display: block; }
+.unmatched-title {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+.unmatched-item {
+  font-size: 11px;
+  color: var(--mid);
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(201,138,58,0.2);
+}
+.unmatched-item:last-child { border-bottom: none; }
+
+.section-header {
+  padding: 14px 18px 8px;
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.collector-list {
+  padding: 0 18px 20px;
+}
+
+.collector-card {
+  background: white;
+  border: 1px solid var(--rule);
+  margin-bottom: 12px;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.thumbnail {
+  width: 60px;
+  height: 60px;
+  background: var(--dark);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-l);
+  font-size: 24px;
+  overflow: hidden;
+}
+.thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+
+.card-content { min-width: 0; }
+.card-name {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--dark);
+  line-height: 1.2;
+}
+.card-painting {
+  font-size: 11px;
+  color: var(--accent);
+  font-style: italic;
+  margin-top: 2px;
+  margin-bottom: 8px;
+}
+.card-type {
+  display: inline-block;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background: var(--cream);
+  color: var(--mid);
+  margin-bottom: 8px;
+}
+
+.progress-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+.progress-row .paid {
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: 400;
+}
+.progress-row .paid .amount { font-size: 16px; }
+.progress-row .remaining {
+  font-size: 11px;
+  color: var(--light);
+}
+
+.progress-bar {
+  height: 4px;
+  background: var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 6px 0;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-l));
+  transition: width 0.6s ease;
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--light);
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+.next-payment {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.next-payment .label {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--light);
+}
+.next-payment .date {
+  font-size: 11px;
+  color: var(--dark);
+}
+
+.alarm {
+  margin-top: 8px;
+  padding: 8px 10px;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.alarm.green {
+  background: rgba(74,124,89,0.08);
+  color: var(--green);
+}
+.alarm.amber {
+  background: rgba(201,138,58,0.1);
+  color: var(--amber);
+}
+.alarm.red {
+  background: rgba(184,80,66,0.1);
+  color: var(--red);
+}
+.alarm.stop {
+  background: var(--dark);
+  color: var(--accent-l);
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.notes {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--mid);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.payment-history {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dotted var(--rule);
+  font-size: 9px;
+  color: var(--light);
+  display: none;
+}
+.payment-history.visible { display: block; }
+.payment-history .item {
+  padding: 3px 0;
+}
+.payment-toggle {
+  font-size: 9px;
+  color: var(--accent);
+  cursor: pointer;
+  margin-top: 6px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.footer {
+  padding: 20px 18px 30px;
+  text-align: center;
+  font-size: 9px;
+  color: var(--light);
+  letter-spacing: 0.1em;
+}
+
+@media (min-width: 600px) {
+  .collector-card {
+    grid-template-columns: 80px 1fr;
+  }
+  .thumbnail {
+    width: 80px;
+    height: 80px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="gold-rule"></div>
+
+<div class="container">
+
+  <div class="header">
+    <div class="eyebrow">Admin View</div>
+    <h1>Collectors</h1>
+    <div class="updated" id="lastUpdated">Last updated —</div>
+  </div>
+
+  <div class="summary" id="summary">
+    <div class="summary-tile">
+      <div class="label">Active</div>
+      <div class="value" id="activeCount">—</div>
+      <div class="sub">collectors</div>
+    </div>
+    <div class="summary-tile">
+      <div class="label">Monthly</div>
+      <div class="value" id="monthlyTotal">—</div>
+      <div class="sub">recurring</div>
+    </div>
+    <div class="summary-tile">
+      <div class="label">Outstanding</div>
+      <div class="value" id="outstandingTotal">—</div>
+      <div class="sub">to collect</div>
+    </div>
+  </div>
+
+  <div class="upload-section">
+    <label class="upload-label">Reconcile against bank</label>
+    <label class="upload-btn">
+      <span id="uploadText">Upload Tide statement (PDF)</span>
+      <span class="arrow">→</span>
+      <input type="file" id="pdfInput" accept="application/pdf">
+    </label>
+    <div class="parse-status" id="parseStatus"></div>
+    <div class="unmatched" id="unmatched">
+      <div class="unmatched-title">⚠ Unmatched inbound payments</div>
+      <div id="unmatchedList"></div>
+    </div>
+  </div>
+
+  <div class="section-header">All collectors</div>
+  <div class="collector-list" id="collectorList"></div>
+
+  <div class="footer">
+    Data lives in collectors.json — edit on GitHub to update
+  </div>
+
+</div>
+
+<div class="gold-rule"></div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+let collectors = [];
+let parsedPayments = []; // payments parsed from latest uploaded PDF
+
+// Load collectors
+async function loadCollectors() {
+  try {
+    const res = await fetch('collectors.json?t=' + Date.now());
+    const data = await res.json();
+    collectors = data.collectors;
+    document.getElementById('lastUpdated').textContent = 'Last updated ' + formatDate(data.lastUpdated);
+    render();
+  } catch (e) {
+    document.getElementById('collectorList').innerHTML =
+      '<div style="padding:20px; color:var(--red); font-size:12px;">Could not load collectors.json. Make sure it sits next to this HTML file.</div>';
+  }
+}
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function monthsBetween(start, end) {
+  if (!start) return 0;
+  const s = new Date(start);
+  const e = end ? new Date(end) : new Date();
+  let m = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth());
+  if (e.getDate() >= s.getDate()) m++;
+  return Math.max(0, m);
+}
+
+function calcStatus(c) {
+  // Returns: { paid, remaining, paymentsExpected, paymentsReceived, nextDate, alarm, alarmType, complete }
+  const today = new Date();
+  const expected = c.startDate ? monthsBetween(c.startDate, today) : 0;
+  const cappedExpected = c.totalPayments ? Math.min(expected, c.totalPayments) : expected;
+
+  // Use parsed bank data if available, else assume on track
+  const matched = parsedPayments.filter(p => matchesCollector(p, c));
+  const received = matched.length || cappedExpected; // fallback to expected
+  const paidFromBank = matched.reduce((sum, p) => sum + p.amount, 0);
+  const paidEstimated = received * c.monthly;
+
+  const paid = matched.length ? paidFromBank : (cappedExpected * c.monthly);
+  const total = c.total;
+  const remaining = total ? Math.max(0, total - paid) : null;
+
+  // Next payment date
+  let nextDate = null;
+  if (c.startDate) {
+    const sd = new Date(c.startDate);
+    const next = new Date(sd);
+    next.setMonth(next.getMonth() + received);
+    nextDate = next;
+  }
+
+  // Alarm logic
+  let alarm = '', alarmType = 'green';
+  const isComplete = c.totalPayments && received >= c.totalPayments;
+  const overpaid = total && paid > total + 1; // small tolerance
+
+  if (isComplete && c.type !== 'TOAT-only Monthly') {
+    alarm = '✓ Schedule complete — STOP payments';
+    alarmType = 'stop';
+  } else if (overpaid) {
+    alarm = '⚠ Overpaid — should have stopped';
+    alarmType = 'red';
+  } else if (matched.length && received < cappedExpected) {
+    const behind = cappedExpected - received;
+    alarm = `⚠ ${behind} payment${behind>1?'s':''} behind`;
+    alarmType = 'amber';
+  } else if (matched.length === 0 && parsedPayments.length > 0) {
+    alarm = '⚠ No matching payments in latest statement';
+    alarmType = 'amber';
+  } else if (matched.length) {
+    alarm = `✓ ${matched.length} payment${matched.length>1?'s':''} matched in statement`;
+    alarmType = 'green';
+  } else {
+    alarm = `${received} payment${received!==1?'s':''} expected (no bank data uploaded)`;
+    alarmType = 'green';
+  }
+
+  return {
+    paid, remaining, total,
+    paymentsReceived: received,
+    paymentsExpected: cappedExpected,
+    nextDate,
+    alarm, alarmType,
+    complete: isComplete,
+    matched
+  };
+}
+
+function matchesCollector(payment, collector) {
+  if (!collector.bankRef) return false;
+  const ref = collector.bankRef.toUpperCase();
+  const details = (payment.details || '').toUpperCase();
+  return details.includes(ref);
+}
+
+function render() {
+  const list = document.getElementById('collectorList');
+  list.innerHTML = '';
+
+  let monthlyTotal = 0, outstandingTotal = 0, activeCount = 0;
+
+  collectors.forEach(c => {
+    const s = calcStatus(c);
+    if (c.status === 'active' || c.status === 'active-ongoing' || c.status === 'pending-first-payment') {
+      activeCount++;
+      monthlyTotal += c.monthly || 0;
+      if (s.remaining) outstandingTotal += s.remaining;
+    }
+    list.appendChild(renderCard(c, s));
+  });
+
+  document.getElementById('activeCount').textContent = activeCount;
+  document.getElementById('monthlyTotal').textContent = '£' + monthlyTotal.toLocaleString();
+  document.getElementById('outstandingTotal').textContent = '£' + Math.round(outstandingTotal).toLocaleString();
+}
+
+function renderCard(c, s) {
+  const card = document.createElement('div');
+  card.className = 'collector-card';
+
+  const pct = c.total ? Math.round((s.paid / c.total) * 100) : null;
+
+  card.innerHTML = `
+    <div class="thumbnail">${c.image ? `<img src="${c.image}" alt="">` : '🎨'}</div>
+    <div class="card-content">
+      <div class="card-name">${c.name}</div>
+      <div class="card-painting">${c.painting}</div>
+      <span class="card-type">${c.type}</span>
+
+      <div class="progress-row">
+        <div class="paid">
+          <span class="amount">£${Math.round(s.paid).toLocaleString()}</span> paid
+        </div>
+        <div class="remaining">${c.total ? `of £${c.total.toLocaleString()}` : `£${c.monthly}/mo · ongoing`}</div>
+      </div>
+
+      ${pct !== null ? `
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:${Math.min(100,pct)}%"></div>
+        </div>
+        <div class="progress-meta">
+          <span>${pct}% complete</span>
+          <span>${s.paymentsReceived} of ${c.totalPayments} payments</span>
+        </div>
+      ` : `
+        <div class="progress-meta">
+          <span>${s.paymentsReceived} payments received</span>
+          <span>£${Math.round(s.paid).toLocaleString()} cumulative</span>
+        </div>
+      `}
+
+      ${s.nextDate && !s.complete ? `
+        <div class="next-payment">
+          <span class="label">Next expected</span>
+          <span class="date">${s.nextDate.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })}</span>
+        </div>
+      ` : ''}
+
+      <div class="alarm ${s.alarmType}">${s.alarm}</div>
+
+      ${c.notes ? `<div class="notes">${c.notes}</div>` : ''}
+
+      ${s.matched && s.matched.length ? `
+        <div class="payment-toggle" data-count="${s.matched.length}" onclick="togglePayments(this)">Show ${s.matched.length} matched payment${s.matched.length>1?'s':''} ▾</div>
+        <div class="payment-history">
+          ${s.matched.map(p => `<div class="item">${p.date} — £${p.amount.toFixed(2)} — ${p.details.substring(0,40)}</div>`).join('')}
+        </div>
+      ` : ''}
+    </div>
+  `;
+  return card;
+}
+
+// ===== PDF PARSING =====
+
+function togglePayments(toggle) {
+  const next = toggle.nextElementSibling;
+  next.classList.toggle('visible');
+  const count = toggle.dataset.count;
+  if (next.classList.contains('visible')) {
+    toggle.textContent = 'Hide payments ▴';
+  } else {
+    toggle.textContent = `Show ${count} matched payment${count > 1 ? 's' : ''} ▾`;
+  }
+}
+
+document.getElementById('pdfInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const status = document.getElementById('parseStatus');
+  status.classList.add('visible');
+  status.textContent = 'Reading PDF...';
+
+  try {
+    const buffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+
+    // Collect all text items WITH their X/Y coordinates from every page
+    const allItems = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const viewport = page.getViewport({ scale: 1 });
+      content.items.forEach(item => {
+        if (!item.str || !item.str.trim()) return;
+        // transform[5] is Y from bottom; convert to Y from top for easier sorting
+        const x = item.transform[4];
+        const yFromBottom = item.transform[5];
+        const y = viewport.height - yFromBottom;
+        allItems.push({ str: item.str, x, y, page: i });
+      });
+    }
+
+    const newPayments = parseTidePositional(allItems);
+
+    // Merge with any previously parsed payments (allow multiple statements to be uploaded)
+    // Dedupe on date + amount + first 40 chars of details
+    const seen = new Set(parsedPayments.map(p => `${p.date}|${p.amount}|${(p.details||'').substring(0,40)}`));
+    let added = 0;
+    for (const p of newPayments) {
+      const key = `${p.date}|${p.amount}|${(p.details||'').substring(0,40)}`;
+      if (!seen.has(key)) { parsedPayments.push(p); seen.add(key); added++; }
+    }
+
+    document.getElementById('uploadText').textContent = `${parsedPayments.length} inbound payments loaded (last: ${file.name})`;
+    status.textContent = `Parsed ${newPayments.length} from ${file.name}, ${added} new (${newPayments.length - added} already loaded). Total: ${parsedPayments.length}.`;
+
+    // Find unmatched payments
+    const unmatched = parsedPayments.filter(p =>
+      !collectors.some(c => matchesCollector(p, c))
+    );
+
+    const unmatchedDiv = document.getElementById('unmatched');
+    if (unmatched.length) {
+      unmatchedDiv.classList.add('visible');
+      // Group unmatched by sender to make it easier to spot patterns
+      const grouped = {};
+      unmatched.forEach(p => {
+        const key = extractSender(p.details);
+        if (!grouped[key]) grouped[key] = { count: 0, total: 0, samples: [] };
+        grouped[key].count++;
+        grouped[key].total += p.amount;
+        if (grouped[key].samples.length < 3) grouped[key].samples.push(p);
+      });
+
+      const list = Object.entries(grouped)
+        .sort((a, b) => b[1].total - a[1].total)
+        .map(([sender, info]) =>
+          `<div class="unmatched-item"><strong>${sender}</strong> — ${info.count}× totalling £${info.total.toFixed(2)} (latest: ${info.samples[0].date})</div>`
+        ).join('');
+      document.getElementById('unmatchedList').innerHTML = list;
+    } else {
+      unmatchedDiv.classList.remove('visible');
+    }
+
+    render();
+  } catch (err) {
+    status.textContent = 'Error parsing PDF: ' + err.message;
+    console.error(err);
+  }
+});
+
+function parseTidePositional(items) {
+  // PDF.js groups text into items where each item has its own X/Y. A whole
+  // string like "DOBBS R&RH / ref: INV 0559" comes as ONE item, not separate words.
+  // Each "row" in the statement is a transaction, but the row's items can be
+  // vertically slightly offset (date at y=358, details text at y=354.3, etc.)
+  // We use Y-clustering with a tolerance of ~6 px to group into rows.
+
+  // Sort by page, then Y, then X
+  items.sort((a, b) => a.page - b.page || a.y - b.y || a.x - b.x);
+
+  // Cluster into rows using a Y-tolerance window
+  const rows = [];
+  for (const it of items) {
+    // Find an existing row on the same page within +/- 6 px of mean Y
+    let added = false;
+    for (let i = rows.length - 1; i >= 0; i--) {
+      const r = rows[i];
+      if (r[0].page !== it.page) break;
+      const meanY = r.reduce((s, x) => s + x.y, 0) / r.length;
+      if (Math.abs(it.y - meanY) <= 6) {
+        r.push(it);
+        added = true;
+        break;
+      }
+      // If we've moved more than 12 below, no point looking further back
+      if (it.y - meanY > 12) break;
+    }
+    if (!added) rows.push([it]);
+  }
+
+  rows.forEach(r => r.sort((a, b) => a.x - b.x));
+
+  // A transaction row contains:
+  //   - One item starting with date pattern "DD Mon YYYY" at x ~40
+  //   - One transaction type at x ~102
+  //   - One or more details items at x ~198
+  //   - Either a "Paid in" number at x ~395-415 (INBOUND)
+  //     OR a "Paid out" number at x ~445-465 (outbound — skip)
+  //   - A balance at x ~507
+
+  const dateInOne = /^(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(20\d{2})$/;
+  const numberPattern = /^[\d,]+\.\d{2}$/;
+  const PAID_IN_X_MIN = 380;
+  const PAID_IN_X_MAX = 435;
+
+  const payments = [];
+
+  for (const row of rows) {
+    // Row must contain a date
+    const dateItem = row.find(it => dateInOne.test(it.str.trim()));
+    if (!dateItem) continue;
+
+    // Find numbers and locate the paid-in column
+    const numbers = row.filter(it => numberPattern.test(it.str.trim()));
+    if (numbers.length < 2) continue;
+
+    // Identify the paid-in number by X position
+    const paidIn = numbers.find(n => n.x >= PAID_IN_X_MIN && n.x <= PAID_IN_X_MAX);
+    if (!paidIn) continue; // not inbound
+
+    // Balance = number with the highest X
+    const balance = numbers.reduce((max, n) => n.x > max.x ? n : max, numbers[0]);
+
+    // Details = items at x in the Details column (~190-380), excluding type column
+    // and excluding "Fee (£): 0.00" noise
+    const detailsItems = row.filter(it => {
+      const s = it.str.trim();
+      if (it.x < 190 || it.x >= PAID_IN_X_MIN) return false;
+      if (numberPattern.test(s)) return false;
+      if (/^Fee\s*\(£\):/.test(s)) return false;
+      return true;
+    });
+
+    let details = detailsItems.map(it => it.str.trim()).join(' ');
+    details = details.replace(/Fee\s*\(£\):\s*[\d.]+/g, '').replace(/\s+/g, ' ').trim();
+
+    payments.push({
+      date: dateItem.str.trim(),
+      amount: parseFloat(paidIn.str.replace(/,/g, '')),
+      balance: parseFloat(balance.str.replace(/,/g, '')),
+      details: details.substring(0, 120) || '(no details)'
+    });
+  }
+
+  return payments;
+}
+
+function parseTideText_legacy(text) {
+  // Tide statement structure:
+  // "Date Transaction type Details Paid in (£) Paid out (£) Balance (£)"
+  // Then rows like: "29 Oct 2025 Domestic Transfer DOBBS R&RH / ref: INV 0559 70.00 6,587.52"
+  // We want INBOUND only — Paid in column has a value.
+
+  const payments = [];
+  const lines = text.split(/\n|(?=\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))/);
+
+  // Date pattern: e.g. "27 Apr 2026" or "1 Jan 2026"
+  const datePattern = /(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/;
+
+  // Split text by date occurrences and reconstruct rows
+  const segments = text.split(datePattern);
+  // segments structure: [pre, day1, mon1, year1, content1, day2, mon2, year2, content2, ...]
+
+  for (let i = 1; i < segments.length; i += 4) {
+    const day = segments[i];
+    const month = segments[i + 1];
+    const year = segments[i + 2];
+    const content = segments[i + 3] || '';
+
+    if (!day || !month || !year) continue;
+
+    const date = `${day} ${month} ${year}`;
+
+    // Skip card transactions (always outbound), fees, direct debits (outbound), and own account transfers
+    // Domestic Transfer is inbound when there's a Paid in amount
+    // Look for "Domestic Transfer" or "Crossborder Transfer" or "Own Account Transfer" with paid-in pattern
+
+    // The inbound row has TWO numbers: amount paid in, then balance (no paid-out value between them)
+    // The outbound row has: amount paid out, then balance
+    // We need to detect the structure. Strategy: find rows where the SECOND-to-last number is meaningful
+
+    // Look for "Domestic Transfer" or "Crossborder Transfer" as the type indicator for transfers in
+    if (!/(Domestic Transfer|Crossborder Transfer)/.test(content)) continue;
+
+    // Extract all numbers in the content (with optional commas)
+    const numberMatches = [...content.matchAll(/([\d,]+\.\d{2})/g)];
+    if (numberMatches.length < 2) continue;
+
+    // Last number is balance, second-to-last could be either Paid in or Paid out
+    // We need a way to distinguish. In the Tide PDF, paid-in and paid-out are separate columns.
+    // After PDF text extraction, an inbound transfer like:
+    //   "29 Oct 2025 Domestic Transfer DOBBS R&RH / ref: INV 0559 70.00 6,587.52"
+    // has 2 numbers: amount and balance.
+    // An outbound transfer like:
+    //   "28 Oct 2025 Domestic Transfer Antony Parsons Hania Mackinnon / ref: Hania wage 1,000.00 5,576.13"
+    // also has 2 numbers and looks identical structurally.
+    //
+    // Better approach: track the running balance. If balance went UP, it was inbound.
+    // We'll do a second pass after collecting all candidate transfers.
+
+    const numbers = numberMatches.map(m => parseFloat(m[1].replace(/,/g, '')));
+    const balance = numbers[numbers.length - 1];
+    const amount = numbers[numbers.length - 2];
+
+    // Get the details portion (remove the type and trailing numbers)
+    let details = content
+      .replace(/(Domestic Transfer|Crossborder Transfer)/, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    // Remove trailing numbers
+    details = details.replace(/(?:[\d,]+\.\d{2}\s*)+$/, '').trim();
+    // Strip "Fee (£): 0.00" noise
+    details = details.replace(/Fee\s*\(£\):\s*[\d.]+/g, '').trim();
+
+    payments.push({ date, day, month, year, amount, balance, details, raw: content.substring(0, 100) });
+  }
+
+  // Now do balance-based filter: keep only payments where balance increased vs the previous transaction
+  // Tide statements list transactions in REVERSE chronological order (newest first)
+  // So for each row, the PREVIOUS row in the list has the next-later balance.
+  // If currentBalance > nextRowBalance, this was inbound; if less, outbound.
+
+  const inbound = [];
+  for (let i = 0; i < payments.length; i++) {
+    const cur = payments[i];
+    // Compare to next in list (which is the EARLIER row, i.e. the balance BEFORE this transaction)
+    // Actually, in reverse chrono: row i+1 is older, so its balance is the balance AFTER the previous transaction
+    // Wait — we need to be careful. In the statement:
+    //   Row 0: most recent → balance after this txn = X
+    //   Row 1: previous txn → balance after THAT txn = Y
+    // If row 0 was inbound, then X > Y.
+    if (i + 1 < payments.length) {
+      const next = payments[i + 1];
+      if (cur.balance > next.balance) {
+        // Verify the difference matches the amount
+        const diff = cur.balance - next.balance;
+        if (Math.abs(diff - cur.amount) < 0.5) {
+          inbound.push(cur);
+        }
+      }
+    }
+  }
+
+  return inbound;
+}
+
+function extractSender(details) {
+  // Try to pull out a clean sender name
+  const slashIdx = details.indexOf('/');
+  if (slashIdx > 0) {
+    return details.substring(0, slashIdx).trim();
+  }
+  return details.substring(0, 40).trim();
+}
+
+loadCollectors();
+</script>
+
+</body>
+</html>
