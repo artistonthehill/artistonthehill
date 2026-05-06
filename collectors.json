@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-05",
+  "lastUpdated": "2026-05-06",
   "collectors": [
     {
       "id": "prim-bright",
@@ -55,10 +55,10 @@
       "total": 2300,
       "monthly": 110,
       "totalPayments": 21,
-      "startDate": "2026-05-05",
-      "bankRef": "Duncan",
-      "notes": "Invoice 0643 raised 5/5/26 to lock pre-VAT tax point. SO start date TBC. Asked for overpay button.",
-      "status": "pending-first-payment",
+      "startDate": "2026-05-08",
+      "bankRef": "DUNCAN",
+      "notes": "Invoice 0643 raised 5/5/26 to lock pre-VAT tax point. SO confirmed live 8 May 2026. Ref: DUNCAN VOLKS PENNY. NatWest sort 601239.",
+      "status": "active",
       "toat": ""
     },
     {
@@ -119,6 +119,21 @@
       "bankRef": "ODELL",
       "notes": "NEEDS CONFIRMATION. Bank ref ODELL E C / ELLIE ODELL. Possible link: Laura Odell (laura.odell@outlook.com) bought a print in Nov 2022, Cornwall/Gillan/Flushing connection \u2014 could be a relative. Pattern matches a 10-month NHS-style instalment for a \u00a3433 painting. Bank shows 8 payments (May-Dec 2025) totalling \u00a3346.64, then NO PAYMENTS Jan-Apr 2026 \u2014 either complete-at-8 or stopped early. Tony to verify painting and total.",
       "status": "needs-confirmation",
+      "toat": ""
+    },
+    {
+      "id": "adrian-burgh",
+      "name": "Adrian Burgh",
+      "painting": "Burgh Island from the Beach",
+      "image": "data:image/jpeg;base64,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",
+      "type": "Waiting Room",
+      "total": 2300,
+      "monthly": 50,
+      "totalPayments": null,
+      "startDate": null,
+      "bankRef": "Burgh",
+      "notes": "\u00a350/month for 12-18 months, then increase to \u00a3100 for remainder. Agreed via WhatsApp 6 May 2026. Painting to be framed and shipped in custom crate after first payment lands. Awaiting: email address, postal address, SO screenshot, and confirmation of which painting.",
+      "status": "pending-first-payment",
       "toat": ""
     }
   ],
