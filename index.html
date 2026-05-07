@@ -467,6 +467,47 @@
 </head>
 <body>
 
+<!-- ═══ VAT PRICE RISE BANNER ═══ -->
+<div id="vat-banner" style="
+  background: #b5170e;
+  color: #ffffff;
+  text-align: center;
+  padding: 16px 48px 16px 24px;
+  font-family: 'Georgia', serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+">
+  <strong>⚠️ Prices rising 20% on 1 June 2026.</strong>
+  &nbsp;Tony is becoming VAT registered — every painting goes up by a fifth.
+  &nbsp;<strong><a href="#works" style="color:#ffe066; text-decoration:underline; white-space:nowrap;">Buy now at current prices →</a></strong>
+  <button onclick="document.getElementById('vat-banner').style.display='none'; localStorage.setItem('vatBannerDismissed','1');" style="
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.5);
+    color: #ffffff;
+    font-size: 1.1rem;
+    line-height: 1;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+  " aria-label="Dismiss">&times;</button>
+</div>
+<script>
+  if (localStorage.getItem('vatBannerDismissed') === '1') {
+    document.getElementById('vat-banner').style.display = 'none';
+  }
+</script>
+<!-- ═══ END VAT BANNER ═══ -->
+
 <nav id="main-nav">
   <a href="#home" class="nav-logo">Tony Parsons <span>Artist on the Hill</span></a>
   <ul class="nav-links">
