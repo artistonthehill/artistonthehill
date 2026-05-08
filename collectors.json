@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-06",
+  "lastUpdated": "2026-05-08",
   "collectors": [
     {
       "id": "prim-bright",
@@ -57,7 +57,7 @@
       "totalPayments": 21,
       "startDate": "2026-05-08",
       "bankRef": "DUNCAN",
-      "notes": "Invoice 0643 raised 5/5/26 to lock pre-VAT tax point. SO confirmed live 8 May 2026. Ref: DUNCAN VOLKS PENNY. NatWest sort 601239.",
+      "notes": "Invoice 0643 raised 5/5/26 to lock pre-VAT. SO confirmed live 8 May 2026, first payment received 8 May. NatWest ref: DUNCAN VOLKS PENNY. Raw oak frame ordered \u2014 painting to be bolted in once dry.",
       "status": "active",
       "toat": ""
     },
