@@ -299,11 +299,7 @@ function renderDashboard(c, code){
 
   // Painting image
   const wrap = document.getElementById('painting-img-wrap');
-  if(c.image && c.image.startsWith('data:')){
-    // We have a thumbnail — show it full width by upscaling (it will be blurry but give a colour impression)
-    // Better: just show placeholder with painting name
-    wrap.innerHTML = '<div class="painting-placeholder"><span>'+c.painting+'</span></div>';
-  } else if(c.image){
+  if(c.image){
     wrap.innerHTML = '<img src="'+c.image+'" alt="'+c.painting+'" class="painting-img">';
   } else {
     wrap.innerHTML = '<div class="painting-placeholder"><span>'+c.painting+'</span></div>';
