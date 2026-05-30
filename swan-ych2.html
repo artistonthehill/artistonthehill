@@ -72,7 +72,7 @@
     <li><span>Size</span><span>80 × 30 cm</span></li>
     <li><span>Medium</span><span>Oil on canvas</span></li>
     <li><span>Framing</span><span>Framed to taste</span></li>
-    <li><span>Location painted</span><span>Cleopatra Yard, Preveza, Greece</span></li>
+    <li><span>Subject</span><span>YCH2 Swan 90, Cleopatra Yard, Preveza</span></li>
     <li><span>Provenance</span><span>TOAT blockchain certified</span></li>
     <li><span>Delivery</span><span>Worldwide delivery included</span></li>
   </ul>
@@ -95,7 +95,7 @@
   </div>
 
   <div class="prose">
-    Painted on the hard at Cleopatra Yard in Preveza during a refit visit — a Swan 90 stripped back to her hull, her sail catching imagined light against the Ionian sky. There is only one original.
+    A studio painting of YCH2 — a Swan 90 on the hard at Cleopatra Yard in Preveza. Her sail catches imagined light against the Ionian sky. There is only one original.
   </div>
 
 </div>
@@ -104,19 +104,14 @@
   Tony Parsons · CreatedFX Ltd · artistonthehill.co.uk · 07880 601709
 </footer>
 
-<!-- Formspree tripwire — fires on page load -->
 <script>
-fetch('https://formspree.io/f/xkokklyw', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    _subject: 'PRIVATE VIEW ACCESSED — Swan (YCH2)',
-    page: 'swan-ych2.html',
-    code: 'SWAN',
-    time: new Date().toISOString(),
-    referrer: document.referrer || 'direct'
-  })
-});
+// ═══ PRIVATE VIEW ALERT ═══
+(function(){
+  var WEBHOOK = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
+  var now = new Date().toLocaleString('en-GB', {timeZone:'Europe/London',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  var params = new URLSearchParams({page:"Swan YCH2 — £2,300", time:now, url:window.location.href});
+  fetch(WEBHOOK + '?' + params.toString(), {mode:'no-cors'}).catch(function(){});
+})();
 </script>
 
 </body>
