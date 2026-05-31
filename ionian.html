@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ionian — Tony Parsons</title>
+<meta name="description" content="The Ionian — Tony Parsons paints boats, people and the vistas of the Greek islands from his yacht, a floating studio. Commission a painting of your boat or a view you love.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Ionian — Tony Parsons">
+<meta property="og:description" content="A floating studio in the Greek islands. Commission an original oil of your boat or a view you love.">
+<meta property="og:image" content="https://www.artistonthehill.co.uk/images/ionian-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#f5f2ed; --dark:#1a1a1a; --accent:#B8963E; --accent-light:#c8a84e;
+  --mid:#555; --light-border:rgba(184,150,62,0.2); --mount:#efe9df;
+  --serif:'Cormorant Garamond',Georgia,serif; --sans:'Montserrat',-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--dark);font-family:var(--serif);font-size:20px;line-height:1.65;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+
+.eyebrow{font-family:var(--sans);font-weight:500;text-transform:uppercase;letter-spacing:.28em;font-size:12px;color:var(--accent)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+.rule{width:60px;height:1px;background:var(--accent);margin:28px auto}
+
+.btn{display:inline-block;font-family:var(--sans);font-weight:500;text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:var(--dark);border:1px solid var(--accent);background:transparent;padding:13px 26px;cursor:pointer;text-decoration:none;transition:background .35s ease,color .35s ease}
+.btn:hover{background:var(--accent);color:#fff}
+
+/* SITE NAV */
+.sitenav{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px 40px;background:var(--bg);border-bottom:1px solid var(--light-border);flex-wrap:wrap}
+.brand{text-decoration:none;line-height:1.04}
+.brand-name{display:block;font-family:var(--serif);font-weight:500;font-size:1.75rem;color:var(--dark)}
+.brand-sub{display:block;font-family:var(--sans);font-weight:400;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#9a958c;margin-top:3px}
+.navlinks{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.navlinks a{font-family:var(--sans);font-weight:400;font-size:12px;letter-spacing:.17em;text-transform:uppercase;color:#3a3a3a;text-decoration:none;transition:color .25s}
+.navlinks a:hover{color:var(--accent)}
+.navlinks a.active{color:var(--accent)}
+
+/* HERO */
+.hero{position:relative;min-height:90vh;display:flex;align-items:flex-end;background:#1a1a1a url('images/ionian-hero.jpg') center/cover no-repeat}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,.55) 100%)}
+.hero-inner{position:relative;z-index:2;padding:0 0 8vh;width:100%}
+.hero .eyebrow{color:#e9d9a8}
+.hero h1{font-family:var(--serif);font-weight:300;color:#fff;font-size:clamp(3.4rem,9vw,7rem);line-height:1;margin:.15em 0 .25em;letter-spacing:.01em}
+.hero p{color:rgba(255,255,255,.92);font-size:clamp(1.2rem,2.4vw,1.6rem);font-weight:300;font-style:italic;max-width:640px}
+.scroll-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:2;font-family:var(--sans);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+
+/* INTRO */
+.intro{padding:110px 0 100px;text-align:center}
+.intro-prose{max-width:700px;margin:0 auto}
+.intro-prose p{font-size:1.35rem;font-weight:300;line-height:1.62;margin-bottom:1.1rem;color:#222}
+.intro-prose .lead{font-size:1.6rem}
+
+/* MAP */
+.map-sec{padding:30px 0 100px;text-align:center}
+.map-sec h2{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,4vw,2.8rem);margin:.3em 0 .2em}
+.map-sec p.intro-line{max-width:580px;margin:0 auto 40px;font-weight:300;color:var(--mid);font-size:1.2rem}
+#ionian-map{width:100%;height:460px;background:var(--mount);border:1px solid var(--light-border)}
+
+/* FOOTER */
+footer{background:var(--dark);color:rgba(245,242,237,.8);padding:60px 0 50px;text-align:center;font-family:var(--sans);font-size:12px;letter-spacing:.08em}
+footer .fname{font-family:var(--serif);font-size:1.6rem;letter-spacing:0;color:#fff;margin-bottom:14px}
+footer a{color:var(--accent-light);text-decoration:none}
+footer .flinks{margin:18px 0 22px}
+footer .flinks a{margin:0 12px}
+footer .copy{color:rgba(245,242,237,.45);margin-top:18px}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+@media(max-width:600px){
+  body{font-size:18px}
+  .wrap{padding:0 22px}
+  .sitenav{padding:14px 22px;gap:12px}
+  .brand-name{font-size:1.5rem}
+  .navlinks{gap:13px}
+  .navlinks a{font-size:11px;letter-spacing:.1em}
+  .intro{padding:80px 0 70px}
+  .hero{min-height:82vh}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SITE NAV ===== -->
+<nav class="sitenav">
+  <a class="brand" href="index.html">
+    <span class="brand-name">Tony Parsons</span>
+    <span class="brand-sub">Artist on the Hill</span>
+  </a>
+  <div class="navlinks">
+    <a href="index.html#works">Works</a>
+    <a href="map.html">Painting Map</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#commission">Commission</a>
+    <a href="process.html">Portraits</a>
+    <a href="waiting-room.html">The Waiting Room</a>
+    <a href="index.html#private">Private Viewing</a>
+    <a href="ionian.html" class="active">Ionian</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="hero-inner wrap">
+    <span class="eyebrow">The Ionian Sea &middot; Greece</span>
+    <h1>The Ionian</h1>
+    <p>A floating studio in the Greek islands &mdash; boats, people and the light, painted from life.</p>
+  </div>
+  <span class="scroll-cue">Scroll</span>
+</header>
+
+<!-- ===== INTRO ===== -->
+<section class="intro reveal">
+  <div class="wrap">
+    <span class="eyebrow">The Floating Studio</span>
+    <div class="rule"></div>
+    <div class="intro-prose">
+      <p class="lead">Tony has worked and sailed in the Ionian intermittently over the last 28 years. He now uses his yacht there as a floating studio to paint the craft, the people and the vistas of this stunningly beautiful place.</p>
+      <p>He has worked at sea, crewed, skippered and driven a lifeboat for all of his adult life. He is a self-confessed &lsquo;boat nerd&rsquo; and loves nothing more than finding out about new boats, motor and sail, meeting new collectors and, where possible, working from life &mdash; finished pieces on the spot, or oil sketches for larger works back in the studio.</p>
+      <p>Tony works very fast, exclusively in oils, in changing light and conditions. If you have a view or a boat that you&rsquo;d like to commission a painting of, Tony can either book it in on his next visit out or travel especially to meet you. Hit the WhatsApp button below to discuss it further.</p>
+      <p style="margin-top:.2rem"><a href="#map" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--light-border)">See where I sail and paint across the Ionian &darr;</a></p>
+    </div>
+    <div style="margin-top:34px">
+      <a class="btn" href="https://wa.me/447880601709" target="_blank" rel="noopener">Discuss a commission on WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MAP ===== -->
+<section class="map-sec reveal" id="map">
+  <div class="wrap">
+    <span class="eyebrow">My cruising ground</span>
+    <h2>Around the islands</h2>
+    <p class="intro-line">Lefkada, Meganissi and the yards at Preveza &mdash; the patch of water I know best, and where I can paint your boat or a view you love.</p>
+    <div id="ionian-map"></div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="wrap">
+    <div class="fname">Artist on the Hill</div>
+    <div>Tony Parsons &middot; plein air oil painter</div>
+    <div class="flinks">
+      <a href="https://wa.me/447880601709" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="mailto:artistonthehill@gmail.com">Email</a>
+      <a href="index.html">Main site</a>
+    </div>
+    <div class="copy">&copy; <span id="yr"></span> CreatedFX Ltd &middot; All paintings &copy; Tony Parsons</div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* scroll reveal */
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){en.target.classList.add('in'); io.unobserve(en.target);} });
+  },{threshold:.12});
+  els.forEach(function(e){io.observe(e)});
+})();
+</script>
+
+<!-- ===== GOOGLE MAP =====
+     API key is domain-restricted, so the map only renders on artistonthehill.co.uk -->
+<script>
+function initIonianMap(){
+  var pins = [
+    {t:'Sivota, Lefkada',          lat:38.621919, lng:20.684639},
+    {t:'Spilia, Meganissi',        lat:38.659240, lng:20.763466},
+    {t:'Vathy, Meganissi',         lat:38.663262, lng:20.784971},
+    {t:'Cleopatra Marina, Preveza',lat:38.948408, lng:20.763183}
+  ];
+  var style = [
+    {elementType:'geometry',stylers:[{color:'#f1ece1'}]},
+    {elementType:'labels.text.fill',stylers:[{color:'#7a7468'}]},
+    {elementType:'labels.text.stroke',stylers:[{color:'#f5f2ed'}]},
+    {featureType:'water',elementType:'geometry',stylers:[{color:'#cdd9d8'}]},
+    {featureType:'landscape',elementType:'geometry',stylers:[{color:'#efe9df'}]},
+    {featureType:'road',elementType:'geometry',stylers:[{color:'#e3dccd'}]},
+    {featureType:'poi',stylers:[{visibility:'off'}]}
+  ];
+  var map = new google.maps.Map(document.getElementById('ionian-map'), {
+    zoom:10, mapTypeControl:false, streetViewControl:false, fullscreenControl:false, styles:style
+  });
+  var bounds = new google.maps.LatLngBounds();
+  pins.forEach(function(p){
+    var pos = {lat:p.lat, lng:p.lng};
+    new google.maps.Marker({position:pos, map:map, title:p.t,
+      icon:{path:google.maps.SymbolPath.CIRCLE, scale:6, fillColor:'#B8963E', fillOpacity:1, strokeColor:'#fff', strokeWeight:1.5}});
+    bounds.extend(pos);
+  });
+  map.fitBounds(bounds);
+  google.maps.event.addListenerOnce(map,'idle',function(){ if(map.getZoom()>12) map.setZoom(12); });
+}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYredcbFKqrJLNSWO0iDtrzarFLgCOoKs&callback=initIonianMap"></script>
+
+</body>
+</html>
