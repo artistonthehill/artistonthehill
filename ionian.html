@@ -55,16 +55,10 @@ a{color:inherit}
 .scroll-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:2;font-family:var(--sans);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.75)}
 
 /* INTRO */
-.intro{padding:110px 0 100px;text-align:center}
+.intro{padding:110px 0 120px;text-align:center}
 .intro-prose{max-width:700px;margin:0 auto}
 .intro-prose p{font-size:1.35rem;font-weight:300;line-height:1.62;margin-bottom:1.1rem;color:#222}
 .intro-prose .lead{font-size:1.6rem}
-
-/* MAP */
-.map-sec{padding:30px 0 100px;text-align:center}
-.map-sec h2{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,4vw,2.8rem);margin:.3em 0 .2em}
-.map-sec p.intro-line{max-width:580px;margin:0 auto 40px;font-weight:300;color:var(--mid);font-size:1.2rem}
-#ionian-map{width:100%;height:460px;background:var(--mount);border:1px solid var(--light-border)}
 
 /* FOOTER */
 footer{background:var(--dark);color:rgba(245,242,237,.8);padding:60px 0 50px;text-align:center;font-family:var(--sans);font-size:12px;letter-spacing:.08em}
@@ -86,7 +80,7 @@ footer .copy{color:rgba(245,242,237,.45);margin-top:18px}
   .brand-name{font-size:1.5rem}
   .navlinks{gap:13px}
   .navlinks a{font-size:11px;letter-spacing:.1em}
-  .intro{padding:80px 0 70px}
+  .intro{padding:80px 0 90px}
   .hero{min-height:82vh}
 }
 </style>
@@ -130,21 +124,11 @@ footer .copy{color:rgba(245,242,237,.45);margin-top:18px}
       <p class="lead">Tony has worked and sailed in the Ionian intermittently over the last 28 years. He now uses his yacht there as a floating studio to paint the craft, the people and the vistas of this stunningly beautiful place.</p>
       <p>He has worked at sea, crewed, skippered and driven a lifeboat for all of his adult life. He is a self-confessed &lsquo;boat nerd&rsquo; and loves nothing more than finding out about new boats, motor and sail, meeting new collectors and, where possible, working from life &mdash; finished pieces on the spot, or oil sketches for larger works back in the studio.</p>
       <p>Tony works very fast, exclusively in oils, in changing light and conditions. If you have a view or a boat that you&rsquo;d like to commission a painting of, Tony can either book it in on his next visit out or travel especially to meet you. Hit the WhatsApp button below to discuss it further.</p>
-      <p style="margin-top:.2rem"><a href="#map" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--light-border)">See where I sail and paint across the Ionian &darr;</a></p>
+      <p style="margin-top:.2rem"><a href="map.html" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--light-border)">See where I&rsquo;ve painted, around the Ionian and beyond, on the map &rarr;</a></p>
     </div>
     <div style="margin-top:34px">
       <a class="btn" href="https://wa.me/447880601709" target="_blank" rel="noopener">Discuss a commission on WhatsApp</a>
     </div>
-  </div>
-</section>
-
-<!-- ===== MAP ===== -->
-<section class="map-sec reveal" id="map">
-  <div class="wrap">
-    <span class="eyebrow">My cruising ground</span>
-    <h2>Around the islands</h2>
-    <p class="intro-line">Lefkada, Meganissi and the yards at Preveza &mdash; the patch of water I know best, and where I can paint your boat or a view you love.</p>
-    <div id="ionian-map"></div>
   </div>
 </section>
 
@@ -164,8 +148,6 @@ footer .copy{color:rgba(245,242,237,.45);margin-top:18px}
 
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
-
-/* scroll reveal */
 (function(){
   var els = document.querySelectorAll('.reveal');
   if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
@@ -175,41 +157,6 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   els.forEach(function(e){io.observe(e)});
 })();
 </script>
-
-<!-- ===== GOOGLE MAP =====
-     API key is domain-restricted, so the map only renders on artistonthehill.co.uk -->
-<script>
-function initIonianMap(){
-  var pins = [
-    {t:'Sivota, Lefkada',          lat:38.621919, lng:20.684639},
-    {t:'Spilia, Meganissi',        lat:38.659240, lng:20.763466},
-    {t:'Vathy, Meganissi',         lat:38.663262, lng:20.784971},
-    {t:'Cleopatra Marina, Preveza',lat:38.948408, lng:20.763183}
-  ];
-  var style = [
-    {elementType:'geometry',stylers:[{color:'#f1ece1'}]},
-    {elementType:'labels.text.fill',stylers:[{color:'#7a7468'}]},
-    {elementType:'labels.text.stroke',stylers:[{color:'#f5f2ed'}]},
-    {featureType:'water',elementType:'geometry',stylers:[{color:'#cdd9d8'}]},
-    {featureType:'landscape',elementType:'geometry',stylers:[{color:'#efe9df'}]},
-    {featureType:'road',elementType:'geometry',stylers:[{color:'#e3dccd'}]},
-    {featureType:'poi',stylers:[{visibility:'off'}]}
-  ];
-  var map = new google.maps.Map(document.getElementById('ionian-map'), {
-    zoom:10, mapTypeControl:false, streetViewControl:false, fullscreenControl:false, styles:style
-  });
-  var bounds = new google.maps.LatLngBounds();
-  pins.forEach(function(p){
-    var pos = {lat:p.lat, lng:p.lng};
-    new google.maps.Marker({position:pos, map:map, title:p.t,
-      icon:{path:google.maps.SymbolPath.CIRCLE, scale:6, fillColor:'#B8963E', fillOpacity:1, strokeColor:'#fff', strokeWeight:1.5}});
-    bounds.extend(pos);
-  });
-  map.fitBounds(bounds);
-  google.maps.event.addListenerOnce(map,'idle',function(){ if(map.getZoom()>12) map.setZoom(12); });
-}
-</script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYredcbFKqrJLNSWO0iDtrzarFLgCOoKs&callback=initIonianMap"></script>
 
 </body>
 </html>
