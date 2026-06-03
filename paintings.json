@@ -1,5 +1,16 @@
 [
   {
+    "id": "distance",
+    "title": "Distance",
+    "img": "images/distance.jpg",
+    "price": "£3,480",
+    "size": "60×42cm · Oil on canvas board",
+    "lat": 38.6594,
+    "lng": 20.763534,
+    "collection": "ionian",
+    "category": "marine"
+  },
+  {
     "id": "panoramic-peace",
     "title": "Panoramic Peace",
     "img": "images/panoramic-peace.jpg",
@@ -17,7 +28,8 @@
     "size": "80×30cm · Oil on board",
     "lat": 50.812029,
     "lng": -0.066723,
-    "collection": "uk"
+    "collection": "uk",
+    "category": "landscape"
   },
   {
     "id": "henley-royalty",
@@ -68,7 +80,8 @@
     "lat": 51.47006,
     "lng": -0.21733,
     "collection": "uk",
-    "prints": "https://www.thegillangallery.com/product-page/the-boat-race-2026"
+    "prints": "https://www.thegillangallery.com/product-page/the-boat-race-2026",
+    "category": "marine"
   },
   {
     "id": "itchenor",
@@ -120,7 +133,8 @@
     "lat": 50.837312,
     "lng": 0.472187,
     "collection": "uk",
-    "prints": "https://www.thegillangallery.com/product-page/de-la-warr-bexhill"
+    "prints": "https://www.thegillangallery.com/product-page/de-la-warr-bexhill",
+    "category": "marine"
   },
   {
     "id": "saltdean-peacehaven",
@@ -131,7 +145,8 @@
     "lat": 50.800736,
     "lng": -0.045977,
     "collection": "uk",
-    "prints": "https://www.thegillangallery.com/product-page/saltdean-and-peacehaven-cliffs"
+    "prints": "https://www.thegillangallery.com/product-page/saltdean-and-peacehaven-cliffs",
+    "category": "marine"
   },
   {
     "id": "portchester",
@@ -162,7 +177,8 @@
     "size": "121×91cm · Oil on canvas",
     "lat": 8.337697,
     "lng": 98.488238,
-    "collection": "worldwide"
+    "collection": "worldwide",
+    "category": "marine"
   },
   {
     "id": "palma-marina-diptych",
