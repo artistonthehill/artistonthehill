@@ -101,6 +101,16 @@ const defaults={artist:"Tony",roomBase:"https://www.artistonthehill.co.uk/room.h
 const settings=Object.assign({},defaults,S);
 function saveSettings(){localStorage.setItem("aoth-settings",JSON.stringify(settings));}
 
+/* ---------- Cloudinary (unsigned field-photo upload) ---------- */
+const CLOUD="dcy9llfe4", PRESET="field-studio";
+async function uploadToCloudinary(dataURL){
+  const blob=await (await fetch(dataURL)).blob();
+  const fd=new FormData();fd.append("file",blob);fd.append("upload_preset",PRESET);
+  const res=await fetch("https://api.cloudinary.com/v1_1/"+CLOUD+"/image/upload",{method:"POST",body:fd});
+  if(!res.ok)throw new Error("upload "+res.status);
+  const j=await res.json();return j.secure_url;
+}
+
 const COUNTRIES=[["UK","44"],["Ireland","353"],["USA/Canada","1"],["France","33"],["Germany","49"],
 ["Spain","34"],["Italy","39"],["Netherlands","31"],["Belgium","32"],["Switzerland","41"],["Austria","43"],
 ["Portugal","351"],["Greece","30"],["Sweden","46"],["Norway","47"],["Denmark","45"],["Australia","61"],
@@ -163,9 +173,12 @@ function buildMessage(p,l){
 }
 function waNumber(l){const cc=(l.cc||settings.cc||"44").replace(/\D/g,"");
   const n=(l.wa||"").replace(/\D/g,"").replace(/^0+/,"");return cc+n;}
-function fireWA(l){const p=current();if(!l.code)l.code=makeCode(p,l);const t=encodeURIComponent(buildMessage(p,l));
+function fireWA(l){const p=current();
+  if(p.photo&&!p.imageURL&&!confirm("The photo hasn't finished uploading (likely no signal). Send without it? Tap Cancel to retry the upload first."))return;
+  if(!l.code)l.code=makeCode(p,l);const t=encodeURIComponent(buildMessage(p,l));
   l.fired=true;persist();window.open("https://wa.me/"+waNumber(l)+"?text="+t,"_blank");}
 function fireMail(l){const p=current();if(!l.code)l.code=makeCode(p,l);
+  if(p.photo&&!p.imageURL&&!confirm("The photo hasn't finished uploading (likely no signal). Send without it? Tap Cancel to retry the upload first."))return;
   const sub=encodeURIComponent((p.title||"Your painting")+" — a private view");
   const body=encodeURIComponent(buildMessage(p,l));l.fired=true;persist();
   window.location.href="mailto:"+encodeURIComponent(l.email)+"?subject="+sub+"&body="+body;}
@@ -230,12 +243,12 @@ function renderPainting(){
       <button class="${p.delivery==="hand"?"on":""}" onclick="setField('delivery','hand')">By hand</button>
       <button class="${p.delivery==="crate"?"on":""}" onclick="setField('delivery','crate')">Custom crate</button>
     </div>
-    <label>Photo of the piece</label>
+    <label>Photo of the piece (snap — it uploads automatically)</label>
     <input type="file" accept="image/*" capture="environment" onchange="addPhoto(this)">
     ${p.photo?`<div class="imgwrap"><img src="${p.photo}"></div>`:""}
-    <label>Image web address (shows in the room)</label>
-    <input id="f-img" placeholder="https://www.artistonthehill.co.uk/images/xxx.jpg" value="${esc(p.imageURL)}">
-    <small class="note">The snapped photo above is your record. The room shows whatever you paste here — upload the piece to your /images/ folder and paste its link.</small>
+    ${uploadStatusHTML(p)}
+    <label>Room image link (auto-filled on upload — or paste your own)</label>
+    <input id="f-img" placeholder="https://res.cloudinary.com/..." value="${esc(p.imageURL)}">
     <hr>
     <label>Status</label>
     <div class="toggles">
@@ -303,12 +316,27 @@ function delLead(i){const p=current();if(!confirm("Remove "+(p.leads[i].name||"t
 async function delPainting(){await del(state.pid);go("list");}
 
 /* ---------- photo (downscaled, stored locally) ---------- */
-function addPhoto(input){const f=input.files[0];if(!f)return;const r=new FileReader();
-  r.onload=e=>{const img=new Image();img.onload=()=>{const max=1280;let w=img.width,h=img.height;
+function addPhoto(input){const f=input.files[0];if(!f)return;const pid=state.pid;const r=new FileReader();
+  r.onload=e=>{const img=new Image();img.onload=async()=>{const max=1280;let w=img.width,h=img.height;
     if(w>h&&w>max){h=h*max/w;w=max;}else if(h>max){w=w*max/h;h=max;}
     const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);
-    current().photo=c.toDataURL("image/jpeg",0.82);persist();renderPainting();};img.src=e.target.result;};
+    const dataURL=c.toDataURL("image/jpeg",0.82);
+    await patchPainting(pid,{photo:dataURL,imageURL:"",uploadState:"uploading"});if(state.pid===pid)await render();
+    try{const url=await uploadToCloudinary(dataURL);await patchPainting(pid,{imageURL:url,uploadState:"done"});}
+    catch(err){await patchPainting(pid,{uploadState:"pending"});}
+    if(state.pid===pid)await render();};img.src=e.target.result;};
   r.readAsDataURL(f);}
+async function patchPainting(pid,patch){const arr=await all();const p=arr.find(x=>x.id===pid);if(!p)return;Object.assign(p,patch);await put(p);}
+async function retryUpload(){const pid=state.pid;const p=current();if(!p||!p.photo)return;
+  await patchPainting(pid,{uploadState:"uploading"});await render();
+  try{const url=await uploadToCloudinary(p.photo);await patchPainting(pid,{imageURL:url,uploadState:"done"});}
+  catch(e){await patchPainting(pid,{uploadState:"pending"});}
+  await render();}
+function uploadStatusHTML(p){if(!p.photo)return"";
+  if(p.uploadState==="uploading")return'<div class="muted" style="margin-top:6px">Uploading photo…</div>';
+  if(p.uploadState==="done"||p.imageURL)return'<div style="margin-top:6px;color:var(--good);font-size:.82rem">✓ Photo uploaded — it\'ll show in the room</div>';
+  if(p.uploadState==="pending")return'<div style="margin-top:6px;color:var(--warn);font-size:.82rem">⚠ Photo not uploaded (no signal). <button class="x" style="color:var(--gold)" onclick="retryUpload()">Retry upload</button></div>';
+  return"";}
 
 /* ---------- new painting ---------- */
 async function newPainting(){const p={id:uid(),createdAt:Date.now(),title:"",loc:"",code:"",dest:"",
