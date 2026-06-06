@@ -129,7 +129,9 @@ function roomLink(p,l){
   const payload={t:p.title,c:code,s:p.size,p:p.price,v:!!p.vat,f:!!p.framed,d:p.delivery,
     w:!!l.waitingRoom,m:monthly(p),pr:!!l.print,who:l.name||code,sold:!!p.sold};
   if(p.gillan)payload.g=p.gillan;
-  try{return (settings.roomBase||"")+"#"+btoa(encodeURIComponent(JSON.stringify(payload)));}catch(e){return"";}
+  if(p.imageURL)payload.i=p.imageURL;
+  try{const enc=btoa(encodeURIComponent(JSON.stringify(payload))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+    return (settings.roomBase||"")+"?d="+enc;}catch(e){return"";}
 }
 
 let state={view:"list",pid:null,paintings:[],lastExport:null};
@@ -231,6 +233,9 @@ function renderPainting(){
     <label>Photo of the piece</label>
     <input type="file" accept="image/*" capture="environment" onchange="addPhoto(this)">
     ${p.photo?`<div class="imgwrap"><img src="${p.photo}"></div>`:""}
+    <label>Image web address (shows in the room)</label>
+    <input id="f-img" placeholder="https://www.artistonthehill.co.uk/images/xxx.jpg" value="${esc(p.imageURL)}">
+    <small class="note">The snapped photo above is your record. The room shows whatever you paste here — upload the piece to your /images/ folder and paste its link.</small>
     <hr>
     <label>Status</label>
     <div class="toggles">
@@ -247,7 +252,7 @@ function renderPainting(){
   <button class="btn ghost" onclick="if(confirm('Delete this painting and its list?')){delPainting()}">Delete painting</button>
   `;
   bindText("f-title","title");bindText("f-loc","loc");bindText("f-code","code",true);
-  bindText("f-size","size");bindText("f-price","price");bindText("f-gillan","gillan");
+  bindText("f-size","size");bindText("f-price","price");bindText("f-gillan","gillan");bindText("f-img","imageURL");
 }
 
 function leadCard(l,i){
@@ -307,7 +312,7 @@ function addPhoto(input){const f=input.files[0];if(!f)return;const r=new FileRea
 
 /* ---------- new painting ---------- */
 async function newPainting(){const p={id:uid(),createdAt:Date.now(),title:"",loc:"",code:"",dest:"",
-  size:"",price:"",vat:false,framed:false,delivery:"",photo:"",sold:false,gillan:"",leads:[]};await put(p);go("painting",p.id);}
+  size:"",price:"",vat:false,framed:false,delivery:"",photo:"",sold:false,gillan:"",imageURL:"",leads:[]};await put(p);go("painting",p.id);}
 
 /* ---------- settings, CRM push & backup ---------- */
 async function renderSettings(){
