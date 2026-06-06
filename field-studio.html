@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>Field Studio — Artist on the Hill</title>
+<style>
+  :root{
+    --gold:#B8963E; --cream:#f5f2ed; --dark:#1a1a1a; --line:#e2dac9; --line2:#e8e1d4;
+    --muted:#6b6357; --good:#1f7a5a; --warn:#b23a2e; --card:#fffdf9;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--cream);color:var(--dark);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:16px}
+  h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+  .bar{position:sticky;top:0;z-index:10;background:var(--dark);color:var(--cream);
+    padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:3px solid var(--gold);
+    padding-top:max(14px,env(safe-area-inset-top))}
+  .bar h1{margin:0;font-size:1.15rem;font-weight:600;letter-spacing:.3px;flex:1}
+  .bar button{background:transparent;border:0;color:var(--cream);font-size:.95rem;padding:6px 4px}
+  .bar .gold{color:var(--gold);font-weight:700}
+  .wrap{max-width:640px;margin:0 auto;padding:16px 16px 90px}
+  .card{background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:14px;margin-bottom:12px;
+    box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  label{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:10px 0 4px}
+  input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;
+    font-size:1rem;background:#fff;color:var(--dark);font-family:inherit}
+  textarea{min-height:120px;line-height:1.45}
+  .row{display:flex;gap:10px}.row>*{flex:1}
+  .btn{display:block;width:100%;padding:13px;border:0;border-radius:10px;font-size:1rem;font-weight:700;
+    letter-spacing:.3px;background:var(--gold);color:#fff;text-align:center;text-decoration:none;margin-top:10px}
+  .btn.dark{background:var(--dark)} .btn.ghost{background:#fff;color:var(--dark);border:1px solid var(--line)}
+  .btn.wa{background:#25D366} .btn.mail{background:#2b6cb0} .btn.sm{padding:10px;font-size:.9rem;margin-top:0}
+  .toggles{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .tog{flex:1 1 auto;min-width:46%;padding:11px 8px;border:1.5px solid var(--line);border-radius:9px;background:#fff;
+    color:var(--muted);font-size:.85rem;font-weight:700;text-align:center}
+  .tog.on{background:var(--gold);border-color:var(--gold);color:#fff}
+  .tog.on.good{background:var(--good);border-color:var(--good)}
+  .tog.on.dk{background:var(--dark);border-color:var(--dark)}
+  .seg{display:flex;border:1.5px solid var(--line);border-radius:9px;overflow:hidden}
+  .seg button{flex:1;padding:11px;border:0;background:#fff;color:var(--muted);font-weight:700;font-size:.85rem}
+  .seg button.on{background:var(--dark);color:#fff}
+  .plist{list-style:none;padding:0;margin:0}
+  .pitem{display:flex;gap:12px;align-items:center;padding:13px 14px;background:var(--card);border:1px solid var(--line2);
+    border-radius:12px;margin-bottom:10px}
+  .pitem .th{width:52px;height:52px;border-radius:8px;background:#eee center/cover;flex:0 0 auto;border:1px solid var(--line)}
+  .pitem .meta{flex:1;min-width:0}
+  .pitem .meta b{font-family:Georgia,serif;font-size:1.05rem;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pitem .meta span{font-size:.78rem;color:var(--muted)}
+  .pill{display:inline-block;font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:10px;background:#ece5d6;color:#6a6044}
+  .pill.map{background:#dfeee6;color:#1f7a5a}.pill.priv{background:#e7e0f0;color:#5a4b7a}.pill.sold{background:#1a1a1a;color:#fff}
+  .pill.crm{background:#dfeee6;color:#1f7a5a}
+  .lead{border:1px solid var(--line2);border-radius:10px;padding:12px;margin-top:10px;background:#fffefb}
+  .lead.prio{border-color:var(--gold);box-shadow:0 0 0 2px rgba(184,150,62,.18)}
+  .lead.synced{opacity:.5}
+  .codetag{margin:6px 0;font-size:.8rem;color:var(--muted)} .codetag b{color:var(--dark);letter-spacing:1px}
+  .preview{white-space:pre-wrap;font-size:.86rem;line-height:1.45;background:#f4efe6;border:1px dashed var(--line);
+    border-radius:8px;padding:10px;margin-top:8px;color:#3a342b;word-break:break-word}
+  .muted{color:var(--muted);font-size:.82rem}
+  .save{font-size:.72rem;color:var(--good);text-align:right;margin:-4px 2px 8px}
+  .soldban{background:#1a1a1a;color:#fff;text-align:center;padding:8px;border-radius:8px;font-weight:700;letter-spacing:2px;margin-bottom:12px}
+  .fab{position:fixed;right:16px;bottom:max(18px,env(safe-area-inset-bottom));z-index:20;background:var(--gold);color:#fff;
+    border:0;border-radius:30px;padding:15px 22px;font-size:1rem;font-weight:800;box-shadow:0 6px 18px rgba(0,0,0,.22)}
+  .empty{text-align:center;color:var(--muted);padding:40px 16px}
+  .empty h2{color:var(--dark)} hr{border:0;border-top:1px solid var(--line2);margin:14px 0}
+  .hd{display:flex;align-items:center;justify-content:space-between;margin:18px 0 6px}
+  .hd h3{margin:0;font-size:1.05rem} .x{color:var(--warn);background:none;border:0;font-size:.8rem;font-weight:700}
+  .imgwrap img{width:100%;border-radius:10px;border:1px solid var(--line);margin-top:6px}
+  small.note{display:block;color:var(--muted);font-size:.72rem;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <button id="back" style="display:none">‹ Back</button>
+  <h1 id="title">Field Studio</h1>
+  <button id="settingsBtn" class="gold">⚙</button>
+</div>
+<div class="wrap" id="app"></div>
+<button class="fab" id="fab">+ Painting</button>
+
+<script>
+/* ---------- storage (IndexedDB, local-first) ---------- */
+const DB="aoth-field", STORE="paintings";
+let _db;
+function db(){return new Promise((res,rej)=>{if(_db)return res(_db);
+  const r=indexedDB.open(DB,1);
+  r.onupgradeneeded=e=>{e.target.result.createObjectStore(STORE,{keyPath:"id"});};
+  r.onsuccess=e=>{_db=e.target.result;res(_db);};r.onerror=e=>rej(e);});}
+async function put(p){const d=await db();return new Promise((res,rej)=>{const t=d.transaction(STORE,"readwrite");
+  t.objectStore(STORE).put(p);t.oncomplete=()=>res();t.onerror=rej;});}
+async function all(){const d=await db();return new Promise((res,rej)=>{const t=d.transaction(STORE,"readonly");
+  const rq=t.objectStore(STORE).getAll();rq.onsuccess=()=>res(rq.result||[]);rq.onerror=rej;});}
+async function del(id){const d=await db();return new Promise((res,rej)=>{const t=d.transaction(STORE,"readwrite");
+  t.objectStore(STORE).delete(id);t.oncomplete=()=>res();t.onerror=rej;});}
+
+/* ---------- settings (localStorage) ---------- */
+const S=JSON.parse(localStorage.getItem("aoth-settings")||"{}");
+const defaults={artist:"Tony",roomBase:"https://www.artistonthehill.co.uk/room.html",vat:20,cc:"44",months:23};
+const settings=Object.assign({},defaults,S);
+function saveSettings(){localStorage.setItem("aoth-settings",JSON.stringify(settings));}
+
+const COUNTRIES=[["UK","44"],["Ireland","353"],["USA/Canada","1"],["France","33"],["Germany","49"],
+["Spain","34"],["Italy","39"],["Netherlands","31"],["Belgium","32"],["Switzerland","41"],["Austria","43"],
+["Portugal","351"],["Greece","30"],["Sweden","46"],["Norway","47"],["Denmark","45"],["Australia","61"],
+["New Zealand","64"],["UAE","971"],["South Africa","27"]];
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s), app=$("#app");
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money=n=>"£"+Number(n).toLocaleString("en-GB");
+const slug=s=>(s||"").replace(/[^a-z]/gi,"").toUpperCase();
+function gross(p){const net=parseFloat(p.price)||0;return p.vat?Math.round(net*(1+settings.vat/100)):net;}
+function priceLine(p){if(!p.price)return"";const net=parseFloat(p.price)||0;
+  return p.vat?money(gross(p))+" (incl. VAT)":money(net);}
+function monthly(p){const amt=gross(p);if(!amt)return 0;return Math.round(amt/settings.months/5)*5;}
+
+/* per-person code: BASE-PER  (BASE from painting code/title, PER from name) */
+function makeCode(p,l){
+  let base=slug(p.code)||slug(p.title).slice(0,4)||"VIEW";
+  let per=slug(l.name).slice(0,3);
+  if(!per)per="G"+(((p.leads||[]).indexOf(l))+1);
+  return base+"-"+per;
+}
+function roomLink(p,l){
+  const code=l.code||makeCode(p,l);
+  const payload={t:p.title,c:code,s:p.size,p:p.price,v:!!p.vat,f:!!p.framed,d:p.delivery,
+    w:!!l.waitingRoom,m:monthly(p),pr:!!l.print,who:l.name||code,sold:!!p.sold};
+  if(p.gillan)payload.g=p.gillan;
+  try{return (settings.roomBase||"")+"#"+btoa(encodeURIComponent(JSON.stringify(payload)));}catch(e){return"";}
+}
+
+let state={view:"list",pid:null,paintings:[],lastExport:null};
+let savedTimer;
+function flagSaved(){const e=$("#savedFlag");if(e){e.textContent="✓ saved";clearTimeout(savedTimer);
+  savedTimer=setTimeout(()=>{if(e)e.textContent="";},1200);}}
+async function persist(){const p=current();if(p){await put(p);flagSaved();}}
+function current(){return state.paintings.find(x=>x.id===state.pid);}
+
+/* ---------- message builder ---------- */
+function buildMessage(p,l){
+  const L=[];
+  L.push("Hi "+((l.name||"there").split(" ")[0])+",");L.push("");
+  L.push("Lovely to meet you"+(p.title?" by "+p.title:"")+" today.");
+  const rl=roomLink(p,l);const code=l.code||makeCode(p,l);
+  if(rl){L.push("Here's your private view: "+rl);}
+  if(code){L.push("Your unlock code: "+code);}
+  L.push("");
+  const desc=[p.title,p.size].filter(Boolean).join(" · ");if(desc)L.push(desc);
+  const pl=priceLine(p);if(pl)L.push(pl);
+  if(p.framed)L.push("Framed to your taste.");
+  if(p.delivery)L.push(p.delivery==="crate"?"Delivered to you in a custom crate.":"Delivered to you by hand.");
+  if(l.waitingRoom){const m=monthly(p);L.push("");
+    L.push("If you'd rather spread the cost, you can reserve it through my Waiting Room — interest-free monthly payments"
+      +(m?", around "+money(m)+"/month":"")+", and it's yours the moment it's finished.");}
+  if(l.print){L.push("");L.push("If you'd prefer a print of this piece, just say the word and I'll sort it.");}
+  L.push("");L.push("No rush at all — just shout if you'd like it.");L.push(settings.artist||"Tony");
+  return L.join("\n");
+}
+function waNumber(l){const cc=(l.cc||settings.cc||"44").replace(/\D/g,"");
+  const n=(l.wa||"").replace(/\D/g,"").replace(/^0+/,"");return cc+n;}
+function fireWA(l){const p=current();if(!l.code)l.code=makeCode(p,l);const t=encodeURIComponent(buildMessage(p,l));
+  l.fired=true;persist();window.open("https://wa.me/"+waNumber(l)+"?text="+t,"_blank");}
+function fireMail(l){const p=current();if(!l.code)l.code=makeCode(p,l);
+  const sub=encodeURIComponent((p.title||"Your painting")+" — a private view");
+  const body=encodeURIComponent(buildMessage(p,l));l.fired=true;persist();
+  window.location.href="mailto:"+encodeURIComponent(l.email)+"?subject="+sub+"&body="+body;}
+
+/* ---------- views ---------- */
+function go(view,pid){state.view=view;if(pid!==undefined)state.pid=pid;render();window.scrollTo(0,0);}
+
+async function render(){
+  state.paintings=await all();
+  $("#back").style.display=state.view==="list"?"none":"inline";
+  $("#settingsBtn").style.display=state.view==="list"?"inline":"none";
+  $("#fab").style.display=state.view==="list"?"block":"none";
+  if(state.view==="list")return renderList();
+  if(state.view==="settings")return renderSettings();
+  if(state.view==="painting")return renderPainting();
+}
+
+function renderList(){
+  $("#title").textContent="Field Studio";
+  const ps=[...state.paintings].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  if(!ps.length){app.innerHTML=`<div class="empty"><h2 class="serif">Nothing logged yet</h2>
+    <p>Tap <b>+ Painting</b> when you set up the easel. Everything saves to this phone — no signal needed.</p></div>`;return;}
+  app.innerHTML=`<ul class="plist">`+ps.map(p=>{
+    const leads=(p.leads||[]).length;const prio=(p.leads||[]).filter(l=>l.priority).length;
+    const dest=p.dest==="map"?'<span class="pill map">Map</span>':p.dest==="priv"?'<span class="pill priv">Private room</span>':'<span class="pill">Undecided</span>';
+    const sold=p.sold?'<span class="pill sold">SOLD</span> ':'';
+    return `<li class="pitem" onclick="go('painting','${p.id}')">
+      <div class="th" style="${p.photo?`background-image:url('${p.photo}')`:''}"></div>
+      <div class="meta"><b>${esc(p.title)||"Untitled"}</b>
+      <span>${sold}${dest} · ${leads} on list${prio?` · <b style="color:var(--gold)">${prio} priority</b>`:""}${p.price?` · ${esc(priceLine(p))}`:""}</span></div>
+      <div style="color:var(--muted)">›</div></li>`;}).join("")+`</ul>
+    <button class="btn ghost" onclick="go('settings')">Settings &amp; push to CRM</button>`;
+}
+
+function renderPainting(){
+  const p=current();if(!p)return go("list");
+  (p.leads||[]).forEach(l=>{if(!l.id)l.id=uid();});
+  $("#title").textContent=p.title||"New painting";
+  app.innerHTML=`
+  <div class="save" id="savedFlag"></div>
+  ${p.sold?`<div class="soldban">SOLD${p.soldAt?" · "+new Date(p.soldAt).toLocaleDateString('en-GB'):""}</div>`:""}
+  <div class="card">
+    <label>Title / what & where</label>
+    <input id="f-title" placeholder="e.g. The George, Fordingbridge" value="${esc(p.title)}">
+    <label>Google Maps lat, long (optional — skip if a client's beside you)</label>
+    <input id="f-loc" placeholder="51.123, -1.456" value="${esc(p.loc)}">
+    <label>Base private view code (each person gets their own variant)</label>
+    <input id="f-code" placeholder="e.g. FORD" value="${esc(p.code)}" style="text-transform:uppercase">
+    <label>Where does this painting go?</label>
+    <div class="seg">
+      <button class="${p.dest==="map"?"on":""}" onclick="setField('dest','map')">Straight on the map</button>
+      <button class="${p.dest==="priv"?"on":""}" onclick="setField('dest','priv')">Private room only</button>
+    </div>
+    <div class="row"><div><label>Size</label><input id="f-size" placeholder="60×42cm" value="${esc(p.size)}"></div>
+      <div><label>Price (net £)</label><input id="f-price" type="number" inputmode="decimal" placeholder="2300" value="${esc(p.price)}"></div></div>
+    <div class="toggles">
+      <button class="tog ${p.vat?"on":""}" onclick="toggle('vat')">+ VAT ${p.vat?"("+money(gross(p))+")":""}</button>
+      <button class="tog ${p.framed?"on":""}" onclick="toggle('framed')">Framed to taste</button>
+    </div>
+    <label>Delivery</label>
+    <div class="seg">
+      <button class="${p.delivery==="hand"?"on":""}" onclick="setField('delivery','hand')">By hand</button>
+      <button class="${p.delivery==="crate"?"on":""}" onclick="setField('delivery','crate')">Custom crate</button>
+    </div>
+    <label>Photo of the piece</label>
+    <input type="file" accept="image/*" capture="environment" onchange="addPhoto(this)">
+    ${p.photo?`<div class="imgwrap"><img src="${p.photo}"></div>`:""}
+    <hr>
+    <label>Status</label>
+    <div class="toggles">
+      <button class="tog ${p.sold?"on dk":""}" onclick="toggleSold()">${p.sold?"★ Sold — tap to undo":"Mark as sold"}</button>
+    </div>
+    <label>Gillan Gallery print link (add any time)</label>
+    <input id="f-gillan" placeholder="https://thegillangallery.com/..." value="${esc(p.gillan)}">
+    <small class="note">Shows in private rooms you send <i>after</i> adding it. Existing links won't change.</small>
+  </div>
+
+  <div class="hd"><h3 class="serif">People on the list</h3><span class="muted">${(p.leads||[]).length} — hidden from each other</span></div>
+  <div id="leads">${(p.leads||[]).map((l,i)=>leadCard(l,i)).join("")}</div>
+  <button class="btn dark" onclick="addLead()">+ Add someone I've spoken to</button>
+  <button class="btn ghost" onclick="if(confirm('Delete this painting and its list?')){delPainting()}">Delete painting</button>
+  `;
+  bindText("f-title","title");bindText("f-loc","loc");bindText("f-code","code",true);
+  bindText("f-size","size");bindText("f-price","price");bindText("f-gillan","gillan");
+}
+
+function leadCard(l,i){
+  const p=current();const hasWA=(l.wa||"").trim().length>0;const hasMail=(l.email||"").trim().length>0;
+  const opts=COUNTRIES.map(c=>`<option value="${c[1]}" ${(l.cc||settings.cc)===c[1]?"selected":""}>${c[0]} +${c[1]}</option>`).join("");
+  const code=l.code||makeCode(p,l);
+  return `<div class="lead ${l.priority?"prio":""} ${l.synced?"synced":""}" id="lead-${i}">
+    ${l.synced?'<span class="pill crm">✓ in CRM</span>':''}
+    <input placeholder="Name" value="${esc(l.name)}" oninput="leadField(${i},'name',this.value,true)">
+    <div class="codetag">Their code: <b>${esc(code)}</b></div>
+    <div class="row" style="margin-top:2px">
+      <select style="flex:0 0 38%" onchange="leadField(${i},'cc',this.value,true)">${opts}</select>
+      <input style="flex:1" type="tel" inputmode="tel" placeholder="WhatsApp number" value="${esc(l.wa)}" oninput="leadField(${i},'wa',this.value,true)">
+    </div>
+    <input style="margin-top:8px" type="email" inputmode="email" placeholder="Email" value="${esc(l.email)}" oninput="leadField(${i},'email',this.value,true)">
+    <div class="toggles">
+      <button class="tog ${l.priority?"on":""}" onclick="leadToggle(${i},'priority')">${l.priority?"★ Priority":"Priority?"}</button>
+      <button class="tog ${l.waitingRoom?"on good":""}" onclick="leadToggle(${i},'waitingRoom')">Waiting Room blurb</button>
+      <button class="tog ${l.print?"on dk":""}" onclick="leadToggle(${i},'print')">Offer a print</button>
+    </div>
+    <div class="preview" id="prev-${i}">${esc(buildMessage(p,l))}</div>
+    <div class="row" style="margin-top:8px">
+      ${hasWA?`<button class="btn wa sm" onclick="fireWA(current().leads[${i}])">${l.fired?"Re-send":"Fire"} WhatsApp</button>`:""}
+      ${hasMail?`<button class="btn mail sm" onclick="fireMail(current().leads[${i}])">${l.fired?"Re-send":"Fire"} Email</button>`:""}
+      ${(!hasWA&&!hasMail)?`<span class="muted" style="align-self:center">Add a number or email to fire a message</span>`:""}
+    </div>
+    <button class="x" style="margin-top:8px" onclick="delLead(${i})">remove</button>
+  </div>`;
+}
+
+/* ---------- field binding ---------- */
+function bindText(id,key,upper){const el=document.getElementById(id);if(!el)return;
+  el.oninput=()=>{let v=el.value;if(upper)v=v.toUpperCase();current()[key]=v;persist();
+    if(key==="title")$("#title").textContent=v||"New painting";};}
+function setField(k,v){current()[k]=v;persist();renderPainting();}
+function toggle(k){current()[k]=!current()[k];persist();renderPainting();}
+function toggleSold(){const p=current();p.sold=!p.sold;if(p.sold)p.soldAt=Date.now();persist();renderPainting();}
+function leadField(i,k,v,refreshPrev){const p=current();p.leads[i][k]=v;
+  if(k==="name")p.leads[i].code="";/* let code re-derive until fired */
+  persist();
+  const pv=document.getElementById("prev-"+i);if(pv)pv.textContent=buildMessage(p,p.leads[i]);
+  if(k==="name"){const ct=document.querySelector("#lead-"+i+" .codetag b");if(ct)ct.textContent=makeCode(p,p.leads[i]);}}
+function leadToggle(i,k){const p=current();p.leads[i][k]=!p.leads[i][k];persist();renderPainting();}
+function addLead(){const p=current();p.leads=p.leads||[];p.leads.push({id:uid(),cc:settings.cc});persist();renderPainting();
+  setTimeout(()=>{const e=document.getElementById("lead-"+(p.leads.length-1));if(e)e.scrollIntoView({behavior:"smooth",block:"center"});},50);}
+function delLead(i){const p=current();if(!confirm("Remove "+(p.leads[i].name||"this person")+"?"))return;
+  p.leads.splice(i,1);persist();renderPainting();}
+async function delPainting(){await del(state.pid);go("list");}
+
+/* ---------- photo (downscaled, stored locally) ---------- */
+function addPhoto(input){const f=input.files[0];if(!f)return;const r=new FileReader();
+  r.onload=e=>{const img=new Image();img.onload=()=>{const max=1280;let w=img.width,h=img.height;
+    if(w>h&&w>max){h=h*max/w;w=max;}else if(h>max){w=w*max/h;h=max;}
+    const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);
+    current().photo=c.toDataURL("image/jpeg",0.82);persist();renderPainting();};img.src=e.target.result;};
+  r.readAsDataURL(f);}
+
+/* ---------- new painting ---------- */
+async function newPainting(){const p={id:uid(),createdAt:Date.now(),title:"",loc:"",code:"",dest:"",
+  size:"",price:"",vat:false,framed:false,delivery:"",photo:"",sold:false,gillan:"",leads:[]};await put(p);go("painting",p.id);}
+
+/* ---------- settings, CRM push & backup ---------- */
+async function renderSettings(){
+  $("#title").textContent="Settings & CRM";
+  const ps=await all();const due=unsyncedCount(ps);
+  app.innerHTML=`<div class="card">
+    <label>Your name (signs the messages)</label><input id="s-artist" value="${esc(settings.artist)}">
+    <label>Private room base URL</label><input id="s-base" value="${esc(settings.roomBase)}">
+    <small class="note">Where room.html lives. Each person's link is this + their painting baked in.</small>
+    <div class="row"><div><label>VAT %</label><input id="s-vat" type="number" value="${settings.vat}"></div>
+    <div><label>Waiting Room months</label><input id="s-months" type="number" value="${settings.months}"></div></div>
+    <button class="btn" onclick="saveSet()">Save settings</button>
+  </div>
+  <div class="card">
+    <h3 class="serif" style="margin-top:0">Push to CRM</h3>
+    <p class="muted">${due} new ${due===1?"entry":"entries"} waiting to push. Do this on wifi.</p>
+    <button class="btn dark" onclick="exportCSV()">1 · Export new entries (CSV)</button>
+    <button class="btn ghost" onclick="confirmArchive()">2 · I've put them in Airtable — archive them</button>
+    <small class="note">Export gives you only people you haven't pushed yet. Once they're safely in Airtable, archive so they never upload twice.</small>
+    <hr>
+    <button class="btn ghost" onclick="exportJSON()">Download full backup (JSON)</button>
+    <label>Restore from a backup</label>
+    <input type="file" accept="application/json" onchange="importJSON(this)">
+  </div>`;
+}
+function saveSet(){settings.artist=$("#s-artist").value;settings.roomBase=$("#s-base").value;
+  settings.vat=parseFloat($("#s-vat").value)||20;settings.months=parseInt($("#s-months").value)||23;
+  saveSettings();alert("Saved.");go("list");}
+
+function unsyncedCount(ps){let n=0;ps.forEach(p=>{const leads=p.leads||[];
+  if(leads.length){n+=leads.filter(l=>!l.synced).length;}else if(!p.synced){n+=1;}});return n;}
+
+function csvCell(v){v=(v==null?"":String(v));return '"'+v.replace(/"/g,'""')+'"';}
+async function exportCSV(){const ps=await all();
+  const head=["Painting","Location","Base code","Destination","Status","Gillan print","Size","Net price",
+    "Plus VAT","Gross","Framed","Delivery","Name","Person code","Country code","WhatsApp","Email",
+    "Priority","Waiting Room","Print interest","Logged"];
+  const rows=[head];const exLeads=[];const exPaints=[];
+  ps.forEach(p=>{const when=new Date(p.createdAt).toLocaleString("en-GB");
+    const pbase=[p.title,p.loc,p.code,p.dest==="map"?"Map":p.dest==="priv"?"Private room":"",
+      p.sold?"SOLD":"",p.gillan||"",p.size,p.price,p.vat?"Yes":"No",p.vat?gross(p):"",p.framed?"Yes":"No",
+      p.delivery==="crate"?"Custom crate":p.delivery==="hand"?"By hand":""];
+    const leads=p.leads||[];
+    if(!leads.length){if(!p.synced){rows.push(pbase.concat(["","","","","","","","",when]));exPaints.push(p.id);}}
+    else{leads.filter(l=>!l.synced).forEach(l=>{rows.push(pbase.concat([l.name||"",l.code||makeCode(p,l),
+      l.cc||"",l.wa||"",l.email||"",l.priority?"PRIORITY":"",l.waitingRoom?"Yes":"",l.print?"Yes":"",when]));
+      exLeads.push(p.id+"::"+l.id);});}});
+  if(rows.length===1){alert("Nothing new to push — you're all caught up.");return;}
+  state.lastExport={leads:exLeads,paints:exPaints};
+  dl("field-studio-"+stamp()+".csv","text/csv",rows.map(r=>r.map(csvCell).join(",")).join("\r\n"));
+}
+async function confirmArchive(){
+  if(!state.lastExport){alert("Export the CSV first, then archive once it's safely in Airtable.");return;}
+  if(!confirm("Archive everything from the last export? They'll stay on your phone but won't upload again."))return;
+  const ps=await all();
+  for(const p of ps){let changed=false;
+    if(state.lastExport.paints.includes(p.id)){p.synced=true;p.syncedAt=Date.now();changed=true;}
+    (p.leads||[]).forEach(l=>{if(state.lastExport.leads.includes(p.id+"::"+l.id)){l.synced=true;l.syncedAt=Date.now();changed=true;}});
+    if(changed)await put(p);}
+  state.lastExport=null;alert("Archived. Those won't appear in the next push.");go("settings");
+}
+async function exportJSON(){const ps=await all();dl("field-studio-backup-"+stamp()+".json","application/json",JSON.stringify(ps,null,2));}
+function importJSON(input){const f=input.files[0];if(!f)return;const r=new FileReader();
+  r.onload=async e=>{try{const arr=JSON.parse(e.target.result);if(!Array.isArray(arr))throw 0;
+    for(const p of arr){if(p&&p.id)await put(p);}alert("Restored "+arr.length+" paintings.");go("list");}
+    catch(_){alert("That doesn't look like a Field Studio backup.");}};r.readAsText(f);}
+function stamp(){return new Date().toISOString().slice(0,10);}
+function dl(name,type,data){const b=new Blob([data],{type});const u=URL.createObjectURL(b);
+  const a=document.createElement("a");a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),2000);}
+
+/* ---------- wire up ---------- */
+$("#fab").onclick=newPainting;
+$("#back").onclick=()=>go("list");
+$("#settingsBtn").onclick=()=>go("settings");
+window.addEventListener("pagehide",()=>{const p=current();if(p)put(p);});
+document.addEventListener("visibilitychange",()=>{if(document.hidden){const p=current();if(p)put(p);}});
+render();
+</script>
+</body>
+</html>
