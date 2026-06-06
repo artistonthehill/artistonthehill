@@ -88,7 +88,11 @@ const TRACKER   = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH
 const VAT = 20, MONTHS = 23;
 
 let P=null;
-try{ const h=location.hash.slice(1); if(h) P=JSON.parse(decodeURIComponent(atob(h))); }catch(e){ P=null; }
+try{
+  let raw=new URLSearchParams(location.search).get("d");
+  if(raw){ raw=raw.replace(/-/g,"+").replace(/_/g,"/"); while(raw.length%4)raw+="="; P=JSON.parse(decodeURIComponent(atob(raw))); }
+  else if(location.hash.slice(1)){ P=JSON.parse(decodeURIComponent(atob(location.hash.slice(1)))); }
+}catch(e){ P=null; }
 
 const $=s=>document.querySelector(s);
 const gbp=n=>"£"+Number(n).toLocaleString("en-GB");
