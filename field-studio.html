@@ -243,8 +243,8 @@ function renderPainting(){
       <button class="${p.delivery==="hand"?"on":""}" onclick="setField('delivery','hand')">By hand</button>
       <button class="${p.delivery==="crate"?"on":""}" onclick="setField('delivery','crate')">Custom crate</button>
     </div>
-    <label>Photo of the piece (snap — it uploads automatically)</label>
-    <input type="file" accept="image/*" capture="environment" onchange="addPhoto(this)">
+    <label>Photo of the piece (choose the best from your roll — it uploads automatically)</label>
+    <input type="file" accept="image/*" onchange="addPhoto(this)">
     ${p.photo?`<div class="imgwrap"><img src="${p.photo}"></div>`:""}
     ${uploadStatusHTML(p)}
     <label>Room image link (auto-filled on upload — or paste your own)</label>
