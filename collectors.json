@@ -138,12 +138,12 @@
       "total": 2300,
       "monthly": 50,
       "totalPayments": null,
-      "startDate": null,
+      "startDate": "2026-05-07",
       "bankRef": "Burgh",
       "notes": "£50/month for 12-18 months, then increase to £100 for remainder. Agreed via WhatsApp 6 May 2026. Painting to be framed and shipped in custom crate after first payment lands. Awaiting: email address, postal address, SO screenshot, and confirmation of which painting.",
       "status": "pending-first-payment",
-      "toat": "",
-      "paymentsReceived": 1
+      "toat": "2G46-ZNE7",
+      "paymentsReceived": 2
     },
     {
       "id": "joanna-davis",
