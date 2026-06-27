@@ -122,9 +122,8 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const money=n=>"£"+Number(n).toLocaleString("en-GB");
 const slug=s=>(s||"").replace(/[^a-z]/gi,"").toUpperCase();
-function gross(p){const net=parseFloat(p.price)||0;return p.vat?Math.round(net*(1+settings.vat/100)):net;}
-function priceLine(p){if(!p.price)return"";const net=parseFloat(p.price)||0;
-  return p.vat?money(gross(p))+" (incl. VAT)":money(net);}
+function gross(p){return parseFloat(p.price)||0;}
+function priceLine(p){if(!p.price)return"";return money(p.price);}
 function monthly(p){const amt=gross(p);if(!amt)return 0;return Math.round(amt/settings.months/5)*5;}
 
 /* per-person code: BASE-PER  (BASE from painting code/title, PER from name) */
@@ -154,21 +153,45 @@ function current(){return state.paintings.find(x=>x.id===state.pid);}
 /* ---------- message builder ---------- */
 function buildMessage(p,l){
   const L=[];
-  L.push("Hi "+((l.name||"there").split(" ")[0])+",");L.push("");
-  L.push("Lovely to meet you"+(p.title?" by "+p.title:"")+" today.");
-  const rl=roomLink(p,l);const code=l.code||makeCode(p,l);
-  if(rl){L.push("Here's your private view: "+rl);}
-  if(code){L.push("Your unlock code: "+code);}
-  L.push("");
-  const desc=[p.title,p.size].filter(Boolean).join(" · ");if(desc)L.push(desc);
-  const pl=priceLine(p);if(pl)L.push(pl);
-  if(p.framed)L.push("Framed to your taste.");
+  const first=(l.name||"there").split(" ")[0];
+  // ---- greeting (chosen per person) ----
+  let greet;
+  if(l.greeting==="you")      greet="Hi "+first+", it was great fun to include you in the picture.";
+  else if(l.greeting==="kids") greet="Hi "+first+", it was great to include your kids in the picture.";
+  else                         greet="Hi "+first+", it was lovely to meet you"+(p.title?" at "+p.title:"")+".";
+  L.push(greet);L.push("");
+  // ---- painting + price + framing ----
+  const pl=priceLine(p);
+  if(pl){L.push((p.title||"It")+" is "+pl+(p.framed?", framed to taste.":", supplied unframed."));}
+  else if(p.title){L.push(p.title+(p.framed?" — framed to taste.":" — supplied unframed."));}
   if(p.delivery)L.push(p.delivery==="crate"?"Delivered to you in a custom crate.":"Delivered to you by hand.");
-  if(l.waitingRoom){const m=monthly(p);L.push("");
+  L.push("");
+  // ---- code + link instruction (the link itself sits at the very bottom) ----
+  const code=l.code||makeCode(p,l);
+  L.push("At the bottom of this message there's a long link. Click it, and when it asks for a code, pop in: "+code+".");
+  L.push("");
+  // ---- sold vs not-sold ----
+  if(p.sold){
+    L.push("This original has now found a home — but I'd be delighted to paint another version for you if you'd like an original of your own, or I can arrange a giclée fine art print. Just reply and let me know which.");
+  }else{
+    L.push("There's only ever one original, and they do tend to go quickly — so if it's speaking to you, try not to sit on it too long. Last year at Henley, both my paintings sold on the day and I painted second versions at full price for the people who just missed out. I'd hate for that to be you.");
+    if(l.print){L.push("");L.push("Would you like a giclée fine art print of this painting? I'd be delighted to arrange it — just reply to this message and I'll send you all the details.");}
+  }
+  // ---- waiting room (only while available) ----
+  if(l.waitingRoom&&!p.sold){const m=monthly(p);L.push("");
     L.push("If you'd rather spread the cost, you can reserve it through my Waiting Room — interest-free monthly payments"
       +(m?", around "+money(m)+"/month":"")+", and it's yours the moment it's finished.");}
-  if(l.print){L.push("");L.push("If you'd prefer a print of this piece, just say the word and I'll sort it.");}
-  L.push("");L.push("No rush at all — just shout if you'd like it.");L.push(settings.artist||"Tony");
+  // ---- newsletter ----
+  L.push("");
+  L.push("If you'd like to receive my absolutely-not-boring newsletter (I only holler when I've actually got something interesting to say), click here and pop your email in the box: https://eepurl.com/gmXsdP");
+  // ---- socials ----
+  L.push("");
+  L.push("And if you take any photos or video, do tag me — you'll find me on Instagram (https://www.instagram.com/artistonthehill) and Facebook (https://www.facebook.com/twistedportrait).");
+  // ---- sign-off ----
+  L.push("");L.push("All the best,");L.push(settings.artist||"Tony");
+  // ---- the long private-view link, at the very bottom ----
+  const rl=roomLink(p,l);
+  if(rl){L.push("");L.push(rl);}
   return L.join("\n");
 }
 function waNumber(l){const cc=(l.cc||settings.cc||"44").replace(/\D/g,"");
@@ -223,8 +246,6 @@ function renderPainting(){
   <div class="card">
     <label>Title / what & where</label>
     <input id="f-title" placeholder="e.g. The George, Fordingbridge" value="${esc(p.title)}">
-    <label>Google Maps lat, long (optional — skip if a client's beside you)</label>
-    <input id="f-loc" placeholder="51.123, -1.456" value="${esc(p.loc)}">
     <label>Base private view code (each person gets their own variant)</label>
     <input id="f-code" placeholder="e.g. FORD" value="${esc(p.code)}" style="text-transform:uppercase">
     <label>Where does this painting go?</label>
@@ -233,10 +254,9 @@ function renderPainting(){
       <button class="${p.dest==="priv"?"on":""}" onclick="setField('dest','priv')">Private room only</button>
     </div>
     <div class="row"><div><label>Size</label><input id="f-size" placeholder="60×42cm" value="${esc(p.size)}"></div>
-      <div><label>Price (net £)</label><input id="f-price" type="number" inputmode="decimal" placeholder="2300" value="${esc(p.price)}"></div></div>
+      <div><label>Price (inc VAT £)</label><input id="f-price" type="number" inputmode="decimal" placeholder="2300" value="${esc(p.price)}"></div></div>
     <div class="toggles">
-      <button class="tog ${p.vat?"on":""}" onclick="toggle('vat')">+ VAT ${p.vat?"("+money(gross(p))+")":""}</button>
-      <button class="tog ${p.framed?"on":""}" onclick="toggle('framed')">Framed to taste</button>
+      <button class="tog ${p.framed?"on":""}" onclick="toggle('framed')">${p.framed?"✓ Framed to taste":"Unframed"}</button>
     </div>
     <label>Delivery</label>
     <div class="seg">
@@ -264,7 +284,7 @@ function renderPainting(){
   <button class="btn dark" onclick="addLead()">+ Add someone I've spoken to</button>
   <button class="btn ghost" onclick="if(confirm('Delete this painting and its list?')){delPainting()}">Delete painting</button>
   `;
-  bindText("f-title","title");bindText("f-loc","loc");bindText("f-code","code",true);
+  bindText("f-title","title");bindText("f-code","code",true);
   bindText("f-size","size");bindText("f-price","price");bindText("f-gillan","gillan");bindText("f-img","imageURL");
 }
 
@@ -281,6 +301,12 @@ function leadCard(l,i){
       <input style="flex:1" type="tel" inputmode="tel" placeholder="WhatsApp number" value="${esc(l.wa)}" oninput="leadField(${i},'wa',this.value,true)">
     </div>
     <input style="margin-top:8px" type="email" inputmode="email" placeholder="Email" value="${esc(l.email)}" oninput="leadField(${i},'email',this.value,true)">
+    <label>Opening line</label>
+    <div class="seg">
+      <button class="${(l.greeting||'met')==='met'?'on':''}" onclick="leadSet(${i},'greeting','met')">Met you</button>
+      <button class="${l.greeting==='you'?'on':''}" onclick="leadSet(${i},'greeting','you')">In picture</button>
+      <button class="${l.greeting==='kids'?'on':''}" onclick="leadSet(${i},'greeting','kids')">Kids in pic</button>
+    </div>
     <div class="toggles">
       <button class="tog ${l.priority?"on":""}" onclick="leadToggle(${i},'priority')">${l.priority?"★ Priority":"Priority?"}</button>
       <button class="tog ${l.waitingRoom?"on good":""}" onclick="leadToggle(${i},'waitingRoom')">Waiting Room blurb</button>
@@ -309,6 +335,7 @@ function leadField(i,k,v,refreshPrev){const p=current();p.leads[i][k]=v;
   const pv=document.getElementById("prev-"+i);if(pv)pv.textContent=buildMessage(p,p.leads[i]);
   if(k==="name"){const ct=document.querySelector("#lead-"+i+" .codetag b");if(ct)ct.textContent=makeCode(p,p.leads[i]);}}
 function leadToggle(i,k){const p=current();p.leads[i][k]=!p.leads[i][k];persist();renderPainting();}
+function leadSet(i,k,v){const p=current();p.leads[i][k]=v;persist();renderPainting();}
 function addLead(){const p=current();p.leads=p.leads||[];p.leads.push({id:uid(),cc:settings.cc});persist();renderPainting();
   setTimeout(()=>{const e=document.getElementById("lead-"+(p.leads.length-1));if(e)e.scrollIntoView({behavior:"smooth",block:"center"});},50);}
 function delLead(i){const p=current();if(!confirm("Remove "+(p.leads[i].name||"this person")+"?"))return;
@@ -340,7 +367,7 @@ function uploadStatusHTML(p){if(!p.photo)return"";
 
 /* ---------- new painting ---------- */
 async function newPainting(){const p={id:uid(),createdAt:Date.now(),title:"",loc:"",code:"",dest:"",
-  size:"",price:"",vat:false,framed:false,delivery:"",photo:"",sold:false,gillan:"",imageURL:"",leads:[]};await put(p);go("painting",p.id);}
+  size:"",price:"",vat:false,framed:true,delivery:"",photo:"",sold:false,gillan:"",imageURL:"",leads:[]};await put(p);go("painting",p.id);}
 
 /* ---------- settings, CRM push & backup ---------- */
 async function renderSettings(){
