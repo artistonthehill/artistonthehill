@@ -168,7 +168,7 @@ function buildMessage(p,l){
   L.push("");
   // ---- code + link instruction (the link itself sits at the very bottom) ----
   const code=l.code||makeCode(p,l);
-  L.push("At the bottom of this message there's a long link. Click it, and when it asks for a code, pop in: "+code+".");
+  L.push("At the bottom of this message there's a link to your own private view of the painting. Just tap it, then tap Unlock — your code ("+code+") is already filled in for you.");
   L.push("");
   // ---- sold vs not-sold ----
   if(p.sold){
