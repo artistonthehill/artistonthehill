@@ -100,6 +100,10 @@ const gbp=n=>"£"+Number(n).toLocaleString("en-GB");
 if(!P){
   $("#gate").innerHTML='<div class="eyebrow">Private View</div><h1 class="serif" style="font-family:\'Cormorant Garamond\',serif;font-size:2rem;margin:10px 0">This link has expired</h1><p style="color:#6b6357">Ask Tony for a fresh one.</p>';
 }else{
+  // Count this landing once, then fire the lightweight "opened" ping —
+  // this fires the moment a valid link is opened, even if they never enter the code.
+  try{ const k="seen-"+(P.c||P.t||"x"); localStorage.setItem(k,String(parseInt(localStorage.getItem(k)||"0")+1)); }catch(e){}
+  ping("opened");
   $("#unlock").onclick=tryUnlock;
   $("#code").addEventListener("keydown",e=>{if(e.key==="Enter")tryUnlock();});
 }
@@ -146,10 +150,23 @@ function openRoom(){
   fireTripwire();
 }
 
-async function fireTripwire(){
+// Shared sender — tags every hit with an event so you can tell "opened" from "unlocked".
+function ping(event,geo){
+  geo=geo||{};
   const key="seen-"+(P.c||P.t||"x");
-  let visits=parseInt(localStorage.getItem(key)||"0")+1;
-  try{ localStorage.setItem(key,String(visits)); }catch(e){}
+  const visits=parseInt(localStorage.getItem(key)||"0");
+  const q=new URLSearchParams({
+    event:event||"",
+    page:P.t||"", who:P.who||"", code:P.c||"",
+    region:geo.region||"", ip:geo.ip||"", isp:geo.isp||"",
+    ua:navigator.userAgent||"", tz:Intl.DateTimeFormat().resolvedOptions().timeZone||"",
+    lang:navigator.language||"", ref:document.referrer||"direct", visits:String(visits)
+  });
+  const img=new Image(); img.src=TRACKER+"?"+q.toString();
+}
+
+// Full "unlocked" signal — fires once the code is accepted, with location lookup.
+async function fireTripwire(){
   let geo={};
   try{
     const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),2500);
@@ -157,13 +174,7 @@ async function fireTripwire(){
     const j=await r.json();
     if(j&&j.success!==false){ geo={ip:j.ip,region:[j.city,j.region,j.country].filter(Boolean).join(", "),isp:(j.connection&&j.connection.isp)||""}; }
   }catch(e){}
-  const q=new URLSearchParams({
-    page:P.t||"", who:P.who||"", code:P.c||"",
-    region:geo.region||"", ip:geo.ip||"", isp:geo.isp||"",
-    ua:navigator.userAgent||"", tz:Intl.DateTimeFormat().resolvedOptions().timeZone||"",
-    lang:navigator.language||"", ref:document.referrer||"direct", visits:String(visits)
-  });
-  const img=new Image(); img.src=TRACKER+"?"+q.toString();
+  ping("unlocked",geo);
 }
 </script>
 </body>
