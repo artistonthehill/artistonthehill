@@ -1030,5 +1030,38 @@
     "collection": "ionian",
     "sold": false,
     "prints": false
+  },
+  {
+    "id": "chilbolton-footbridge",
+    "title": "Chilbolton Footbridge",
+    "img": "images/chilbolton-footbridge.jpg",
+    "price": "£2,760",
+    "size": "80×30cm · Oil on board",
+    "lat": 51.162363,
+    "lng": -1.44927,
+    "collection": "uk",
+    "category": "landscape"
+  },
+  {
+    "id": "swan-at-streatley",
+    "title": "The Swan at Streatley",
+    "img": "images/swan-at-streatley.jpg",
+    "price": "£2,760",
+    "size": "80×30cm · Oil on board",
+    "lat": 51.523879,
+    "lng": -1.142968,
+    "collection": "uk",
+    "category": "landscape"
+  },
+  {
+    "id": "london-to-brighton-bike-ride",
+    "title": "The London to Brighton Bike Ride",
+    "img": "images/london-to-brighton-bike-ride.jpg",
+    "price": "£2,760",
+    "size": "80×30cm · Oil on board",
+    "lat": 50.816456,
+    "lng": -0.119634,
+    "collection": "uk",
+    "category": "landscape"
   }
 ]
