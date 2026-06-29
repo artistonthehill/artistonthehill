@@ -50,7 +50,7 @@
   <div id="gate">
     <div class="eyebrow">A Private View</div>
     <h1 class="serif">By invitation</h1>
-    <p>Enter the code I gave you to see the piece.</p>
+    <p>Your private code's filled in — just tap below to see the piece.</p>
     <input id="code" placeholder="CODE" autocomplete="off" autocapitalize="characters">
     <div class="err" id="err"></div>
     <button class="btn" id="unlock">Unlock</button>
@@ -106,6 +106,8 @@ if(!P){
   ping("opened");
   $("#unlock").onclick=tryUnlock;
   $("#code").addEventListener("keydown",e=>{if(e.key==="Enter")tryUnlock();});
+  // Pre-fill the code from the link so there's no scrolling back for it — one tap to view.
+  if(P.c){ $("#code").value=P.c; }
 }
 
 function tryUnlock(){
