@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>A Private View — Artist on the Hill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#B8963E;--cream:#f5f2ed;--dark:#1a1a1a;--muted:#6b6357;--line:#e2dac9}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--cream);color:var(--dark);font-family:'Montserrat',sans-serif;line-height:1.6;
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+  .serif{font-family:'Cormorant Garamond',serif}
+  .eyebrow{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .wrap{max-width:560px;width:100%}
+  #loading,#gone{text-align:center;color:var(--muted)}
+  #gone h1{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--dark);margin:10px 0}
+  #room{display:none}
+  .hero{width:100%;border-radius:14px;border:1px solid var(--line);margin-bottom:22px;display:block}
+  .titleblock{text-align:center;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:20px}
+  .titleblock h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:2.3rem;line-height:1.15;margin:8px 0}
+  .titleblock .price{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold);margin-top:8px}
+  .specs{font-size:.9rem;color:var(--muted);text-align:center}
+  .specs span{display:inline-block;margin:0 8px}
+  .soldnote{text-align:center;background:var(--dark);color:var(--cream);border-radius:10px;padding:14px 18px;margin-bottom:20px}
+  .soldnote .lab{letter-spacing:3px;font-size:.72rem;color:var(--gold);font-weight:600}
+  .soldnote p{font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin-top:4px}
+  .panel{background:#fff;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;
+    padding:18px 20px;margin:22px 0}
+  .panel h3{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.3rem;color:var(--dark);margin-bottom:6px}
+  .panel .mo{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold);font-weight:600}
+  .panel p{font-size:.9rem;color:var(--muted)}
+  .btn{display:block;width:100%;text-align:center;margin-top:12px;padding:14px 32px;border:0;border-radius:10px;
+    font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:.5px;font-size:1rem;text-decoration:none;cursor:pointer;color:#fff}
+  .btn.wa{background:#25D366}.btn.dk{background:var(--dark)}
+  .btn.ghost{background:transparent;color:var(--dark);border:1px solid var(--line)}
+  .btn.gold{background:var(--gold)}
+  .more{text-align:center;margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+  .more a{color:var(--muted);font-size:.82rem;text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
+  .foot{text-align:center;color:var(--muted);font-size:.78rem;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="loading">
+    <div class="eyebrow">A Private View</div>
+    <p style="margin-top:10px">Opening your painting…</p>
+  </div>
+
+  <div id="gone" style="display:none">
+    <div class="eyebrow">Private View</div>
+    <h1 class="serif">This link isn't ready yet</h1>
+    <p>Give it a minute and refresh — or ask Tony for a fresh one.</p>
+  </div>
+
+  <div id="room">
+    <img id="hero" class="hero" alt="" style="display:none">
+    <div class="soldnote" id="r-soldnote" style="display:none">
+      <div class="lab">NOW IN A PRIVATE COLLECTION</div>
+      <p>This original has found its home — but you can still own it as a print.</p>
+    </div>
+    <div class="titleblock">
+      <div class="eyebrow" id="r-eyebrow">Reserved for your eyes</div>
+      <h1 class="serif" id="r-title"></h1>
+      <div class="specs" id="r-specs"></div>
+      <div class="price serif" id="r-price"></div>
+    </div>
+    <div id="r-terms" class="specs" style="margin-bottom:8px"></div>
+
+    <div class="panel" id="r-waiting" style="display:none">
+      <h3>Reserve it through the Waiting Room</h3>
+      <div class="mo" id="r-monthly"></div>
+      <p>Interest-free monthly payments. The painting is held for you and becomes yours the moment it's finished — no lump sum, no pressure.</p>
+    </div>
+
+    <a class="btn wa" id="r-reserve">Message Tony to reserve this piece</a>
+    <a class="btn dk" id="r-printlink" style="display:none">Own a print of this piece →</a>
+    <a class="btn ghost" id="r-print" style="display:none">I'd love a print of this instead</a>
+    <a class="btn gold" id="r-news" href="https://eepurl.com/gmXsdP" target="_blank" rel="noopener">Join the newsletter</a>
+
+    <div class="more">
+      <a href="https://www.artistonthehill.co.uk/" target="_blank" rel="noopener">See more of Tony's work →</a>
+    </div>
+    <div class="foot">Artist on the Hill · this view is private to you</div>
+  </div>
+
+</div>
+
+<script>
+const ARTIST_WA = "447880601709";
+const TRACKER   = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
+
+const $=s=>document.querySelector(s);
+const gbp=n=>"£"+Number(n).toLocaleString("en-GB");
+
+// ---- read the link: ?p=<painting-slug>&w=<who token> ----
+const params=new URLSearchParams(location.search);
+const slug=(params.get("p")||params.get("r")||"").trim();
+const who =(params.get("w")||params.get("who")||"").trim();
+
+if(!slug){ showGone(); }
+else{ loadRoom(); }
+
+async function loadRoom(){
+  try{
+    const r=await fetch(encodeURIComponent(slug)+".json",{cache:"no-store"});
+    if(!r.ok) throw new Error(r.status);
+    const P=await r.json();
+    render(P);
+  }catch(e){ showGone(); }
+}
+
+function showGone(){ $("#loading").style.display="none"; $("#gone").style.display="block"; ping("opened"); }
+
+function render(P){
+  $("#loading").style.display="none";
+  $("#room").style.display="block";
+
+  ping("opened");
+
+  if(P.i){ const im=$("#hero"); im.src=P.i; im.style.display="block"; }
+  $("#r-title").textContent=P.t||"Your painting";
+  const specs=[]; if(P.s) specs.push(P.s);
+  $("#r-specs").innerHTML=specs.map(x=>"<span>"+x+"</span>").join(" · ");
+
+  const amt=parseFloat(P.p)||0;
+  $("#r-price").textContent=amt?(gbp(amt)+(P.v?" incl. VAT":"")):"";
+
+  const terms=[];
+  if(P.f) terms.push("Framed to your taste");
+  if(P.d) terms.push(P.d==="crate"?"Delivered in a custom crate":"Delivered by hand");
+  $("#r-terms").innerHTML=terms.map(x=>"<span>"+x+"</span>").join(" · ");
+
+  const tag=P.t?(' "'+P.t+'"'):" the painting";
+
+  if(P.sold){
+    $("#r-soldnote").style.display="block";
+    $("#r-eyebrow").textContent="A private view";
+    $("#r-reserve").style.display="none";
+    $("#r-terms").style.display="none";
+    if(P.g){ const pl=$("#r-printlink"); pl.style.display="block"; pl.href=P.g; }
+    else{ const pr=$("#r-print"); pr.style.display="block";
+      pr.href=wa("Hi Tony, I'd love a print of"+tag); }
+  }else{
+    if(P.w){ $("#r-waiting").style.display="block";
+      $("#r-monthly").textContent=(P.m?"around "+gbp(P.m)+" / month":"flexible monthly payments"); }
+    $("#r-reserve").href=wa("Hi Tony, I'd love to reserve"+tag);
+    if(P.g){ const pl=$("#r-printlink"); pl.style.display="block"; pl.href=P.g; pl.textContent="Prefer a print? See it here →"; }
+    else if(P.pr){ const pr=$("#r-print"); pr.style.display="block";
+      pr.href=wa("Hi Tony, I'd like a print of"+tag); }
+  }
+
+  fireTripwire(P);
+}
+
+function wa(text){ return "https://wa.me/"+ARTIST_WA+"?text="+encodeURIComponent(text); }
+
+function ping(event,geo){
+  geo=geo||{};
+  const key="seen-"+slug+"-"+who;
+  let visits=0; try{ visits=parseInt(localStorage.getItem(key)||"0"); if(event==="opened"){ visits++; localStorage.setItem(key,String(visits)); } }catch(e){}
+  const q=new URLSearchParams({
+    event:event||"", page:slug||"", who:who||"", code:who||"",
+    region:geo.region||"", ip:geo.ip||"", isp:geo.isp||"",
+    ua:navigator.userAgent||"", tz:Intl.DateTimeFormat().resolvedOptions().timeZone||"",
+    lang:navigator.language||"", ref:document.referrer||"direct", visits:String(visits)
+  });
+  const img=new Image(); img.src=TRACKER+"?"+q.toString();
+}
+
+async function fireTripwire(P){
+  let geo={};
+  try{
+    const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),2500);
+    const r=await fetch("https://ipwho.is/",{signal:ctrl.signal});
+    const j=await r.json();
+    if(j&&j.success!==false){ geo={ip:j.ip,region:[j.city,j.region,j.country].filter(Boolean).join(", "),isp:(j.connection&&j.connection.isp)||""}; }
+  }catch(e){}
+  ping("viewed",geo);
+}
+</script>
+</body>
+</html>
