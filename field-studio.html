@@ -28,11 +28,13 @@
   input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;
     font-size:1rem;background:#fff;color:var(--dark);font-family:inherit}
   textarea{min-height:120px;line-height:1.45}
+  textarea.msgbox{min-height:140px;background:#fffefb}
   .row{display:flex;gap:10px}.row>*{flex:1}
   .btn{display:block;width:100%;padding:13px;border:0;border-radius:10px;font-size:1rem;font-weight:700;
     letter-spacing:.3px;background:var(--gold);color:#fff;text-align:center;text-decoration:none;margin-top:10px}
   .btn.dark{background:var(--dark)} .btn.ghost{background:#fff;color:var(--dark);border:1px solid var(--line)}
   .btn.wa{background:#25D366} .btn.mail{background:#2b6cb0} .btn.sm{padding:10px;font-size:.9rem;margin-top:0}
+  .btn:disabled{opacity:.5}
   .toggles{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
   .tog{flex:1 1 auto;min-width:46%;padding:11px 8px;border:1.5px solid var(--line);border-radius:9px;background:#fff;
     color:var(--muted);font-size:.85rem;font-weight:700;text-align:center}
@@ -51,16 +53,18 @@
   .pitem .meta span{font-size:.78rem;color:var(--muted)}
   .pill{display:inline-block;font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:10px;background:#ece5d6;color:#6a6044}
   .pill.map{background:#dfeee6;color:#1f7a5a}.pill.priv{background:#e7e0f0;color:#5a4b7a}.pill.sold{background:#1a1a1a;color:#fff}
-  .pill.crm{background:#dfeee6;color:#1f7a5a}
+  .pill.crm{background:#dfeee6;color:#1f7a5a}.pill.live{background:#dfeee6;color:#1f7a5a}.pill.draft{background:#f3e7c9;color:#8a6d1f}
   .lead{border:1px solid var(--line2);border-radius:10px;padding:12px;margin-top:10px;background:#fffefb}
   .lead.prio{border-color:var(--gold);box-shadow:0 0 0 2px rgba(184,150,62,.18)}
   .lead.synced{opacity:.5}
   .codetag{margin:6px 0;font-size:.8rem;color:var(--muted)} .codetag b{color:var(--dark);letter-spacing:1px}
-  .preview{white-space:pre-wrap;font-size:.86rem;line-height:1.45;background:#f4efe6;border:1px dashed var(--line);
-    border-radius:8px;padding:10px;margin-top:8px;color:#3a342b;word-break:break-word}
+  .linktag{margin:8px 0 0;font-size:.72rem;color:var(--muted);word-break:break-all;background:#f4efe6;border:1px dashed var(--line);border-radius:8px;padding:8px}
+  .linktag b{color:var(--good)}
   .muted{color:var(--muted);font-size:.82rem}
   .save{font-size:.72rem;color:var(--good);text-align:right;margin:-4px 2px 8px}
   .soldban{background:#1a1a1a;color:#fff;text-align:center;padding:8px;border-radius:8px;font-weight:700;letter-spacing:2px;margin-bottom:12px}
+  .pubbox{border:1px solid var(--line2);border-radius:12px;padding:14px;margin-bottom:12px;background:#fff}
+  .pubbox.live{border-color:#a9d3bf;background:#f2f8f4}
   .fab{position:fixed;right:16px;bottom:max(18px,env(safe-area-inset-bottom));z-index:20;background:var(--gold);color:#fff;
     border:0;border-radius:30px;padding:15px 22px;font-size:1rem;font-weight:800;box-shadow:0 6px 18px rgba(0,0,0,.22)}
   .empty{text-align:center;color:var(--muted);padding:40px 16px}
@@ -69,6 +73,8 @@
   .hd h3{margin:0;font-size:1.05rem} .x{color:var(--warn);background:none;border:0;font-size:.8rem;font-weight:700}
   .imgwrap img{width:100%;border-radius:10px;border:1px solid var(--line);margin-top:6px}
   small.note{display:block;color:var(--muted);font-size:.72rem;margin-top:4px}
+  .stepnote{font-size:.82rem;margin-top:8px}
+  .stepnote.busy{color:var(--muted)} .stepnote.done{color:var(--good)} .stepnote.err{color:var(--warn)}
 </style>
 </head>
 <body>
@@ -97,9 +103,35 @@ async function del(id){const d=await db();return new Promise((res,rej)=>{const t
 
 /* ---------- settings (localStorage) ---------- */
 const S=JSON.parse(localStorage.getItem("aoth-settings")||"{}");
-const defaults={artist:"Tony",roomBase:"https://www.artistonthehill.co.uk/room.html",vat:20,cc:"44",months:23};
+const defaults={artist:"Tony",viewBase:"https://www.artistonthehill.co.uk/v/",vat:20,cc:"44",months:23};
 const settings=Object.assign({},defaults,S);
 function saveSettings(){localStorage.setItem("aoth-settings",JSON.stringify(settings));}
+
+/* ---------- GitHub (publishes each painting's private view) ---------- */
+const GH_OWNER="artistonthehill", GH_REPO="artistonthehill", GH_BRANCH="main";
+function getToken(){return localStorage.getItem("gh_token_aoth");}
+function needToken(){
+  let t=getToken();
+  if(t)return t;
+  t=prompt("One-time setup: paste your GitHub token (starts ghp_ or github_pat_).\n\nThis is the same token your Upload app uses — it lets Field Studio publish private views to your website. Stored only on this phone.");
+  if(t){t=t.trim();localStorage.setItem("gh_token_aoth",t);return t;}
+  return null;
+}
+async function ghGet(path){
+  const r=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}?ref=${GH_BRANCH}`,
+    {headers:{Authorization:"token "+getToken(),Accept:"application/vnd.github.v3+json"}});
+  if(!r.ok)throw new Error("GET "+r.status);
+  return r.json();
+}
+async function ghPut(path,content,sha,message){
+  const body={message,content,branch:GH_BRANCH};if(sha)body.sha=sha;
+  const r=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`,
+    {method:"PUT",headers:{Authorization:"token "+getToken(),Accept:"application/vnd.github.v3+json","Content-Type":"application/json"},
+     body:JSON.stringify(body)});
+  if(!r.ok)throw new Error("PUT "+r.status+" "+await r.text());
+  return r.json();
+}
+function b64utf8(str){const bytes=new TextEncoder().encode(str);let bin="";bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin);}
 
 /* ---------- Cloudinary (unsigned field-photo upload) ---------- */
 const CLOUD="dcy9llfe4", PRESET="field-studio";
@@ -122,6 +154,7 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const money=n=>"£"+Number(n).toLocaleString("en-GB");
 const slug=s=>(s||"").replace(/[^a-z]/gi,"").toUpperCase();
+const kebab=s=>(s||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
 function gross(p){return parseFloat(p.price)||0;}
 function priceLine(p){if(!p.price)return"";return money(p.price);}
 function monthly(p){const amt=gross(p);if(!amt)return 0;return Math.round(amt/settings.months/5)*5;}
@@ -133,14 +166,27 @@ function makeCode(p,l){
   if(!per)per="G"+(((p.leads||[]).indexOf(l))+1);
   return base+"-"+per;
 }
+/* stable per-painting slug for the published file + link */
+function ensureSlug(p){
+  if(p.slug)return p.slug;
+  let base=kebab(p.code||p.title||"view").slice(0,40)||"view";
+  p.slug=base+"-"+Math.random().toString(36).slice(2,5);
+  return p.slug;
+}
+/* short link: viewBase?p=<painting>&w=<person> */
 function roomLink(p,l){
-  const code=l.code||makeCode(p,l);
-  const payload={t:p.title,c:code,s:p.size,p:p.price,v:!!p.vat,f:!!p.framed,d:p.delivery,
-    w:!!l.waitingRoom,m:monthly(p),pr:!!l.print,who:l.name||code,sold:!!p.sold};
-  if(p.gillan)payload.g=p.gillan;
-  if(p.imageURL)payload.i=p.imageURL;
-  try{const enc=btoa(encodeURIComponent(JSON.stringify(payload))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
-    return (settings.roomBase||"")+"?d="+enc;}catch(e){return"";}
+  ensureSlug(p);
+  const code=(l.code||makeCode(p,l)).toLowerCase();
+  return (settings.viewBase||"")+"?p="+encodeURIComponent(p.slug)+"&w="+encodeURIComponent(code);
+}
+/* the JSON the /v/ page reads */
+function buildPayload(p){
+  const pl={t:p.title||"",s:p.size||"",p:p.price||"",v:!!p.price,f:!!p.framed,
+    d:p.delivery||"",sold:!!p.sold,w:(p.waiting!==false)&&!p.sold,m:monthly(p),pr:true,
+    updated:new Date().toISOString().slice(0,10)};
+  if(p.imageURL)pl.i=p.imageURL;
+  if(p.gillan)pl.g=p.gillan;
+  return pl;
 }
 
 let state={view:"list",pid:null,paintings:[],lastExport:null};
@@ -150,60 +196,53 @@ function flagSaved(){const e=$("#savedFlag");if(e){e.textContent="✓ saved";cle
 async function persist(){const p=current();if(p){await put(p);flagSaved();}}
 function current(){return state.paintings.find(x=>x.id===state.pid);}
 
-/* ---------- message builder ---------- */
-function buildMessage(p,l){
-  const L=[];
-  const first=(l.name||"there").split(" ")[0];
-  // ---- greeting (chosen per person) ----
-  let greet;
-  if(l.greeting==="you")      greet="Hi "+first+", it was great fun to include you in the picture.";
-  else if(l.greeting==="kids") greet="Hi "+first+", it was great to include your kids in the picture.";
-  else                         greet="Hi "+first+", it was lovely to meet you"+(p.title?" at "+p.title:"")+".";
-  L.push(greet);L.push("");
-  // ---- painting + price + framing ----
-  const pl=priceLine(p);
-  if(pl){L.push((p.title||"It")+" is "+pl+(p.framed?", framed to taste.":", supplied unframed."));}
-  else if(p.title){L.push(p.title+(p.framed?" — framed to taste.":" — supplied unframed."));}
-  if(p.delivery)L.push(p.delivery==="crate"?"Delivered to you in a custom crate.":"Delivered to you by hand.");
-  L.push("");
-  // ---- code + link instruction (the link itself sits at the very bottom) ----
-  const code=l.code||makeCode(p,l);
-  L.push("At the bottom of this message there's a link to your own private view of the painting. Just tap it, then tap Unlock — your code ("+code+") is already filled in for you.");
-  L.push("");
-  // ---- sold vs not-sold ----
-  if(p.sold){
-    L.push("This original has now found a home — but I'd be delighted to paint another version for you if you'd like an original of your own, or I can arrange a giclée fine art print. Just reply and let me know which.");
-  }else{
-    L.push("There's only ever one original, and they do tend to go quickly — so if it's speaking to you, try not to sit on it too long. Last year at Henley, both my paintings sold on the day and I painted second versions at full price for the people who just missed out. I'd hate for that to be you.");
-    if(l.print){L.push("");L.push("Would you like a giclée fine art print of this painting? I'd be delighted to arrange it — just reply to this message and I'll send you all the details.");}
+/* ---------- publish the private view ---------- */
+async function publishView(){
+  const p=current();if(!p)return;
+  if(!p.title)return alert("Give the painting a title first.");
+  if(!needToken())return;
+  ensureSlug(p);
+  if(!p.imageURL && !confirm("The photo hasn't uploaded yet, so the view will show a blank image. Publish anyway?"))return;
+  const noteEl=$("#pub-note");
+  const set=(cls,msg)=>{if(noteEl){noteEl.className="stepnote "+cls;noteEl.textContent=msg;}};
+  set("busy","Publishing your private view…");
+  try{
+    const path="v/data/"+p.slug+".json";
+    let sha=null;try{sha=(await ghGet(path)).sha;}catch(e){}
+    await ghPut(path,b64utf8(JSON.stringify(buildPayload(p),null,2)),sha,"Publish private view: "+p.title);
+    p.published=true;p.publishedAt=Date.now();await persist();
+    set("done","✓ Live. Your links now work — updates in ~1 min.");
+    renderPainting();
+  }catch(e){
+    set("err","Couldn't publish ("+e.message+"). Check signal / token, then try again.");
   }
-  // ---- waiting room (only while available) ----
-  if(l.waitingRoom&&!p.sold){const m=monthly(p);L.push("");
-    L.push("If you'd rather spread the cost, you can reserve it through my Waiting Room — interest-free monthly payments"
-      +(m?", around "+money(m)+"/month":"")+", and it's yours the moment it's finished.");}
-  // ---- newsletter ----
-  L.push("");
-  L.push("If you'd like to receive my absolutely-not-boring newsletter (I only holler when I've actually got something interesting to say), click here and pop your email in the box: https://eepurl.com/gmXsdP");
-  // ---- socials ----
-  L.push("");
-  L.push("And if you take any photos or video, do tag me — you'll find me on Instagram (https://www.instagram.com/artistonthehill) and Facebook (https://www.facebook.com/twistedportrait).");
-  // ---- sign-off ----
-  L.push("");L.push("All the best,");L.push(settings.artist||"Tony");
-  // ---- the long private-view link, at the very bottom ----
-  const rl=roomLink(p,l);
-  if(rl){L.push("");L.push(rl);}
-  return L.join("\n");
 }
+
+/* ---------- message (short, editable per person) ---------- */
+function buildDefaultMessage(p,l){
+  const first=(l.name||"there").split(" ")[0];
+  let opener;
+  if(l.greeting==="you")       opener="Hi "+first+" — it was great fun to include you in the painting today.";
+  else if(l.greeting==="kids") opener="Hi "+first+" — it was great to include your kids in the painting today.";
+  else                         opener="Hi "+first+" — great to meet you today.";
+  return opener+"\n\nAs promised, here's your private view of the painting. Everything's on the page — a few ways to own it, a print option, and a sign-up for my newsletter if you fancy it. Have a wander round the rest of my site while you're there.";
+}
+function leadMessage(l,p){return (l.message!=null?l.message:buildDefaultMessage(p,l));}
+
 function waNumber(l){const cc=(l.cc||settings.cc||"44").replace(/\D/g,"");
   const n=(l.wa||"").replace(/\D/g,"").replace(/^0+/,"");return cc+n;}
 function fireWA(l){const p=current();
+  if(!p.published&&!confirm("You haven't published this painting's private view yet — the link won't work until you do (use the Publish button up top). Send anyway?"))return;
   if(p.photo&&!p.imageURL&&!confirm("The photo hasn't finished uploading (likely no signal). Send without it? Tap Cancel to retry the upload first."))return;
-  if(!l.code)l.code=makeCode(p,l);const t=encodeURIComponent(buildMessage(p,l));
-  l.fired=true;persist();window.open("https://wa.me/"+waNumber(l)+"?text="+t,"_blank");}
-function fireMail(l){const p=current();if(!l.code)l.code=makeCode(p,l);
+  if(!l.code)l.code=makeCode(p,l);
+  const body=leadMessage(l,p)+"\n\n"+roomLink(p,l);
+  l.fired=true;persist();window.open("https://wa.me/"+waNumber(l)+"?text="+encodeURIComponent(body),"_blank");}
+function fireMail(l){const p=current();
+  if(!p.published&&!confirm("You haven't published this painting's private view yet — the link won't work until you do. Send anyway?"))return;
+  if(!l.code)l.code=makeCode(p,l);
   if(p.photo&&!p.imageURL&&!confirm("The photo hasn't finished uploading (likely no signal). Send without it? Tap Cancel to retry the upload first."))return;
   const sub=encodeURIComponent((p.title||"Your painting")+" — a private view");
-  const body=encodeURIComponent(buildMessage(p,l));l.fired=true;persist();
+  const body=encodeURIComponent(leadMessage(l,p)+"\n\n"+roomLink(p,l));l.fired=true;persist();
   window.location.href="mailto:"+encodeURIComponent(l.email)+"?subject="+sub+"&body="+body;}
 
 /* ---------- views ---------- */
@@ -226,12 +265,11 @@ function renderList(){
     <p>Tap <b>+ Painting</b> when you set up the easel. Everything saves to this phone — no signal needed.</p></div>`;return;}
   app.innerHTML=`<ul class="plist">`+ps.map(p=>{
     const leads=(p.leads||[]).length;const prio=(p.leads||[]).filter(l=>l.priority).length;
-    const dest=p.dest==="map"?'<span class="pill map">Map</span>':p.dest==="priv"?'<span class="pill priv">Private room</span>':'<span class="pill">Undecided</span>';
-    const sold=p.sold?'<span class="pill sold">SOLD</span> ':'';
+    const dest=p.sold?'<span class="pill sold">SOLD</span> ':(p.published?'<span class="pill live">Live</span> ':'<span class="pill draft">Draft</span> ');
     return `<li class="pitem" onclick="go('painting','${p.id}')">
       <div class="th" style="${p.photo?`background-image:url('${p.photo}')`:''}"></div>
       <div class="meta"><b>${esc(p.title)||"Untitled"}</b>
-      <span>${sold}${dest} · ${leads} on list${prio?` · <b style="color:var(--gold)">${prio} priority</b>`:""}${p.price?` · ${esc(priceLine(p))}`:""}</span></div>
+      <span>${dest}· ${leads} on list${prio?` · <b style="color:var(--gold)">${prio} priority</b>`:""}${p.price?` · ${esc(priceLine(p))}`:""}</span></div>
       <div style="color:var(--muted)">›</div></li>`;}).join("")+`</ul>
     <button class="btn ghost" onclick="go('settings')">Settings &amp; push to CRM</button>`;
 }
@@ -240,23 +278,20 @@ function renderPainting(){
   const p=current();if(!p)return go("list");
   (p.leads||[]).forEach(l=>{if(!l.id)l.id=uid();});
   $("#title").textContent=p.title||"New painting";
+  const link=p.slug?(settings.viewBase+"?p="+p.slug):"";
   app.innerHTML=`
   <div class="save" id="savedFlag"></div>
   ${p.sold?`<div class="soldban">SOLD${p.soldAt?" · "+new Date(p.soldAt).toLocaleDateString('en-GB'):""}</div>`:""}
   <div class="card">
     <label>Title / what & where</label>
     <input id="f-title" placeholder="e.g. The George, Fordingbridge" value="${esc(p.title)}">
-    <label>Base private view code (each person gets their own variant)</label>
+    <label>Base private view code (optional — used in the link)</label>
     <input id="f-code" placeholder="e.g. FORD" value="${esc(p.code)}" style="text-transform:uppercase">
-    <label>Where does this painting go?</label>
-    <div class="seg">
-      <button class="${p.dest==="map"?"on":""}" onclick="setField('dest','map')">Straight on the map</button>
-      <button class="${p.dest==="priv"?"on":""}" onclick="setField('dest','priv')">Private room only</button>
-    </div>
     <div class="row"><div><label>Size</label><input id="f-size" placeholder="60×42cm" value="${esc(p.size)}"></div>
       <div><label>Price (inc VAT £)</label><input id="f-price" type="number" inputmode="decimal" placeholder="2300" value="${esc(p.price)}"></div></div>
     <div class="toggles">
       <button class="tog ${p.framed?"on":""}" onclick="toggle('framed')">${p.framed?"✓ Framed to taste":"Unframed"}</button>
+      <button class="tog ${p.waiting!==false?"on good":""}" onclick="toggle('waiting')">${p.waiting!==false?"✓ Waiting Room plan":"No payment plan"}</button>
     </div>
     <label>Delivery</label>
     <div class="seg">
@@ -276,7 +311,13 @@ function renderPainting(){
     </div>
     <label>Gillan Gallery print link (add any time)</label>
     <input id="f-gillan" placeholder="https://thegillangallery.com/..." value="${esc(p.gillan)}">
-    <small class="note">Shows in private rooms you send <i>after</i> adding it. Existing links won't change.</small>
+    <small class="note">Publish again after changing price, sold status or print link to update every view you've sent.</small>
+  </div>
+
+  <div class="pubbox ${p.published?"live":""}">
+    <button class="btn ${p.published?"ghost":""}" onclick="publishView()">${p.published?"✓ Published — republish to update":"Publish private view"}</button>
+    ${link?`<div class="linktag">Live at: <b>${esc(link)}</b></div>`:`<small class="note">Publishing puts the painting on your website so the links work. Do this once you've got signal.</small>`}
+    <div class="stepnote" id="pub-note"></div>
   </div>
 
   <div class="hd"><h3 class="serif">People on the list</h3><span class="muted">${(p.leads||[]).length} — hidden from each other</span></div>
@@ -294,29 +335,29 @@ function leadCard(l,i){
   const code=l.code||makeCode(p,l);
   return `<div class="lead ${l.priority?"prio":""} ${l.synced?"synced":""}" id="lead-${i}">
     ${l.synced?'<span class="pill crm">✓ in CRM</span>':''}
-    <input placeholder="Name" value="${esc(l.name)}" oninput="leadField(${i},'name',this.value,true)">
-    <div class="codetag">Their code: <b>${esc(code)}</b></div>
+    <input placeholder="Name" value="${esc(l.name)}" oninput="leadField(${i},'name',this.value)">
+    <div class="codetag">Their tracking tag: <b>${esc(code.toLowerCase())}</b></div>
     <div class="row" style="margin-top:2px">
-      <select style="flex:0 0 38%" onchange="leadField(${i},'cc',this.value,true)">${opts}</select>
-      <input style="flex:1" type="tel" inputmode="tel" placeholder="WhatsApp number" value="${esc(l.wa)}" oninput="leadField(${i},'wa',this.value,true)">
+      <select style="flex:0 0 38%" onchange="leadField(${i},'cc',this.value)">${opts}</select>
+      <input style="flex:1" type="tel" inputmode="tel" placeholder="WhatsApp number" value="${esc(l.wa)}" oninput="leadField(${i},'wa',this.value)">
     </div>
-    <input style="margin-top:8px" type="email" inputmode="email" placeholder="Email" value="${esc(l.email)}" oninput="leadField(${i},'email',this.value,true)">
-    <label>Opening line</label>
+    <input style="margin-top:8px" type="email" inputmode="email" placeholder="Email" value="${esc(l.email)}" oninput="leadField(${i},'email',this.value)">
+    <label>Quick opener (rewrites the message below)</label>
     <div class="seg">
       <button class="${(l.greeting||'met')==='met'?'on':''}" onclick="leadSet(${i},'greeting','met')">Met you</button>
       <button class="${l.greeting==='you'?'on':''}" onclick="leadSet(${i},'greeting','you')">In picture</button>
       <button class="${l.greeting==='kids'?'on':''}" onclick="leadSet(${i},'greeting','kids')">Kids in pic</button>
     </div>
+    <label>Message to ${esc((l.name||"them").split(" ")[0])} — edit freely (the link is added automatically)</label>
+    <textarea class="msgbox" oninput="leadMsg(${i},this.value)">${esc(leadMessage(l,p))}</textarea>
     <div class="toggles">
       <button class="tog ${l.priority?"on":""}" onclick="leadToggle(${i},'priority')">${l.priority?"★ Priority":"Priority?"}</button>
-      <button class="tog ${l.waitingRoom?"on good":""}" onclick="leadToggle(${i},'waitingRoom')">Waiting Room blurb</button>
-      <button class="tog ${l.print?"on dk":""}" onclick="leadToggle(${i},'print')">Offer a print</button>
+      <button class="tog ghost" onclick="resetMsg(${i})" style="color:var(--muted)">Reset text</button>
     </div>
-    <div class="preview" id="prev-${i}">${esc(buildMessage(p,l))}</div>
     <div class="row" style="margin-top:8px">
-      ${hasWA?`<button class="btn wa sm" onclick="fireWA(current().leads[${i}])">${l.fired?"Re-send":"Fire"} WhatsApp</button>`:""}
-      ${hasMail?`<button class="btn mail sm" onclick="fireMail(current().leads[${i}])">${l.fired?"Re-send":"Fire"} Email</button>`:""}
-      ${(!hasWA&&!hasMail)?`<span class="muted" style="align-self:center">Add a number or email to fire a message</span>`:""}
+      ${hasWA?`<button class="btn wa sm" onclick="fireWA(current().leads[${i}])">${l.fired?"Re-send":"Send"} WhatsApp</button>`:""}
+      ${hasMail?`<button class="btn mail sm" onclick="fireMail(current().leads[${i}])">${l.fired?"Re-send":"Send"} Email</button>`:""}
+      ${(!hasWA&&!hasMail)?`<span class="muted" style="align-self:center">Add a number or email to send</span>`:""}
     </div>
     <button class="x" style="margin-top:8px" onclick="delLead(${i})">remove</button>
   </div>`;
@@ -327,15 +368,19 @@ function bindText(id,key,upper){const el=document.getElementById(id);if(!el)retu
   el.oninput=()=>{let v=el.value;if(upper)v=v.toUpperCase();current()[key]=v;persist();
     if(key==="title")$("#title").textContent=v||"New painting";};}
 function setField(k,v){current()[k]=v;persist();renderPainting();}
-function toggle(k){current()[k]=!current()[k];persist();renderPainting();}
+function toggle(k){const p=current();p[k]=(k==="waiting")?(p.waiting===false?true:false):!p[k];persist();renderPainting();}
 function toggleSold(){const p=current();p.sold=!p.sold;if(p.sold)p.soldAt=Date.now();persist();renderPainting();}
-function leadField(i,k,v,refreshPrev){const p=current();p.leads[i][k]=v;
-  if(k==="name")p.leads[i].code="";/* let code re-derive until fired */
-  persist();
-  const pv=document.getElementById("prev-"+i);if(pv)pv.textContent=buildMessage(p,p.leads[i]);
-  if(k==="name"){const ct=document.querySelector("#lead-"+i+" .codetag b");if(ct)ct.textContent=makeCode(p,p.leads[i]);}}
+function leadField(i,k,v){const p=current();p.leads[i][k]=v;
+  if(k==="name"){p.leads[i].code="";
+    const ct=document.querySelector("#lead-"+i+" .codetag b");if(ct)ct.textContent=makeCode(p,p.leads[i]).toLowerCase();
+    if(p.leads[i].message==null){const ta=document.querySelector("#lead-"+i+" .msgbox");if(ta)ta.value=buildDefaultMessage(p,p.leads[i]);}}
+  persist();}
+function leadMsg(i,v){const p=current();p.leads[i].message=v;persist();}
+function resetMsg(i){const p=current();p.leads[i].message=null;persist();renderPainting();}
 function leadToggle(i,k){const p=current();p.leads[i][k]=!p.leads[i][k];persist();renderPainting();}
-function leadSet(i,k,v){const p=current();p.leads[i][k]=v;persist();renderPainting();}
+function leadSet(i,k,v){const p=current();p.leads[i][k]=v;
+  if(k==="greeting")p.leads[i].message=buildDefaultMessage(p,p.leads[i]);
+  persist();renderPainting();}
 function addLead(){const p=current();p.leads=p.leads||[];p.leads.push({id:uid(),cc:settings.cc});persist();renderPainting();
   setTimeout(()=>{const e=document.getElementById("lead-"+(p.leads.length-1));if(e)e.scrollIntoView({behavior:"smooth",block:"center"});},50);}
 function delLead(i){const p=current();if(!confirm("Remove "+(p.leads[i].name||"this person")+"?"))return;
@@ -366,20 +411,27 @@ function uploadStatusHTML(p){if(!p.photo)return"";
   return"";}
 
 /* ---------- new painting ---------- */
-async function newPainting(){const p={id:uid(),createdAt:Date.now(),title:"",loc:"",code:"",dest:"",
-  size:"",price:"",vat:false,framed:true,delivery:"",photo:"",sold:false,gillan:"",imageURL:"",leads:[]};await put(p);go("painting",p.id);}
+async function newPainting(){const p={id:uid(),createdAt:Date.now(),title:"",loc:"",code:"",
+  size:"",price:"",vat:false,framed:true,waiting:true,delivery:"",photo:"",sold:false,gillan:"",imageURL:"",
+  slug:"",published:false,leads:[]};await put(p);go("painting",p.id);}
 
 /* ---------- settings, CRM push & backup ---------- */
 async function renderSettings(){
   $("#title").textContent="Settings & CRM";
   const ps=await all();const due=unsyncedCount(ps);
+  const hasTok=!!getToken();
   app.innerHTML=`<div class="card">
     <label>Your name (signs the messages)</label><input id="s-artist" value="${esc(settings.artist)}">
-    <label>Private room base URL</label><input id="s-base" value="${esc(settings.roomBase)}">
-    <small class="note">Where room.html lives. Each person's link is this + their painting baked in.</small>
+    <label>Private view base URL</label><input id="s-base" value="${esc(settings.viewBase)}">
+    <small class="note">Where the /v/ page lives. Each link is this + the painting + person.</small>
     <div class="row"><div><label>VAT %</label><input id="s-vat" type="number" value="${settings.vat}"></div>
     <div><label>Waiting Room months</label><input id="s-months" type="number" value="${settings.months}"></div></div>
     <button class="btn" onclick="saveSet()">Save settings</button>
+  </div>
+  <div class="card">
+    <h3 class="serif" style="margin-top:0">Website publishing</h3>
+    <p class="muted">${hasTok?"✓ GitHub token saved — publishing is ready.":"No GitHub token yet. You'll be asked for it the first time you publish a view."}</p>
+    <button class="btn ghost" onclick="setToken()">${hasTok?"Replace GitHub token":"Add GitHub token"}</button>
   </div>
   <div class="card">
     <h3 class="serif" style="margin-top:0">Push to CRM</h3>
@@ -393,7 +445,8 @@ async function renderSettings(){
     <input type="file" accept="application/json" onchange="importJSON(this)">
   </div>`;
 }
-function saveSet(){settings.artist=$("#s-artist").value;settings.roomBase=$("#s-base").value;
+function setToken(){const t=prompt("Paste your GitHub token (starts ghp_ or github_pat_):");if(t){localStorage.setItem("gh_token_aoth",t.trim());alert("Saved.");go("settings");}}
+function saveSet(){settings.artist=$("#s-artist").value;settings.viewBase=$("#s-base").value.trim();
   settings.vat=parseFloat($("#s-vat").value)||20;settings.months=parseInt($("#s-months").value)||23;
   saveSettings();alert("Saved.");go("list");}
 
@@ -402,18 +455,18 @@ function unsyncedCount(ps){let n=0;ps.forEach(p=>{const leads=p.leads||[];
 
 function csvCell(v){v=(v==null?"":String(v));return '"'+v.replace(/"/g,'""')+'"';}
 async function exportCSV(){const ps=await all();
-  const head=["Painting","Location","Base code","Destination","Status","Gillan print","Size","Net price",
+  const head=["Painting","Location","Base code","Status","Gillan print","Size","Net price",
     "Plus VAT","Gross","Framed","Delivery","Name","Person code","Country code","WhatsApp","Email",
-    "Priority","Waiting Room","Print interest","Logged"];
+    "Priority","Logged"];
   const rows=[head];const exLeads=[];const exPaints=[];
   ps.forEach(p=>{const when=new Date(p.createdAt).toLocaleString("en-GB");
-    const pbase=[p.title,p.loc,p.code,p.dest==="map"?"Map":p.dest==="priv"?"Private room":"",
-      p.sold?"SOLD":"",p.gillan||"",p.size,p.price,p.vat?"Yes":"No",p.vat?gross(p):"",p.framed?"Yes":"No",
+    const pbase=[p.title,p.loc,p.code,p.sold?"SOLD":(p.published?"Live":"Draft"),p.gillan||"",p.size,p.price,
+      p.vat?"Yes":"No",p.vat?gross(p):"",p.framed?"Yes":"No",
       p.delivery==="crate"?"Custom crate":p.delivery==="hand"?"By hand":""];
     const leads=p.leads||[];
-    if(!leads.length){if(!p.synced){rows.push(pbase.concat(["","","","","","","","",when]));exPaints.push(p.id);}}
+    if(!leads.length){if(!p.synced){rows.push(pbase.concat(["","","","","","",when]));exPaints.push(p.id);}}
     else{leads.filter(l=>!l.synced).forEach(l=>{rows.push(pbase.concat([l.name||"",l.code||makeCode(p,l),
-      l.cc||"",l.wa||"",l.email||"",l.priority?"PRIORITY":"",l.waitingRoom?"Yes":"",l.print?"Yes":"",when]));
+      l.cc||"",l.wa||"",l.email||"",l.priority?"PRIORITY":"",when]));
       exLeads.push(p.id+"::"+l.id);});}});
   if(rows.length===1){alert("Nothing new to push — you're all caught up.");return;}
   state.lastExport={leads:exLeads,paints:exPaints};
