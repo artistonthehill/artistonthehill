@@ -103,7 +103,7 @@ async function del(id){const d=await db();return new Promise((res,rej)=>{const t
 
 /* ---------- settings (localStorage) ---------- */
 const S=JSON.parse(localStorage.getItem("aoth-settings")||"{}");
-const defaults={artist:"Tony",viewBase:"https://www.artistonthehill.co.uk/v/",vat:20,cc:"44",months:23};
+const defaults={artist:"Tony",viewBase:"https://www.artistonthehill.co.uk/view.html",vat:20,cc:"44",months:23};
 const settings=Object.assign({},defaults,S);
 function saveSettings(){localStorage.setItem("aoth-settings",JSON.stringify(settings));}
 
@@ -207,7 +207,7 @@ async function publishView(){
   const set=(cls,msg)=>{if(noteEl){noteEl.className="stepnote "+cls;noteEl.textContent=msg;}};
   set("busy","Publishing your private view…");
   try{
-    const path="v/data/"+p.slug+".json";
+    const path=p.slug+".json";
     let sha=null;try{sha=(await ghGet(path)).sha;}catch(e){}
     await ghPut(path,b64utf8(JSON.stringify(buildPayload(p),null,2)),sha,"Publish private view: "+p.title);
     p.published=true;p.publishedAt=Date.now();await persist();
