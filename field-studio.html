@@ -203,16 +203,23 @@ async function publishView(){
   if(!needToken())return;
   ensureSlug(p);
   if(!p.imageURL && !confirm("The photo hasn't uploaded yet, so the view will show a blank image. Publish anyway?"))return;
-  const noteEl=$("#pub-note");
-  const set=(cls,msg)=>{if(noteEl){noteEl.className="stepnote "+cls;noteEl.textContent=msg;}};
+  const set=(cls,msg)=>{const el=$("#pub-note");if(el){el.className="stepnote "+cls;el.textContent=msg;}};
   set("busy","Publishing your private view…");
   try{
     const path=p.slug+".json";
     let sha=null;try{sha=(await ghGet(path)).sha;}catch(e){}
     await ghPut(path,b64utf8(JSON.stringify(buildPayload(p),null,2)),sha,"Publish private view: "+p.title);
     p.published=true;p.publishedAt=Date.now();await persist();
-    set("done","✓ Live. Your links now work — updates in ~1 min.");
     renderPainting();
+    set("busy","Published — checking the link actually works…");
+    const rawURL="https://raw.githubusercontent.com/"+GH_OWNER+"/"+GH_REPO+"/"+GH_BRANCH+"/"+encodeURIComponent(p.slug)+".json";
+    let live=false;
+    for(let i=0;i<6&&!live;i++){
+      try{const r=await fetch(rawURL+"?t="+Date.now(),{cache:"no-store"});live=r.ok;}catch(e){}
+      if(!live)await new Promise(res=>setTimeout(res,3000));
+    }
+    set("done",live?"✓ Live and verified — safe to send your links right now."
+                   :"✓ Published. Couldn't verify yet (signal?) — links should work within a minute.");
   }catch(e){
     set("err","Couldn't publish ("+e.message+"). Check signal / token, then try again.");
   }
