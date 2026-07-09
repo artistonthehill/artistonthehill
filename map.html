@@ -53,6 +53,7 @@
   <meta property="og:image" content="https://www.artistonthehill.co.uk/images/bahamas-spanish-wells-sunrise.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@artistonthehill">
+<script defer src="analytics.js"></script>
 </head>
 <body>
 <nav>
@@ -68,6 +69,11 @@
   </div>
 </nav>
 <div id="map"></div>
+<!-- Newsletter pill — simple link out to Mailchimp hosted signup -->
+<a href="https://eepurl.com/gmXsdP" target="_blank" rel="noopener"
+   style="position:fixed; bottom:22px; left:14px; z-index:1200; background:#1a1714; color:#fff; padding:10px 16px; border-radius:999px; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; text-decoration:none; box-shadow:0 3px 14px rgba(0,0,0,0.25); font-family:Arial,sans-serif;">
+  ✉ The absolutely-not-boring newsletter
+</a>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
@@ -112,9 +118,14 @@ function initMap(paintingsData) {
     const priceHtml = p.sold
       ? '<div class="iw-price" style="font-size:0.8rem;"><span style="text-decoration:line-through;opacity:0.4;">' + p.price + '</span> <span style="background:#1a1714;color:#fff;font-size:0.62rem;letter-spacing:0.12em;padding:2px 6px;font-family:Arial,sans-serif;">SOLD</span></div>'
       : '<div class="iw-price">' + p.price + '</div>';
+    // Every popup gets a one-tap WhatsApp route with the painting title prefilled.
+    const waText = p.sold
+      ? 'Hello Tony, I saw ' + p.title + ' on your map — could you paint something similar for me?'
+      : 'Hello Tony, I am interested in ' + p.title + ' (' + p.price + ').';
+    const waBtn = '<a class="iw-btn" href="https://wa.me/447880601709?text=' + encodeURIComponent(waText) + '" target="_blank" style="background:#8b6f47;">' + (p.sold ? 'Commission similar via WhatsApp' : 'Enquire via WhatsApp') + '</a>';
     const actionBtns = p.sold && p.prints
-      ? '<a class="iw-btn" href="' + p.prints + '" target="_blank" style="background:#8b6f47;">Order a print →</a>'
-      : '<a class="iw-btn" href="' + viewUrl + '" style="margin-bottom:6px;">View painting →</a><a class="iw-btn" href="https://wa.me/447880601709?text=' + encodeURIComponent('Hello Tony, I am interested in ' + p.title + ' (' + p.price + ').') + '" target="_blank" style="background:#8b6f47;">Enquire via WhatsApp</a>';
+      ? '<a class="iw-btn" href="' + p.prints + '" target="_blank">Order a print →</a>' + waBtn
+      : '<a class="iw-btn" href="' + viewUrl + '" style="margin-bottom:6px;">View painting →</a>' + waBtn;
     marker.bindPopup('<div class="iw-wrap">' + imgHtml + '<div class="iw-title">' + p.title + '</div><div class="iw-size">' + p.size + '</div>' + priceHtml + actionBtns + '</div>', { maxWidth: 250, minWidth: 220 });
   });
 

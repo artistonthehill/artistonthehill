@@ -139,15 +139,6 @@
 }
 </script>
 
-<!-- ═══ GOOGLE ANALYTICS 4 — replace G-XXXXXXXXXX with your Measurement ID ═══ -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
-</script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
@@ -464,6 +455,7 @@
   <meta property="og:image" content="https://www.artistonthehill.co.uk/images/undercliff.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@artistonthehill">
+<script defer src="analytics.js"></script>
 </head>
 <body>
 
@@ -546,6 +538,14 @@
   </div>
 
 </section>
+
+<!-- ── SEE WHERE I PAINT — high-placed route to the map ── -->
+<div style="background:var(--ink); padding:26px 40px;">
+  <div style="max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;">
+    <p style="font-family:'Cormorant Garamond',serif; font-size:1.35rem; font-weight:300; color:var(--white); margin:0; line-height:1.4;">Every painting made <em style="color:var(--accent-light);">on location</em> — see exactly where, on the map.</p>
+    <a href="map.html" style="display:inline-flex; align-items:center; gap:10px; background:var(--accent); color:#fff; padding:14px 28px; font-family:'Karla',sans-serif; font-size:0.74rem; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; text-decoration:none; white-space:nowrap;">See where I paint →</a>
+  </div>
+</div>
 
 <section id="works" aria-label="Available original oil paintings for sale">
   <div class="container">
@@ -693,6 +693,16 @@
       </a>
       <p style="margin-top:16px; font-family:'Karla',sans-serif; font-size:0.78rem; color:rgba(255,255,255,0.35); letter-spacing:0.08em;">Zoom · tap any pin · open in Google Maps on your phone</p>
     </div>
+  </div>
+</section>
+
+<!-- ── NEWSLETTER — simple link out to Mailchimp hosted signup ── -->
+<section id="newsletter" style="background:var(--parchment); border-bottom:1px solid var(--warm-mid); padding:64px 40px;">
+  <div style="max-width:760px; margin:0 auto; text-align:center;">
+    <span style="font-family:'Karla',sans-serif; font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:12px;">Stay in touch</span>
+    <h2 style="font-family:'Cormorant Garamond',serif; font-size:2.1rem; font-weight:300; line-height:1.25; color:var(--ink); margin-bottom:14px;">The absolutely-not-boring <em style="color:var(--accent);">newsletter</em></h2>
+    <p style="font-family:'Karla',sans-serif; font-size:0.92rem; line-height:1.75; color:var(--text-body); margin-bottom:28px;">New paintings from the field, first — and nothing else. I only holler when I've got something genuinely interesting to say.</p>
+    <a href="https://eepurl.com/gmXsdP" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:10px; background:var(--ink); color:#fff; padding:16px 32px; font-family:'Karla',sans-serif; font-size:0.76rem; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; text-decoration:none;">Join the list →</a>
   </div>
 </section>
 
@@ -1066,6 +1076,10 @@ document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
       <span>Email</span>
       <small>artistonthehill@gmail.com</small>
     </a>
+    <a href="https://eepurl.com/gmXsdP" target="_blank" rel="noopener" class="sticky-option sticky-news">
+      <span>Newsletter</span>
+      <small>The absolutely-not-boring one</small>
+    </a>
   </div>
   <button id="sticky-trigger" onclick="toggleSticky()" aria-label="Contact Tony">💬</button>
 </div>
@@ -1121,6 +1135,7 @@ document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 .sticky-option small { font-size: 0.68rem; color: rgba(255,255,255,0.65); margin-top: 2px; }
 .sticky-wa { background: #25D366; }
 .sticky-email { background: var(--accent); }
+.sticky-news { background: var(--ink); border: 1px solid rgba(255,255,255,0.25); }
 @media (max-width: 600px) {
   #sticky-contact { bottom: 18px; right: 16px; }
   .sticky-option { min-width: 155px; }
