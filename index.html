@@ -995,7 +995,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 function checkViewingCode() {
   const code = document.getElementById('viewing-code').value.trim().toUpperCase();
-  if (['SALTMARSH','COLLECTOR','PRIVATE','NEONMONK','AARON','CROWBOROUGH','CAROLECBGC','JOHNCBGC','DIANE','FAYE','CRAIG','BOATRACE','HAWKHURST','OAST','TONBRIDGEOAST','HOPE','BURGHBAR','GALLEON','CAUSEWAY','BEACH4','MERMAID','SEAFORD','SWAN','FORD','MILLRICH','COPPA','HARRIET'].includes(code)) {
+  if (['SALTMARSH','COLLECTOR','PRIVATE','NEONMONK','AARON','CROWBOROUGH','CAROLECBGC','JOHNCBGC','DIANE','FAYE','CRAIG','BOATRACE','HAWKHURST','OAST','TONBRIDGEOAST','HOPE','BURGHBAR','GALLEON','CAUSEWAY','BEACH4','MERMAID','SEAFORD','SWAN','FORD','MILLRICH','COPPA','HARRIET','LUCID'].includes(code)) {
     if (code === 'MILLRICH') {
       alert('Welcome Richard. Redirecting to your private viewing…');
       window.location.href = 'mill-bay.html';
@@ -1041,6 +1041,9 @@ function checkViewingCode() {
     } else if (code === 'SWAN') {
       alert('Welcome. Redirecting to your private viewing…');
       window.location.href = 'swan-ych2.html';
+    } else if (code === 'LUCID') {
+      alert('Welcome Craig. Redirecting to your private viewing…');
+      window.location.href = 'lucid-poultry.html';
     } else if (code === 'COPPA') {
       alert('Welcome. Redirecting to your private viewing…');
       window.location.href = 'swan-streatley.html';
