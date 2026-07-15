@@ -369,22 +369,6 @@
       ],
       "finishLabel": "May 2028",
       "startLabel": "Jun 2026"
-    },
-    {
-      "id": "nathan-devonport",
-      "name": "Nathan",
-      "painting": "Kingsand (clock-tower, 2nd version) & Kingsand from the Devonport Inn",
-      "image": "",
-      "type": "Purchase",
-      "total": 4600,
-      "monthly": 0,
-      "totalPayments": 1,
-      "startDate": "2026-06-14",
-      "bankRef": "BARROWCL NB",
-      "notes": "Sunday sale, Devon weekend. Two 80x30 oils: a SECOND version of the Kingsand clock-tower view + Kingsand from the Devonport Inn. Paid in full 4600 on Sun 14 Jun 2026 (ref BARROWCL NB), pre-VAT. Tel +44 7765 402631. NOTE: his Kingsand is a different painting from Caroline Stamp-s Kingsand - keep distinct.",
-      "status": "active",
-      "toat": "",
-      "paymentsReceived": 1
     }
   ],
   "excludeFromCollectors": [
