@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-12",
+  "lastUpdated": "2026-07-15",
   "collectors": [
     {
       "id": "prim-bright",
@@ -12,8 +12,8 @@
       "totalPayments": 10,
       "startDate": "2025-08-07",
       "bankRef": "P Bright",
-      "notes": "Diptych. £7,800 each. Final payment due on delivery (~June 2026 when Prim visits studio). Tom (Putney/Henley rowing) + Manon. Family — Australian great aunt.",
-      "status": "active",
+      "notes": "Diptych. £7,800 each. Final payment due on delivery (~June 2026 when Prim visits studio). Tom (Putney/Henley rowing) + Manon. Family — Australian great aunt. Plan complete — paid in full (10 of 10).",
+      "status": "complete",
       "toat": "",
       "paymentsReceived": 10
     },
@@ -31,7 +31,7 @@
       "notes": "Collector #1 of Waiting Room scheme. ~1m tall kingfisher on dark background. Will collect in person. Bexhill.",
       "status": "active",
       "toat": "",
-      "paymentsReceived": 2
+      "paymentsReceived": 3
     },
     {
       "id": "julie-white",
@@ -47,7 +47,7 @@
       "notes": "Teaching assistant. Daughter Elspeth + best friend Cath in painting. Burgh Island residency contact.",
       "status": "active",
       "toat": "",
-      "paymentsReceived": 2
+      "paymentsReceived": 3
     },
     {
       "id": "kate-duncan",
@@ -63,7 +63,7 @@
       "notes": "Invoice 0643 raised 5/5/26 to lock pre-VAT. SO confirmed live 8 May 2026, first payment received 8 May. NatWest ref: DUNCAN VOLKS PENNY. Raw oak frame ordered — painting to be bolted in once dry.",
       "status": "active",
       "toat": "",
-      "paymentsReceived": 2
+      "paymentsReceived": 3
     },
     {
       "id": "alex-moore",
@@ -79,7 +79,7 @@
       "notes": "Already owns paintings (Macaw bought via Peter Barker FA long ago, Rolling Wave bought direct via Instagram for A3). £100/month is for TOAT tokens — ongoing, no end date. Two physical TOATs still to be posted. Tarporley, Cheshire.",
       "status": "active-ongoing",
       "toat": "EWDF-6DVA",
-      "paymentsReceived": 5
+      "paymentsReceived": 6
     },
     {
       "id": "romanie-dobbs",
@@ -95,7 +95,7 @@
       "notes": "Inv 0559. Met on Chapel Porth Beach 26/3/25 — the original genesis of the Waiting Room concept. Painting collected wet, framed.",
       "status": "active",
       "toat": "",
-      "paymentsReceived": 15
+      "paymentsReceived": 16
     },
     {
       "id": "odessa-scrivo",
@@ -111,7 +111,7 @@
       "notes": "Met Charmouth beach March 2025 — painted her & son. Genesis of Waiting Room scheme alongside Dobbs. Total/end date to be confirmed. Separate £400 payments are work invoices (winter social media work) — not part of this scheme.",
       "status": "needs-confirmation",
       "toat": "",
-      "paymentsReceived": 16
+      "paymentsReceived": 17
     },
     {
       "id": "ellie-odell",
@@ -141,9 +141,9 @@
       "startDate": "2026-05-07",
       "bankRef": "Burgh",
       "notes": "£50/month for 12-18 months, then increase to £100 for remainder. Agreed via WhatsApp 6 May 2026. Painting to be framed and shipped in custom crate after first payment lands. Awaiting: email address, postal address, SO screenshot, and confirmation of which painting.",
-      "status": "pending-first-payment",
+      "status": "active",
       "toat": "2G46-ZNE7",
-      "paymentsReceived": 2
+      "paymentsReceived": 3
     },
     {
       "id": "joanna-davis",
@@ -159,7 +159,7 @@
       "notes": "12 Mercers, Hawkhurst, Kent TN18 4LH. davisjoanna@rocketmail.com. £300 deposit paid 19 Apr 2026. Remaining £2,000 at £100/month — paying manually, not SO. May pay off sooner. Painting at Tim the framer — white/off-white frame options. Dashboard promised and delivered.",
       "status": "active",
       "toat": "",
-      "paymentsReceived": 2,
+      "paymentsReceived": 3,
       "manualPaid": 300,
       "schedule": [
         {
@@ -265,10 +265,10 @@
       "totalPayments": 23,
       "startDate": "2026-06-16",
       "bankRef": "STAMP KINGSAND",
-      "notes": "Two 80×30cm oils (Kingsand + Cawsand), bespoke framed in white. £200/month initially with a balloon payment next year. Torview, Glenwood, Dorking RH5 4BY. 07900061176. caroline.s123@icloud.com. Invoiced 16 Jun 2026, £4,600, pre-VAT (one invoice, two lines).",
+      "notes": "Two 80×30cm oils (Kingsand + Cawsand), bespoke framed in white. £200/month initially with a balloon payment next year. Torview, Glenwood, Dorking RH5 4BY. 07900061176. caroline.s123@icloud.com. Invoiced 16 Jun 2026, £4,600, pre-VAT (one invoice, two lines). First £200 received 1 Jul 2026 (ref CAROLINE STAMP). Bespoke white frames collected 17 Jul; paintings dispatched to Dorking.",
       "status": "active",
       "toat": "",
-      "paymentsReceived": 0,
+      "paymentsReceived": 1,
       "schedule": [
         {
           "m": 0,
@@ -369,6 +369,22 @@
       ],
       "finishLabel": "May 2028",
       "startLabel": "Jun 2026"
+    },
+    {
+      "id": "nathan-devonport",
+      "name": "Nathan",
+      "painting": "Kingsand (clock-tower, 2nd version) & Kingsand from the Devonport Inn",
+      "image": "",
+      "type": "Purchase",
+      "total": 4600,
+      "monthly": 0,
+      "totalPayments": 1,
+      "startDate": "2026-06-14",
+      "bankRef": "BARROWCL NB",
+      "notes": "Sunday sale, Devon weekend. Two 80x30 oils: a SECOND version of the Kingsand clock-tower view + Kingsand from the Devonport Inn. Paid in full 4600 on Sun 14 Jun 2026 (ref BARROWCL NB), pre-VAT. Tel +44 7765 402631. NOTE: his Kingsand is a different painting from Caroline Stamp-s Kingsand - keep distinct.",
+      "status": "active",
+      "toat": "",
+      "paymentsReceived": 1
     }
   ],
   "excludeFromCollectors": [
