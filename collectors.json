@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-15",
+  "lastUpdated": "2026-07-20",
   "collectors": [
     {
       "id": "prim-bright",
@@ -369,6 +369,23 @@
       ],
       "finishLabel": "May 2028",
       "startLabel": "Jun 2026"
+    },
+    {
+      "id": "mary-escott",
+      "name": "Mary Escott",
+      "painting": "Mill Bay, Salcombe",
+      "image": "images/mill-bay.jpg",
+      "type": "Waiting Room",
+      "total": 2500,
+      "monthly": 50,
+      "totalPayments": 50,
+      "startDate": "2026-07-20",
+      "bankRef": "ESCOTT MILL BAY",
+      "code": "MILLBAY",
+      "notes": "Bought Mill Bay Salcombe after the July easel session (four others waiting on it). Invoice 0650, £2,500 inc VAT, £50/mo x 50 by SO. TOAT U9GT-QJUT mounted, delivered by hand July 2026. Touchwood, Littleworth Lane, Littleworth RH13 8JF · escottmary60@gmail.com · 07968 234597. DO NOT send dashboard link until first £50 lands.",
+      "status": "pending-first-payment",
+      "toat": "U9GT-QJUT",
+      "paymentsReceived": 0
     }
   ],
   "excludeFromCollectors": [
