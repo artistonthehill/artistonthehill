@@ -5,11 +5,11 @@
   "v": true,
   "f": true,
   "d": "crate",
-  "sold": false,
-  "w": true,
+  "sold": true,
+  "w": false,
   "m": 110,
   "pr": true,
-  "updated": "2026-07-11",
+  "updated": "2026-07-21",
   "i": "https://res.cloudinary.com/dcy9llfe4/image/upload/v1783777528/ecczhpveoa8ykyhvq4t3.jpg",
   "g": "https://www.thegillangallery.com/product-page/hot-rock"
 }
