@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-07-20",
+  "lastUpdated": "2026-07-23",
   "collectors": [
     {
       "id": "prim-bright",
       "name": "Prim Bright",
-      "painting": "Tom & Manon — Henley/Putney Diptych",
+      "painting": "Tom & Manon \u2014 Henley/Putney Diptych",
       "image": "data:image/jpeg;base64,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",
       "type": "Commission",
       "total": 15600,
@@ -12,7 +12,7 @@
       "totalPayments": 10,
       "startDate": "2025-08-07",
       "bankRef": "P Bright",
-      "notes": "Diptych. £7,800 each. Final payment due on delivery (~June 2026 when Prim visits studio). Tom (Putney/Henley rowing) + Manon. Family — Australian great aunt. Plan complete — paid in full (10 of 10).",
+      "notes": "Diptych. \u00a37,800 each. Final payment due on delivery (~June 2026 when Prim visits studio). Tom (Putney/Henley rowing) + Manon. Family \u2014 Australian great aunt. Plan complete \u2014 paid in full (10 of 10).",
       "status": "complete",
       "toat": "",
       "paymentsReceived": 10
@@ -60,7 +60,7 @@
       "totalPayments": 21,
       "startDate": "2026-05-08",
       "bankRef": "DUNCAN",
-      "notes": "Invoice 0643 raised 5/5/26 to lock pre-VAT. SO confirmed live 8 May 2026, first payment received 8 May. NatWest ref: DUNCAN VOLKS PENNY. Raw oak frame ordered — painting to be bolted in once dry.",
+      "notes": "Invoice 0643 raised 5/5/26 to lock pre-VAT. SO confirmed live 8 May 2026, first payment received 8 May. NatWest ref: DUNCAN VOLKS PENNY. Raw oak frame ordered \u2014 painting to be bolted in once dry.",
       "status": "active",
       "toat": "",
       "paymentsReceived": 3
@@ -76,7 +76,7 @@
       "totalPayments": null,
       "startDate": "2026-02-07",
       "bankRef": "MOORE A",
-      "notes": "Already owns paintings (Macaw bought via Peter Barker FA long ago, Rolling Wave bought direct via Instagram for A3). £100/month is for TOAT tokens — ongoing, no end date. Two physical TOATs still to be posted. Tarporley, Cheshire.",
+      "notes": "Already owns paintings (Macaw bought via Peter Barker FA long ago, Rolling Wave bought direct via Instagram for A3). \u00a3100/month is for TOAT tokens \u2014 ongoing, no end date. Two physical TOATs still to be posted. Tarporley, Cheshire.",
       "status": "active-ongoing",
       "toat": "EWDF-6DVA",
       "paymentsReceived": 6
@@ -92,7 +92,7 @@
       "totalPayments": 24,
       "startDate": "2025-03-27",
       "bankRef": "DOBBS",
-      "notes": "Inv 0559. Met on Chapel Porth Beach 26/3/25 — the original genesis of the Waiting Room concept. Painting collected wet, framed.",
+      "notes": "Inv 0559. Met on Chapel Porth Beach 26/3/25 \u2014 the original genesis of the Waiting Room concept. Painting collected wet, framed.",
       "status": "active",
       "toat": "",
       "paymentsReceived": 16
@@ -108,15 +108,15 @@
       "totalPayments": null,
       "startDate": "2025-03-01",
       "bankRef": "Scrivo Social",
-      "notes": "Met Charmouth beach March 2025 — painted her & son. Genesis of Waiting Room scheme alongside Dobbs. Total/end date to be confirmed. Separate £400 payments are work invoices (winter social media work) — not part of this scheme.",
+      "notes": "Met Charmouth beach March 2025 \u2014 painted her & son. Genesis of Waiting Room scheme alongside Dobbs. Total/end date to be confirmed. Separate \u00a3400 payments are work invoices (winter social media work) \u2014 not part of this scheme.",
       "status": "needs-confirmation",
       "toat": "",
-      "paymentsReceived": 17
+      "paymentsReceived": 18
     },
     {
       "id": "ellie-odell",
       "name": "Ellie Odell",
-      "painting": "(needs confirmation — likely Cornwall piece)",
+      "painting": "(needs confirmation \u2014 likely Cornwall piece)",
       "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAB4AHgDASIAAhEBAxEB/8QAGgABAQADAQEAAAAAAAAAAAAAAAMBBAYFAv/EACgQAAIDAAICAQMEAwEAAAAAAAASAQIDBBEFITETIlEUI0FhBjJCgf/EABcBAQEBAQAAAAAAAAAAAAAAAAACAQP/xAAbEQEAAgMBAQAAAAAAAAAAAAAAAQIREjFRYf/aAAwDAQACEQMRAD8A4RgxJgxC1WDEmDAVYMSYMBVgxJgwFWDEmDAVYMSYMBVgxJgwFWBJgBJgxFgwFmDEWDAWYMRYMBZgxFgwFmDEWDAWYMRYMBZgxFgwFmBFgBJgxJgwYqwYkwYCrBiTBgKsGJMGAqwYkwYCrBiTBgKsGJMGAqwJMAIsGJMGAqwYkwYCrBiTBgKsGJMGAqwYkwYCrBiTBgKsGJMGAqwJMAJMGJMGAqwYkwYCrBiTBgKsGJMGAqwYkwYCrBiTBgKsGJMGAqwJMAJMGIsGNFmDEWDAWYMRYMBZgxFgwFmDEWDAWYMRYMBZgxFgwFmBFgBFgxJgwFWLcSlt+XjlSsXvpetIrPxMzPXXo1GL8Hm7cDmY8rjWrXfK0Xpa1ItETHxPUxMGT8Idb5Di+Nt5yvC8bjwbxvzf02P077TfOIvWIm0Xnqe4nr46+ffonxeJw+ZnppTHKme3O30y7rMxXLLOb2rPVolerV/nv0eDXzvOptnrnfDPTPSNazTj51+6O+pnqvv5n5/J8YeZ5uGNMstKRnSNIrH0qT1GkdXj3H8x6OelsdXtD08/Aax4ynM5Os4V049+RSbU+yYjuIrNu4+601mIiIn5j8mvwOPjn4fk+S5FI2TWnHyymZis2tFrTa3UxPURX47+Zj8dGhr5Lka8WnH0tS1KU+nWZzq0V776brvrv+zHE8jvxctMsppbHSYtbPTOt6zMd9T1MT7juff9yVi2GZh0HK8Thr4zieRnrh5Tx/q70pE39zralFrM/wDSzPUz19sz+IL8/wDx/wCvy9Z41bV43Grhje2OTTbW2cWtPUzEREe+5mY69fk56PNc2LbzbWt43rWt63zravVf9Yisx1HX8dfEejN/Oc7TTkX11ppbka/X0+plS0Tp7+6ImOo+Z+Cdb+tzV0OHA4vG5nisNK8fk1p+q5Gutfddsc5tEf8An7V5if7OSY2q+Y5lfp9a0/bwtxq95Un9u3fcfHv5n38+zQYqtZjqZmJ4qwYkwYtirAkwAkwYAAwYAAwYAAwYAAwYAAwYAAwYAAwAA//Z",
       "type": "Waiting Room (legacy)",
       "total": 433.3,
@@ -124,7 +124,7 @@
       "totalPayments": 10,
       "startDate": "2025-05-06",
       "bankRef": "ODELL",
-      "notes": "NEEDS CONFIRMATION. Bank ref ODELL E C / ELLIE ODELL. Possible link: Laura Odell (laura.odell@outlook.com) bought a print in Nov 2022, Cornwall/Gillan/Flushing connection — could be a relative. Pattern matches a 10-month NHS-style instalment for a £433 painting. Bank shows 8 payments (May-Dec 2025) totalling £346.64, then NO PAYMENTS Jan-Apr 2026 — either complete-at-8 or stopped early. Tony to verify painting and total.",
+      "notes": "NEEDS CONFIRMATION. Bank ref ODELL E C / ELLIE ODELL. Possible link: Laura Odell (laura.odell@outlook.com) bought a print in Nov 2022, Cornwall/Gillan/Flushing connection \u2014 could be a relative. Pattern matches a 10-month NHS-style instalment for a \u00a3433 painting. Bank shows 8 payments (May-Dec 2025) totalling \u00a3346.64, then NO PAYMENTS Jan-Apr 2026 \u2014 either complete-at-8 or stopped early. Tony to verify painting and total.",
       "status": "needs-confirmation",
       "toat": "",
       "paymentsReceived": 10
@@ -140,7 +140,7 @@
       "totalPayments": null,
       "startDate": "2026-05-07",
       "bankRef": "Burgh",
-      "notes": "£50/month for 12-18 months, then increase to £100 for remainder. Agreed via WhatsApp 6 May 2026. Painting to be framed and shipped in custom crate after first payment lands. Awaiting: email address, postal address, SO screenshot, and confirmation of which painting.",
+      "notes": "\u00a350/month for 12-18 months, then increase to \u00a3100 for remainder. Agreed via WhatsApp 6 May 2026. Painting to be framed and shipped in custom crate after first payment lands. Awaiting: email address, postal address, SO screenshot, and confirmation of which painting.",
       "status": "active",
       "toat": "2G46-ZNE7",
       "paymentsReceived": 3
@@ -156,7 +156,7 @@
       "totalPayments": 20,
       "startDate": "2026-04-19",
       "bankRef": "DAVIS HAWKHURST",
-      "notes": "12 Mercers, Hawkhurst, Kent TN18 4LH. davisjoanna@rocketmail.com. £300 deposit paid 19 Apr 2026. Remaining £2,000 at £100/month — paying manually, not SO. May pay off sooner. Painting at Tim the framer — white/off-white frame options. Dashboard promised and delivered.",
+      "notes": "12 Mercers, Hawkhurst, Kent TN18 4LH. davisjoanna@rocketmail.com. \u00a3300 deposit paid 19 Apr 2026. Remaining \u00a32,000 at \u00a3100/month \u2014 paying manually, not SO. May pay off sooner. Painting at Tim the framer \u2014 white/off-white frame options. Dashboard promised and delivered.",
       "status": "active",
       "toat": "",
       "paymentsReceived": 3,
@@ -265,7 +265,7 @@
       "totalPayments": 23,
       "startDate": "2026-06-16",
       "bankRef": "STAMP KINGSAND",
-      "notes": "Two 80×30cm oils (Kingsand + Cawsand), bespoke framed in white. £200/month initially with a balloon payment next year. Torview, Glenwood, Dorking RH5 4BY. 07900061176. caroline.s123@icloud.com. Invoiced 16 Jun 2026, £4,600, pre-VAT (one invoice, two lines). First £200 received 1 Jul 2026 (ref CAROLINE STAMP). Bespoke white frames collected 17 Jul; paintings dispatched to Dorking.",
+      "notes": "Two 80\u00d730cm oils (Kingsand + Cawsand), bespoke framed in white. \u00a3200/month initially with a balloon payment next year. Torview, Glenwood, Dorking RH5 4BY. 07900061176. caroline.s123@icloud.com. Invoiced 16 Jun 2026, \u00a34,600, pre-VAT (one invoice, two lines). First \u00a3200 received 1 Jul 2026 (ref CAROLINE STAMP). Bespoke white frames collected 17 Jul; paintings dispatched to Dorking.",
       "status": "active",
       "toat": "",
       "paymentsReceived": 1,
@@ -382,20 +382,20 @@
       "startDate": "2026-07-20",
       "bankRef": "ESCOTT MILL BAY",
       "code": "MILLBAY",
-      "notes": "Bought Mill Bay Salcombe after the July easel session (four others waiting on it). Invoice 0650, £2,500 inc VAT, £50/mo x 50 by SO. TOAT U9GT-QJUT mounted, delivered by hand July 2026. Touchwood, Littleworth Lane, Littleworth RH13 8JF · escottmary60@gmail.com · 07968 234597. DO NOT send dashboard link until first £50 lands.",
-      "status": "pending-first-payment",
+      "notes": "Bought Mill Bay Salcombe after the July easel session (four others waiting on it). Invoice 0650, \u00a32,500 inc VAT, \u00a350/mo x 50 by SO. TOAT U9GT-QJUT mounted, delivered by hand July 2026. Touchwood, Littleworth Lane, Littleworth RH13 8JF \u00b7 escottmary60@gmail.com \u00b7 07968 234597. DO NOT send dashboard link until first \u00a350 lands.",
+      "status": "active",
       "toat": "U9GT-QJUT",
-      "paymentsReceived": 0
+      "paymentsReceived": 1
     }
   ],
   "excludeFromCollectors": [
     {
       "name": "Maia Wolf",
-      "reason": "Marketing/CRM contractor — £300/month is wages, not painting payments"
+      "reason": "Marketing/CRM contractor \u2014 \u00a3300/month is wages, not painting payments"
     },
     {
       "name": "Valerie Clark",
-      "reason": "Aunt — £250/month is loan repayment for £5k Greek yacht share, not painting"
+      "reason": "Aunt \u2014 \u00a3250/month is loan repayment for \u00a35k Greek yacht share, not painting"
     },
     {
       "name": "P Bright (final payment)",
