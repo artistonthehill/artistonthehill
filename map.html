@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Where I Paint — Tony Parsons</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
@@ -76,6 +77,7 @@
 </a>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
 <script>
 // No API key, no billing, no Google Cloud. Map renders as soon as paintings.json loads.
 // Fetch paintings.json — cache-busting so new uploads appear immediately.
@@ -85,7 +87,18 @@ fetch('paintings.json?v=' + Date.now())
   .catch(err => console.error('Could not load paintings.json:', err));
 
 function initMap(paintingsData) {
-  const map = L.map('map', { scrollWheelZoom: true }).setView([52.0, -2.0], 6);
+  // Deep-linkable regions: map.html?view=greece opens zoomed to the Ionian, etc.
+  const REGIONS = {
+    greece:  { center: [38.62, 20.72], zoom: 10 },  // Ionian — Lefkada/Meganisi/Ithaca
+    ionian:  { center: [38.62, 20.72], zoom: 10 },
+    devon:   { center: [50.24, -3.77], zoom: 11 },
+    cornwall:{ center: [50.16, -5.02], zoom: 10 },
+    thames:  { center: [51.52, -0.92], zoom: 11 },
+    sussex:  { center: [50.82, -0.05], zoom: 10 }
+  };
+  const requestedView = new URLSearchParams(location.search).get('view');
+  const region = REGIONS[(requestedView || '').toLowerCase()];
+  const map = L.map('map', { scrollWheelZoom: true }).setView(region ? region.center : [52.0, -2.0], region ? region.zoom : 6);
 
   // Light, muted basemap (matches the brand far better than Google's default)
   const baseMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -102,13 +115,28 @@ function initMap(paintingsData) {
 
   const ukBounds = [];
 
+  // Cluster overlapping pins (Spilia, Henley etc). Tap a numbered badge to fan the pins out.
+  const clusterGroup = L.markerClusterGroup({
+    maxClusterRadius: 34,
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false,
+    spiderLegPolylineOptions: { weight: 1.2, color: '#8b6f47', opacity: 0.6 },
+    iconCreateFunction: function (cluster) {
+      return L.divIcon({
+        html: '<div style="background:#8b6f47;color:#fff;border:2px solid #fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;font-size:0.78rem;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.3);">' + cluster.getChildCount() + '</div>',
+        className: '', iconSize: [32, 32]
+      });
+    }
+  });
+
   paintingsData.forEach(p => {
     const isUK = p.lat > 49 && p.lat < 62 && p.lng > -9 && p.lng < 2.5;
     if (isUK) ukBounds.push([p.lat, p.lng]);
     const pinColor = p.sold ? '#9e9e9e' : '#8b6f47';
     const marker = L.circleMarker([p.lat, p.lng], {
       radius: 8, fillColor: pinColor, fillOpacity: 0.9, color: '#ffffff', weight: 2
-    }).addTo(map);
+    });
+    clusterGroup.addLayer(marker);
     marker.bindTooltip(p.title);
 
     const viewParams = new URLSearchParams({ img: p.img || '', title: p.title, meta: p.size, price: p.sold ? 'Sold' : p.price, back: 'map.html' });
@@ -128,6 +156,8 @@ function initMap(paintingsData) {
       : '<a class="iw-btn" href="' + viewUrl + '" style="margin-bottom:6px;">View painting →</a>' + waBtn;
     marker.bindPopup('<div class="iw-wrap">' + imgHtml + '<div class="iw-title">' + p.title + '</div><div class="iw-size">' + p.size + '</div>' + priceHtml + actionBtns + '</div>', { maxWidth: 250, minWidth: 220 });
   });
+
+  map.addLayer(clusterGroup);
 
   if (ukBounds.length) map.fitBounds(ukBounds, { padding: [50, 50] });
 
