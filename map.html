@@ -116,7 +116,8 @@ function initMap(paintingsData) {
   const ukBounds = [];
 
   // Cluster overlapping pins (Spilia, Henley etc). Tap a numbered badge to fan the pins out.
-  const clusterGroup = L.markerClusterGroup({
+  // Falls back to plain pins if the clustering library fails to load — the map must never die.
+  const clusterGroup = (typeof L.markerClusterGroup === 'function') ? L.markerClusterGroup({
     maxClusterRadius: 34,
     spiderfyOnMaxZoom: true,
     showCoverageOnHover: false,
@@ -127,7 +128,7 @@ function initMap(paintingsData) {
         className: '', iconSize: [32, 32]
       });
     }
-  });
+  }) : L.layerGroup();
 
   paintingsData.forEach(p => {
     const isUK = p.lat > 49 && p.lat < 62 && p.lng > -9 && p.lng < 2.5;
