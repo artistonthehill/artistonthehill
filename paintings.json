@@ -1212,12 +1212,12 @@
   "id": "porthleven-hope",
   "title": "Porthleven Hope",
   "img": "images/PorthlevenHope.jpg",
-  "price": "£2,760",
+  "price": "Sold",
   "size": "80×30cm · Oil on board",
   "lat": 50.085195,
   "lng": -5.31734,
   "collection": "uk",
-  "sold": false,
+  "sold": true,
   "prints": false
  },
  {
