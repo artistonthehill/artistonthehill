@@ -1231,5 +1231,17 @@
   "collection": "uk",
   "sold": false,
   "prints": false
+ },
+ {
+  "id": "compositional-cows",
+  "title": "Compositional Cows",
+  "img": "images/CompositionalCowssm.jpg",
+  "price": "£2,950",
+  "size": "60×40cm · Oil over acrylic on deep canvas · Studio work from field studies, the Helford",
+  "lat": 50.089432,
+  "lng": -5.098191,
+  "collection": "uk",
+  "sold": false,
+  "prints": false
  }
 ]
