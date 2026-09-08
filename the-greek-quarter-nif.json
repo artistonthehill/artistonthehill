@@ -1,13 +1,13 @@
 {
   "t": "The Greek Quarter ",
   "s": "42x30",
-  "p": "",
-  "v": false,
+  "p": "1360",
+  "v": true,
   "f": true,
   "d": "",
   "sold": false,
   "w": true,
-  "m": 0,
+  "m": 60,
   "pr": true,
   "updated": "2026-09-08",
   "i": "https://res.cloudinary.com/dcy9llfe4/image/upload/v1788878570/um0xhgili2ictxclajlz.jpg"
