@@ -43,6 +43,15 @@
   }
   dl.details dt{color:var(--soft);}
   dl.details dd{text-align:right;}
+  .artwork{
+    background:#fff; border:1px solid #e5e0d6; border-radius:4px;
+    padding:1.4rem 1.4rem .9rem; margin:0 0 1.4rem; text-align:center;
+  }
+  .artwork img{width:100%; display:block; border:1px solid #eee9de;}
+  .artwork figcaption{
+    font-size:.78rem; color:var(--soft); padding-top:.6rem;
+    font-family:'Montserrat', sans-serif;
+  }
   .price{
     font-family:'Cormorant Garamond', serif; font-size:1.9rem; font-weight:500;
     text-align:center; margin:.4rem 0 1.1rem;
@@ -125,6 +134,11 @@
       <dt>Medium</dt><dd id="dMedium"></dd>
     </dl>
 
+    <figure class="artwork" id="artWrap" hidden>
+      <img id="artImg" src="" alt="">
+      <figcaption>The painting, squared and unframed</figcaption>
+    </figure>
+
     <p class="price" id="pPrice"><small>including VAT, framed, delivered worldwide</small></p>
 
     <a class="btn buy" id="btnBuy" href="#">Discuss purchasing this painting</a>
@@ -177,7 +191,8 @@ var ROOMS = {
     size: "42\u00D730cm",
     medium: "Oil on canvas-covered board",
     price: "\u00A31,360",
-    img: "https://res.cloudinary.com/dcy9llfe4/image/upload/v1788878570/um0xhgili2ictxclajlz.jpg",
+    img: "images/the-greek-quarter.jpg",
+    easel: "images/the-greek-quarter-easel.jpg",
     prints: null,
     group: "Venice",
     siblings: ["antico-doge-3gn", "pointe-de-l-ogio"]
@@ -245,9 +260,20 @@ function fireBeacon(kind, slug, code){
 
   document.title = d.title + " \u2014 a private view";
   var img = document.getElementById("pImg");
-  img.src = d.img;
-  img.alt = d.title + " \u2014 original oil painting by Tony Parsons";
+  var hero = d.easel || d.img;
+  img.src = hero;
+  img.alt = d.easel
+    ? d.title + " on the easel, painted en plein air"
+    : d.title + " \u2014 original oil painting by Tony Parsons";
   img.onerror = function(){ this.style.display = "none"; };
+  if (d.easel){
+    var aw = document.getElementById("artWrap");
+    aw.hidden = false;
+    var ai = document.getElementById("artImg");
+    ai.src = d.img;
+    ai.alt = d.title + " \u2014 original oil painting by Tony Parsons";
+    ai.onerror = function(){ aw.hidden = true; };
+  }
 
   document.getElementById("pProv").textContent =
     "Painted en plein air \u2014 " + d.where + ", " + d.date;
