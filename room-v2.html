@@ -55,7 +55,7 @@
     display:block; width:100%; text-align:center; text-decoration:none;
     padding:1rem 1.2rem; border-radius:6px; font-size:1rem; font-weight:500;
     margin-bottom:.8rem; border:1px solid var(--gold); cursor:pointer;
-    font-family:'Montserrat', sans-serif;
+    font-family:'Cormorant Garamond', serif; font-size:1.2rem; font-weight:500;
   }
   .btn:focus-visible{outline:3px solid var(--gold); outline-offset:2px;}
   .btn.buy{background:var(--gold); color:#fff;}
@@ -127,9 +127,9 @@
 
     <p class="price" id="pPrice"><small>including VAT, framed, delivered worldwide</small></p>
 
-    <a class="btn buy" id="btnBuy" href="#">I’d like to buy this painting</a>
-    <button class="btn plan" id="btnPlan" type="button" aria-expanded="false" aria-controls="payment">Show me the monthly arrangement</button>
-    <a class="quietlink" id="btnEmail" href="#">Or simply email Tony</a>
+    <a class="btn buy" id="btnBuy" href="#">Discuss purchasing this painting</a>
+    <button class="btn plan" id="btnPlan" type="button" aria-expanded="false" aria-controls="payment">Arrange monthly payments</button>
+    <a class="quietlink" id="btnEmail" href="#">Discuss with Tony</a>
 
     <div class="payment" id="payment">
       <h2>Own it from £60 a month</h2>
@@ -175,7 +175,7 @@ var ROOMS = {
     where: "Venice",            // TODO Tony: street/campo
     date: "8 September 2026",
     size: "42\u00D730cm",
-    medium: "Oil on board",
+    medium: "Oil on canvas-covered board",
     price: "\u00A31,360",
     img: "https://res.cloudinary.com/dcy9llfe4/image/upload/v1788878570/um0xhgili2ictxclajlz.jpg",
     prints: null,
@@ -187,7 +187,7 @@ var ROOMS = {
     where: "Venice",            // TODO Tony: street/campo
     date: "September 2026",
     size: "42\u00D730cm",
-    medium: "Oil on board",
+    medium: "Oil on canvas-covered board",
     price: "\u00A31,320",
     img: "https://res.cloudinary.com/dcy9llfe4/image/upload/v1788970408/e9nn5txnqxuieadp1ex2.jpg",
     prints: null,
@@ -199,7 +199,7 @@ var ROOMS = {
     where: "Venice",            // TODO Tony: confirm spelling + street
     date: "8 September 2026",
     size: "42\u00D730cm",
-    medium: "Oil on board",
+    medium: "Oil on canvas-covered board",
     price: "\u00A31,360",
     img: "https://res.cloudinary.com/dcy9llfe4/image/upload/v1788863462/lxxzslvivjy0iv2mhsa8.jpg",
     prints: null,
@@ -238,8 +238,8 @@ function fireBeacon(kind, slug, code){
     document.getElementById("pPrice").hidden = true;
     document.getElementById("btnBuy").hidden = true;
     document.getElementById("btnPlan").hidden = true;
-    document.getElementById("btnEmail").href = "mailto:" + EMAIL;
-    document.getElementById("btnEmail").textContent = "Email Tony";
+    document.getElementById("btnEmail").href = "https://wa.me/" + WHATSAPP;
+    document.getElementById("btnEmail").textContent = "Message Tony";
     return;
   }
 
@@ -250,7 +250,7 @@ function fireBeacon(kind, slug, code){
   img.onerror = function(){ this.style.display = "none"; };
 
   document.getElementById("pProv").textContent =
-    "Painted on the spot \u2014 " + d.where + ", " + d.date;
+    "Painted en plein air \u2014 " + d.where + ", " + d.date;
   document.getElementById("pTitle").textContent = d.title;
   document.getElementById("dWhere").textContent = d.where;
   document.getElementById("dDate").textContent = d.date;
@@ -264,15 +264,15 @@ function fireBeacon(kind, slug, code){
   var waPlan = encodeURIComponent("Hello Tony \u2014 " + d.title + " \u2014 could you tell me about the monthly arrangement?");
   document.getElementById("btnPlanWa").href = "https://wa.me/" + WHATSAPP + "?text=" + waPlan;
 
-  document.getElementById("btnEmail").href =
-    "mailto:" + EMAIL + "?subject=" + encodeURIComponent(d.title);
+  var waTalk = encodeURIComponent("Hello Tony \u2014 " + d.title + " \u2014 ");
+  document.getElementById("btnEmail").href = "https://wa.me/" + WHATSAPP + "?text=" + waTalk;
 
   var planBtn = document.getElementById("btnPlan");
   planBtn.addEventListener("click", function(){
     var box = document.getElementById("payment");
     var open = box.classList.toggle("open");
     planBtn.setAttribute("aria-expanded", open ? "true" : "false");
-    planBtn.textContent = open ? "Hide the monthly arrangement" : "Show me the monthly arrangement";
+    planBtn.textContent = open ? "Hide monthly payments" : "Arrange monthly payments";
   });
 
   if (d.prints){
