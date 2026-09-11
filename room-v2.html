@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>A private view — Artist on the Hill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#B8963E; --cream:#f5f2ed; --ink:#1a1a1a; --soft:#6b665e; --card:#ffffff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--cream); color:var(--ink);
+    font-family:'Montserrat', sans-serif; font-weight:400;
+    font-size:16px; line-height:1.6;
+  }
+  .frame{max-width:640px; margin:0 auto; padding:0 0 4rem;}
+  .goldrule{height:3px; background:var(--gold);}
+  .welcome{
+    font-family:'Cormorant Garamond', serif; font-size:1.05rem; font-style:italic;
+    color:var(--soft); text-align:center; padding:.9rem 1.25rem .7rem;
+  }
+  .painting{width:100%; display:block; background:#e7e2d8; min-height:220px; object-fit:cover;}
+  .provenance{
+    font-family:'Cormorant Garamond', serif; font-size:1.15rem; font-style:italic;
+    text-align:center; color:var(--ink); padding:1.1rem 1.5rem .2rem;
+  }
+  h1{
+    font-family:'Cormorant Garamond', serif; font-weight:600;
+    font-size:clamp(2rem, 7vw, 2.6rem); text-align:center; line-height:1.15;
+    padding:.2rem 1.25rem .4rem;
+  }
+  .inner{padding:0 1.25rem;}
+  dl.details{
+    background:var(--card); border:1px solid #e5e0d6; border-radius:6px;
+    padding:1.1rem 1.25rem; margin:1.2rem 0 1.4rem;
+    display:grid; grid-template-columns:auto 1fr; gap:.45rem 1.2rem;
+    font-size:.95rem;
+  }
+  dl.details dt{color:var(--soft);}
+  dl.details dd{text-align:right;}
+  .price{
+    font-family:'Cormorant Garamond', serif; font-size:1.9rem; font-weight:500;
+    text-align:center; margin:.4rem 0 1.1rem;
+  }
+  .price small{
+    display:block; font-family:'Montserrat', sans-serif; font-size:.8rem;
+    color:var(--soft); font-weight:400; margin-top:.15rem;
+  }
+  .btn{
+    display:block; width:100%; text-align:center; text-decoration:none;
+    padding:1rem 1.2rem; border-radius:6px; font-size:1rem; font-weight:500;
+    margin-bottom:.8rem; border:1px solid var(--gold); cursor:pointer;
+    font-family:'Montserrat', sans-serif;
+  }
+  .btn:focus-visible{outline:3px solid var(--gold); outline-offset:2px;}
+  .btn.buy{background:var(--gold); color:#fff;}
+  .btn.plan{background:transparent; color:var(--ink);}
+  .quietlink{
+    display:block; text-align:center; font-size:.85rem; color:var(--soft);
+    text-decoration:underline; text-underline-offset:3px; margin:.2rem 0 1.6rem;
+  }
+  .payment{
+    background:var(--card); border:1px solid #e5e0d6; border-radius:6px;
+    padding:1.2rem 1.25rem; margin:0 0 1.6rem; display:none;
+  }
+  .payment.open{display:block;}
+  .payment h2{
+    font-family:'Cormorant Garamond', serif; font-weight:600; font-size:1.35rem;
+    margin-bottom:.5rem;
+  }
+  .payment p{font-size:.93rem; margin-bottom:.8rem;}
+  .payment .printline{
+    border-top:1px solid #eee9de; padding-top:.8rem; margin-top:.2rem;
+    font-size:.88rem; color:var(--soft);
+  }
+  .payment .printline a{color:var(--ink);}
+  .bio{
+    font-family:'Cormorant Garamond', serif; font-size:1.12rem; line-height:1.55;
+    border-top:1px solid #ddd6c8; border-bottom:1px solid #ddd6c8;
+    padding:1.4rem .2rem; margin:0 0 1.6rem; color:var(--ink);
+  }
+  .bio a{color:var(--ink); text-decoration:underline; text-underline-offset:3px; white-space:nowrap;}
+  .siblings h2{
+    font-family:'Cormorant Garamond', serif; font-weight:600; font-size:1.35rem;
+    margin-bottom:.9rem;
+  }
+  .sib{
+    display:flex; align-items:center; gap:.9rem; text-decoration:none; color:var(--ink);
+    background:var(--card); border:1px solid #e5e0d6; border-radius:6px;
+    padding:.7rem .8rem; margin-bottom:.7rem;
+  }
+  .sib img{width:64px; height:64px; object-fit:cover; border-radius:4px; background:#e7e2d8;}
+  .sib .t{font-family:'Cormorant Garamond', serif; font-size:1.15rem; font-weight:500;}
+  .sib .s{font-size:.82rem; color:var(--soft);}
+  .foot{
+    text-align:center; font-size:.8rem; color:var(--soft); margin-top:2.2rem;
+    padding:0 1.25rem;
+  }
+  .foot a{color:var(--soft);}
+  @media (prefers-reduced-motion: no-preference){
+    .payment.open{animation:open .25s ease-out;}
+    @keyframes open{from{opacity:0; transform:translateY(-4px);} to{opacity:1; transform:none;}}
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="goldrule"></div>
+  <p class="welcome">A private view, for you — this page isn’t public.</p>
+
+  <img class="painting" id="pImg" src="" alt="">
+  <p class="provenance" id="pProv"></p>
+  <h1 id="pTitle"></h1>
+
+  <div class="inner">
+    <dl class="details">
+      <dt>Painted at</dt><dd id="dWhere"></dd>
+      <dt>Date</dt><dd id="dDate"></dd>
+      <dt>Size</dt><dd id="dSize"></dd>
+      <dt>Medium</dt><dd id="dMedium"></dd>
+    </dl>
+
+    <p class="price" id="pPrice"><small>including VAT, framed, delivered worldwide</small></p>
+
+    <a class="btn buy" id="btnBuy" href="#">I’d like to buy this painting</a>
+    <button class="btn plan" id="btnPlan" type="button" aria-expanded="false" aria-controls="payment">Show me the monthly arrangement</button>
+    <a class="quietlink" id="btnEmail" href="#">Or simply email Tony</a>
+
+    <div class="payment" id="payment">
+      <h2>Own it from £60 a month</h2>
+      <p>The painting comes home with you now; you pay monthly by standing order at a pace you choose, with no interest and no fixed end date. Most collectors settle somewhere between £60 and £200 a month.</p>
+      <p>Message Tony and he’ll set it up personally — it takes about five minutes.</p>
+      <a class="btn buy" id="btnPlanWa" href="#">Ask Tony about the monthly arrangement</a>
+      <p class="printline" id="printline" hidden>
+        And if the original isn’t the right fit, a fine-art print of this painting is available
+        <a id="printHref" href="#">at the Gillan Gallery</a>.
+      </p>
+    </div>
+
+    <p class="bio" id="bioStrip"></p>
+
+    <div class="siblings" id="siblings" hidden>
+      <h2 id="sibHeading"></h2>
+      <div id="sibList"></div>
+    </div>
+  </div>
+
+  <p class="foot">
+    Artist on the Hill · <a href="https://artistonthehill.co.uk">artistonthehill.co.uk</a>
+  </p>
+</div>
+
+<script>
+// ---------------------------------------------------------------
+// ROOM v2 — Hania's template, Sept 2026.
+// Data below is a self-contained demo set (the Venice trio) so this
+// page can be played with before any plumbing exists. In production
+// this object is replaced by a fetch of the per-painting slug JSON,
+// projected from the AOTH Spine (publish-ticked fields only).
+// TODO (designated session): wire fireBeacon() to the existing
+// private-view Apps Script webhook so opens land in the usual
+// tripwire channel. It must stay invisible on the page.
+// TODO: confirm "Painted at" street lines with Tony before sending
+// to anyone — placeholders below say Venice only. Titles are from
+// the app export, never from slugs.
+// ---------------------------------------------------------------
+var ROOMS = {
+  "the-greek-quarter": {
+    title: "The Greek Quarter",
+    where: "Venice",            // TODO Tony: street/campo
+    date: "8 September 2026",
+    size: "42\u00D730cm",
+    medium: "Oil on board",
+    price: "\u00A31,360",
+    img: "images/the-greek-quarter.jpg",   // TODO: Cloudinary/repo image
+    prints: null,
+    group: "Venice",
+    siblings: ["antico-doge-3gn", "pointe-de-l-ogio"]
+  },
+  "antico-doge-3gn": {
+    title: "Antico Doge",
+    where: "Venice",            // TODO Tony: street/campo
+    date: "September 2026",
+    size: "42\u00D730cm",
+    medium: "Oil on board",
+    price: "\u00A31,320",
+    img: "images/antico-doge.jpg",
+    prints: null,
+    group: "Venice",
+    siblings: ["the-greek-quarter", "pointe-de-l-ogio"]
+  },
+  "pointe-de-l-ogio": {
+    title: "Pointe de l\u2019Ogio",
+    where: "Venice",            // TODO Tony: confirm spelling + street
+    date: "8 September 2026",
+    size: "42\u00D730cm",
+    medium: "Oil on board",
+    price: "\u00A31,360",
+    img: "images/pointe-de-l-ogio.jpg",
+    prints: null,
+    group: "Venice",
+    siblings: ["the-greek-quarter", "antico-doge-3gn"]
+  }
+};
+
+var BIO_STRIP = "Tony has exhibited with the ROI and the RSMA at London\u2019s Mall Galleries, held solo exhibitions in Cairo, the Bahamas, the Channel Islands and the Alps, and his work hangs in the private collections of British Royalty and of institutions across Europe. ";
+
+var WHATSAPP = "447880601709";
+var EMAIL = "artistonthehill@gmail.com";
+
+function param(name){
+  try {
+    return new URLSearchParams(window.location.search).get(name) || "";
+  } catch(e){ return ""; }
+}
+
+function fireBeacon(kind, slug, code){
+  // Intentionally inert until wired to the existing webhook.
+  // fetch(WEBHOOK_URL, {method:"POST", body: JSON.stringify({kind:kind, slug:slug, code:code}), keepalive:true});
+}
+
+(function(){
+  var slug = param("p") || "the-greek-quarter";
+  var code = param("w") || "";
+  var d = ROOMS[slug];
+  if (!d){
+    // Degrade, never die: unknown slug shows a graceful note, not a dead page.
+    document.getElementById("pTitle").textContent = "This view has moved";
+    document.getElementById("pProv").textContent = "Please ask Tony for a fresh link.";
+    document.querySelector(".details").hidden = true;
+    document.getElementById("pPrice").hidden = true;
+    document.getElementById("btnBuy").hidden = true;
+    document.getElementById("btnPlan").hidden = true;
+    document.getElementById("btnEmail").href = "mailto:" + EMAIL;
+    document.getElementById("btnEmail").textContent = "Email Tony";
+    return;
+  }
+
+  document.title = d.title + " \u2014 a private view";
+  var img = document.getElementById("pImg");
+  img.src = d.img;
+  img.alt = d.title + " \u2014 original oil painting by Tony Parsons";
+  img.onerror = function(){ this.style.display = "none"; };
+
+  document.getElementById("pProv").textContent =
+    "Painted on the spot \u2014 " + d.where + ", " + d.date;
+  document.getElementById("pTitle").textContent = d.title;
+  document.getElementById("dWhere").textContent = d.where;
+  document.getElementById("dDate").textContent = d.date;
+  document.getElementById("dSize").textContent = d.size;
+  document.getElementById("dMedium").textContent = d.medium;
+  document.getElementById("pPrice").insertAdjacentText("afterbegin", d.price);
+
+  var waText = encodeURIComponent("Hello Tony \u2014 " + d.title + " \u2014 I\u2019d like to buy the original.");
+  document.getElementById("btnBuy").href = "https://wa.me/" + WHATSAPP + "?text=" + waText;
+
+  var waPlan = encodeURIComponent("Hello Tony \u2014 " + d.title + " \u2014 could you tell me about the monthly arrangement?");
+  document.getElementById("btnPlanWa").href = "https://wa.me/" + WHATSAPP + "?text=" + waPlan;
+
+  document.getElementById("btnEmail").href =
+    "mailto:" + EMAIL + "?subject=" + encodeURIComponent(d.title);
+
+  var planBtn = document.getElementById("btnPlan");
+  planBtn.addEventListener("click", function(){
+    var box = document.getElementById("payment");
+    var open = box.classList.toggle("open");
+    planBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    planBtn.textContent = open ? "Hide the monthly arrangement" : "Show me the monthly arrangement";
+  });
+
+  if (d.prints){
+    var pl = document.getElementById("printline");
+    pl.hidden = false;
+    document.getElementById("printHref").href = d.prints;
+  }
+
+  var bio = document.getElementById("bioStrip");
+  bio.textContent = BIO_STRIP;
+  var bioLink = document.createElement("a");
+  bioLink.href = "bio-v2.html" + (code ? "?w=" + encodeURIComponent(code) : "");
+  bioLink.textContent = "More about Tony";
+  bio.appendChild(bioLink);
+  bio.appendChild(document.createTextNode("."));
+
+  if (d.siblings && d.siblings.length){
+    var wrap = document.getElementById("siblings");
+    wrap.hidden = false;
+    document.getElementById("sibHeading").textContent =
+      "The rest of Tony\u2019s " + d.group + " works";
+    var list = document.getElementById("sibList");
+    d.siblings.forEach(function(s){
+      var sd = ROOMS[s];
+      if (!sd) return;
+      var a = document.createElement("a");
+      a.className = "sib";
+      a.href = "room-v2.html?p=" + encodeURIComponent(s) +
+               (code ? "&w=" + encodeURIComponent(code) : "");
+      var im = document.createElement("img");
+      im.src = sd.img; im.alt = sd.title;
+      im.onerror = function(){ this.style.visibility = "hidden"; };
+      var tx = document.createElement("div");
+      var t = document.createElement("div");
+      t.className = "t"; t.textContent = sd.title;
+      var st = document.createElement("div");
+      st.className = "s"; st.textContent = sd.size + " \u00B7 " + sd.medium;
+      tx.appendChild(t); tx.appendChild(st);
+      a.appendChild(im); a.appendChild(tx);
+      list.appendChild(a);
+    });
+  }
+
+  fireBeacon("room", slug, code);
+})();
+</script>
+</body>
+</html>

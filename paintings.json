@@ -895,25 +895,7 @@
   "lat": 50.7509,
   "lng": -1.2927,
   "collection": "uk",
-  "datePainted": "2025-05-17",
-  "peopleMet": [
-   {
-    "name": "Deb Jones",
-    "email": "Deborahjones@ntl.com",
-    "wa": "",
-    "note": "",
-    "id": "east-cowes-marina-0",
-    "contacted": false
-   },
-   {
-    "name": "John",
-    "email": "Jcarter263@gmail.com",
-    "wa": "",
-    "note": "",
-    "id": "east-cowes-marina-1",
-    "contacted": false
-   }
-  ]
+  "datePainted": "2025-05-17"
  },
  {
   "title": "Horsmonden Heath",
@@ -921,7 +903,8 @@
   "lng": 0.4089,
   "img": "images/horsmonden.jpg",
   "price": "£1,320",
-  "size": "A3 · Oil on canvas · Framed"
+  "size": "A3 · Oil on canvas · Framed",
+  "id": "horsmonden-heath"
  },
  {
   "id": "volks-railway",

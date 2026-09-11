@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>About Tony — Artist on the Hill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{ --gold:#B8963E; --cream:#f5f2ed; --ink:#1a1a1a; --soft:#6b665e; }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--cream); color:var(--ink);
+    font-family:'Cormorant Garamond', serif; font-size:1.2rem; line-height:1.62;
+  }
+  .frame{max-width:560px; margin:0 auto; padding:0 1.4rem 4rem;}
+  .goldrule{height:3px; background:var(--gold); margin:0 -1.4rem;}
+  h1{
+    font-weight:600; font-size:clamp(2rem, 7vw, 2.5rem);
+    text-align:center; padding:1.6rem 0 .2rem; line-height:1.1;
+  }
+  .sub{
+    font-family:'Montserrat', sans-serif; font-size:.85rem; color:var(--soft);
+    text-align:center; margin-bottom:1.8rem;
+  }
+  p{margin-bottom:1.1rem;}
+  .back{
+    display:block; text-align:center; margin-top:2.4rem;
+    font-family:'Montserrat', sans-serif; font-size:.95rem;
+    color:var(--ink); text-decoration:underline; text-underline-offset:3px;
+  }
+  .back:focus-visible{outline:3px solid var(--gold); outline-offset:2px;}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="goldrule"></div>
+  <h1>Tony Parsons</h1>
+  <p class="sub">Artist on the Hill</p>
+
+  <p>Tony has painted outdoors, in all weathers, for over twenty years. He has exhibited with the Royal Institute of Oil Painters and the Royal Society of Marine Artists at London&rsquo;s Mall Galleries, and held solo exhibitions in Cairo, the Bahamas, the Channel Islands and the Alps. His work hangs in the private collections of British Royalty and of institutions across Europe.</p>
+
+  <p>He was Sky Arts&rsquo; in-house artist for the first two series of Portrait Artist of the Year, before crossing the easel to compete in Landscape Artist of the Year. He has also spent most of his adult life as a volunteer search-and-rescue skipper &mdash; so if you found him by the water, that&rsquo;s why.</p>
+
+  <p>These days Tony largely bypasses the art world&rsquo;s galleries and dealers, preferring to sell directly to a worldwide network of collectors &mdash; most of whom, like you, simply met him somewhere, painting.</p>
+
+  <a class="back" href="javascript:history.back()">Back to the painting</a>
+</div>
+
+<script>
+function param(name){
+  try { return new URLSearchParams(window.location.search).get(name) || ""; }
+  catch(e){ return ""; }
+}
+function fireBeacon(kind, slug, code){
+  // Inert until wired to the existing private-view webhook (designated session).
+  // A bio open on a room code is the "pricing Tony up" signal.
+}
+fireBeacon("bio", "", param("w"));
+</script>
+</body>
+</html>
