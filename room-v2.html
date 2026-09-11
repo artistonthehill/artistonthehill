@@ -177,7 +177,7 @@ var ROOMS = {
     size: "42\u00D730cm",
     medium: "Oil on board",
     price: "\u00A31,360",
-    img: "images/the-greek-quarter.jpg",   // TODO: Cloudinary/repo image
+    img: "https://res.cloudinary.com/dcy9llfe4/image/upload/v1788878570/um0xhgili2ictxclajlz.jpg",
     prints: null,
     group: "Venice",
     siblings: ["antico-doge-3gn", "pointe-de-l-ogio"]
@@ -189,7 +189,7 @@ var ROOMS = {
     size: "42\u00D730cm",
     medium: "Oil on board",
     price: "\u00A31,320",
-    img: "images/antico-doge.jpg",
+    img: "https://res.cloudinary.com/dcy9llfe4/image/upload/v1788970408/e9nn5txnqxuieadp1ex2.jpg",
     prints: null,
     group: "Venice",
     siblings: ["the-greek-quarter", "pointe-de-l-ogio"]
@@ -201,7 +201,7 @@ var ROOMS = {
     size: "42\u00D730cm",
     medium: "Oil on board",
     price: "\u00A31,360",
-    img: "images/pointe-de-l-ogio.jpg",
+    img: "https://res.cloudinary.com/dcy9llfe4/image/upload/v1788863462/lxxzslvivjy0iv2mhsa8.jpg",
     prints: null,
     group: "Venice",
     siblings: ["the-greek-quarter", "antico-doge-3gn"]
@@ -225,7 +225,9 @@ function fireBeacon(kind, slug, code){
 }
 
 (function(){
+  var ALIAS = {"the-greek-quarter-nif":"the-greek-quarter","venice1-bm7":"pointe-de-l-ogio"};
   var slug = param("p") || "the-greek-quarter";
+  slug = ALIAS[slug] || slug;
   var code = param("w") || "";
   var d = ROOMS[slug];
   if (!d){
