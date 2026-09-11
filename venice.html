@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three from Venice — Tony Parsons</title>
+<meta property="og:title" content="Three from Venice — Tony Parsons">
+<meta property="og:description" content="First look at the three paintings from the September Venice trip, before they find walls.">
+<meta property="og:image" content="https://res.cloudinary.com/dcy9llfe4/image/upload/v1788970408/e9nn5txnqxuieadp1ex2.jpg">
+<meta property="og:type" content="website">
+<style>
+  :root{--linen:#FAF7F0;--ink:#232323;--soft:#6B655B;--gold:#B08D3E;--line:#E4DDCE}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--linen);color:var(--ink);
+    font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.6}
+  .wrap{max-width:640px;margin:0 auto;padding:38px 20px 70px}
+  header{text-align:center;margin-bottom:34px}
+  h1{font-size:30px;font-weight:400;letter-spacing:.01em}
+  .rule{width:52px;height:1px;background:var(--gold);margin:16px auto}
+  .intro{color:var(--soft);font-size:16px;max-width:46ch;margin:0 auto}
+  .painting{margin:44px 0}
+  .painting img{width:100%;height:auto;display:block;border:1px solid var(--line);
+    box-shadow:0 10px 28px rgba(35,35,35,.10)}
+  .caption{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+    margin-top:14px;flex-wrap:wrap}
+  .caption h2{font-size:21px;font-weight:400;font-style:italic}
+  .caption .detail{color:var(--soft);font-size:14px;font-family:'Helvetica Neue',Arial,sans-serif}
+  .where{color:var(--soft);font-size:15px;margin-top:5px}
+  .wish{display:inline-block;margin-top:13px;padding:11px 22px;border:1px solid var(--gold);
+    color:var(--ink);text-decoration:none;font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:14px;letter-spacing:.04em;background:none;cursor:pointer}
+  .wish:hover{background:#F1EADA}
+  .close{border-top:1px solid var(--line);margin-top:52px;padding-top:26px;
+    color:var(--soft);font-size:16px;text-align:center}
+  .close .sig{margin-top:14px;color:var(--ink);font-style:italic}
+  .bio{color:var(--soft);font-size:13.5px;font-family:'Helvetica Neue',Arial,sans-serif;
+    margin-top:26px;text-align:center;line-height:1.55}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Three from Venice</h1>
+    <div class="rule"></div>
+    <p class="intro">Painted from the canal edges in September — a first look, before they find walls.
+    Larger Venice work follows from the studio over the winter; these three were the scouts.</p>
+  </header>
+
+  <div class="painting">
+    <img src="https://res.cloudinary.com/dcy9llfe4/image/upload/v1788970408/e9nn5txnqxuieadp1ex2.jpg" alt="Antico Doge — oil painting by Tony Parsons">
+    <div class="caption"><h2>Antico Doge</h2><span class="detail">42×30cm · Oil on canvas-covered board</span></div>
+    <div class="where">From the canal edge opposite the Hotel Antico Doge, Cannaregio.</div>
+    <button class="wish" data-slug="antico-doge-3gn" data-title="Antico Doge" type="button">Add to my wishlist</button>
+  </div>
+
+  <div class="painting">
+    <img src="images/the-greek-quarter.jpg" alt="The Greek Quarter — oil painting by Tony Parsons">
+    <div class="caption"><h2>The Greek Quarter</h2><span class="detail">42×30cm · Oil on canvas-covered board</span></div>
+    <div class="where">Ponte dei Greci, Castello.</div>
+    <button class="wish" data-slug="the-greek-quarter" data-title="The Greek Quarter" type="button">Add to my wishlist</button>
+  </div>
+
+  <div class="painting">
+    <img src="https://res.cloudinary.com/dcy9llfe4/image/upload/v1788863462/lxxzslvivjy0iv2mhsa8.jpg" alt="Pointe de l'Ogio — oil painting by Tony Parsons">
+    <div class="caption"><h2>Pointe de l&rsquo;Ogio</h2><span class="detail">42×30cm · Oil on canvas-covered board</span></div>
+    <div class="where">The Ponte de l&rsquo;Ogio — the little &lsquo;bridge of the oil&rsquo;, two minutes from the hotel, Cannaregio.</div>
+    <button class="wish" data-slug="pointe-de-l-ogio" data-title="Pointe de l'Ogio" type="button">Add to my wishlist</button>
+  </div>
+
+  <div class="close">
+    <p>If one of the three catches you, the wishlist button will find me — or simply reply on WhatsApp.</p>
+    <p class="sig">Tony</p>
+    <p class="bio">Tony has exhibited with the ROI and the RSMA at London&rsquo;s Mall Galleries, held solo
+    exhibitions in Cairo, the Bahamas, the Channel Islands and the Alps, and his work hangs in the private
+    collections of British Royalty and of institutions across Europe.</p>
+  </div>
+</div>
+
+<script>
+const ARTIST_WA = "447880601709";
+const TRACKER   = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
+
+const params = new URLSearchParams(location.search);
+const who = (params.get("w")||params.get("who")||"").trim();
+
+function ping(event, page, geo){
+  geo = geo||{};
+  const key = "seen-"+page+"-"+who;
+  let visits = 0;
+  try{ visits = parseInt(localStorage.getItem(key)||"0");
+       if(event==="viewed"){ visits++; localStorage.setItem(key, String(visits)); } }catch(e){}
+  const q = new URLSearchParams({
+    event: event||"", page: page||"", who: who||"", code: who||"",
+    region: geo.region||"", ip: geo.ip||"", isp: geo.isp||"",
+    ua: navigator.userAgent||"", tz: Intl.DateTimeFormat().resolvedOptions().timeZone||"",
+    lang: navigator.language||"", ref: document.referrer||"direct", visits: String(visits)
+  });
+  const img = new Image(); img.src = TRACKER+"?"+q.toString();
+}
+
+let GEO = {};
+(async function opened(){
+  try{
+    const ctrl = new AbortController(); setTimeout(()=>ctrl.abort(), 2500);
+    const r = await fetch("https://ipwho.is/", {signal: ctrl.signal});
+    const j = await r.json();
+    if(j && j.success!==false){
+      GEO = {ip:j.ip, region:[j.city,j.region,j.country].filter(Boolean).join(", "),
+             isp:(j.connection&&j.connection.isp)||""};
+    }
+  }catch(e){}
+  ping("viewed","venice-trio",GEO);
+})();
+
+document.querySelectorAll(".wish").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    ping("wishlist", btn.dataset.slug, GEO);
+    const text = "Hi Tony — add me to the wishlist for "+btn.dataset.title+" please."+(who?" ("+who+")":"");
+    window.open("https://wa.me/"+ARTIST_WA+"?text="+encodeURIComponent(text), "_blank");
+  });
+});
+</script>
+</body>
+</html>
