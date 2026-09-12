@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tony Parsons — Artist on the Hill</title>
+<!-- v2 staging page — deliberately unlinked and noindexed until cutover -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#f7f4ef; --ink:#1a1714; --warm-mid:#e4ddce; --accent:#8b6f47;
+    --accent-light:#c49a6c; --white:#fff; --text-body:#3a342d; --text-light:#7a6e65;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Karla',sans-serif;background:var(--parchment);color:var(--ink);
+    font-weight:300;line-height:1.6;overflow-x:hidden}
+  a{color:inherit}
+
+  header{padding:34px 24px 26px;text-align:center}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:400;letter-spacing:.06em}
+  .logo span{display:block;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--text-light);font-family:'Karla',sans-serif;margin-top:4px}
+
+  /* demoted strip — a low band, not a wall */
+  .strip{display:grid;grid-template-columns:repeat(6,1fr);height:110px;overflow:hidden;background:var(--ink)}
+  .strip img{width:100%;height:100%;object-fit:cover;opacity:.75;display:block}
+
+  .head-line{max-width:640px;margin:0 auto;padding:40px 24px 8px;text-align:center}
+  .head-line h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,4vw,2.7rem);
+    font-weight:300;line-height:1.15}
+  .head-line h1 em{font-style:italic;color:var(--accent)}
+  .head-line p{color:var(--text-light);font-size:.95rem;margin-top:12px;max-width:46ch;
+    margin-left:auto;margin-right:auto}
+
+  /* the fork */
+  .fork{display:grid;grid-template-columns:1fr 1fr;gap:3px;max-width:1100px;margin:36px auto 0;padding:0 3px}
+  .door{position:relative;display:block;text-decoration:none;overflow:hidden;background:var(--ink);
+    aspect-ratio:4/3}
+  .door img{width:100%;height:100%;object-fit:cover;opacity:.72;transition:opacity .4s,transform .6s;
+    transform:scale(1.02);display:block}
+  .door:hover img{opacity:.95;transform:scale(1)}
+  .door-label{position:absolute;left:0;right:0;bottom:0;padding:22px 24px;
+    background:linear-gradient(transparent,rgba(26,23,20,.82))}
+  .door-label .big{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:#fff}
+  .door-label .sub{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    color:rgba(255,255,255,.65);margin-top:4px}
+  .door-label .go{position:absolute;right:24px;bottom:26px;color:var(--accent-light);
+    font-size:1.3rem;font-family:'Cormorant Garamond',serif}
+  @media(max-width:700px){.fork{grid-template-columns:1fr}.door{aspect-ratio:16/9}}
+
+  /* fresh from the field */
+  .fresh{max-width:1100px;margin:64px auto 0;padding:0 24px}
+  .fresh-head{display:flex;align-items:baseline;gap:14px;padding-bottom:14px;
+    border-bottom:1px solid var(--warm-mid);margin-bottom:20px}
+  .fresh-head .t{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:300}
+  .fresh-head .k{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+  .fresh-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+  .fresh-card{position:relative;display:block;overflow:hidden;background:var(--ink);text-decoration:none}
+  .fresh-card img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:4/3;
+    transition:opacity .3s}
+  .fresh-card:hover img{opacity:.85}
+  .fresh-cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;
+    background:linear-gradient(transparent,rgba(26,23,20,.85));color:#fff}
+  .fresh-cap .t{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic}
+  .fresh-cap .m{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:2px}
+  @media(max-width:700px){.fresh-grid{grid-template-columns:1fr}}
+
+  footer{margin-top:80px;background:var(--ink);color:rgba(255,255,255,.55);
+    padding:44px 24px 54px;text-align:center;font-size:.85rem}
+  footer .name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#fff;margin-bottom:8px}
+  footer .creds{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+    color:rgba(255,255,255,.32);margin-top:18px;line-height:2}
+  footer a{color:rgba(255,255,255,.75);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.2);
+    padding-bottom:1px}
+  footer a:hover{color:var(--accent-light)}
+  .contact-row{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Tony Parsons<span>Artist on the Hill</span></div>
+</header>
+
+<div class="strip">
+  <img src="images/explorer-egypt.jpg" alt="Painting at the Pyramids of Giza">
+  <img src="images/explorer-alps.jpg" alt="Painting on a glacier in the Alps" style="object-position:center 30%">
+  <img src="images/explorer-amalfi.jpg" alt="Painting at Amalfi" style="object-position:center 40%">
+  <img src="images/explorer-bahamas.jpg" alt="Painting standing in the sea, Bahamas" style="object-position:center 30%">
+  <img src="images/explorer-madeira.jpg" alt="Painting on the beach in Madeira" style="object-position:center 30%">
+  <img src="images/explorer-oldharry.jpg" alt="Painting at Old Harry Rocks" style="object-position:center 40%">
+</div>
+
+<div class="head-line">
+  <h1>The world is <em>the studio.</em></h1>
+  <p>Every painting is made on location, in a single session, in the place it depicts.
+  Two ways in from here.</p>
+</div>
+
+<div class="fork">
+  <a class="door" id="door-map" href="map.html">
+    <img src="images/explorer-oldharry.jpg" alt="" style="object-position:center 55%">
+    <div class="door-label">
+      <div class="big">The map</div>
+      <div class="sub">Every painting, on the spot it was painted</div>
+      <div class="go">→</div>
+    </div>
+  </a>
+  <a class="door" id="door-gallery" href="gallery-v2.html">
+    <img src="" alt="" id="door-gallery-img">
+    <div class="door-label">
+      <div class="big">The gallery</div>
+      <div class="sub">The work itself, wall by wall</div>
+      <div class="go">→</div>
+    </div>
+  </a>
+</div>
+
+<div class="fresh" id="fresh" hidden>
+  <div class="fresh-head"><span class="t">Fresh from the field</span><span class="k">Latest work</span></div>
+  <div class="fresh-grid" id="fresh-grid"></div>
+</div>
+
+<footer>
+  <div class="name">Tony Parsons</div>
+  <div>Plein air oils, painted worldwide. Originals, prints and commissions.</div>
+  <div class="contact-row">
+    <a href="https://wa.me/447880601709">WhatsApp</a>
+    <a href="mailto:artistonthehill@gmail.com">Email</a>
+    <a href="https://www.thegillangallery.com" target="_blank" rel="noopener">Prints — The Gillan Gallery</a>
+  </div>
+  <div class="creds">
+    Sky's Portrait Artist of the Year · in-house artist<br>
+    ROI &amp; RSMA, Mall Galleries · RAF commission — Prince William<br>
+    Collections of British Royalty and institutions across Europe
+  </div>
+</footer>
+
+<script>
+// Tripwire + code passthrough: any ?w= code rides along to the map and gallery doors.
+const ARTIST_WA = "447880601709";
+const TRACKER   = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
+const who = (new URLSearchParams(location.search).get("w")||"").trim();
+if (who) {
+  ["door-map","door-gallery"].forEach(id=>{
+    const a = document.getElementById(id);
+    a.href += (a.href.includes("?")?"&":"?") + "w=" + encodeURIComponent(who);
+  });
+}
+function ping(event,page){
+  try{
+    const q = new URLSearchParams({event:event||"",page:page||"",who:who,code:who,
+      ua:navigator.userAgent||"",tz:Intl.DateTimeFormat().resolvedOptions().timeZone||"",
+      lang:navigator.language||"",ref:document.referrer||"direct"});
+    new Image().src = TRACKER+"?"+q.toString();
+  }catch(e){}
+}
+if (who) ping("viewed","index-v2");
+
+// The page is a projection of paintings.json — newest first, straight from the spine.
+fetch("paintings.json?v="+Date.now()).then(r=>r.json()).then(all=>{
+  const available = all.filter(p=>!p.sold);
+  const hero = (available[0]||all[0]);
+  if (hero) document.getElementById("door-gallery-img").src = hero.img;
+  const fresh = all.slice(0,3);
+  if (fresh.length){
+    document.getElementById("fresh").hidden = false;
+    document.getElementById("fresh-grid").innerHTML = fresh.map(p=>{
+      const price = p.sold ? "Sold" : (p.price||"");
+      const link = "gallery-v2.html?p="+encodeURIComponent(p.id)+(who?"&w="+encodeURIComponent(who):"");
+      return '<a class="fresh-card" href="'+link+'">'
+        + '<img src="'+p.img+'" alt="'+p.title.replace(/"/g,"&quot;")+'">'
+        + '<div class="fresh-cap"><div class="t">'+p.title+'</div>'
+        + '<div class="m">'+[p.size,price].filter(Boolean).join(" · ")+'</div></div></a>';
+    }).join("");
+  }
+}).catch(()=>{});
+</script>
+</body>
+</html>
