@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Gallery — Tony Parsons</title>
+<!-- v2 staging page — deliberately unlinked and noindexed until cutover -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#f7f4ef; --ink:#1a1714; --warm-mid:#e4ddce; --accent:#8b6f47;
+    --accent-light:#c49a6c; --white:#fff; --text-body:#3a342d; --text-light:#7a6e65;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Karla',sans-serif;background:var(--parchment);color:var(--ink);
+    font-weight:300;line-height:1.6}
+  header{padding:30px 24px 6px;text-align:center}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:1.35rem;letter-spacing:.06em}
+  .logo a{text-decoration:none;color:inherit}
+  .logo span{display:block;font-size:.56rem;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--text-light);font-family:'Karla',sans-serif;margin-top:3px}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(1.7rem,3.5vw,2.3rem);
+    text-align:center;margin-top:26px}
+  h1 em{font-style:italic;color:var(--accent)}
+  .note{color:var(--text-light);font-size:.9rem;text-align:center;max-width:52ch;margin:10px auto 0;padding:0 24px}
+
+  .filters{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:30px 24px 6px}
+  .fbtn{font-family:'Karla',sans-serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+    background:none;border:1px solid var(--warm-mid);color:var(--text-body);padding:9px 18px;cursor:pointer}
+  .fbtn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  .grid{columns:3 320px;column-gap:3px;max-width:1200px;margin:26px auto 0;padding:0 3px}
+  .card{position:relative;display:block;break-inside:avoid;margin-bottom:3px;overflow:hidden;
+    background:var(--ink);cursor:pointer}
+  .card img{width:100%;display:block;transition:opacity .3s}
+  .card:hover img{opacity:.82}
+  .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;
+    background:linear-gradient(transparent,rgba(26,23,20,.88));color:#fff;
+    opacity:0;transition:opacity .25s}
+  .card:hover .cap{opacity:1}
+  @media(hover:none){.cap{opacity:1}}
+  .cap .t{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic}
+  .cap .m{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:2px}
+  .cap .p{font-size:.8rem;margin-top:4px;color:var(--accent-light)}
+  .sold-chip{display:inline-block;background:#fff;color:var(--ink);font-size:.56rem;
+    letter-spacing:.14em;padding:2px 7px;margin-left:8px;vertical-align:middle}
+
+  /* lightbox */
+  #lb{position:fixed;inset:0;background:rgba(26,23,20,.94);display:none;z-index:100;
+    overflow-y:auto;padding:5vh 18px 60px}
+  #lb.open{display:block}
+  .lb-inner{max-width:900px;margin:0 auto}
+  .lb-close{position:fixed;top:18px;right:22px;background:none;border:none;color:rgba(255,255,255,.7);
+    font-size:2rem;cursor:pointer;line-height:1;z-index:101}
+  #lb img{width:100%;display:block;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .lb-cap{color:#fff;padding:20px 4px}
+  .lb-cap .t{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-style:italic}
+  .lb-cap .m{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-top:5px}
+  .lb-cap .p{font-size:1rem;margin-top:8px;color:var(--accent-light)}
+  .lb-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+  .lb-btn{font-family:'Karla',sans-serif;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    text-decoration:none;padding:12px 22px;cursor:pointer;border:none}
+  .lb-btn.solid{background:var(--accent);color:#fff}
+  .lb-btn.line{background:none;border:1px solid rgba(255,255,255,.35);color:rgba(255,255,255,.85)}
+  .lb-btn.line:hover{border-color:var(--accent-light);color:var(--accent-light)}
+
+  footer{margin-top:70px;background:var(--ink);color:rgba(255,255,255,.5);
+    padding:36px 24px;text-align:center;font-size:.82rem}
+  footer a{color:rgba(255,255,255,.75)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><a href="index-v2.html" id="home-link">Tony Parsons<span>Artist on the Hill</span></a></div>
+</header>
+
+<h1>The gallery, <em>wall by wall</em></h1>
+<p class="note">Everything currently showing, straight from the easel record.
+Prefer to see where each was painted? <a href="map.html" id="map-link" style="color:var(--accent)">Browse the map instead</a>.</p>
+
+<div class="filters" id="filters"></div>
+<div class="grid" id="grid"></div>
+
+<div id="lb" role="dialog" aria-modal="true">
+  <button class="lb-close" onclick="closeLB()" aria-label="Close">×</button>
+  <div class="lb-inner">
+    <img id="lb-img" src="" alt="">
+    <div class="lb-cap">
+      <div class="t" id="lb-title"></div>
+      <div class="m" id="lb-meta"></div>
+      <div class="p" id="lb-price"></div>
+      <div class="lb-actions" id="lb-actions"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Originals, prints and commissions ·
+  <a href="https://wa.me/447880601709">WhatsApp</a> ·
+  <a href="mailto:artistonthehill@gmail.com">Email</a>
+</footer>
+
+<script>
+const ARTIST_WA = "447880601709";
+const TRACKER   = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
+const params = new URLSearchParams(location.search);
+const who = (params.get("w")||"").trim();
+const deepLink = (params.get("p")||"").trim();
+
+if (who) ["home-link","map-link"].forEach(id=>{
+  const a=document.getElementById(id);
+  a.href += (a.href.includes("?")?"&":"?")+"w="+encodeURIComponent(who);
+});
+
+function ping(event,page){
+  try{
+    const q=new URLSearchParams({event:event||"",page:page||"",who:who,code:who,
+      ua:navigator.userAgent||"",tz:Intl.DateTimeFormat().resolvedOptions().timeZone||"",
+      lang:navigator.language||"",ref:document.referrer||"direct"});
+    new Image().src=TRACKER+"?"+q.toString();
+  }catch(e){}
+}
+if (who) ping("viewed","gallery-v2");
+
+let ALL=[], current="all";
+const grid=document.getElementById("grid"), filtersEl=document.getElementById("filters");
+const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+
+fetch("paintings.json?v="+Date.now()).then(r=>r.json()).then(all=>{
+  ALL=all;
+  const cats=[...new Set(all.map(p=>p.category).filter(Boolean))].sort();
+  filtersEl.innerHTML =
+    '<button class="fbtn active" data-f="all">All works</button>'
+    + cats.map(c=>'<button class="fbtn" data-f="'+esc(c)+'">'+c+'</button>').join("")
+    + '<button class="fbtn" data-f="available">Available</button>';
+  filtersEl.querySelectorAll(".fbtn").forEach(b=>b.addEventListener("click",()=>{
+    filtersEl.querySelectorAll(".fbtn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active"); current=b.dataset.f; render();
+  }));
+  render();
+  if (deepLink){ const p=all.find(x=>x.id===deepLink); if(p) openLB(p.id); }
+}).catch(()=>{ grid.innerHTML='<p style="text-align:center;color:var(--text-light);padding:40px">The gallery is being rehung — do look back shortly.</p>'; });
+
+function subset(){
+  if(current==="all") return ALL;
+  if(current==="available") return ALL.filter(p=>!p.sold);
+  return ALL.filter(p=>p.category===current);
+}
+function render(){
+  grid.innerHTML = subset().map(p=>{
+    const price = p.sold
+      ? '<span style="text-decoration:line-through;opacity:.5">'+esc(p.price)+'</span><span class="sold-chip">Sold</span>'
+      : esc(p.price||"");
+    return '<div class="card" data-id="'+esc(p.id)+'">'
+      + '<img loading="lazy" src="'+esc(p.img)+'" alt="'+esc(p.title)+' — oil painting by Tony Parsons">'
+      + '<div class="cap"><div class="t">'+esc(p.title)+'</div>'
+      + '<div class="m">'+esc(p.size||"")+'</div>'
+      + '<div class="p">'+price+'</div></div></div>';
+  }).join("");
+  grid.querySelectorAll(".card").forEach(c=>c.addEventListener("click",()=>openLB(c.dataset.id)));
+}
+
+function openLB(id){
+  const p=ALL.find(x=>x.id===id); if(!p) return;
+  document.getElementById("lb-img").src=p.img;
+  document.getElementById("lb-img").alt=p.title;
+  document.getElementById("lb-title").textContent=p.title;
+  document.getElementById("lb-meta").textContent=p.size||"";
+  document.getElementById("lb-price").textContent=p.sold?"Sold":(p.price||"");
+  const waText = p.sold
+    ? "Hello Tony, I saw "+p.title+" in the gallery — could you paint something similar for me?"
+    : "Hello Tony, I'm interested in "+p.title+" ("+(p.price||"")+"). Could you tell me more?";
+  const wishText = "Hi Tony — add me to the wishlist for "+p.title+" please."+(who?" ("+who+")":"");
+  let a='';
+  a+='<button class="lb-btn solid" onclick="wish(\''+esc(p.id)+'\')">Add to my wishlist</button>';
+  a+='<a class="lb-btn line" target="_blank" rel="noopener" href="https://wa.me/'+ARTIST_WA+'?text='+encodeURIComponent(waText)+'">'+(p.sold?"Commission similar":"Enquire")+' · WhatsApp</a>';
+  if(p.prints) a+='<a class="lb-btn line" target="_blank" rel="noopener" href="'+esc(p.prints)+'">Order a print →</a>';
+  document.getElementById("lb-actions").innerHTML=a;
+  document.getElementById("lb").classList.add("open");
+  document.body.style.overflow="hidden";
+  ping("painting", p.id);
+}
+function wish(id){
+  const p=ALL.find(x=>x.id===id); if(!p) return;
+  ping("wishlist", p.id);
+  const text="Hi Tony — add me to the wishlist for "+p.title+" please."+(who?" ("+who+")":"");
+  window.open("https://wa.me/"+ARTIST_WA+"?text="+encodeURIComponent(text),"_blank");
+}
+function closeLB(){
+  document.getElementById("lb").classList.remove("open");
+  document.body.style.overflow="";
+}
+document.getElementById("lb").addEventListener("click",e=>{ if(e.target.id==="lb") closeLB(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeLB(); });
+</script>
+</body>
+</html>
