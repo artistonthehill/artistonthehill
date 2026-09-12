@@ -1,0 +1,36 @@
+name: Publish from spine
+
+on:
+  workflow_dispatch:        # run it by hand from the Actions tab (works from the phone)
+  # Cron stays OFF until Field Studio v2 writes to the spine: the v1 app still
+  # publishes straight into paintings.json, and a scheduled run would take those
+  # pieces down unless they're carded+ticked first. Uncomment at v2 cutover.
+  # schedule:
+  #   - cron: "0 6 * * *"   # every morning, 06:00 UTC — rotation takedowns happen here
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Project spine -> paintings.json
+        env:
+          AIRTABLE_PAT: ${{ secrets.AIRTABLE_PAT }}
+        run: python3 scripts/publish-spine.py
+
+      - name: Commit if changed
+        run: |
+          if ! git diff --quiet paintings.json; then
+            COUNT=$(python3 -c "import json;print(len(json.load(open('paintings.json'))))")
+            git config user.name  "AOTH Spine"
+            git config user.email "artistonthehill@gmail.com"
+            git add paintings.json
+            git commit -m "Publish from spine: ${COUNT} live"
+            git push
+          else
+            echo "No change."
+          fi
