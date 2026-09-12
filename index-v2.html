@@ -23,9 +23,13 @@
   .logo span{display:block;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;
     color:var(--text-light);font-family:'Karla',sans-serif;margin-top:4px}
 
-  /* demoted strip — a low band, not a wall */
-  .strip{display:grid;grid-template-columns:repeat(6,1fr);height:110px;overflow:hidden;background:var(--ink)}
-  .strip img{width:100%;height:100%;object-fit:cover;opacity:.75;display:block}
+  /* hero — one painting, full width, nothing shouting over it */
+  .hero{display:block;position:relative;max-width:1500px;margin:0 auto;text-decoration:none}
+  .hero img{width:100%;display:block}
+  .hero-cap{position:absolute;left:18px;bottom:14px;background:rgba(26,23,20,.62);
+    color:#fff;padding:8px 14px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+  .hero-cap .t{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic}
+  .hero-cap .m{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7)}
 
   .head-line{max-width:640px;margin:0 auto;padding:40px 24px 8px;text-align:center}
   .head-line h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,4vw,2.7rem);
@@ -84,14 +88,10 @@
   <div class="logo">Tony Parsons<span>Artist on the Hill</span></div>
 </header>
 
-<div class="strip">
-  <img src="images/explorer-egypt.jpg" alt="Painting at the Pyramids of Giza">
-  <img src="images/explorer-alps.jpg" alt="Painting on a glacier in the Alps" style="object-position:center 30%">
-  <img src="images/explorer-amalfi.jpg" alt="Painting at Amalfi" style="object-position:center 40%">
-  <img src="images/explorer-bahamas.jpg" alt="Painting standing in the sea, Bahamas" style="object-position:center 30%">
-  <img src="images/explorer-madeira.jpg" alt="Painting on the beach in Madeira" style="object-position:center 30%">
-  <img src="images/explorer-oldharry.jpg" alt="Painting at Old Harry Rocks" style="object-position:center 40%">
-</div>
+<a class="hero" id="hero-link" href="gallery-v2.html?p=bosham">
+  <img src="images/bosham-causeway-hero.jpg" alt="Bosham Causeway — 80×30cm oil on board, painted on location by Tony Parsons">
+  <div class="hero-cap"><span class="t">Bosham Causeway</span><span class="m">80×30cm · Oil on board</span></div>
+</a>
 
 <div class="head-line">
   <h1>The world is <em>the studio.</em></h1>
@@ -101,7 +101,7 @@
 
 <div class="fork">
   <a class="door" id="door-map" href="map.html">
-    <img src="images/explorer-oldharry.jpg" alt="" style="object-position:center 55%">
+    <img src="images/map-door.jpg" alt="The painting map — a pin on every spot" style="object-position:center top">
     <div class="door-label">
       <div class="big">The map</div>
       <div class="sub">Every painting, on the spot it was painted</div>
@@ -144,7 +144,7 @@ const ARTIST_WA = "447880601709";
 const TRACKER   = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
 const who = (new URLSearchParams(location.search).get("w")||"").trim();
 if (who) {
-  ["door-map","door-gallery"].forEach(id=>{
+  ["door-map","door-gallery","hero-link"].forEach(id=>{
     const a = document.getElementById(id);
     a.href += (a.href.includes("?")?"&":"?") + "w=" + encodeURIComponent(who);
   });
