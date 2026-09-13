@@ -1,0 +1,90 @@
+name: Migrate Wix images home
+# One-shot: downloads the 42 paintings still hosted on Wix into images/,
+# so the site and spine stop depending on the old Wix account.
+# Run it from the Actions tab ("Run workflow"). Safe to re-run; it skips files
+# that already exist.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download from Wix
+        run: |
+          set -e
+          ok=0; skip=0; fail=0
+          fetch() {
+            slug="$1"; url="$2"; out="images/$slug.jpg"
+            if [ -f "$out" ]; then echo "skip  $out (exists)"; skip=$((skip+1)); return; fi
+            if curl -fsSL --retry 3 -o "$out" "$url"; then
+              size=$(stat -c%s "$out")
+              if [ "$size" -lt 20000 ]; then
+                echo "FAIL  $out too small ($size bytes)"; rm -f "$out"; fail=$((fail+1))
+              else
+                echo "ok    $out ($size bytes)"; ok=$((ok+1))
+              fi
+            else
+              echo "FAIL  $slug download"; fail=$((fail+1))
+            fi
+          }
+          fetch "thurlestone-beach" "https://static.wixstatic.com/media/9dfbf6_e41dcf27c838404fa8cb94a178c5500d~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_e41dcf27c838404fa8cb94a178c5500d~mv2.jpg"
+          fetch "east-head" "https://static.wixstatic.com/media/9dfbf6_34d809a3277945a38a7c9c1208ce144a~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_34d809a3277945a38a7c9c1208ce144a~mv2.jpg"
+          fetch "gazelle-quay" "https://static.wixstatic.com/media/9dfbf6_3718ecd4d0ff4548b7ac86e0e8e71be3~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_3718ecd4d0ff4548b7ac86e0e8e71be3~mv2.jpg"
+          fetch "flaine-diptych-2" "https://static.wixstatic.com/media/9dfbf6_4a0f5db66d654deda1aaa12dba41fe72~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_4a0f5db66d654deda1aaa12dba41fe72~mv2.jpg"
+          fetch "kaboom" "https://static.wixstatic.com/media/9dfbf6_dff1f8765a8b461bbf2e77777a8c9084~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_dff1f8765a8b461bbf2e77777a8c9084~mv2.jpg"
+          fetch "mudeford-quay" "https://static.wixstatic.com/media/9dfbf6_cd8c33ead11d402597a35b7135d35cc7~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_cd8c33ead11d402597a35b7135d35cc7~mv2.jpg"
+          fetch "malahide" "https://static.wixstatic.com/media/9dfbf6_3028fa4173f046dc9e99dff3ff6c2fc1~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_3028fa4173f046dc9e99dff3ff6c2fc1~mv2.jpg"
+          fetch "hope-cove" "https://static.wixstatic.com/media/9dfbf6_ce2dd5b479d44d0099ec67f6ba21c9c4~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_ce2dd5b479d44d0099ec67f6ba21c9c4~mv2.jpg"
+          fetch "east-of-island" "https://static.wixstatic.com/media/9dfbf6_972f5da4f55e415ca25ca9fc7783ab4c~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_972f5da4f55e415ca25ca9fc7783ab4c~mv2.jpg"
+          fetch "thurlestone-west" "https://static.wixstatic.com/media/9dfbf6_f9a5d15588c244eeaa35adfe3133c994~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_f9a5d15588c244eeaa35adfe3133c994~mv2.jpg"
+          fetch "ravilious-1" "https://static.wixstatic.com/media/9dfbf6_da6bb2bd5c7c4397a89d95fc0def8e7f~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_da6bb2bd5c7c4397a89d95fc0def8e7f~mv2.jpg"
+          fetch "chapel-porth-beach" "https://static.wixstatic.com/media/9dfbf6_6bc6898e21894d4d9a553f055f81823a~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_6bc6898e21894d4d9a553f055f81823a~mv2.jpg"
+          fetch "menai-fish-trap" "https://static.wixstatic.com/media/9dfbf6_609b452c82cd49beb7c6c6cb3631850f~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_609b452c82cd49beb7c6c6cb3631850f~mv2.jpg"
+          fetch "fenton" "https://static.wixstatic.com/media/9dfbf6_c914de69652949768e475d473d3d3542~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_c914de69652949768e475d473d3d3542~mv2.jpg"
+          fetch "sennen-light" "https://static.wixstatic.com/media/9dfbf6_3f5b77605d0a4fae93941c195f5dbcb6~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_3f5b77605d0a4fae93941c195f5dbcb6~mv2.jpg"
+          fetch "interesting-friends" "https://static.wixstatic.com/media/9dfbf6_de49b51e927746babd1d80eb4d9f5d37~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_de49b51e927746babd1d80eb4d9f5d37~mv2.jpg"
+          fetch "bantham-hand" "https://static.wixstatic.com/media/9dfbf6_7f8598d36c9c4a3494933f304a1f57ca~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_7f8598d36c9c4a3494933f304a1f57ca~mv2.jpg"
+          fetch "chapel-porth" "https://static.wixstatic.com/media/9dfbf6_6cea3375df4847be8984c4d6a4f26d80~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_6cea3375df4847be8984c4d6a4f26d80~mv2.jpg"
+          fetch "ripley-queen" "https://static.wixstatic.com/media/9dfbf6_b1f1e1bbd656441a847d94b01ae32588~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_b1f1e1bbd656441a847d94b01ae32588~mv2.jpg"
+          fetch "st-agnes-surfers" "https://static.wixstatic.com/media/9dfbf6_cfa1eed53fe348789ab03f41365e13e0~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_cfa1eed53fe348789ab03f41365e13e0~mv2.jpg"
+          fetch "roedean" "https://static.wixstatic.com/media/9dfbf6_5121c8d8c39b4923894245a99c9aec72~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_5121c8d8c39b4923894245a99c9aec72~mv2.jpg"
+          fetch "flaine-diptych-1" "https://static.wixstatic.com/media/9dfbf6_b8edb92ff9c04ba99515bff702861457~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_b8edb92ff9c04ba99515bff702861457~mv2.jpg"
+          fetch "very-edge" "https://static.wixstatic.com/media/9dfbf6_c6018ddd853f477ba8f7097e450446e8~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_c6018ddd853f477ba8f7097e450446e8~mv2.jpg"
+          fetch "flushing-sailing-club" "https://static.wixstatic.com/media/9dfbf6_062f755b37504770930a72360479a0ec~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_062f755b37504770930a72360479a0ec~mv2.jpg"
+          fetch "charmouth" "https://static.wixstatic.com/media/9dfbf6_9405e2a6e3364c00a3088bd172101139~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_9405e2a6e3364c00a3088bd172101139~mv2.jpg"
+          fetch "lusty-glaze" "https://static.wixstatic.com/media/9dfbf6_afd163b3f8634078bcba1455d1d344b7~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_afd163b3f8634078bcba1455d1d344b7~mv2.jpg"
+          fetch "sussex-light" "https://static.wixstatic.com/media/9dfbf6_dbd6db1cdba144e1b9c88bcafdd176ad~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_dbd6db1cdba144e1b9c88bcafdd176ad~mv2.jpg"
+          fetch "ravilious-2" "https://static.wixstatic.com/media/9dfbf6_a77f8cbdde984c50af999a0a41d02a30~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_a77f8cbdde984c50af999a0a41d02a30~mv2.jpg"
+          fetch "bosham" "https://static.wixstatic.com/media/9dfbf6_e44c52ff26ad4973b0442c2eaf95b76c~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_e44c52ff26ad4973b0442c2eaf95b76c~mv2.jpg"
+          fetch "mine" "https://static.wixstatic.com/media/9dfbf6_0fee8683d5f84098bff6dde1b4635511~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_0fee8683d5f84098bff6dde1b4635511~mv2.jpg"
+          fetch "regency-colour" "https://static.wixstatic.com/media/9dfbf6_5fecf3390cd64dc9bea7bf0ef210645a~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_5fecf3390cd64dc9bea7bf0ef210645a~mv2.jpg"
+          fetch "cliffe-bridge" "https://static.wixstatic.com/media/9dfbf6_6f8c25bfffb647d99dcd4e49dc9aef41~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_6f8c25bfffb647d99dcd4e49dc9aef41~mv2.jpg"
+          fetch "st-wulfrans" "https://static.wixstatic.com/media/9dfbf6_248d2698efee414684914db0c9b89664~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_248d2698efee414684914db0c9b89664~mv2.jpg"
+          fetch "palma-yachts" "https://static.wixstatic.com/media/9dfbf6_2320d392278149c983f491f02ce42154~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_2320d392278149c983f491f02ce42154~mv2.jpg"
+          fetch "peace-bruvver" "https://static.wixstatic.com/media/9dfbf6_fc1dfdb941ef4d68b35921315fa0f0d4~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_fc1dfdb941ef4d68b35921315fa0f0d4~mv2.jpg"
+          fetch "massif-jump" "https://static.wixstatic.com/media/9dfbf6_01dd68e438084aa091db5ed383223499~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_01dd68e438084aa091db5ed383223499~mv2.jpg"
+          fetch "horsley" "https://static.wixstatic.com/media/9dfbf6_68940bce9ab54156b6cc9bca1a471b61~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_68940bce9ab54156b6cc9bca1a471b61~mv2.jpg"
+          fetch "rapid-descent" "https://static.wixstatic.com/media/9dfbf6_5b1e525f6e0a47fbb5c65c64381c4fe4~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_5b1e525f6e0a47fbb5c65c64381c4fe4~mv2.jpg"
+          fetch "guildford-guildhall" "https://static.wixstatic.com/media/9dfbf6_25b9aed0bddd43d6b3e969b68fad0745~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_25b9aed0bddd43d6b3e969b68fad0745~mv2.jpg"
+          fetch "bantham-burgh" "https://static.wixstatic.com/media/9dfbf6_a48b21fa23bb42e989c36831a514f3d4~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_a48b21fa23bb42e989c36831a514f3d4~mv2.jpg"
+          fetch "seaview" "https://static.wixstatic.com/media/9dfbf6_a6467be7a4c6401b9f803149a865e161~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_a6467be7a4c6401b9f803149a865e161~mv2.jpg"
+          fetch "sandycove" "https://static.wixstatic.com/media/9dfbf6_42d01185ded741288750009df5661252~mv2.jpg/v1/fit/w_1920,h_1440,al_c,q_90/9dfbf6_42d01185ded741288750009df5661252~mv2.jpg"
+          echo "----"
+          echo "downloaded $ok, skipped $skip, failed $fail"
+          if [ "$fail" -gt 0 ]; then exit 1; fi
+
+      - name: Commit
+        run: |
+          git config user.name  "wix-migration"
+          git config user.email "actions@github.com"
+          git add images/
+          git diff --cached --quiet && echo "nothing new" && exit 0
+          git commit -m "Bring Wix-hosted paintings home into images/"
+          git push
