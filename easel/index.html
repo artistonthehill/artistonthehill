@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On the Easel — Tony Parsons</title>
+<meta name="description" content="The latest paintings from Tony Parsons, Artist on the Hill — straight from the field.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--parchment:#f7f4ef;--ink:#1a1714;--warm-mid:#e4ddce;--teal:#4e7f7d;--text-light:#7a6e65}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Karla',sans-serif;background:var(--parchment);color:var(--ink);
+    font-weight:300;line-height:1.6}
+  a{color:inherit}
+
+  header{padding:30px 24px 8px;text-align:center}
+  .brand{background:var(--teal);color:#fff;display:inline-block;padding:14px 22px}
+  .brand .n{font-family:'Cormorant Garamond',serif;font-size:1.05rem;letter-spacing:.35em}
+  .brand .s{font-size:.5rem;letter-spacing:.32em;margin-top:4px;opacity:.85}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(1.8rem,4vw,2.4rem);
+    text-align:center;margin-top:26px}
+  h1 em{font-style:italic;color:var(--teal)}
+  .note{color:var(--text-light);font-size:.92rem;text-align:center;max-width:46ch;margin:10px auto 0;padding:0 24px}
+
+  /* the one on the easel */
+  .easel{max-width:900px;margin:36px auto 0;padding:0 16px}
+  .easel a{display:block;text-decoration:none}
+  .easel img{width:100%;display:block;box-shadow:0 14px 44px rgba(26,23,20,.18)}
+  .easel-cap{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;padding:16px 4px 0}
+  .easel-cap .t{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.5rem}
+  .easel-cap .m{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-light)}
+  .easel-cap .p{margin-left:auto;font-size:.95rem;color:var(--teal)}
+
+  /* just behind it */
+  .recent{max-width:1100px;margin:56px auto 0;padding:0 16px}
+  .recent-head{display:flex;align-items:baseline;gap:14px;padding-bottom:12px;
+    border-bottom:1px solid var(--warm-mid);margin-bottom:16px}
+  .recent-head .t{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300}
+  .recent-head .k{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal)}
+  .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+  .rcard{position:relative;display:block;overflow:hidden;background:var(--ink);text-decoration:none}
+  .rcard img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:4/3;transition:opacity .3s}
+  .rcard:hover img{opacity:.85}
+  .rcap{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;
+    background:linear-gradient(transparent,rgba(26,23,20,.85));color:#fff}
+  .rcap .t{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic}
+  .rcap .m{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-top:2px}
+  .sold-chip{display:inline-block;background:#fff;color:var(--ink);font-size:.54rem;
+    letter-spacing:.14em;padding:2px 6px;margin-left:7px;vertical-align:middle}
+  @media(max-width:700px){.rgrid{grid-template-columns:1fr 1fr}}
+  @media(max-width:460px){.rgrid{grid-template-columns:1fr}}
+
+  .doors{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:48px 24px 0}
+  .door{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+    padding:13px 24px}
+  .door.solid{background:var(--teal);color:#fff}
+  .door.line{border:1px solid var(--warm-mid);color:var(--ink)}
+  .door.line:hover{border-color:var(--teal);color:var(--teal)}
+
+  footer{margin-top:70px;background:var(--ink);color:rgba(255,255,255,.55);
+    padding:36px 24px;text-align:center;font-size:.82rem}
+  footer a{color:rgba(255,255,255,.75)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><div class="n">TONY / PARSONS</div><div class="s">ARTIST ON THE HILL</div></div>
+</header>
+
+<h1>On <em>the easel</em></h1>
+<p class="note">Every painting is made on location, in a single sitting.
+This is the latest — still smelling faintly of oil paint.</p>
+
+<div class="easel" id="easel"></div>
+
+<div class="recent" id="recent" hidden>
+  <div class="recent-head"><span class="t">Just behind it</span><span class="k">Recent work</span></div>
+  <div class="rgrid" id="rgrid"></div>
+</div>
+
+<div class="doors">
+  <a class="door solid" id="wa-door" href="https://wa.me/447880601709?text=Hello%20Tony%20%E2%80%94%20I%20scanned%20your%20sign%20and%20I%27m%20curious%20about%20what%20you%27re%20painting.">Ask me about it</a>
+  <a class="door line" href="https://www.artistonthehill.co.uk/">The full gallery</a>
+</div>
+
+<footer>
+  Originals, prints and commissions ·
+  <a href="https://wa.me/447880601709">WhatsApp</a> ·
+  <a href="mailto:artistonthehill@gmail.com">Email</a>
+</footer>
+
+<script>
+const TRACKER = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
+const who = (new URLSearchParams(location.search).get("w")||"").trim();
+try{
+  const q = new URLSearchParams({event:"easel-view", page:"easel", who:who, code:who,
+    ua:navigator.userAgent||"", tz:Intl.DateTimeFormat().resolvedOptions().timeZone||"",
+    lang:navigator.language||"", ref:document.referrer||"direct"});
+  new Image().src = TRACKER+"?"+q.toString();
+}catch(e){}
+
+const esc = s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+function viewLink(p){
+  const params = new URLSearchParams({ img:p.img||"", title:p.title||"",
+    meta:p.size||"", price:p.sold?"Sold":(p.price||"") });
+  if (p.prints) params.set("prints", p.prints);
+  return "/painting-view.html?"+params.toString();
+}
+
+fetch("/paintings.json?v="+Date.now()).then(r=>r.json()).then(all=>{
+  if (!all.length) return;
+  const top = all[0];
+  document.getElementById("easel").innerHTML =
+    '<a href="'+viewLink(top)+'">'
+    + '<img src="/'+esc(top.img)+'" alt="'+esc(top.title)+' — oil painting by Tony Parsons">'
+    + '<div class="easel-cap"><span class="t">'+esc(top.title)+'</span>'
+    + '<span class="m">'+esc(top.size||"")+'</span>'
+    + '<span class="p">'+(top.sold?"Sold":esc(top.price||""))+'</span></div></a>';
+  const rest = all.slice(1,7);
+  if (rest.length){
+    document.getElementById("recent").hidden = false;
+    document.getElementById("rgrid").innerHTML = rest.map(p=>
+      '<a class="rcard" href="'+viewLink(p)+'">'
+      + '<img loading="lazy" src="/'+esc(p.img)+'" alt="'+esc(p.title)+' — oil painting by Tony Parsons">'
+      + '<div class="rcap"><div class="t">'+esc(p.title)+(p.sold?'<span class="sold-chip">Sold</span>':'')+'</div>'
+      + '<div class="m">'+esc(p.size||"")+'</div></div></a>').join("");
+  }
+}).catch(()=>{});
+</script>
+</body>
+</html>
