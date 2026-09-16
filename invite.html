@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A private view — Tony Parsons</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--cream:#FAF7F0;--ink:#232323;--soft:#6B655B;--gold:#B08D3E;--line:#E4DDCE}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--cream);color:var(--ink);font-family:'Cormorant Garamond',serif;
+    font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:560px;margin:0 auto;padding:52px 24px 80px;text-align:center}
+  .brand{font-family:'Montserrat',sans-serif;font-size:.8rem;letter-spacing:.42em;margin-bottom:6px}
+  .brand-sub{font-family:'Montserrat',sans-serif;font-size:.5rem;letter-spacing:.34em;color:var(--soft)}
+  .rule{width:52px;height:1px;background:var(--gold);margin:26px auto}
+  h1{font-weight:400;font-size:2.1rem;letter-spacing:.02em}
+  .expeditions{font-style:italic;font-size:1.15rem;color:var(--soft);max-width:40ch;margin:14px auto 0}
+  .when{margin-top:34px;font-size:1.2rem}
+  .when .venue a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--line)}
+  .addr{font-size:.95rem;color:var(--soft);margin-top:6px}
+  .mapnote{font-family:'Montserrat',sans-serif;font-size:.58rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--soft);margin-top:8px}
+  .mapnote a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--line)}
+  .fare{font-style:italic;color:var(--soft);margin-top:16px}
+  .light{font-family:'Montserrat',sans-serif;font-size:.68rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--soft);margin-top:10px}
+
+  .rsvp{margin-top:44px}
+  .rsvp .ask{font-style:italic;color:var(--soft)}
+  .heads{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+  .heads button{font-family:'Montserrat',sans-serif;font-size:.72rem;letter-spacing:.12em;
+    text-transform:uppercase;background:none;border:1px solid var(--gold);color:var(--ink);
+    padding:13px 20px;cursor:pointer;transition:background .2s,color .2s}
+  .heads button:hover{background:#F1EADA}
+  .heads button.picked{background:var(--gold);color:#fff}
+  .regrets{margin-top:14px}
+  .regrets button{font-family:'Montserrat',sans-serif;font-size:.62rem;letter-spacing:.14em;
+    text-transform:uppercase;background:none;border:none;color:var(--soft);cursor:pointer;
+    border-bottom:1px solid var(--line);padding-bottom:2px}
+  .regrets button.picked{color:var(--gold);border-color:var(--gold)}
+
+  #confirm{display:none;margin-top:30px}
+  #confirm .msg{font-style:italic;font-size:1.15rem}
+  #confirm .cal{display:inline-block;margin-top:14px;font-family:'Montserrat',sans-serif;
+    font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);
+    text-decoration:none;border-bottom:1px solid var(--gold);padding-bottom:3px}
+  #diet{display:none;margin-top:26px}
+  #diet .q{font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--soft)}
+  .toggles{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+  .toggles button{font-family:'Montserrat',sans-serif;font-size:.62rem;letter-spacing:.1em;
+    background:none;border:1px solid var(--line);color:var(--soft);padding:9px 15px;cursor:pointer}
+  .toggles button.on{border-color:var(--gold);color:var(--ink);background:#F1EADA}
+
+  .closing{margin-top:54px;padding-top:26px;border-top:1px solid var(--line);
+    font-style:italic;color:var(--soft)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">TONY / PARSONS</div>
+  <div class="brand-sub">ARTIST ON THE HILL</div>
+  <div class="rule"></div>
+
+  <h1 id="ev-title">A private view</h1>
+  <p class="expeditions" id="ev-line"></p>
+
+  <div class="when">
+    <div id="ev-when"></div>
+    <div class="venue" id="ev-venue"></div>
+    <div class="addr" id="ev-addr"></div>
+    <div class="mapnote" id="ev-mapnote"></div>
+    <div class="fare" id="ev-fare"></div>
+    <div class="light" id="ev-light"></div>
+  </div>
+
+  <div class="rsvp">
+    <p class="ask">Shall we expect you?</p>
+    <div class="heads">
+      <button data-heads="1">Just me</button>
+      <button data-heads="2">+1</button>
+      <button data-heads="3">+2</button>
+      <button data-heads="4">+3</button>
+    </div>
+    <div class="regrets"><button id="regrets">Can't make it</button></div>
+  </div>
+
+  <div id="confirm">
+    <p class="msg" id="confirm-msg"></p>
+    <a class="cal" id="cal" download="private-view.ics">Add to calendar</a>
+  </div>
+
+  <div id="diet">
+    <p class="q">Anything the kitchen should know?</p>
+    <div class="toggles">
+      <button data-pref="veggie">Veggie</button>
+      <button data-pref="glutenfree">Gluten-free</button>
+      <button data-pref="nofish">No fish</button>
+    </div>
+  </div>
+
+  <p class="closing" id="ev-closing"></p>
+</div>
+
+<script>
+/* ================= EVENT CONFIG — edit this block per PV ================= */
+const EVENT = {
+  id: "pv-2026-11-14-saltmarsh",            // beacon page id, unique per PV
+  line: "The Bahamas, Greece and Italy — framed and hung together for one afternoon.",
+  when: "Saturday 14 November, 2–6pm",
+  venue: "Saltmarsh Farmhouse, Seven Sisters Country Park",
+  address: "Exceat Farmhouse, E Dean Rd, Seaford BN25 4AD",
+  mapUrl: "https://www.google.com/maps?q=50.775855,0.151513", // pin = main car park entrance
+  mapNote: "The pin takes you to the main car park",
+  fare: "Bubbly and nibbles throughout the afternoon.",
+  light: "Daylight first, lamplight later.",
+  closing: "Invitation only — bring whoever you'd bring.",
+  confirmYes: "Lovely — see you on the 14th. Nothing else needed.",
+  confirmNo: "Understood — you'll be missed. Another time.",
+  // .ics details
+  icsStart: "20261114T140000", icsEnd: "20261114T180000", icsTz: "Europe/London",
+  icsSummary: "A private view — Tony Parsons",
+  icsLocation: "Saltmarsh Farmhouse, Seven Sisters Country Park, Exceat Farmhouse, E Dean Rd, Seaford BN25 4AD",
+  icsGeo: "50.775855;0.151513"               // main car park entrance
+};
+/* ======================================================================== */
+
+const TRACKER = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
+const who = (new URLSearchParams(location.search).get("w")||"").trim();
+
+// render config
+document.getElementById("ev-line").textContent = EVENT.line;
+document.getElementById("ev-when").textContent = EVENT.when;
+document.getElementById("ev-venue").innerHTML = EVENT.mapUrl && EVENT.mapUrl !== "MAP_LINK_HERE"
+  ? '<a href="'+EVENT.mapUrl+'" target="_blank" rel="noopener">'+EVENT.venue+"</a>" : EVENT.venue;
+document.getElementById("ev-addr").textContent = EVENT.address||"";
+document.getElementById("ev-mapnote").innerHTML = (EVENT.mapNote && EVENT.mapUrl)
+  ? '<a href="'+EVENT.mapUrl+'" target="_blank" rel="noopener">'+EVENT.mapNote+" &rarr;</a>" : "";
+document.getElementById("ev-fare").textContent = EVENT.fare||"";
+document.getElementById("ev-light").textContent = EVENT.light;
+document.getElementById("ev-closing").textContent = EVENT.closing;
+
+function beacon(event, extra){
+  try{
+    const q = new URLSearchParams(Object.assign({
+      event: event, page: EVENT.id, who: who, code: who,
+      ua: navigator.userAgent||"", tz: Intl.DateTimeFormat().resolvedOptions().timeZone||"",
+      lang: navigator.language||"", ref: document.referrer||"direct"
+    }, extra||{}));
+    new Image().src = TRACKER+"?"+q.toString();
+  }catch(e){}
+}
+
+// tripwire on open — its own subject family (🥂 Invite opened) via the invite-opened event
+beacon("invite-opened");
+
+// .ics data link
+(function(){
+  const ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Artist on the Hill//Private View//EN",
+    "BEGIN:VEVENT","UID:"+EVENT.id+"@artistonthehill.co.uk",
+    "DTSTART;TZID="+EVENT.icsTz+":"+EVENT.icsStart,
+    "DTEND;TZID="+EVENT.icsTz+":"+EVENT.icsEnd,
+    "SUMMARY:"+EVENT.icsSummary,"LOCATION:"+EVENT.icsLocation.replace(/,/g,"\\,"),
+    (EVENT.icsGeo ? "GEO:"+EVENT.icsGeo : ""),
+    "END:VEVENT","END:VCALENDAR"].filter(Boolean).join("\r\n");
+  document.getElementById("cal").href = "data:text/calendar;charset=utf-8,"+encodeURIComponent(ics);
+})();
+
+// RSVP — buttons stay live; every tap sends a fresh timestamped beacon; latest per code wins at sweep
+const headBtns = document.querySelectorAll(".heads button");
+const regretsBtn = document.getElementById("regrets");
+function setPicked(btn){
+  headBtns.forEach(b=>b.classList.remove("picked"));
+  regretsBtn.classList.remove("picked");
+  if (btn) btn.classList.add("picked");
+}
+function showConfirm(yes){
+  document.getElementById("confirm").style.display = "block";
+  document.getElementById("confirm-msg").textContent = yes ? EVENT.confirmYes : EVENT.confirmNo;
+  document.getElementById("cal").style.display = yes ? "inline-block" : "none";
+  document.getElementById("diet").style.display = yes ? "block" : "none";
+}
+headBtns.forEach(b=>b.addEventListener("click",()=>{
+  beacon("rsvp", {heads: b.dataset.heads});
+  setPicked(b); showConfirm(true);
+}));
+regretsBtn.addEventListener("click",()=>{
+  beacon("rsvp-regrets");
+  setPicked(regretsBtn); showConfirm(false);
+});
+
+// dietary toggles — one-tap, each toggle beacons its state
+document.querySelectorAll(".toggles button").forEach(b=>b.addEventListener("click",()=>{
+  b.classList.toggle("on");
+  beacon("diet", {pref: b.dataset.pref, state: b.classList.contains("on") ? "on" : "off"});
+}));
+</script>
+</body>
+</html>
