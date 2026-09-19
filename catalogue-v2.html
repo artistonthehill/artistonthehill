@@ -55,18 +55,22 @@
   <p class="lead">Tell me what you love and roughly where you are, and I&rsquo;ll send you a
   proper catalogue as a PDF &mdash; including paintings that aren&rsquo;t on the website just now.</p>
 
-  <label for="name">Your first name</label>
+  <label for="name">Your name</label>
   <input type="text" id="name" autocomplete="given-name">
 
-  <label>What should go in it? Choose any</label>
+  <label for="contact">WhatsApp or email</label>
+  <input type="text" id="contact" autocomplete="off" inputmode="email"
+    placeholder="a number or an address &mdash; whichever you prefer">
+
+  <label for="loc">Where you are</label>
+  <input type="text" id="loc" autocomplete="off"
+    placeholder="a town or county is plenty &mdash; I&rsquo;ll include work painted near you">
+
+  <label>What you&rsquo;re interested in &mdash; choose any</label>
   <div class="chips" id="interests"></div>
 
-  <label for="loc">Where are you? A town or county is plenty — I&rsquo;ll include work painted near you</label>
-  <input type="text" id="loc" autocomplete="off" placeholder="e.g. Falmouth, or West Sussex">
-
   <div class="send">
-    <button type="button" id="waBtn">Send my request by WhatsApp</button>
-    <button type="button" id="emBtn" class="quiet">By email instead</button>
+    <button type="button" id="goBtn">Send my request</button>
   </div>
   <div class="err" id="err"></div>
   <p class="note">Your catalogue is usually with you the same day.</p>
@@ -103,34 +107,50 @@ function ping(event,who){
   }catch(e){}
   ping('viewed');
 })();
+function looksEmail(v){return /@.+\./.test(v);}
+function looksPhone(v){return /^[+0-9][0-9 ()-]{6,}$/.test(v.replace(/\s+/g,' ').trim());}
 function message(){
   const name=document.getElementById('name').value.trim();
+  const contact=document.getElementById('contact').value.trim();
   const loc=document.getElementById('loc').value.trim();
   const err=document.getElementById('err');
-  if(!name){err.textContent='Just your first name first — so I know whose catalogue it is.';
+  if(!name){err.textContent='Just your name first \u2014 so I know whose catalogue it is.';
     document.getElementById('name').focus();return null;}
-  if(!picked.size&&!loc){err.textContent='Choose at least one interest, or tell me where you are.';return null;}
+  if(!contact){err.textContent='A WhatsApp number or an email \u2014 so the catalogue can reach you.';
+    document.getElementById('contact').focus();return null;}
+  if(!looksEmail(contact)&&!looksPhone(contact)){
+    err.textContent='That doesn\u2019t look like a number or an email \u2014 have another go.';
+    document.getElementById('contact').focus();return null;}
+  if(!picked.size&&!loc){err.textContent='Tell me where you are, or choose at least one interest.';return null;}
   err.textContent='';
-  let m='Hi Tony — I\'d love a catalogue please. I\'m '+name+'.';
+  let m='Hi Tony \u2014 I\u2019d love a catalogue please. I\u2019m '+name+'.';
+  m+=' Reach me on '+contact+'.';
+  if(loc)m+=' I\u2019m near '+loc+'.';
   if(picked.size)m+=' Interests: '+[...picked].join(', ')+'.';
-  if(loc)m+=' I\'m near '+loc+'.';
   return m;
 }
 function detail(){
   const name=document.getElementById('name').value.trim();
+  const contact=document.getElementById('contact').value.trim();
   const loc=document.getElementById('loc').value.trim();
-  let d='';
+  let d=' \u00b7 reach: '+contact;
   if(picked.size)d+=' \u00b7 wants: '+[...picked].join(', ');
   if(loc)d+=' \u00b7 near: '+loc;
   return {name:name,d:d};
 }
-document.getElementById('waBtn').onclick=()=>{const m=message();if(!m)return;
-  const x=detail(); ping('catalogue-request-wa'+x.d, x.name);
-  window.open('https://wa.me/'+ARTIST_WA+'?text='+encodeURIComponent(m),'_blank');};
-document.getElementById('emBtn').onclick=()=>{const m=message();if(!m)return;
-  const x=detail(); ping('catalogue-request-email'+x.d, x.name);
-  location.href='mailto:'+ARTIST_EM+'?subject='+encodeURIComponent('A catalogue, please')+
-    '&body='+encodeURIComponent(m);};
+document.getElementById('goBtn').onclick=()=>{
+  const m=message();if(!m)return;
+  const x=detail();
+  const contact=document.getElementById('contact').value.trim();
+  if(looksEmail(contact)){
+    ping('catalogue-request-email'+x.d, x.name);
+    location.href='mailto:'+ARTIST_EM+'?subject='+encodeURIComponent('A catalogue, please')+
+      '&body='+encodeURIComponent(m);
+  }else{
+    ping('catalogue-request-wa'+x.d, x.name);
+    window.open('https://wa.me/'+ARTIST_WA+'?text='+encodeURIComponent(m),'_blank');
+  }
+};
 </script>
 </body>
 </html>

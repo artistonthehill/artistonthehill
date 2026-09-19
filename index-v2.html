@@ -44,6 +44,12 @@
   .foot{text-align:center;color:var(--soft);font-size:13.5px;margin-top:44px;
     font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;line-height:1.7}
   a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+  .door.pic{display:block;padding:0;overflow:hidden}
+  .door.pic img{width:100%;display:block}
+  .door.pic .dt{display:block;padding:16px 20px 18px}
+  .door.pic .t{display:block}
+  .door.pic .s{display:block;margin-top:6px}
 </style>
 </head>
 <body>
@@ -58,37 +64,17 @@
   <p class="strap">Everything here was painted outdoors, on the spot, in one sitting —
   weather permitting, and sometimes not.</p>
 
-  <a class="door" href="map.html">
-    <svg viewBox="0 0 84 64" width="84" height="64" aria-hidden="true">
-      <path d="M5 46 C 16 39, 21 49, 30 42 S 46 26, 54 30 S 72 19, 80 12"
-            fill="none" stroke="#6FA8A1" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="17" cy="41" r="3" fill="#6FA8A1"/><circle cx="33" cy="39" r="2.1" fill="#6FA8A1"/>
-      <circle cx="48" cy="29" r="3.5" fill="#6FA8A1"/><circle cx="63" cy="24" r="2.1" fill="#6FA8A1"/>
-      <circle cx="75" cy="15" r="2.6" fill="#6FA8A1"/>
-    </svg>
-    <span><span class="t">The map</span><br>
+  <a class="door pic" href="map.html">
+    <img src="door-map.jpg" alt="" loading="lazy">
+    <span class="dt"><span class="t">The map</span>
     <span class="s">Every painting, pinned where the easel stood.</span></span>
   </a>
 
-  <a class="door" href="gallery-v2.html">
-    <svg viewBox="0 0 84 64" width="84" height="64" aria-hidden="true">
-      <rect x="14" y="10" width="56" height="36" fill="#FFFEFA" stroke="#6FA8A1" stroke-width="1.2"/>
-      <rect x="24" y="18" width="36" height="20" fill="#6FA8A1" opacity="0.35"/>
-      <line x1="14" y1="52" x2="70" y2="52" stroke="#6FA8A1" stroke-width="1.2"/>
-    </svg>
-    <span><span class="t">The catalogue</span><br>
-    <span class="s">Every painting on its own page, by place.</span></span>
-  </a>
-
-  <a class="door" href="catalogue-v2.html">
-    <svg viewBox="0 0 84 64" width="84" height="64" aria-hidden="true">
-      <path d="M22 10 h34 l8 8 v36 h-42 z" fill="#FFFEFA" stroke="#6FA8A1" stroke-width="1.2"/>
-      <line x1="30" y1="26" x2="56" y2="26" stroke="#6FA8A1" stroke-width="1.2"/>
-      <line x1="30" y1="34" x2="56" y2="34" stroke="#6FA8A1" stroke-width="1.2"/>
-      <line x1="30" y1="42" x2="48" y2="42" stroke="#6FA8A1" stroke-width="1.2"/>
-    </svg>
-    <span><span class="t">A catalogue of your own</span><br>
-    <span class="s">Tell me what you love and where you are — I&rsquo;ll send a PDF, including work not shown here.</span></span>
+  <a class="door pic" href="catalogue-v2.html">
+    <img src="door-own.jpg" alt="" loading="lazy">
+    <span class="dt"><span class="t">A catalogue of your own</span>
+    <span class="s">Tell me what you love and where you are &mdash; I&rsquo;ll send a PDF,
+    including work not shown here.</span></span>
   </a>
 
   <div class="foot">Sky Arts &middot; the ROI and RSMA at the Mall Galleries &middot; collections of British Royalty<br>
