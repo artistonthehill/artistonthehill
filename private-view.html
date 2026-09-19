@@ -44,6 +44,14 @@
   .note{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;color:var(--soft);
     text-align:center;font-size:16.5px;margin-top:30px}
   a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+  .footnav{margin-top:46px}
+  .fbtn{display:block;background:var(--mount);box-shadow:0 1px 0 var(--teal), 0 6px 18px rgba(35,35,35,.08);
+    padding:15px 20px;margin-bottom:12px;text-decoration:none;color:var(--ink);
+    font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:21px;text-align:center;
+    transition:transform .15s ease, box-shadow .15s ease}
+  .fbtn:hover,.fbtn:active{transform:translateY(-2px);
+    box-shadow:0 1px 0 var(--teal), 0 10px 24px rgba(35,35,35,.13)}
+  .fbtn span{color:var(--teal);margin-left:8px;font-style:normal}
 </style>
 </head>
 <body>
@@ -67,6 +75,13 @@
   <div class="err" id="err"></div>
 
   <p class="note">Your invitation will follow, with the details and a one-tap RSVP.</p>
+
+  <nav class="footnav">
+    <a class="fbtn" href="commissions.html">Commissions <span>&rarr;</span></a>
+    <a class="fbtn" href="https://eepurl.com/gmXsdP">The newsletter <span>&rarr;</span></a>
+    <a class="fbtn" href="about.html">About me <span>&rarr;</span></a>
+    <a class="fbtn" href="https://wa.me/447880601709?text=Hello%20Tony%20%E2%80%94%20">Message me <span>&rarr;</span></a>
+  </nav>
 </div>
 
 <script>
