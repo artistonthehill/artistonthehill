@@ -46,6 +46,15 @@
   .err{color:#A0522D;font-size:14px;text-align:center;margin-top:12px;min-height:20px}
   .note{color:var(--soft);font-size:14px;text-align:center;margin-top:26px;font-style:italic}
   button:focus-visible,input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+  .footnav{margin-top:46px}
+  .fbtn{display:block;background:var(--mount);box-shadow:0 1px 0 var(--teal), 0 6px 18px rgba(35,35,35,.08);
+    padding:15px 20px;margin-bottom:12px;text-decoration:none;color:var(--ink);
+    font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:21px;text-align:center;
+    transition:transform .15s ease, box-shadow .15s ease}
+  .fbtn:hover,.fbtn:active{transform:translateY(-2px);
+    box-shadow:0 1px 0 var(--teal), 0 10px 24px rgba(35,35,35,.13)}
+  .fbtn span{color:var(--teal);margin-left:8px;font-style:normal}
 </style>
 </head>
 <body>
@@ -74,6 +83,12 @@
   </div>
   <div class="err" id="err"></div>
   <p class="note">Your catalogue is usually with you the same day.</p>
+  <nav class="footnav">
+    <a class="fbtn" href="https://eepurl.com/gmXsdP">The newsletter <span>&rarr;</span></a>
+    <a class="fbtn" href="about-v2.html">About the artist <span>&rarr;</span></a>
+    <a class="fbtn" href="https://wa.me/447880601709?text=Hello%20Tony%20%E2%80%94%20">Message Tony <span>&rarr;</span></a>
+  </nav>
+
 </div>
 
 <script>
