@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The catalogue — Tony Parsons</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WE9VCP47Q8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WE9VCP47Q8');
+  </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{--linen:#FAF7F0;--mount:#FFFEFA;--ink:#232323;--soft:#6B655B;--teal:#6FA8A1;--hair:#E7E1D3}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--linen);color:var(--ink);font-family:Georgia,'Times New Roman',serif;
+    font-size:17px;line-height:1.65}
+  .page{max-width:640px;margin:0 auto;padding:34px 20px 80px}
+  .mark{text-align:center;margin-bottom:10px}
+  .mark a{display:inline-block;background:var(--teal);color:#FDFCF8;text-decoration:none;
+    font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;font-size:12px;
+    letter-spacing:.34em;padding:10px 16px 10px 20px}
+  .intro{color:var(--soft);text-align:center;max-width:44ch;margin:20px auto 42px;font-size:16.5px}
+  .chapter h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-style:italic;
+    font-size:32px;line-height:1.1;margin-top:36px}
+  .chapter .count{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;font-size:13px;
+    letter-spacing:.06em;color:var(--soft);margin:6px 0 22px}
+  .hero{display:block;background:var(--mount);padding:18px;
+    box-shadow:0 1px 0 var(--teal), 0 12px 30px rgba(35,35,35,.07);
+    text-decoration:none;color:var(--ink);margin-bottom:22px}
+  .hero img{width:100%;display:block}
+  .hero .cap{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:12px}
+  .hero .cap .t{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:22px}
+  .hero .cap .p{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;font-size:13.5px;color:var(--soft)}
+  .plates{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:26px}
+  .plate{display:block;text-decoration:none;color:var(--ink)}
+  .plate .m{background:var(--mount);height:150px;display:flex;align-items:center;justify-content:center;
+    padding:12px;box-shadow:0 1px 0 var(--teal)}
+  .plate img{max-width:100%;max-height:100%;display:block}
+  .plate .t{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:17.5px;
+    line-height:1.2;margin-top:9px}
+  .plate .p{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;font-size:12.5px;
+    color:var(--soft);margin-top:2px}
+  .plate:hover .m,.hero:hover{background:#FDFAF2}
+  a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+  .footnav{margin-top:46px}
+  .fbtn{display:block;background:var(--mount);box-shadow:0 1px 0 var(--teal), 0 6px 18px rgba(35,35,35,.08);
+    padding:15px 20px;margin-bottom:12px;text-decoration:none;color:var(--ink);
+    font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:21px;text-align:center;
+    transition:transform .15s ease, box-shadow .15s ease}
+  .fbtn:hover,.fbtn:active{transform:translateY(-2px);
+    box-shadow:0 1px 0 var(--teal), 0 10px 24px rgba(35,35,35,.13)}
+  .fbtn span{color:var(--teal);margin-left:8px;font-style:normal}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="mark"><a href="index.html">TONY / PARSONS</a></div>
+  <p class="intro">The catalogue reads by place. Each painting has its own page &mdash;
+  tap any plate to stand in front of it.</p>
+  <div id="chapters"></div>
+  <nav class="footnav">
+    <a class="fbtn" href="private-view.html">The private view <span>&rarr;</span></a>
+    <a class="fbtn" href="https://eepurl.com/gmXsdP">The newsletter <span>&rarr;</span></a>
+    <a class="fbtn" href="about.html">About the artist <span>&rarr;</span></a>
+    <a class="fbtn" href="https://wa.me/447880601709?text=Hello%20Tony%20%E2%80%94%20">Message Tony <span>&rarr;</span></a>
+  </nav>
+
+</div>
+
+<script>
+const NAMES={uk:'Britain',ionian:'The Ionian',venice:'Venice',alps:'The Alps',
+  amalfi:'The Amalfi Coast',bahamas:'The Bahamas',worldwide:'Further afield'};
+const ORDER=['uk','ionian','venice','alps','amalfi','bahamas','worldwide'];
+
+fetch('paintings.json').then(r=>r.json()).then(list=>{
+  const groups={};
+  list.forEach(p=>{const k=p.collection||'worldwide';(groups[k]=groups[k]||[]).push(p);});
+  const keys=ORDER.filter(k=>groups[k]).concat(Object.keys(groups).filter(k=>!ORDER.includes(k)));
+  const root=document.getElementById('chapters');
+  keys.forEach(k=>{
+    const ps=groups[k];
+    const hero=ps.find(p=>!p.sold)||ps[0];
+    const rest=ps.filter(p=>p!==hero);
+    const ch=document.createElement('div'); ch.className='chapter';
+    const avail=ps.filter(p=>!p.sold).length;
+    ch.innerHTML='<h2>'+(NAMES[k]||k)+'</h2>'+
+      '<div class="count">'+ps.length+' painting'+(ps.length===1?'':'s')+
+      (avail<ps.length?' · '+avail+' available':'')+'</div>';
+    root.appendChild(ch);
+    root.appendChild(heroEl(hero));
+    if(rest.length){
+      const grid=document.createElement('div'); grid.className='plates';
+      rest.forEach(p=>grid.appendChild(plateEl(p)));
+      root.appendChild(grid);
+    }
+  });
+}).catch(()=>{document.getElementById('chapters').textContent='The catalogue is being rehung — back in a moment.';});
+
+function lotHref(p){return 'painting.html?p='+encodeURIComponent(p.id);}
+function heroEl(p){
+  const a=document.createElement('a'); a.className='hero'; a.href=lotHref(p);
+  a.innerHTML='<img loading="lazy" src="'+p.img+'" alt="'+esc(p.title)+'">'+
+    '<span class="cap"><span class="t">'+esc(p.title)+'</span>'+
+    '<span class="p">'+(p.sold?'Sold':esc(p.price||''))+'</span></span>';
+  return a;
+}
+function plateEl(p){
+  const a=document.createElement('a'); a.className='plate'; a.href=lotHref(p);
+  a.innerHTML='<span class="m"><img loading="lazy" src="'+p.img+'" alt="'+esc(p.title)+'"></span>'+
+    '<span class="t">'+esc(p.title)+'</span>'+
+    '<span class="p">'+(p.sold?'Sold':esc(p.price||''))+'</span>';
+  return a;
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+</script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A catalogue of your own — Tony Parsons</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WE9VCP47Q8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WE9VCP47Q8');
+  </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--linen:#FAF7F0;--mount:#FFFEFA;--ink:#232323;--soft:#6B655B;--teal:#6FA8A1;--hair:#E7E1D3}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--linen);color:var(--ink);font-family:Georgia,'Times New Roman',serif;
+    font-size:17px;line-height:1.65}
+  .page{max-width:560px;margin:0 auto;padding:36px 22px 70px}
+  .mark{text-align:center;margin-bottom:30px}
+  .mark a{display:inline-block;background:var(--teal);color:#FDFCF8;text-decoration:none;
+    font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;font-size:12px;
+    letter-spacing:.34em;padding:10px 16px 10px 20px}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-style:italic;
+    font-size:34px;line-height:1.1;text-align:center}
+  .lead{color:var(--soft);text-align:center;max-width:44ch;margin:14px auto 34px;font-size:16px}
+  label{display:block;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;
+    font-size:13px;letter-spacing:.06em;color:var(--soft);margin:22px 0 8px}
+  input[type=text]{width:100%;background:var(--mount);border:1px solid var(--hair);
+    padding:13px 14px;font:inherit;font-size:16px;color:var(--ink);outline:none}
+  input:focus{border-color:var(--teal)}
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{border:1px solid var(--hair);background:var(--mount);color:var(--ink);
+    padding:10px 17px;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;
+    font-size:14px;letter-spacing:.03em;cursor:pointer}
+  .chip.on{border-color:var(--teal);background:#EDF3F1}
+  .send{margin-top:34px;display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+  .send button{padding:14px 26px;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;
+    font-size:14px;letter-spacing:.05em;color:var(--ink);border:1px solid var(--teal);
+    background:none;cursor:pointer}
+  .send button:hover{background:#F2EDE1}
+  .send .quiet{border-color:var(--hair);color:var(--soft)}
+  .err{color:#A0522D;font-size:14px;text-align:center;margin-top:12px;min-height:20px}
+  .note{color:var(--soft);font-size:14px;text-align:center;margin-top:26px;font-style:italic}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+  .footnav{margin-top:46px}
+  .fbtn{display:block;background:var(--mount);box-shadow:0 1px 0 var(--teal), 0 6px 18px rgba(35,35,35,.08);
+    padding:15px 20px;margin-bottom:12px;text-decoration:none;color:var(--ink);
+    font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:21px;text-align:center;
+    transition:transform .15s ease, box-shadow .15s ease}
+  .fbtn:hover,.fbtn:active{transform:translateY(-2px);
+    box-shadow:0 1px 0 var(--teal), 0 10px 24px rgba(35,35,35,.13)}
+  .fbtn span{color:var(--teal);margin-left:8px;font-style:normal}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="mark"><a href="index.html">TONY / PARSONS</a></div>
+  <h1>A catalogue of your own</h1>
+  <p class="lead">Tell me what you love and roughly where you are, and I&rsquo;ll send you a
+  proper catalogue as a PDF &mdash; including paintings that aren&rsquo;t on the website just now.</p>
+
+  <label for="name">Your name</label>
+  <input type="text" id="name" autocomplete="given-name">
+
+  <label for="contact">WhatsApp or email</label>
+  <input type="text" id="contact" autocomplete="off" inputmode="email"
+    placeholder="a number or an address &mdash; whichever you prefer">
+
+  <label for="loc">Where you are</label>
+  <input type="text" id="loc" autocomplete="off"
+    placeholder="a town or county is plenty &mdash; I&rsquo;ll include work painted near you">
+
+  <label>What you&rsquo;re interested in &mdash; choose any</label>
+  <div class="chips" id="interests"></div>
+
+  <div class="send">
+    <button type="button" id="goBtn">Send my request</button>
+  </div>
+  <div class="err" id="err"></div>
+  <p class="note">Your catalogue is usually with you the same day.</p>
+  <nav class="footnav">
+    <a class="fbtn" href="private-view.html">The private view <span>&rarr;</span></a>
+    <a class="fbtn" href="https://eepurl.com/gmXsdP">The newsletter <span>&rarr;</span></a>
+    <a class="fbtn" href="about.html">About the artist <span>&rarr;</span></a>
+    <a class="fbtn" href="https://wa.me/447880601709?text=Hello%20Tony%20%E2%80%94%20">Message Tony <span>&rarr;</span></a>
+  </nav>
+
+</div>
+
+<script>
+const ARTIST_WA="447880601709", ARTIST_EM="artistonthehill@gmail.com";
+const TRACKER="https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
+const OPTIONS=['The last few months — everything, sold and all','Greece','Cornwall & Devon','Sussex','Venice','The Alps','The Bahamas','Animals','Boats & harbours','Everything'];
+const picked=new Set();
+const box=document.getElementById('interests');
+OPTIONS.forEach(o=>{
+  const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=o;
+  b.onclick=()=>{picked.has(o)?picked.delete(o):picked.add(o); b.classList.toggle('on');};
+  box.appendChild(b);
+});
+const SRC=(new URLSearchParams(location.search).get('src')||'').trim();
+let GEO={};
+function ping(event,who){
+  let tail='';
+  if(SRC)tail+=' \u00b7 via: '+SRC;
+  const q=new URLSearchParams({event:event+tail,page:'catalogue-request',
+    who:who||'site',code:'catalogue',
+    region:GEO.region||'',ip:GEO.ip||'',isp:GEO.isp||'',
+    ua:navigator.userAgent||'',tz:Intl.DateTimeFormat().resolvedOptions().timeZone||'',
+    lang:navigator.language||'',ref:document.referrer||'direct',visits:'1'});
+  const i=new Image(); i.src=TRACKER+'?'+q.toString();
+}
+(async function(){
+  try{const ctrl=new AbortController();setTimeout(()=>ctrl.abort(),2500);
+    const r=await fetch('https://ipwho.is/',{signal:ctrl.signal});const j=await r.json();
+    if(j&&j.success!==false)GEO={ip:j.ip,isp:(j.connection&&j.connection.isp)||'',
+      region:[j.city,j.region,j.country].filter(Boolean).join(', ')};
+  }catch(e){}
+  ping('viewed');
+})();
+function looksEmail(v){return /@.+\./.test(v);}
+function looksPhone(v){return /^[+0-9][0-9 ()-]{6,}$/.test(v.replace(/\s+/g,' ').trim());}
+function message(){
+  const name=document.getElementById('name').value.trim();
+  const contact=document.getElementById('contact').value.trim();
+  const loc=document.getElementById('loc').value.trim();
+  const err=document.getElementById('err');
+  if(!name){err.textContent='Just your name first \u2014 so I know whose catalogue it is.';
+    document.getElementById('name').focus();return null;}
+  if(!contact){err.textContent='A WhatsApp number or an email \u2014 so the catalogue can reach you.';
+    document.getElementById('contact').focus();return null;}
+  if(!looksEmail(contact)&&!looksPhone(contact)){
+    err.textContent='That doesn\u2019t look like a number or an email \u2014 have another go.';
+    document.getElementById('contact').focus();return null;}
+  if(!picked.size&&!loc){err.textContent='Tell me where you are, or choose at least one interest.';return null;}
+  err.textContent='';
+  let m='Hi Tony \u2014 I\u2019d love a catalogue please. I\u2019m '+name+'.';
+  m+=' Reach me on '+contact+'.';
+  if(loc)m+=' I\u2019m near '+loc+'.';
+  if(picked.size)m+=' Interests: '+[...picked].join(', ')+'.';
+  return m;
+}
+function detail(){
+  const name=document.getElementById('name').value.trim();
+  const contact=document.getElementById('contact').value.trim();
+  const loc=document.getElementById('loc').value.trim();
+  let d=' \u00b7 reach: '+contact;
+  if(picked.size)d+=' \u00b7 wants: '+[...picked].join(', ');
+  if(loc)d+=' \u00b7 near: '+loc;
+  return {name:name,d:d};
+}
+document.getElementById('goBtn').onclick=()=>{
+  const m=message();if(!m)return;
+  const x=detail();
+  const contact=document.getElementById('contact').value.trim();
+  if(looksEmail(contact)){
+    ping('catalogue-request-email'+x.d, x.name);
+    location.href='mailto:'+ARTIST_EM+'?subject='+encodeURIComponent('A catalogue, please')+
+      '&body='+encodeURIComponent(m);
+  }else{
+    ping('catalogue-request-wa'+x.d, x.name);
+    window.open('https://wa.me/'+ARTIST_WA+'?text='+encodeURIComponent(m),'_blank');
+  }
+};
+</script>
+</body>
+</html>
