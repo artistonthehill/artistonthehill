@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="description" content="An original oil painting by Tony Parsons — painted once, on location. One of one.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tony Parsons — the catalogue</title>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WE9VCP47Q8"></script>
@@ -107,7 +108,18 @@ fetch('paintings.json').then(r=>r.json()).then(list=>{
   const p=i>=0?list[i]:null;
   const root=document.getElementById('lot');
   if(!p){root.innerHTML='<p style="text-align:center;color:var(--soft)">That painting has left the catalogue — <a href="gallery.html">back to the wall</a>.</p>';return;}
-  document.title=p.title+' — Tony Parsons';
+  document.title=p.title+' — original oil painting by Tony Parsons';
+  var mtag=document.querySelector('meta[name="description"]');
+  if(mtag)mtag.setAttribute('content',p.title+' — an original oil painting by Tony Parsons'+(p.size?', '+p.size:'')+'. One of one.'+(p.sold?' Sold.':(p.price?' '+p.price+'.':'')));
+  var ld=document.createElement('script');ld.type='application/ld+json';
+  ld.textContent=JSON.stringify({"@context":"https://schema.org","@type":"VisualArtwork",
+    "name":p.title,"creator":{"@type":"Person","name":"Tony Parsons","url":"https://www.artistonthehill.co.uk/about.html"},
+    "artMedium":"Oil","artform":"Painting",
+    "image":"https://www.artistonthehill.co.uk/"+(p.img||''),
+    "url":"https://www.artistonthehill.co.uk/painting.html?p="+encodeURIComponent(p.id),
+    "offers":{"@type":"Offer","price":(p.price||'').replace(/[^0-9.]/g,''),"priceCurrency":"GBP",
+      "availability":p.sold?"https://schema.org/SoldOut":"https://schema.org/InStock"}});
+  document.head.appendChild(ld);
   const wa=t=>'https://wa.me/'+ARTIST_WA+'?text='+encodeURIComponent(t);
   let doors='';
   if(!p.sold){
@@ -121,7 +133,7 @@ fetch('paintings.json').then(r=>r.json()).then(list=>{
     '<figure class="plinth"><img src="'+esc(p.img)+'" alt="'+esc(p.title)+' — oil painting by Tony Parsons"></figure>'+
     '<div class="label"><h1>'+esc(p.title)+'</h1>'+
     (p.story?'<p class="story">'+esc(p.story)+'</p>':'')+
-    '<p class="meta">'+esc(p.size||'')+'<br>Painted on the spot, in one sitting</p>'+
+    '<p class="meta">'+esc(p.size||'')+'<br>'+esc(p.made||'Painted on the spot, in one sitting')+' &mdash; one of one</p>'+
     '<p class="price">'+(p.sold?'Sold':esc(p.price||''))+'</p>'+
     '<div class="doors">'+doors+'</div></div>'+
     (p.easel?'<hr class="rule"><div class="plate2"><img loading="lazy" src="'+esc(p.easel)+'" alt="On the easel"></div><p class="cap">At the easel — the morning it was made.</p>':'')+
