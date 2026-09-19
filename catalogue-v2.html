@@ -83,13 +83,26 @@ OPTIONS.forEach(o=>{
   b.onclick=()=>{picked.has(o)?picked.delete(o):picked.add(o); b.classList.toggle('on');};
   box.appendChild(b);
 });
-function ping(event){
-  const q=new URLSearchParams({event:event,page:'catalogue-request',who:'site',code:'site',
+const SRC=(new URLSearchParams(location.search).get('src')||'').trim();
+let GEO={};
+function ping(event,who){
+  let tail='';
+  if(SRC)tail+=' \u00b7 via: '+SRC;
+  const q=new URLSearchParams({event:event+tail,page:'catalogue-request',
+    who:who||'site',code:'catalogue',
+    region:GEO.region||'',ip:GEO.ip||'',isp:GEO.isp||'',
     ua:navigator.userAgent||'',tz:Intl.DateTimeFormat().resolvedOptions().timeZone||'',
     lang:navigator.language||'',ref:document.referrer||'direct',visits:'1'});
   const i=new Image(); i.src=TRACKER+'?'+q.toString();
 }
-ping('viewed');
+(async function(){
+  try{const ctrl=new AbortController();setTimeout(()=>ctrl.abort(),2500);
+    const r=await fetch('https://ipwho.is/',{signal:ctrl.signal});const j=await r.json();
+    if(j&&j.success!==false)GEO={ip:j.ip,isp:(j.connection&&j.connection.isp)||'',
+      region:[j.city,j.region,j.country].filter(Boolean).join(', ')};
+  }catch(e){}
+  ping('viewed');
+})();
 function message(){
   const name=document.getElementById('name').value.trim();
   const loc=document.getElementById('loc').value.trim();
@@ -103,11 +116,19 @@ function message(){
   if(loc)m+=' I\'m near '+loc+'.';
   return m;
 }
+function detail(){
+  const name=document.getElementById('name').value.trim();
+  const loc=document.getElementById('loc').value.trim();
+  let d='';
+  if(picked.size)d+=' \u00b7 wants: '+[...picked].join(', ');
+  if(loc)d+=' \u00b7 near: '+loc;
+  return {name:name,d:d};
+}
 document.getElementById('waBtn').onclick=()=>{const m=message();if(!m)return;
-  ping('catalogue-request-wa');
+  const x=detail(); ping('catalogue-request-wa'+x.d, x.name);
   window.open('https://wa.me/'+ARTIST_WA+'?text='+encodeURIComponent(m),'_blank');};
 document.getElementById('emBtn').onclick=()=>{const m=message();if(!m)return;
-  ping('catalogue-request-email');
+  const x=detail(); ping('catalogue-request-email'+x.d, x.name);
   location.href='mailto:'+ARTIST_EM+'?subject='+encodeURIComponent('A catalogue, please')+
     '&body='+encodeURIComponent(m);};
 </script>
