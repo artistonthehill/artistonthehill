@@ -30,6 +30,7 @@
   .hero{display:block;background:var(--mount);padding:20px;text-decoration:none;color:var(--ink);
     box-shadow:0 1px 0 var(--teal), 0 14px 34px rgba(35,35,35,.09);margin-bottom:14px}
   .hero img{width:100%;display:block}
+  #hero{margin-bottom:26px}
   .hero .cap{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:12px}
   .hero .cap .t{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:22px}
   .hero .cap .p{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;font-size:13.5px;color:var(--soft)}
@@ -45,7 +46,13 @@
     font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;line-height:1.7}
   a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
-  .door.pic{display:block;padding:0;overflow:hidden}
+  .door.pic{display:block;padding:0;overflow:hidden;cursor:pointer;
+    box-shadow:0 1px 0 var(--teal), 0 8px 22px rgba(35,35,35,.12);
+    transition:box-shadow .15s ease, transform .15s ease}
+  .door.pic:hover,.door.pic:active{transform:translateY(-2px);
+    box-shadow:0 1px 0 var(--teal), 0 12px 30px rgba(35,35,35,.16)}
+  .door.pic .t::after{content:"\2192";font-family:Georgia,serif;font-style:normal;
+    color:var(--teal);margin-left:10px;font-size:20px}
   .door.pic img{width:100%;display:block}
   .door.pic .dt{display:block;padding:16px 20px 18px}
   .door.pic .t{display:block}
@@ -61,10 +68,7 @@
     <span class="cap"><span class="t" id="heroTitle"></span><span class="p" id="heroPrice"></span></span>
   </a>
 
-  <p class="strap">Everything here was painted outdoors, on the spot, in one sitting —
-  weather permitting, and sometimes not.</p>
-
-  <a class="door pic" href="map.html">
+    <a class="door pic" href="map.html">
     <img src="door-map.jpg" alt="" loading="lazy">
     <span class="dt"><span class="t">The map</span>
     <span class="s">Every painting, pinned where the easel stood.</span></span>
@@ -83,7 +87,10 @@
 
 <script>
 fetch('paintings.json').then(r=>r.json()).then(list=>{
-  const p=list.find(x=>!x.sold)||list[0]; if(!p) return;
+  const pool=list.filter(x=>!x.sold&&x.img&&/80\s*[x\u00d7]\s*30/i.test(x.size||''));
+  const p=pool.length?pool[Math.floor(Math.random()*pool.length)]
+        :(list.find(x=>!x.sold)||list[0]);
+  if(!p) return;
   document.getElementById('heroImg').src=p.img;
   document.getElementById('heroImg').alt=p.title;
   document.getElementById('heroTitle').textContent=p.title;
