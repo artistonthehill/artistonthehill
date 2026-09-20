@@ -106,6 +106,17 @@
   .setrow{margin-bottom:14px}
   .setrow small{display:block;color:var(--dim);font-size:12.5px;margin-top:5px}
   .empty{color:var(--dim);text-align:center;padding:20px 0;font-size:14.5px}
+  .ppl{display:flex;gap:11px;align-items:center;background:var(--panel);border:1px solid var(--line);
+    border-radius:11px;padding:10px;margin-bottom:9px}
+  .ppl .t{flex:1;min-width:0}
+  .ppl .n{font-size:15.5px;font-weight:700}
+  .ppl .m{font-size:12.5px;color:var(--dim)}
+  .ppl .rm{background:none;border:1px solid var(--aliz);color:var(--aliz);border-radius:99px;
+    font:inherit;font-size:12.5px;padding:6px 11px}
+  .wabtn{display:inline-block;background:#25D366;color:#fff;border-radius:99px;font:inherit;
+    font-size:13.5px;font-weight:700;padding:8px 14px;margin:3px 6px 8px 63px;text-decoration:none}
+  .mlbtn{display:inline-block;background:var(--teal);color:#0E1B19;border-radius:99px;font:inherit;
+    font-size:13.5px;font-weight:700;padding:8px 14px;margin:3px 6px 8px 63px;text-decoration:none}
 </style>
 </head>
 <body>
@@ -153,6 +164,12 @@
     <div class="field"><label for="notes">Private notes</label>
       <textarea id="notes" placeholder="who stopped to watch, the story, anything"></textarea>
     </div>
+
+    <div class="qhead">People you met today</div>
+    <div id="pplList"></div>
+    <div class="chips" style="margin-bottom:6px"><button class="chip" id="addPerson" type="button">＋ Add a person</button></div>
+    <div class="wallnote">Card the painting and each of these gets a private view link, texted straight from your phone, and lands in the spine automatically — no re-typing.</div>
+
     <div class="qhead">This session <button id="syncAll" type="button">Sync all</button></div>
     <div id="queue"><div class="empty">Nothing carded yet.</div></div>
   </div>
@@ -215,7 +232,7 @@
     <button class="x" id="keyClose" type="button">×</button></div>
   <div class="setrow"><label>GitHub uploader token</label>
     <input type="text" id="ghKey" autocomplete="off" placeholder="ghp_…">
-    <small>The "ArtistOnTheHill Uploader" token — uploads photos to the site.</small></div>
+    <small>The "ArtistOnTheHill Uploader" token — uploads photos and room pages to the site.</small></div>
   <div class="setrow"><label>Airtable token</label>
     <input type="text" id="atKey" autocomplete="off" placeholder="pat…">
     <small>Writes cards and enquiries to the spine. Both stay on this phone.</small></div>
@@ -275,11 +292,14 @@ async function ghPut(path,b64,msg){
   if(!r.ok) throw new Error('github '+r.status);
   return r.json();
 }
+function b64utf8(str){ return btoa(unescape(encodeURIComponent(str))); }
+function waDigits(c){ let d=(c||'').replace(/[^0-9]/g,''); if(d.startsWith('0')) d='44'+d.slice(1); return d; }
 
 // ================= capture form =================
 const SIZES=['80×30cm','42×30cm','60×42cm','A3','A2','60×30cm'];
 const PRICES=['1320','2040','2760','3600','5040'];
 let pickSize='',pickPrice='',photoB64=null,photoURL=null,pin=null;
+let peoplePending=[];
 function chips(el,list,cur,set){
   el.innerHTML='';
   list.forEach(v=>{const b=document.createElement('button');b.type='button';
@@ -309,6 +329,26 @@ document.getElementById('phIn').onchange=e=>{
   };
   img.src=URL.createObjectURL(f);
 };
+
+// ---- people you met today (feeds the WhatsApp zap on card) ----
+function pplRender(){
+  const el=document.getElementById('pplList'); el.innerHTML='';
+  if(!peoplePending.length){el.innerHTML='<div class="wallnote">Nobody added yet — tap below for each person.</div>';return;}
+  peoplePending.forEach((p,i)=>{
+    const row=document.createElement('div'); row.className='ppl';
+    row.innerHTML='<div class="t"><div class="n">'+p.name+'</div><div class="m">'+
+      (p.contact||'no contact yet')+'</div></div><button type="button" class="rm">remove</button>';
+    row.querySelector('.rm').onclick=()=>{peoplePending.splice(i,1);pplRender();};
+    el.appendChild(row);
+  });
+}
+document.getElementById('addPerson').onclick=()=>{
+  const name=(prompt('Their name?')||'').trim(); if(!name)return;
+  const contact=(prompt('Their WhatsApp number or email?')||'').trim();
+  peoplePending.push({name:name,contact:contact});
+  pplRender();
+};
+pplRender();
 
 // map (Esri light grey, keyless — same tiles as the site map)
 const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([50.79,-0.06],6);
@@ -340,6 +380,7 @@ document.getElementById('title').addEventListener('input',()=>{
 let queue=JSON.parse(localStorage.getItem('fs2-q')||'[]');
 function saveQ(){localStorage.setItem('fs2-q',JSON.stringify(queue.map(i=>{
   const c=Object.assign({},i); if(c.b64&&c.state==='ok')delete c.b64; return c;})));}
+function today(){return new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
 function render(){
   const list=document.getElementById('queue'); list.innerHTML='';
   if(!queue.length){list.innerHTML='<div class="empty">Nothing carded yet.</div>';return;}
@@ -353,6 +394,26 @@ function render(){
     const b=d.querySelector('.st');
     if(it.state==='q'||it.state==='bad')b.onclick=()=>sync(it);
     list.appendChild(d);
+    // once the card and its room page are live, offer the zap per person
+    if(it.kind==='card' && it.state==='ok' && it.people && it.people.length){
+      it.people.forEach(p=>{
+        const first=p.name.split(' ')[0];
+        const msg='Hi '+first+' — great to meet you today. Here\u2019s '+it.title+
+          ', fresh off the easel — first look, before it goes anywhere else.\n\n'+
+          SITE+'/view.html?p='+it.slug+'&w='+(p.code||'');
+        const isEmail=(p.contact||'').includes('@');
+        if(isEmail){
+          const a=document.createElement('a'); a.className='mlbtn';
+          a.href='mailto:'+p.contact+'?subject='+encodeURIComponent(it.title+' — a private view')+
+            '&body='+encodeURIComponent(msg);
+          a.textContent='Email '+first; list.appendChild(a);
+        }else{
+          const a=document.createElement('a'); a.className='wabtn'; a.target='_blank'; a.rel='noopener';
+          a.href='https://wa.me/'+waDigits(p.contact)+'?text='+encodeURIComponent(msg);
+          a.textContent='Text '+first; list.appendChild(a);
+        }
+      });
+    }
   });
 }
 document.getElementById('syncAll').onclick=()=>queue.filter(i=>i.state!=='ok').forEach(sync);
@@ -369,6 +430,7 @@ document.getElementById('cardBtn').onclick=()=>{
     b64:photoB64,thumb:photoURL,size:size,priceN:priceN,
     frame:document.getElementById('frameNotes').value.trim(),
     pin:pin,notes:document.getElementById('notes').value.trim(),
+    people:peoplePending.slice(),
     stamp:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),state:'q'};
   queue.unshift(it); render(); saveQ(); sync(it);
   // clear for the next one
@@ -379,6 +441,7 @@ document.getElementById('cardBtn').onclick=()=>{
   document.getElementById('phPrev').classList.add('hidden');
   document.getElementById('phEmpty').classList.remove('hidden');
   dupEl.style.display='none';
+  peoplePending=[];pplRender();
 };
 
 async function sync(it){
@@ -397,14 +460,40 @@ async function sync(it){
       const noteBits=[];
       if(it.notes)noteBits.push(it.notes);
       if(it.frame)noteBits.push('Frame/depth: '+it.frame);
-      noteBits.push('Carded in the field '+new Date().toLocaleDateString('en-GB',
-        {day:'numeric',month:'short',year:'numeric'})+' — resting; not yet public.');
+      noteBits.push('Carded in the field '+today()+' — resting; not yet public.');
       fields[F.notes]=noteBits.join('\n');
       const j=await at('POST',TABLE,{records:[{fields:fields}],typecast:true});
       it.rec=j.records[0].id;
       wallList.unshift({rec:it.rec,title:it.title,slug:it.slug,img:'images/'+it.slug+'.jpg',
         sold:false,pub:false,created:new Date().toISOString(),loc:'With Tony (on trip)'});
       renderWall();
+
+      // push the private room page straight away — it works before Release,
+      // exactly like the old app: view.html reads this file directly, no
+      // waiting on Publish or the map pipeline.
+      try{
+        const room={t:it.title};
+        if(it.size)room.s=it.size;
+        if(it.priceN){room.p=Number(it.priceN);room.v=true;}
+        if(it.frame)room.f=!/unfram/i.test(it.frame);
+        room.i=SITE+'/images/'+it.slug+'.jpg';
+        await ghPut(it.slug+'.json', b64utf8(JSON.stringify(room)), 'Field Studio: room for '+it.title);
+      }catch(e){}
+
+      // log everyone you met straight into the spine, no re-typing
+      if(it.people && it.people.length){
+        for(const p of it.people){
+          const code=(it.slug.slice(0,4)).toUpperCase().replace(/[^A-Z0-9]/g,'')+'-'+
+            (p.name.slice(0,3)).toUpperCase();
+          const fi={}; fi[FI.person]=p.name; fi[FI.channel]=p.contact; fi[FI.type]='Easel';
+          fi[FI.code]=code; fi[FI.notes]='Met at the easel — '+it.title+'. ('+today()+')';
+          fi[FI.link]=[it.rec];
+          try{
+            await at('POST',INTEREST,{records:[{fields:fi}],typecast:true});
+            p.code=code;
+          }catch(e){}
+        }
+      }
     }else if(it.kind==='edit'){
       const fields={};
       if(it.loc)fields[F.curLoc]=it.loc;
@@ -518,7 +607,6 @@ function openSheet(p){
 }
 document.getElementById('shClose').onclick=()=>sheetWrap.classList.remove('open');
 sheetWrap.onclick=e=>{if(e.target===sheetWrap)sheetWrap.classList.remove('open');};
-function today(){return new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
 function queueEdit(pub){
   const loc=document.getElementById('shLoc').value.trim();
   const note=document.getElementById('shNote').value.trim();
