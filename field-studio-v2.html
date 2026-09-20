@@ -147,9 +147,9 @@
       <div class="wallnote" id="dup" style="color:var(--ochre);display:none;margin-top:7px"></div>
     </div>
 
-    <div class="qhead" style="margin:0 0 10px">People you met today</div>
+    <div class="qhead" style="margin:0 0 10px">People you've met so far <span style="font-weight:400;color:var(--dim)">— for the piece you're still working on</span></div>
     <div id="pplList"></div>
-    <div class="chips" style="margin-bottom:16px"><button class="chip" id="addPerson" type="button">＋ Add a person</button></div>
+    <div class="chips" style="margin-bottom:16px"><button class="chip" id="addPerson" type="button">＋ Add a person (before it's carded)</button></div>
 
     <div class="field"><label>Size</label>
       <div class="chips" id="sizeChips"></div>
@@ -195,6 +195,14 @@
     <button class="x" id="shClose" type="button">×</button>
   </div>
   <div class="age" id="shAge"></div>
+  <div class="field"><label>Photo</label>
+    <div class="photo">
+      <img class="ph hidden" id="shPhPrev" alt="">
+      <div class="ph" id="shPhEmpty">＋</div>
+      <label class="btn" for="shPhIn">Take / choose</label>
+      <input type="file" id="shPhIn" accept="image/*" capture="environment">
+    </div>
+  </div>
   <div class="field"><label>Where it is now</label>
     <div class="chips" id="shLocChips" style="margin-bottom:8px"></div>
     <input type="text" id="shLoc" autocomplete="off" placeholder="leave blank to leave unchanged">
@@ -456,9 +464,11 @@ function render(){
           a.textContent='Text '+first; list.appendChild(a);
         }
       });
-      const addBtn=document.createElement('button'); addBtn.type='button'; addBtn.className='chip';
-      addBtn.style.cssText='margin:3px 0 8px 63px;font-size:13px;padding:8px 14px';
-      addBtn.textContent='+ Add someone else to this card';
+      const addBtn=document.createElement('button'); addBtn.type='button';
+      addBtn.style.cssText='display:block;margin:3px 0 12px 63px;background:var(--sap);'+
+        'color:#101408;border:0;border-radius:99px;font:inherit;font-size:13.5px;font-weight:800;'+
+        'padding:9px 15px';
+      addBtn.textContent='\u2713 Add someone else to \u201c'+it.title+'\u201d';
       addBtn.onclick=()=>addPersonToCard(it);
       list.appendChild(addBtn);
     }
@@ -585,7 +595,16 @@ async function sync(it){
       if(it.loc)fields[F.curLoc]=it.loc;
       if(it.pub)fields[F.pub]=true;
       if(it.noteAdd)fields[F.notes]=(it.baseNotes?it.baseNotes+'\n':'')+it.noteAdd;
+      if(it.photoB64){
+        let slug=it.slug;
+        if(!slug){ slug=slugify(it.title)+'-'+tri(); fields[F.slug]=slug; it.slug=slug; }
+        await ghPut('images/'+slug+'.jpg', it.photoB64, 'Field Studio: photo for '+it.title);
+        fields[F.img]='images/'+slug+'.jpg';
+        const wp=wallList.find(w=>w.rec===it.rec);
+        if(wp){ wp.img=fields[F.img]; wp.slug=slug; }
+      }
       await at('PATCH',TABLE,{records:[{id:it.rec,fields:fields}],typecast:true});
+      renderWall();
     }else if(it.kind==='del'){
       await at('DELETE',TABLE+'?records[]='+it.rec);
     }else if(it.kind==='enquiry'){
@@ -673,6 +692,10 @@ function openSheet(p){
   sheetP=p;delArmed=false;
   document.getElementById('shLoc').value='';document.getElementById('shNote').value='';
   document.getElementById('shFrame').value='';
+  shPhotoB64=null;shPhotoURL=null;
+  const shp=document.getElementById('shPhPrev'),she=document.getElementById('shPhEmpty');
+  if(p.img){shp.src=SITE+'/'+p.img;shp.classList.remove('hidden');she.classList.add('hidden');}
+  else{shp.classList.add('hidden');she.classList.remove('hidden');}
   const ph=document.getElementById('shPh'),u=p.img?(SITE+'/'+p.img):'';
   ph.innerHTML=u?'<img src="'+u+'">':'<span class="noph">'+initials(p.title)+'</span>';
   document.getElementById('shTitle').textContent=p.title;
@@ -694,18 +717,38 @@ function openSheet(p){
 }
 document.getElementById('shClose').onclick=()=>sheetWrap.classList.remove('open');
 sheetWrap.onclick=e=>{if(e.target===sheetWrap)sheetWrap.classList.remove('open');};
+let shPhotoB64=null,shPhotoURL=null;
+document.getElementById('shPhIn').onchange=e=>{
+  const f=e.target.files[0]; if(!f)return;
+  const img=new Image();
+  img.onload=()=>{
+    const c=document.createElement('canvas');
+    const s=Math.min(1,1920/Math.max(img.width,img.height));
+    c.width=Math.round(img.width*s); c.height=Math.round(img.height*s);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    shPhotoURL=c.toDataURL('image/jpeg',0.86);
+    shPhotoB64=shPhotoURL.split(',')[1];
+    const p=document.getElementById('shPhPrev');
+    p.src=shPhotoURL;p.classList.remove('hidden');
+    document.getElementById('shPhEmpty').classList.add('hidden');
+    URL.revokeObjectURL(img.src);
+  };
+  img.src=URL.createObjectURL(f);
+};
 function queueEdit(pub){
   const loc=document.getElementById('shLoc').value.trim();
   const note=document.getElementById('shNote').value.trim();
   const frame=document.getElementById('shFrame').value.trim();
-  if(!loc&&!note&&!frame&&!pub){sheetWrap.classList.remove('open');return;}
+  if(!loc&&!note&&!frame&&!pub&&!shPhotoB64){sheetWrap.classList.remove('open');return;}
   const lines=[];
   if(loc)lines.push('\u2192 '+loc+' \u2014 '+today()+' (field studio)');
   if(frame)lines.push('Frame/depth: '+frame+' \u2014 '+today());
+  if(shPhotoB64)lines.push('Photo added from the wall \u2014 '+today());
   if(pub)lines.push('Released to the site \u2014 '+today());
   if(note)lines.push(note+' \u2014 '+today());
   const it={kind:'edit',id:'e'+Date.now().toString(36),title:sheetP.title,rec:sheetP.rec,
     loc:loc||null,pub:!!pub,baseNotes:sheetP.notes||'',noteAdd:lines.join('\n'),
+    photoB64:shPhotoB64,slug:sheetP.slug||null,
     stamp:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),state:'q'};
   if(loc)sheetP.loc=loc;
   if(pub)sheetP.pub=true;
