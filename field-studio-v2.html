@@ -435,9 +435,11 @@ function render(){
     const b=d.querySelector('.st');
     if(it.state==='q'||it.state==='bad')b.onclick=()=>sync(it);
     list.appendChild(d);
-    // once the card and its room page are live, offer the zap per person
-    if(it.kind==='card' && it.state==='ok' && it.people && it.people.length){
-      it.people.forEach(p=>{
+    // once the card and its room page are live, offer the zap per person,
+    // plus a standing way to add more people to THIS card — never a reason
+    // to tap "Card it" again for someone you met after the fact
+    if(it.kind==='card' && it.state==='ok'){
+      (it.people||[]).forEach(p=>{
         const first=p.name.split(' ')[0];
         const msg='Hi '+first+' — great to meet you today. Here\u2019s '+it.title+
           ', fresh off the easel — first look, before it goes anywhere else.\n\n'+
@@ -454,10 +456,49 @@ function render(){
           a.textContent='Text '+first; list.appendChild(a);
         }
       });
+      const addBtn=document.createElement('button'); addBtn.type='button'; addBtn.className='chip';
+      addBtn.style.cssText='margin:3px 0 8px 63px;font-size:13px;padding:8px 14px';
+      addBtn.textContent='+ Add someone else to this card';
+      addBtn.onclick=()=>addPersonToCard(it);
+      list.appendChild(addBtn);
+    }
+    // same zap for someone logged via "Someone's interested" on the wall —
+    // an older painting deserves the same one-tap send as a brand new one
+    if(it.kind==='enquiry' && it.state==='ok' && it.slug){
+      const first=it.name.split(' ')[0];
+      const msg='Hi '+first+' — great to meet you today. Here\u2019s '+it.paintingTitle+
+        ', for your first look, before it goes anywhere else.\n\n'+
+        SITE+'/view.html?p='+it.slug+'&w='+(it.code||'');
+      const isEmail=(it.contact||'').includes('@');
+      if(isEmail){
+        const a=document.createElement('a'); a.className='mlbtn';
+        a.href='mailto:'+it.contact+'?subject='+encodeURIComponent(it.paintingTitle+' — a private view')+
+          '&body='+encodeURIComponent(msg);
+        a.textContent='Email '+first; list.appendChild(a);
+      }else{
+        const a=document.createElement('a'); a.className='wabtn'; a.target='_blank'; a.rel='noopener';
+        a.href='https://wa.me/'+waDigits(it.contact)+'?text='+encodeURIComponent(msg);
+        a.textContent='Text '+first; list.appendChild(a);
+      }
     }
   });
 }
 document.getElementById('syncAll').onclick=()=>queue.filter(i=>i.state!=='ok').forEach(sync);
+
+// add one more person to a painting that's already in the spine — no new
+// card, no duplicate. Works for a card from earlier this session.
+async function addPersonToCard(it){
+  const name=(prompt('Their name?')||'').trim(); if(!name)return;
+  const contact=(prompt('Their WhatsApp number or email?')||'').trim();
+  const p={name:name,contact:contact};
+  it.people=it.people||[]; it.people.push(p); render(); saveQ();
+  const code=(it.slug.slice(0,4)).toUpperCase().replace(/[^A-Z0-9]/g,'')+'-'+(name.slice(0,3)).toUpperCase();
+  const fi={}; fi[FI.person]=name; fi[FI.channel]=contact; fi[FI.type]='Easel';
+  fi[FI.code]=code; fi[FI.notes]='Met at the easel — '+it.title+'. ('+today()+')'; fi[FI.link]=[it.rec];
+  try{ await at('POST',INTEREST,{records:[{fields:fi}],typecast:true}); p.code=code; }
+  catch(e){ alert('Couldn\u2019t log '+name+' — check your connection, then tap Add someone else again.'); }
+  render(); saveQ();
+}
 
 document.getElementById('cardBtn').onclick=function(){
   const title=document.getElementById('title').value.trim();
@@ -702,6 +743,7 @@ document.getElementById('enqSave').onclick=()=>{
   const code=(sheetP.slug||'xxx').slice(0,4).toUpperCase().replace(/-/g,'')+'-'+
     name.slice(0,3).toUpperCase();
   const it={kind:'enquiry',id:'n'+Date.now().toString(36),title:name+' → '+sheetP.title,
+    paintingTitle:sheetP.title,slug:sheetP.slug,
     rec:sheetP.rec,name:name,contact:contact,code:code,
     note:'Met at the easel — '+sheetP.title+'. '+(note||'')+' ('+today()+')',
     stamp:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),state:'q'};
