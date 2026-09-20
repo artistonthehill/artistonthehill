@@ -1,5 +1,14 @@
 [
  {
+  "id": "the-palace-gardens-19d",
+  "title": "The Palace Gardens",
+  "img": "images/the-palace-gardens-19d.jpg",
+  "price": "£2,760",
+  "size": "80×30cm",
+  "lat": 50.82307,
+  "lng": -0.13915
+ },
+ {
   "id": "stockbridge-trout",
   "title": "Stockbridge Trout",
   "img": "images/stockbridge-trout.jpg",
@@ -17,8 +26,8 @@
   "img": "images/distance.jpg",
   "price": "£3,480",
   "size": "60×42cm · Oil on canvas board",
-  "lat": 38.6594,
-  "lng": 20.763534,
+  "lat": 32.82787,
+  "lng": -16.984589,
   "collection": "ionian",
   "category": "marine"
  },
@@ -67,7 +76,7 @@
   "id": "cowdray-ruins",
   "title": "Cowdray Ruins",
   "img": "images/cowdray-ruins.jpg",
-  "price": "£2,640",
+  "price": "£2,760",
   "size": "80×30cm · Oil on board",
   "lat": 50.988333,
   "lng": -0.734889,
@@ -174,7 +183,7 @@
   "id": "hengistbury",
   "title": "Hengistbury Head",
   "img": "images/hengistbury.jpg",
-  "price": "£2,400",
+  "price": "£2,760",
   "size": "80×30cm · Oil on board",
   "lat": 50.71438,
   "lng": -1.74639,
@@ -247,7 +256,7 @@
   "title": "Sussex Light",
   "img": "images/sussex-light.jpg",
   "price": "£6,480",
-  "size": "Oil on board",
+  "size": "61×91cm · Oil on canvas",
   "lat": 50.838121,
   "lng": -0.080679,
   "collection": "uk"
@@ -288,8 +297,8 @@
   "img": "images/bantham-burgh.jpg",
   "price": "£3,240",
   "size": "60×42cm · Oil on board",
-  "lat": 50.280333,
-  "lng": -3.865736,
+  "lat": 50.281157,
+  "lng": -3.864405,
   "collection": "uk"
  },
  {
@@ -297,14 +306,14 @@
   "title": "Bantham Hand",
   "img": "images/bantham-hand.jpg",
   "price": "£5,040",
-  "size": "80×60cm · Oil on board",
-  "lat": 50.282322,
-  "lng": -3.892118,
+  "size": "80×60cm · Oil on canvas · Painted on the beach at Bigbury, March 2025",
+  "lat": 50.281989,
+  "lng": -3.891926,
   "collection": "uk"
  },
  {
   "id": "mine",
-  "title": "Mine!",
+  "title": "Chapel Porth Engines",
   "img": "images/mine.jpg",
   "price": "£2,760",
   "size": "80×30cm · Oil on board",
@@ -447,7 +456,7 @@
   "title": "Rapid Descent",
   "img": "images/rapid-descent.jpg",
   "price": "£1,320",
-  "size": "Oil on board",
+  "size": "42×30cm · Oil on board",
   "lat": 46.003043,
   "lng": 6.700281,
   "collection": "alps"
@@ -703,7 +712,7 @@
   "id": "bahamas-sea-swings",
   "title": "Sea Swings",
   "img": "images/bahamas-sea-swings.jpg",
-  "price": "£1,440",
+  "price": "£1,320",
   "size": "42×30cm · Oil on board",
   "lat": 25.549294,
   "lng": -76.772623,
@@ -736,7 +745,7 @@
   "id": "bahamas-pink-house",
   "title": "The Pink House",
   "img": "images/bahamas-pink-house.jpg",
-  "price": "£1,440",
+  "price": "£1,320",
   "size": "42×30cm · Oil on board",
   "lat": 25.543136,
   "lng": -76.744698,
@@ -747,7 +756,7 @@
   "id": "bahamas-south-canal",
   "title": "South Canal",
   "img": "images/bahamas-south-canal.jpg",
-  "price": "£1,440",
+  "price": "£1,320",
   "size": "42×30cm · Oil on board",
   "lat": 25.011733,
   "lng": -77.340942,
@@ -839,7 +848,7 @@
   "id": "amalfi-capri-arch",
   "title": "Capri Arch",
   "img": "images/amalfi-capri-arch.jpg",
-  "price": "£1,440",
+  "price": "£1,320",
   "size": "42×30cm · TOAT Sketch",
   "lat": 40.545156,
   "lng": 14.234902,
@@ -908,7 +917,7 @@
  },
  {
   "id": "volks-railway",
-  "title": "The Volks Railway",
+  "title": "Volks Railway & The Penny Lift",
   "img": "images/volks-railway.jpg",
   "price": "£2,760",
   "size": "80×30cm · Oil on board",
@@ -1001,17 +1010,6 @@
   "collection": "ionian"
  },
  {
-  "id": "chilbolton-footbridge",
-  "title": "Chilbolton Footbridge",
-  "img": "images/chilbolton-footbridge.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 51.162363,
-  "lng": -1.44927,
-  "collection": "uk",
-  "category": "landscape"
- },
- {
   "id": "swan-at-streatley",
   "title": "The Swan at Streatley",
   "img": "images/swan-streatley.jpg",
@@ -1019,17 +1017,6 @@
   "size": "80×30cm · Oil on board",
   "lat": 51.523879,
   "lng": -1.142968,
-  "collection": "uk",
-  "category": "landscape"
- },
- {
-  "id": "london-to-brighton-bike-ride",
-  "title": "The London to Brighton Bike Ride",
-  "img": "images/london-to-brighton-bike-ride.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.816456,
-  "lng": -0.119634,
   "collection": "uk",
   "category": "landscape"
  },
@@ -1069,7 +1056,7 @@
   "id": "kioni",
   "title": "Kioni",
   "img": "images/Kioni.jpg",
-  "price": "£1,100",
+  "price": "£1,320",
   "size": "42×30cm · Oil on board",
   "lat": 38.449681,
   "lng": 20.68995,
@@ -1142,11 +1129,12 @@
   "id": "spilia-meganisi-sunset",
   "title": "Spilia, Meganisi",
   "img": "images/SpiliaMeganisism.jpg",
-  "price": "£1,320",
+  "price": "Sold",
   "size": "42×30cm · Oil on board",
   "lat": 38.659349,
   "lng": 20.763676,
-  "collection": "ionian"
+  "collection": "ionian",
+  "sold": true
  },
  {
   "id": "vibes-sivota",
