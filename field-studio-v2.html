@@ -48,6 +48,7 @@
   .save button{width:100%;max-width:402px;display:block;margin:0 auto;background:var(--ochre);
     border:0;border-radius:13px;color:#241A05;font:inherit;font-size:18px;font-weight:800;padding:16px}
   .save button:disabled{opacity:.45}
+  .save button:active{background:#B8862A;transform:scale(.97)}
   .qhead{font-size:14px;color:var(--dim);margin:22px 0 10px;display:flex;align-items:center}
   .qhead button{margin-left:auto;background:none;border:1px solid var(--line);border-radius:9px;
     color:var(--dim);font:inherit;font-size:13px;padding:6px 11px}
@@ -145,6 +146,11 @@
       <input type="text" id="title" autocomplete="off" placeholder="e.g. Kioni Morning">
       <div class="wallnote" id="dup" style="color:var(--ochre);display:none;margin-top:7px"></div>
     </div>
+
+    <div class="qhead" style="margin:0 0 10px">People you met today</div>
+    <div id="pplList"></div>
+    <div class="chips" style="margin-bottom:16px"><button class="chip" id="addPerson" type="button">＋ Add a person</button></div>
+
     <div class="field"><label>Size</label>
       <div class="chips" id="sizeChips"></div>
       <input type="text" id="sizeFree" autocomplete="off" placeholder="or type it" style="margin-top:8px">
@@ -152,9 +158,6 @@
     <div class="field"><label>Price</label>
       <div class="chips" id="priceChips"></div>
       <input type="text" id="priceFree" autocomplete="off" inputmode="numeric" placeholder="or type inc-VAT number" style="margin-top:8px">
-    </div>
-    <div class="field"><label>Frame &amp; depth <span style="color:var(--dim)">(for frame reuse later)</span></label>
-      <input type="text" id="frameNotes" autocomplete="off" placeholder="e.g. unframed, 18mm board / oak 20mm rebate">
     </div>
     <div class="field"><label>Where the easel stood</label>
       <div id="map"></div>
@@ -164,11 +167,6 @@
     <div class="field"><label for="notes">Private notes</label>
       <textarea id="notes" placeholder="who stopped to watch, the story, anything"></textarea>
     </div>
-
-    <div class="qhead">People you met today</div>
-    <div id="pplList"></div>
-    <div class="chips" style="margin-bottom:6px"><button class="chip" id="addPerson" type="button">＋ Add a person</button></div>
-    <div class="wallnote">Card the painting and each of these gets a private view link, texted straight from your phone, and lands in the spine automatically — no re-typing.</div>
 
     <div class="qhead">This session <button id="syncAll" type="button">Sync all</button></div>
     <div id="queue"><div class="empty">Nothing carded yet.</div></div>
@@ -200,6 +198,9 @@
   <div class="field"><label>Where it is now</label>
     <div class="chips" id="shLocChips" style="margin-bottom:8px"></div>
     <input type="text" id="shLoc" autocomplete="off" placeholder="leave blank to leave unchanged">
+  </div>
+  <div class="field"><label for="shFrame">Frame &amp; depth <span style="color:var(--dim)">(for frame reuse later)</span></label>
+    <input type="text" id="shFrame" autocomplete="off" placeholder="e.g. oak 20mm rebate, 18mm board — leave blank to skip">
   </div>
   <div class="field"><label for="shNote">Add a line to the notes</label>
     <textarea id="shNote"></textarea>
@@ -308,8 +309,8 @@ function chips(el,list,cur,set){
     b.onclick=()=>set(cur===v?'':v);el.appendChild(b);});
 }
 function drawChips(){
-  chips(document.getElementById('sizeChips'),SIZES,pickSize,v=>{pickSize=v;drawChips();});
-  chips(document.getElementById('priceChips'),PRICES,pickPrice,v=>{pickPrice=v;drawChips();});
+  chips(document.getElementById('sizeChips'),SIZES,pickSize,v=>{pickSize=v;drawChips();saveDraft();});
+  chips(document.getElementById('priceChips'),PRICES,pickPrice,v=>{pickPrice=v;drawChips();saveDraft();});
 }
 drawChips();
 document.getElementById('phIn').onchange=e=>{
@@ -326,6 +327,7 @@ document.getElementById('phIn').onchange=e=>{
     p.src=photoURL;p.classList.remove('hidden');
     document.getElementById('phEmpty').classList.add('hidden');
     URL.revokeObjectURL(img.src);
+    saveDraft();
   };
   img.src=URL.createObjectURL(f);
 };
@@ -333,14 +335,15 @@ document.getElementById('phIn').onchange=e=>{
 // ---- people you met today (feeds the WhatsApp zap on card) ----
 function pplRender(){
   const el=document.getElementById('pplList'); el.innerHTML='';
-  if(!peoplePending.length){el.innerHTML='<div class="wallnote">Nobody added yet — tap below for each person.</div>';return;}
-  peoplePending.forEach((p,i)=>{
+  if(!peoplePending.length){el.innerHTML='<div class="wallnote">Nobody added yet — tap below the moment someone stops to talk.</div>';}
+  else peoplePending.forEach((p,i)=>{
     const row=document.createElement('div'); row.className='ppl';
     row.innerHTML='<div class="t"><div class="n">'+p.name+'</div><div class="m">'+
       (p.contact||'no contact yet')+'</div></div><button type="button" class="rm">remove</button>';
     row.querySelector('.rm').onclick=()=>{peoplePending.splice(i,1);pplRender();};
     el.appendChild(row);
   });
+  saveDraft();
 }
 document.getElementById('addPerson').onclick=()=>{
   const name=(prompt('Their name?')||'').trim(); if(!name)return;
@@ -350,13 +353,50 @@ document.getElementById('addPerson').onclick=()=>{
 };
 pplRender();
 
+// ---- autosave the whole in-progress card — a crash or dead signal never
+// loses a name someone just gave you. Nothing sends until "Card it". ----
+function saveDraft(){
+  try{
+    localStorage.setItem('fs2-draft',JSON.stringify({
+      title:document.getElementById('title').value,
+      sizeFree:document.getElementById('sizeFree').value,
+      priceFree:document.getElementById('priceFree').value,
+      pickSize:pickSize,pickPrice:pickPrice,
+      notes:document.getElementById('notes').value,
+      pin:pin,people:peoplePending,
+      photoURL:photoURL,photoB64:photoB64}));
+  }catch(e){}
+}
+function clearDraft(){ localStorage.removeItem('fs2-draft'); }
+function restoreDraft(){
+  let d=null;
+  try{d=JSON.parse(localStorage.getItem('fs2-draft')||'null');}catch(e){}
+  if(!d)return;
+  document.getElementById('title').value=d.title||'';
+  document.getElementById('sizeFree').value=d.sizeFree||'';
+  document.getElementById('priceFree').value=d.priceFree||'';
+  document.getElementById('notes').value=d.notes||'';
+  pickSize=d.pickSize||'';pickPrice=d.pickPrice||'';drawChips();
+  peoplePending=Array.isArray(d.people)?d.people:[];pplRender();
+  if(d.pin){setPin(d.pin.lat,d.pin.lng);map.setView([d.pin.lat,d.pin.lng],13);}
+  if(d.photoB64){
+    photoB64=d.photoB64;photoURL=d.photoURL||('data:image/jpeg;base64,'+d.photoB64);
+    const p=document.getElementById('phPrev');p.src=photoURL;p.classList.remove('hidden');
+    document.getElementById('phEmpty').classList.add('hidden');
+  }
+}
+document.getElementById('sizeFree').addEventListener('input',saveDraft);
+document.getElementById('priceFree').addEventListener('input',saveDraft);
+document.getElementById('notes').addEventListener('input',saveDraft);
+
 // map (Esri light grey, keyless — same tiles as the site map)
 const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([50.79,-0.06],6);
 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',{maxZoom:16}).addTo(map);
 let marker=null;
 function setPin(lat,lng){pin={lat:+lat.toFixed(5),lng:+lng.toFixed(5)};
   if(marker)marker.setLatLng([lat,lng]);else marker=L.marker([lat,lng]).addTo(map);
-  document.getElementById('latlng').textContent=pin.lat+', '+pin.lng;}
+  document.getElementById('latlng').textContent=pin.lat+', '+pin.lng;
+  saveDraft();}
 map.on('click',e=>setPin(e.latlng.lat,e.latlng.lng));
 document.getElementById('gpsBtn').onclick=()=>{
   navigator.geolocation.getCurrentPosition(p=>{
@@ -374,6 +414,7 @@ document.getElementById('title').addEventListener('input',()=>{
   const hit=wallList.find(p=>slugify(p.title)===t);
   dupEl.style.display=hit?'block':'none';
   if(hit)dupEl.textContent='Already in the spine: '+hit.title;
+  saveDraft();
 });
 
 // ================= queue + sync =================
@@ -418,24 +459,28 @@ function render(){
 }
 document.getElementById('syncAll').onclick=()=>queue.filter(i=>i.state!=='ok').forEach(sync);
 
-document.getElementById('cardBtn').onclick=()=>{
+document.getElementById('cardBtn').onclick=function(){
   const title=document.getElementById('title').value.trim();
   if(!title){alert('A title first.');return;}
   if(!photoB64){alert('Photo first — that\u2019s the whole point.');return;}
   if(needKeys())return;
+  if(this.disabled)return;               // belt & braces against a double tap
+  this.disabled=true;
+  this.textContent='Carding…';
+  const btn=this;
+  setTimeout(()=>{btn.disabled=false;btn.textContent='Card it';},1200);
   const size=pickSize||document.getElementById('sizeFree').value.trim();
   const priceN=pickPrice||document.getElementById('priceFree').value.replace(/[^0-9]/g,'');
   const slug=slugify(title)+'-'+tri();
   const it={kind:'card',id:'c'+Date.now().toString(36),title:title,slug:slug,
     b64:photoB64,thumb:photoURL,size:size,priceN:priceN,
-    frame:document.getElementById('frameNotes').value.trim(),
     pin:pin,notes:document.getElementById('notes').value.trim(),
     people:peoplePending.slice(),
     stamp:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),state:'q'};
   queue.unshift(it); render(); saveQ(); sync(it);
+  clearDraft();
   // clear for the next one
   document.getElementById('title').value='';document.getElementById('notes').value='';
-  document.getElementById('frameNotes').value='';
   document.getElementById('sizeFree').value='';document.getElementById('priceFree').value='';
   pickSize='';pickPrice='';drawChips();photoB64=null;photoURL=null;
   document.getElementById('phPrev').classList.add('hidden');
@@ -586,6 +631,7 @@ let sheetP=null,delArmed=false;
 function openSheet(p){
   sheetP=p;delArmed=false;
   document.getElementById('shLoc').value='';document.getElementById('shNote').value='';
+  document.getElementById('shFrame').value='';
   const ph=document.getElementById('shPh'),u=p.img?(SITE+'/'+p.img):'';
   ph.innerHTML=u?'<img src="'+u+'">':'<span class="noph">'+initials(p.title)+'</span>';
   document.getElementById('shTitle').textContent=p.title;
@@ -610,9 +656,11 @@ sheetWrap.onclick=e=>{if(e.target===sheetWrap)sheetWrap.classList.remove('open')
 function queueEdit(pub){
   const loc=document.getElementById('shLoc').value.trim();
   const note=document.getElementById('shNote').value.trim();
-  if(!loc&&!note&&!pub){sheetWrap.classList.remove('open');return;}
+  const frame=document.getElementById('shFrame').value.trim();
+  if(!loc&&!note&&!frame&&!pub){sheetWrap.classList.remove('open');return;}
   const lines=[];
   if(loc)lines.push('\u2192 '+loc+' \u2014 '+today()+' (field studio)');
+  if(frame)lines.push('Frame/depth: '+frame+' \u2014 '+today());
   if(pub)lines.push('Released to the site \u2014 '+today());
   if(note)lines.push(note+' \u2014 '+today());
   const it={kind:'edit',id:'e'+Date.now().toString(36),title:sheetP.title,rec:sheetP.rec,
@@ -673,7 +721,7 @@ function showTab(w){
 }
 document.getElementById('tabCard').onclick=()=>showTab('card');
 document.getElementById('tabWall').onclick=()=>showTab('wall');
-net();render();renderWall();
+net();render();renderWall();restoreDraft();
 if(K.at)loadWall();else keyWrap.classList.add('open');
 </script>
 </body></html>
