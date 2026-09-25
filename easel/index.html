@@ -61,6 +61,13 @@
   footer{margin-top:70px;background:var(--ink);color:rgba(255,255,255,.55);
     padding:36px 24px;text-align:center;font-size:.82rem}
   footer a{color:rgba(255,255,255,.75)}
+
+  .now{margin:0 0 34px}
+  .now img{width:100%;display:block;border-radius:14px}
+  .now-head{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 10px}
+  .now-head .t{font-weight:700} .now-head .k{opacity:.6;font-size:.85rem}
+  .now-note{margin:14px 0 6px;font-size:1rem;line-height:1.5}
+  .now-doors{margin-top:12px}
 </style>
 </head>
 <body>
@@ -72,6 +79,18 @@
 <h1>On <em>the easel</em></h1>
 <p class="note">Every painting is made on location, in a single sitting.
 This is the latest — still smelling faintly of oil paint.</p>
+
+
+<div class="now" id="now" hidden>
+  <div class="now-head"><span class="t" id="now-title">On the easel today</span><span class="k" id="now-where"></span></div>
+  <img id="now-img" alt="On the easel">
+  <p class="now-note">Still wet. If you'd like a photograph and the details once it's finished,
+  leave me your WhatsApp or email and I'll send it over.</p>
+  <div class="doors now-doors">
+    <a class="door solid" id="now-wa" href="#">Send me the finished painting</a>
+    <a class="door line" id="now-mail" href="#">By email instead</a>
+  </div>
+</div>
 
 <div class="easel" id="easel"></div>
 
@@ -108,6 +127,21 @@ function viewLink(p){
   if (p.prints) params.set("prints", p.prints);
   return "/painting-view.html?"+params.toString();
 }
+
+
+fetch("/now.json?v="+Date.now()).then(r=>r.ok?r.json():null).then(n=>{
+  if(!n||!n.img) return;
+  document.getElementById("now-img").src="/"+n.img+"?v="+Date.now();
+  if(n.title) document.getElementById("now-title").textContent=n.title;
+  if(n.where) document.getElementById("now-where").textContent=n.where;
+  const place=n.where||n.title||"today";
+  document.getElementById("now-wa").href="https://wa.me/447880601709?text="+encodeURIComponent(
+    "Hi Tony \u2014 I saw you painting at "+place+" today. Please send me the finished picture when it\u2019s done.");
+  document.getElementById("now-mail").href="mailto:artistonthehill@gmail.com?subject="+encodeURIComponent(place+" \u2014 the finished painting")+
+    "&body="+encodeURIComponent("Hi Tony \u2014 I saw you painting at "+place+" today. Please send me the finished picture when it\u2019s done.");
+  document.getElementById("now").hidden=false;
+  document.querySelector("h1").innerHTML="On <em>the easel</em> now";
+}).catch(()=>{});
 
 fetch("/paintings.json?v="+Date.now()).then(r=>r.json()).then(all=>{
   if (!all.length) return;
