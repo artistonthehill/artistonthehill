@@ -40,6 +40,9 @@
   .more{text-align:center;margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
   .more a{color:var(--muted);font-size:.82rem;text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
   .foot{text-align:center;color:var(--muted);font-size:.78rem;margin-top:24px}
+  .sendname{margin:16px 0 4px;text-align:center}
+  .sendname p{font-style:italic;opacity:.75;font-size:16px;margin:0 0 10px}
+  .sendname a{display:block;background:#1f3f3c;color:#fff;text-decoration:none;font-size:15px;letter-spacing:.1em;padding:16px}
 </style>
 <script defer src="analytics.js"></script>
 </head>
@@ -59,6 +62,10 @@
 
   <div id="room">
     <img id="hero" class="hero" alt="" style="display:none">
+    <div class="sendname" id="sendname" style="display:none">
+      <p>For a private link when this or the next one is ready, send me your first name.</p>
+      <a id="sendname-a" href="#">Send my name</a>
+    </div>
     <div class="soldnote" id="r-soldnote" style="display:none">
       <div class="lab">NOW IN A PRIVATE COLLECTION</div>
       <p>This original has found its home — but you can still own it as a print.</p>
@@ -166,6 +173,9 @@ function render(P){
       pr.href=wa("Hi Tony, I'd like a print of"+tag); }
   }
 
+  if(!who||who==="site"){ const sn=$("#sendname"); sn.style.display="block";
+    const a=$("#sendname-a"); a.href=wa("Hi Tony — I'd like a private link to "+(P.t||"the painting")+". [Your first name]");
+    a.addEventListener("click",()=>ping("tapped",{})); }
   fireTripwire(P);
 }
 
