@@ -1,10 +1,21 @@
 [
  {
+  "id": "lindfield-7jx",
+  "title": "Lindfield Pond",
+  "img": "images/lindfield-7jx.jpg",
+  "price": "£2,760",
+  "size": "80×30cm · Oil on board",
+  "lat": 51.011693,
+  "lng": -0.081661,
+  "collection": "uk",
+  "prints": "https://www.thegillangallery.com/product-page/lindfield-pond"
+ },
+ {
   "id": "final-day-at-henley-2026-3sd",
   "title": "Final Day at Henley 2026",
   "img": "images/final-day-at-henley-2026-3sd.jpg",
   "price": "Sold",
-  "size": "80×30cm · Oil on board",
+  "size": "80×30cm · Oil on board, solid white oak frame",
   "lat": 51.5372,
   "lng": -0.8997,
   "collection": "uk",
