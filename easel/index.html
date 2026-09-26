@@ -82,13 +82,11 @@ This is the latest — still smelling faintly of oil paint.</p>
 
 
 <div class="now" id="now" hidden>
-  <div class="now-head"><span class="t" id="now-title">On the easel today</span><span class="k" id="now-where"></span></div>
+  <div class="now-head"><span class="t" id="now-title">You’ve caught me painting.</span><span class="k" id="now-where"></span></div>
   <img id="now-img" alt="On the easel">
-  <p class="now-note">Still wet. If you'd like a photograph and the details once it's finished,
-  leave me your WhatsApp or email and I'll send it over.</p>
+  <p class="now-note">To see this one when it&rsquo;s finished, send me your first name and I&rsquo;ll WhatsApp you a private link.</p>
   <div class="doors now-doors">
-    <a class="door solid" id="now-wa" href="#">Send me the finished painting</a>
-    <a class="door line" id="now-mail" href="#">By email instead</a>
+    <a class="door solid" id="now-wa" href="#">Send my name</a>
   </div>
 </div>
 
@@ -113,12 +111,13 @@ This is the latest — still smelling faintly of oil paint.</p>
 <script>
 const TRACKER = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
 const who = (new URLSearchParams(location.search).get("w")||"").trim();
-try{
-  const q = new URLSearchParams({event:"easel-view", page:"easel", who:who, code:who,
+function ping(event){ try{
+  const q = new URLSearchParams({event:event, page:"easel", who:who, code:who,
     ua:navigator.userAgent||"", tz:Intl.DateTimeFormat().resolvedOptions().timeZone||"",
     lang:navigator.language||"", ref:document.referrer||"direct"});
   new Image().src = TRACKER+"?"+q.toString();
-}catch(e){}
+}catch(e){} }
+ping("easel-view");
 
 const esc = s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
 function viewLink(p){
@@ -134,11 +133,12 @@ fetch("/now.json?v="+Date.now()).then(r=>r.ok?r.json():null).then(n=>{
   document.getElementById("now-img").src="/"+n.img+"?v="+Date.now();
   if(n.title) document.getElementById("now-title").textContent=n.title;
   if(n.where) document.getElementById("now-where").textContent=n.where;
-  const place=n.where||n.title||"today";
-  document.getElementById("now-wa").href="https://wa.me/447880601709?text="+encodeURIComponent(
-    "Hi Tony \u2014 I saw you painting at "+place+" today. Please send me the finished picture when it\u2019s done.");
-  document.getElementById("now-mail").href="mailto:artistonthehill@gmail.com?subject="+encodeURIComponent(place+" \u2014 the finished painting")+
-    "&body="+encodeURIComponent("Hi Tony \u2014 I saw you painting at "+place+" today. Please send me the finished picture when it\u2019s done.");
+  const title=n.title||"the painting";
+  document.getElementById("now-title").textContent="You\u2019ve caught me painting.";
+  document.getElementById("now-where").textContent=n.where||"";
+  const wa=document.getElementById("now-wa");
+  wa.href="https://wa.me/447880601709?text="+encodeURIComponent("Hi Tony \u2014 I\u2019d like to see "+title+" when it\u2019s finished. [Your first name]");
+  wa.addEventListener("click",()=>{ try{ ping("tapped"); }catch(e){} });
   document.getElementById("now").hidden=false;
   document.querySelector("h1").innerHTML="On <em>the easel</em> now";
 }).catch(()=>{});
