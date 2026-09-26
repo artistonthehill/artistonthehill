@@ -61,6 +61,12 @@
   .fbtn:hover,.fbtn:active{transform:translateY(-2px);
     box-shadow:0 1px 0 var(--teal), 0 10px 24px rgba(35,35,35,.13)}
   .fbtn span{color:var(--teal);margin-left:8px;font-style:normal}
+  .sendname{margin:18px 0 6px;text-align:center}
+  .sendname p{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;color:var(--soft);
+    font-size:18px;margin:0 0 12px}
+  .sendname a{display:block;background:var(--teal);color:#FDFCF8;text-decoration:none;
+    font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;font-size:15px;letter-spacing:.12em;
+    padding:17px 20px;box-shadow:0 1px 0 var(--teal), 0 6px 18px rgba(35,35,35,.08)}
 </style>
 </head>
 <body>
@@ -131,6 +137,8 @@ fetch('paintings.json').then(r=>r.json()).then(list=>{
   doors+='<a class="quiet" href="'+wa('Hi Tony — about '+p.title+'…')+'">Ask Tony about this painting</a>';
   root.innerHTML=
     '<figure class="plinth"><img src="'+esc(p.img)+'" alt="'+esc(p.title)+' — oil painting by Tony Parsons"></figure>'+
+    '<div class="sendname"><p>For a private link when this or the next one is ready, send me your first name.</p>'+
+    '<a id="sendname" href="'+wa("Hi Tony — I'd like a private link to "+p.title+". [Your first name]")+'">Send my name</a></div>'+
     '<div class="label"><h1>'+esc(p.title)+'</h1>'+
     (p.story?'<p class="story">'+esc(p.story)+'</p>':'')+
     '<p class="meta">'+esc(p.size||'')+'<br>'+esc(p.made||'Painted on the spot, in one sitting')+' &mdash; one of one</p>'+
@@ -138,6 +146,8 @@ fetch('paintings.json').then(r=>r.json()).then(list=>{
     '<div class="doors">'+doors+'</div></div>'+
     (p.easel?'<hr class="rule"><div class="plate2"><img loading="lazy" src="'+esc(p.easel)+'" alt="On the easel"></div><p class="cap">At the easel — the morning it was made.</p>':'')+
     '<hr class="rule"><div class="nav">'+navEl(list,i-1,'Previous')+navEl(list,i+1,'Next')+'</div>';
+  const sn=document.getElementById('sendname');
+  if(sn)sn.addEventListener('click',()=>ping('tapped',slug,GEO));
   const w=document.getElementById('wish');
   if(w)w.addEventListener('click',()=>{ping('wishlist',slug,GEO);
     window.open(wa('Hi Tony — add me to the wishlist for '+p.title+' please.'),'_blank');});
