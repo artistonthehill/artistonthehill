@@ -1,5 +1,16 @@
 [
  {
+  "id": "london-to-brighton-bike-ride",
+  "title": "London to Brighton Cycle Ride 2026",
+  "img": "images/london-to-brighton-bike-ride.jpg",
+  "price": "£2,760",
+  "size": "80×30cm · Oil on board",
+  "lat": 50.816927,
+  "lng": -0.122023,
+  "collection": "uk",
+  "category": "landscape"
+ },
+ {
   "id": "lindfield-7jx",
   "title": "Lindfield Pond",
   "img": "images/lindfield-7jx.jpg",
@@ -937,18 +948,6 @@
   "size": "A3 · Oil on canvas · Framed",
   "lat": 51.1196,
   "lng": 0.4089
- },
- {
-  "id": "volks-railway",
-  "title": "Volks Railway & The Penny Lift",
-  "img": "images/volks-railway.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.816927,
-  "lng": -0.122023,
-  "collection": "uk",
-  "prints": "https://www.thegillangallery.com/product-page/volks-railway-and-the-penny-lift",
-  "sold": true
  },
  {
   "id": "sivota-olive-press",
