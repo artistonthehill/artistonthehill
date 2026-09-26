@@ -1,3 +1,4 @@
+document.getElementById('sendName').addEventListener('click',()=>ping('tapped'));
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="description" content="A private view of paintings from the Bahamas, Greece and Venice at Saltmarsh Farmhouse in the Seven Sisters — Saturday 14 November.">
@@ -39,6 +40,9 @@
     font-family:Georgia,serif;font-size:17.5px;padding:15px 34px;cursor:pointer;
     box-shadow:0 1px 0 var(--teal), 0 6px 18px rgba(35,35,35,.08);
     transition:transform .15s ease, box-shadow .15s ease}
+  .send a.sendname{display:inline-block;background:var(--mount);border:1px solid var(--teal);color:var(--ink);
+    font-family:Georgia,serif;font-size:17.5px;padding:15px 34px;text-decoration:none;
+    box-shadow:0 1px 0 var(--teal), 0 6px 18px rgba(35,35,35,.08)}
   .send button:hover{transform:translateY(-2px);
     box-shadow:0 1px 0 var(--teal), 0 10px 24px rgba(35,35,35,.13)}
   .err{color:#9C4A34;font-size:14.5px;text-align:center;margin-top:14px;min-height:18px}
@@ -65,17 +69,8 @@
   and the dusk coming in over the Downs.</p>
   <p class="when">Saturday 14 November &middot; two till six</p>
 
-  <label for="name">Your name</label>
-  <input type="text" id="name" autocomplete="given-name">
-
-  <label for="contact">WhatsApp or email</label>
-  <input type="text" id="contact" autocomplete="off" inputmode="email"
-    placeholder="a number or an address &mdash; whichever you prefer">
-
-  <div class="send"><button type="button" id="goBtn">Ask for an invitation</button></div>
-  <div class="err" id="err"></div>
-
-  <p class="note">Your invitation will follow, with the details and a one-tap RSVP.</p>
+  <p class="note">Send me your first name and I&rsquo;ll add you to the list.</p>
+  <div class="send"><a class="sendname" id="sendName" href="https://wa.me/447880601709?text=Hi%20Tony%20%E2%80%94%20I%27d%20like%20an%20invitation%20to%20the%20private%20view.%20%5BYour%20first%20name%5D">Send my name</a></div>
 
   <nav class="footnav">
     <a class="fbtn" href="commissions.html">Commissions <span>&rarr;</span></a>
