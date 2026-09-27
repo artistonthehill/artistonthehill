@@ -324,6 +324,9 @@
         <a href="#" class="prints-link" id="prints-link" target="_blank">
           Giclée prints available at The Gillan Gallery ↗
         </a>
+        <a href="waiting-room.html" class="prints-link visible" id="wr-link">
+          Or own it monthly — interest-free, from £30 a month →
+        </a>
         <a href="#" class="enquire-btn" id="enquire-btn" target="_blank">
           <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
           Enquire via WhatsApp
@@ -406,6 +409,7 @@ function init() {
     printsEl.classList.add('visible');
   }
 
+  if (price && /sold/i.test(price)) { document.getElementById('wr-link').style.display='none'; }
   // Enquire button
   const msg = encodeURIComponent('Hello Tony, I\'m interested in "' + title + '"' + (price ? ' (' + price + ')' : '') + '. Could you tell me more?');
   document.getElementById('enquire-btn').href = 'https://wa.me/447880601709?text=' + msg;
