@@ -67,6 +67,8 @@
   .sendname a{display:block;background:var(--teal);color:#FDFCF8;text-decoration:none;
     font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300;font-size:15px;letter-spacing:.12em;
     padding:17px 20px;box-shadow:0 1px 0 var(--teal), 0 6px 18px rgba(35,35,35,.08)}
+  .wr{margin-top:6px;font-size:15px}
+  .wr a{color:var(--soft);text-decoration:none;border-bottom:1px solid var(--hair)}
 </style>
 </head>
 <body>
@@ -75,6 +77,7 @@
   <div id="lot"></div>
   <nav class="footnav">
     <a class="fbtn" href="private-view.html">The private view <span>&rarr;</span></a>
+    <a class="fbtn" href="waiting-room.html">The Waiting Room <span>&rarr;</span></a>
     <a class="fbtn" href="commissions.html">Commissions <span>&rarr;</span></a>
     <a class="fbtn" href="https://eepurl.com/gmXsdP">The newsletter <span>&rarr;</span></a>
     <a class="fbtn" href="about.html">About me <span>&rarr;</span></a>
@@ -143,6 +146,7 @@ fetch('paintings.json').then(r=>r.json()).then(list=>{
     (p.story?'<p class="story">'+esc(p.story)+'</p>':'')+
     '<p class="meta">'+esc(p.size||'')+'<br>'+esc(p.made||'Painted on the spot, in one sitting')+' &mdash; one of one</p>'+
     '<p class="price">'+(p.sold?'Sold':esc(p.price||''))+'</p>'+
+    (p.sold?'':'<p class="wr"><a href="waiting-room.html?p='+encodeURIComponent(slug)+'">Or own it monthly &mdash; interest-free, from &pound;30 a month &rarr;</a></p>')+
     '<div class="doors">'+doors+'</div></div>'+
     (p.easel?'<hr class="rule"><div class="plate2"><img loading="lazy" src="'+esc(p.easel)+'" alt="On the easel"></div><p class="cap">At the easel — the morning it was made.</p>':'')+
     '<hr class="rule"><div class="nav">'+navEl(list,i-1,'Previous')+navEl(list,i+1,'Next')+'</div>';
