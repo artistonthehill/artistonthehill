@@ -274,7 +274,7 @@ const F={title:'fldUwsWcBNFRiOm80',slug:'fldaFiuL9FO21uLI0',img:'fldsi0m3fLzHXER
  curLoc:'fldJ8tcc8rBUUWTbC',framed:'fldmzEwUPg57ajdeQ',notes:'fld1EoW9eum2LlLsC'};
 const FI={person:'fldwoBk1IKLWTpk4g',channel:'fldxZUFngyekqKU7Z',notes:'fldh4nntPUsKiIqSw',
  type:'fld2CZPj8l8KUKjPJ',code:'fldtGO7poSrEqdjQe',link:'fldJ9NCEwhh9U8xiA',source:'fldwt7yXBA5yrcWwY'};
-const VER='v2.1.1 · 29 Sep';
+const VER='v2.1.2 · 29 Sep';
 document.getElementById('ver').textContent=VER;
 // anything that blows up now shows on screen instead of vanishing
 const errBar=document.getElementById('errBar');
@@ -821,7 +821,9 @@ function openSheet(p){
   const oc=document.getElementById('shOnCard'); oc.scrollTop=oc.scrollHeight;
   const age=p.created?days(p.created):null;
   const rel=document.getElementById('shRelease');
-  if(p.pub){document.getElementById('shAge').innerHTML='Already on the public site.';
+  if(p.pub){document.getElementById('shAge').innerHTML=p.slug
+      ?'Already on the public site — <a href="'+SITE+'/painting.html?p='+p.slug+'" target="_blank" rel="noopener" style="color:var(--ochre);font-weight:700">see its page</a> (price, size, sold or not).'
+      :'Marked public, but it has no slug so the site can\u2019t show it — add a photo and Write to the card.';
     rel.classList.add('hidden');}
   else{
     rel.classList.remove('hidden');
