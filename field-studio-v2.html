@@ -29,6 +29,37 @@
   .ppl .src{display:inline-block;background:var(--teal);color:#0E1B19;border-radius:6px;font-size:11px;
     font-weight:800;padding:1px 6px;margin-left:6px;vertical-align:middle}
   #queue .err{color:var(--aliz);font-size:12.5px;margin:-4px 0 9px 63px}
+  .pc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
+  .pc.qr{border-color:var(--teal)}
+  .pc input[type=text],.pc textarea,.pc select{margin-top:8px}
+  .pc .row{display:flex;gap:8px}
+  .pc .row select{flex:0 0 118px}
+  .pc .row input{flex:1}
+  .pc select{background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--canvas);
+    font:inherit;font-size:16px;padding:12px 10px;-webkit-appearance:none;appearance:none}
+  .pc textarea{min-height:120px}
+  .pc .lab{font-size:12px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;margin-top:12px}
+  .pc .open{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:6px}
+  .pc .open button{flex:1;background:none;border:0;color:var(--dim);font:inherit;font-size:14px;font-weight:700;padding:10px 4px}
+  .pc .open button.on{background:var(--canvas);color:var(--ground)}
+  .pc .two{display:flex;gap:8px;margin-top:10px}
+  .pc .two button{flex:1;background:none;border:1px solid var(--line);border-radius:10px;color:var(--dim);
+    font:inherit;font-size:14px;font-weight:700;padding:11px}
+  .pc .two button.on{border-color:var(--ochre);color:var(--ochre)}
+  .pc .send{display:block;width:100%;margin-top:10px;border:0;border-radius:11px;font:inherit;font-size:16px;
+    font-weight:800;padding:14px;text-align:center;text-decoration:none;color:#fff;background:#25D366}
+  .pc .send.mail{background:#2F6FB5}
+  .pc .send.wait{background:var(--panel2);color:var(--dim)}
+  .pc .foot{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12.5px;color:var(--dim)}
+  .pc .foot .rm{margin-left:auto;background:none;border:0;color:var(--aliz);font:inherit;font-size:13px;font-weight:700}
+  .pc .foot .rm.arm{background:var(--aliz);color:#fff;border-radius:99px;padding:4px 10px}
+  .pc .sp{display:inline-block;border-radius:99px;padding:3px 9px;font-weight:700}
+  .pc .sp.ok{background:#1f3b26;color:#9ad39a}.pc .sp.bad{background:#3a1a17;color:#f3c7c1}
+  .pc .sp.s,.pc .sp.q{background:var(--panel2);color:var(--ochre)}.pc .sp.n{background:var(--panel2)}
+  .pc .tag{font-size:12.5px;color:var(--dim);margin-top:6px}
+  .pc .tag b{color:var(--canvas);font-family:ui-monospace,Menlo,monospace}
+  .grp{font-weight:800;font-size:15px;margin:18px 0 8px;display:flex;gap:8px;align-items:baseline}
+  .grp span{font-weight:400;color:var(--dim);font-size:13px}
   .hidden{display:none!important}
   .field{margin-bottom:16px}
   label{display:block;font-size:14px;color:var(--dim);margin-bottom:7px}
@@ -137,6 +168,7 @@
   <div class="tabs">
     <button id="tabCard" class="on" type="button">Card new</button>
     <button id="tabWall" type="button">The wall</button>
+    <button id="tabPeople" type="button">People <span id="peopleN" style="font-weight:400"></span></button>
   </div>
 
   <div id="cardView">
@@ -155,7 +187,7 @@
       <div class="wallnote" id="dup" style="color:var(--ochre);display:none;margin-top:7px"></div>
     </div>
 
-    <div class="qhead" style="margin:0 0 10px">People you've met so far <span style="font-weight:400;color:var(--dim)">— for the piece you're still working on</span></div>
+    <div class="qhead" style="margin:0 0 10px">People you've met so far <span style="font-weight:400;color:var(--dim)">— for the piece you're still working on. Saved as you type.</span></div>
     <div id="pplList"></div>
     <div class="chips" style="margin-bottom:16px">
       <button class="chip" id="addPerson" type="button">＋ Add a person (before it's carded)</button>
@@ -183,6 +215,15 @@
     <div id="queue"><div class="empty">Nothing carded yet.</div></div>
   </div>
 
+  <div id="peopleView" class="hidden">
+    <div class="wallhead"><input type="text" id="peopleSearch" autocomplete="off" placeholder="Search names, numbers, paintings…"></div>
+    <div class="wallnote" id="peopleNote"></div>
+    <div class="chips" style="margin-bottom:6px">
+      <button class="chip" id="copyPeople" type="button">Copy everyone as text</button>
+      <button class="chip" id="pushPeople" type="button">Send all to the spine</button>
+    </div>
+    <div id="peopleList"></div>
+  </div>
   <div id="wallView" class="hidden">
     <div class="wallhead">
       <input type="text" id="wallSearch" autocomplete="off" placeholder="Search the spine…">
@@ -233,23 +274,10 @@
     <button class="write" id="shWrite" type="button">Write to the card</button>
     <button class="release" id="shRelease" type="button">Release to the site</button>
   </div>
-  <button class="enq" id="shEnq" type="button">Someone's interested</button>
+  <button class="enq" id="shEnq" type="button">Someone's interested — add them</button>
+  <button class="enq" id="shPeople" type="button" style="border-color:var(--dim);color:var(--dim)">People on this card (from the spine)</button>
   <button class="enq" id="shLive" type="button" style="border-color:var(--ochre);color:var(--ochre)">Put this on the easel QR</button>
   <button class="del" id="shDel" type="button">Delete from the spine</button>
-</div></div>
-
-<!-- enquiry sheet -->
-<div class="sheetwrap" id="enqWrap"><div class="sheet">
-  <div class="shead"><div><div class="sn">Someone's interested</div>
-    <div class="sm" id="enqPainting"></div></div>
-    <button class="x" id="enqClose" type="button">×</button></div>
-  <div class="field"><label for="enqName">Their name</label>
-    <input type="text" id="enqName" autocomplete="off"></div>
-  <div class="field"><label for="enqContact">WhatsApp or email</label>
-    <input type="text" id="enqContact" autocomplete="off"></div>
-  <div class="field"><label for="enqNote">The moment</label>
-    <textarea id="enqNote" placeholder="e.g. watched the last hour at the easel, loved the light"></textarea></div>
-  <div class="srow"><button class="write" id="enqSave" type="button">Into the CRM</button></div>
 </div></div>
 
 <!-- keys sheet -->
@@ -273,8 +301,9 @@ const F={title:'fldUwsWcBNFRiOm80',slug:'fldaFiuL9FO21uLI0',img:'fldsi0m3fLzHXER
  sold:'fldK2MfHmSOcuL5Cd',pub:'flduUIlOtmw04hwwL',lat:'fldaDJkmLc2ygxYyJ',lng:'fldM6DKhwMMNKb6lK',
  curLoc:'fldJ8tcc8rBUUWTbC',framed:'fldmzEwUPg57ajdeQ',notes:'fld1EoW9eum2LlLsC'};
 const FI={person:'fldwoBk1IKLWTpk4g',channel:'fldxZUFngyekqKU7Z',notes:'fldh4nntPUsKiIqSw',
- type:'fld2CZPj8l8KUKjPJ',code:'fldtGO7poSrEqdjQe',link:'fldJ9NCEwhh9U8xiA',source:'fldwt7yXBA5yrcWwY'};
-const VER='v2.1.3 · 29 Sep';
+ type:'fld2CZPj8l8KUKjPJ',code:'fldtGO7poSrEqdjQe',link:'fldJ9NCEwhh9U8xiA',source:'fldwt7yXBA5yrcWwY',
+ priority:'flddTmjw0xb0S8ykd'};
+const VER='v2.2 · 29 Sep';
 document.getElementById('ver').textContent=VER;
 // anything that blows up now shows on screen instead of vanishing
 const errBar=document.getElementById('errBar');
@@ -372,7 +401,7 @@ function waDigits(c){ let d=(c||'').replace(/[^0-9]/g,''); if(d.startsWith('0'))
 const SIZES=['80×30cm','42×30cm','60×42cm','A3','A2','60×30cm'];
 const PRICES=['1320','2040','2760','3600','5040'];
 let pickSize='',pickPrice='',photoB64=null,photoURL=null,photoThumb=null,pin=null;
-let peoplePending=[];
+
 function chips(el,list,cur,set){
   el.innerHTML='';
   list.forEach(v=>{const b=document.createElement('button');b.type='button';
@@ -405,35 +434,6 @@ document.getElementById('phIn').onchange=e=>{
   img.src=URL.createObjectURL(f);
 };
 
-// ---- people you met today (feeds the WhatsApp zap on card) ----
-function pplRender(){
-  const el=document.getElementById('pplList'); el.innerHTML='';
-  if(!peoplePending.length){el.innerHTML='<div class="wallnote">Nobody added yet — tap below the moment someone stops to talk.</div>';}
-  else peoplePending.forEach((p,i)=>{
-    const row=document.createElement('div'); row.className='ppl';
-    row.innerHTML='<div class="t"><div class="n">'+p.name+(p.src==='QR'?'<span class="src">QR</span>':'')+'</div><div class="m">'+
-      (p.contact||'no contact yet')+'</div></div><button type="button" class="rm">remove</button>';
-    row.querySelector('.rm').onclick=()=>{peoplePending.splice(i,1);pplRender();};
-    el.appendChild(row);
-  });
-  saveDraft();
-}
-document.getElementById('addPerson').onclick=()=>{
-  const name=(prompt('Their name?')||'').trim(); if(!name)return;
-  const contact=askContact();
-  peoplePending.push({name:name,contact:contact,src:'In person'});
-  pplRender();
-};
-// someone who scanned the sign and texted — same list, tagged QR so the
-// spine knows the sign brought them in
-document.getElementById('addQR').onclick=()=>{
-  const name=(prompt('Their first name (from the WhatsApp)?')||'').trim(); if(!name)return;
-  const contact=askContact();
-  peoplePending.push({name:name,contact:contact,src:'QR'});
-  pplRender();
-};
-pplRender();
-
 // ---- autosave the whole in-progress card — a crash or dead signal never
 // loses a name someone just gave you. Nothing sends until "Card it". ----
 function saveDraft(){
@@ -444,7 +444,7 @@ function saveDraft(){
       priceFree:document.getElementById('priceFree').value,
       pickSize:pickSize,pickPrice:pickPrice,
       notes:document.getElementById('notes').value,
-      pin:pin,people:peoplePending,
+      pin:pin,
       photoB64:photoB64}));
   }catch(e){}
 }
@@ -458,7 +458,6 @@ function restoreDraft(){
   document.getElementById('priceFree').value=d.priceFree||'';
   document.getElementById('notes').value=d.notes||'';
   pickSize=d.pickSize||'';pickPrice=d.pickPrice||'';drawChips();
-  peoplePending=Array.isArray(d.people)?d.people:[];pplRender();
   if(d.pin){setPin(d.pin.lat,d.pin.lng);map.setView([d.pin.lat,d.pin.lng],13);}
   if(d.photoB64){
     photoB64=d.photoB64;photoURL=d.photoURL||('data:image/jpeg;base64,'+d.photoB64);
@@ -498,6 +497,190 @@ document.getElementById('title').addEventListener('input',()=>{
   if(hit)dupEl.textContent='Already in the spine: '+hit.title;
   saveDraft();
 });
+
+// ================= the People book =================
+// Every name, number and email ever typed on this phone, in its own store,
+// written on every keystroke, never trimmed, never cleared by the app.
+// Photos live elsewhere, so this store stays tiny and can't be crowded out.
+// A second copy is kept, and a bin holds anyone removed.
+const CCS=[['44','UK +44'],['353','IE +353'],['31','NL +31'],['49','DE +49'],['33','FR +33'],['40','RO +40'],
+ ['30','GR +30'],['34','ES +34'],['39','IT +39'],['41','CH +41'],['32','BE +32'],['43','AT +43'],['351','PT +351'],
+ ['45','DK +45'],['46','SE +46'],['47','NO +47'],['48','PL +48'],['1','US/CA +1'],['61','AU +61'],['64','NZ +64'],
+ ['971','UAE +971'],['852','HK +852'],['65','SG +65'],['886','TW +886'],['81','JP +81']];
+function loadPeople(){
+  for(const k of ['fs2-people','fs2-people-bak']){
+    try{const v=JSON.parse(localStorage.getItem(k)||'null'); if(Array.isArray(v))return v;}catch(e){}
+  }
+  return [];
+}
+let PEOPLE=loadPeople();
+function savePeople(){
+  try{ const j=JSON.stringify(PEOPLE); localStorage.setItem('fs2-people',j); localStorage.setItem('fs2-people-bak',j); }
+  catch(e){ showErr('this phone would not save the people list — write the number down NOW, then close other apps and try again'); }
+  const n=PEOPLE.length; document.getElementById('peopleN').textContent=n?'('+n+')':'';
+}
+// prove the phone can save before Tony types a single name
+(function(){try{localStorage.setItem('fs2-test','1');if(localStorage.getItem('fs2-test')!=='1')throw 0;localStorage.removeItem('fs2-test');}
+  catch(e){showErr('this phone is NOT saving — nothing typed will survive a reload. Close other apps or free space before carding.');}})();
+function codeFor(slug,name){return (slug||'xxxx').slice(0,4).toUpperCase().replace(/[^A-Z0-9]/g,'')+'-'+(name||'').slice(0,3).toUpperCase();}
+function newPerson(o){
+  const p=Object.assign({id:'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),
+    name:'',cc:'44',num:'',email:'',src:'In person',cardId:null,rec:'',slug:'',title:'',code:'',
+    opener:'met',msg:null,priority:false,sent:0,iid:'',sp:'',err:'',created:Date.now()},o||{});
+  PEOPLE.unshift(p); savePeople(); return p;
+}
+function first(n){return (n||'').trim().split(/\s+/)[0]||'';}
+const TAIL='As promised, here\u2019s your private view of the painting. Everything\u2019s on the page \u2014 a few ways to own it, a print option, and a sign-up for my newsletter if you fancy it. Have a wander.';
+function openerText(p){
+  const f=first(p.name)||'there';
+  if(p.src==='QR')return 'Hi '+f+' \u2014 thanks for sending your name at the easel. Here\u2019s '+(p.title||'the painting')+' finished \u2014 a first look, before it goes anywhere else.';
+  if(p.opener==='pic')return 'Hi '+f+' \u2014 it was great to include you in the painting today.\n\n'+TAIL;
+  if(p.opener==='kids')return 'Hi '+f+' \u2014 it was great to include you and the children in the painting today.\n\n'+TAIL;
+  return 'Hi '+f+' \u2014 great to meet you today.\n\n'+TAIL;
+}
+function msgOf(p){return (p.msg!==null&&p.msg!==undefined)?p.msg:openerText(p);}
+function roomLink(p){return p.slug?SITE+'/view.html?p='+p.slug+'&w='+(p.code||''):'';}
+function fullDigits(p){return (p.cc||'')+(p.num||'').replace(/[^0-9]/g,'').replace(/^0+/,'');}
+function channelOf(p){return p.num?('+'+fullDigits(p)):(p.email||'');}
+function fromChannel(ch){   // spine "Channel" → cc/num/email
+  ch=(ch||'').trim(); if(ch.includes('@'))return {email:ch,cc:'44',num:''};
+  let d=ch.replace(/[^0-9]/g,''); if(!d)return {email:'',cc:'44',num:''};
+  if(d.startsWith('0')){return {email:'',cc:'44',num:d.slice(1)};}
+  const cc=CCS.map(c=>c[0]).sort((a,b)=>b.length-a.length).find(c=>d.startsWith(c));
+  return cc?{email:'',cc:cc,num:d.slice(cc.length)}:{email:'',cc:'44',num:d};
+}
+let pushTimers={};
+function queuePush(p){ clearTimeout(pushTimers[p.id]); pushTimers[p.id]=setTimeout(()=>pushPerson(p),1500); }
+// one row in Interest per person, linked to the painting; edits update it
+async function pushPerson(p){
+  if(!p.rec||!p.name.trim()||!(p.num||p.email)){p.sp='';renderPersonState(p);return;}
+  if(!navigator.onLine||!K.at){p.sp='q';renderPersonState(p);return;}
+  if(!p.code&&p.slug)p.code=codeFor(p.slug,p.name);
+  p.sp='s';renderPersonState(p);
+  const fi={};fi[FI.person]=p.name.trim();fi[FI.channel]=channelOf(p);fi[FI.type]='Easel';fi[FI.source]=p.src||'In person';
+  fi[FI.code]=p.code;fi[FI.link]=[p.rec];fi[FI.priority]=!!p.priority;
+  if(!p.iid)fi[FI.notes]=(p.src==='QR'?'Scanned the easel QR \u2014 ':'Met at the easel \u2014 ')+(p.title||'')+'. ('+today()+')';
+  try{
+    if(p.iid){await at('PATCH',INTEREST,{records:[{id:p.iid,fields:fi}],typecast:true});}
+    else{const j=await at('POST',INTEREST,{records:[{fields:fi}],typecast:true});p.iid=j.records[0].id;}
+    p.sp='ok';p.err='';
+  }catch(e){p.sp='bad';p.err=String(e&&e.message||e);}
+  savePeople();renderPersonState(p);
+}
+// pull a painting's people out of the spine (old-app rooms and all)
+async function pullPeople(painting){
+  const f='FIND("'+painting.title.replace(/"/g,'\\"')+'",ARRAYJOIN({Painting}))';
+  const j=await at('GET',INTEREST+'?returnFieldsByFieldId=true&filterByFormula='+encodeURIComponent(f));
+  let n=0;
+  j.records.forEach(r=>{
+    if(PEOPLE.find(p=>p.iid===r.id))return;
+    const ch=fromChannel(r.fields[FI.channel]);
+    PEOPLE.push(Object.assign({id:'p'+r.id,name:r.fields[FI.person]||'',src:(r.fields[FI.source]||'In person'),
+      cardId:null,rec:painting.rec,slug:painting.slug||'',title:painting.title,code:r.fields[FI.code]||'',
+      opener:'met',msg:null,priority:!!r.fields[FI.priority],sent:0,iid:r.id,sp:'ok',err:'',
+      created:Date.parse(r.createdTime)||Date.now()},ch));
+    n++;
+  });
+  savePeople(); return n;
+}
+function personCard(p){
+  const d=document.createElement('div'); d.className='pc'+(p.src==='QR'?' qr':''); d.dataset.pid=p.id;
+  const ccOpts=CCS.map(c=>'<option value="'+c[0]+'"'+(c[0]===p.cc?' selected':'')+'>'+c[1]+'</option>').join('');
+  d.innerHTML=
+    '<input type="text" class="nm" placeholder="Their name" autocomplete="off" value="'+esc(p.name)+'">'+
+    (p.src==='QR'?'<div class="tag">Came in by the easel QR</div>':'')+
+    '<div class="row"><select class="cc">'+ccOpts+'</select><input type="text" class="num" inputmode="tel" placeholder="WhatsApp number" autocomplete="off" value="'+esc(p.num)+'"></div>'+
+    '<input type="text" class="em" inputmode="email" placeholder="Email" autocomplete="off" value="'+esc(p.email)+'">'+
+    '<div class="tag">Painting: <b>'+(p.title?esc(p.title):'not carded yet \u2014 stays with the piece you\u2019re on')+'</b>'+(p.code?' \u00b7 tag <b>'+esc(p.code)+'</b>':'')+'</div>'+
+    (p.src==='QR'?'':'<div class="lab">Quick opener (rewrites the message)</div><div class="open">'+
+      '<button type="button" data-o="met"'+(p.opener==='met'?' class="on"':'')+'>Met you</button>'+
+      '<button type="button" data-o="pic"'+(p.opener==='pic'?' class="on"':'')+'>In picture</button>'+
+      '<button type="button" data-o="kids"'+(p.opener==='kids'?' class="on"':'')+'>Kids in pic</button></div>')+
+    '<div class="lab">Message to '+esc(first(p.name)||'them')+' \u2014 edit freely (the link is added automatically)</div>'+
+    '<textarea class="msg">'+esc(msgOf(p))+'</textarea>'+
+    '<div class="two"><button type="button" class="pri'+(p.priority?' on':'')+'">'+(p.priority?'\u2605 Priority':'Priority?')+'</button><button type="button" class="rst">Reset text</button></div>'+
+    '<a class="send" href="#"></a>'+
+    '<div class="foot"><span class="sp n"></span><button type="button" class="rm">remove</button></div>';
+  const q=c=>d.querySelector(c);
+  const upd=()=>{savePeople();renderPersonState(p);queuePush(p);};
+  q('.nm').oninput=e=>{p.name=e.target.value;if(p.msg===null)q('.msg').value=openerText(p);if(p.slug)p.code=codeFor(p.slug,p.name);upd();};
+  q('.cc').onchange=e=>{p.cc=e.target.value;upd();};
+  q('.num').oninput=e=>{p.num=e.target.value;upd();};
+  q('.em').oninput=e=>{p.email=e.target.value;upd();};
+  d.querySelectorAll('.open button').forEach(b=>b.onclick=()=>{p.opener=b.dataset.o;p.msg=null;q('.msg').value=openerText(p);
+    d.querySelectorAll('.open button').forEach(x=>x.classList.toggle('on',x===b));savePeople();});
+  q('.msg').oninput=e=>{p.msg=e.target.value;savePeople();};
+  q('.rst').onclick=()=>{p.msg=null;q('.msg').value=openerText(p);savePeople();};
+  q('.pri').onclick=function(){p.priority=!p.priority;this.classList.toggle('on',p.priority);this.textContent=p.priority?'\u2605 Priority':'Priority?';upd();};
+  q('.send').onclick=e=>{
+    const a=e.currentTarget; if(a.classList.contains('wait')){e.preventDefault();return;}
+    p.sent=(p.sent||0)+1;p.sentAt=Date.now();savePeople();setTimeout(()=>renderPersonState(p),300);
+  };
+  let armed=false;
+  q('.rm').onclick=function(){
+    if(!armed){armed=true;this.classList.add('arm');this.textContent='tap again to remove '+(first(p.name)||'them');setTimeout(()=>{armed=false;this.classList.remove('arm');this.textContent='remove';},3000);return;}
+    try{const bin=JSON.parse(localStorage.getItem('fs2-people-bin')||'[]');bin.unshift(p);localStorage.setItem('fs2-people-bin',JSON.stringify(bin.slice(0,60)));}catch(e){}
+    PEOPLE=PEOPLE.filter(x=>x.id!==p.id);savePeople();renderPeople();renderDraftPeople();
+  };
+  renderPersonState(p,d);
+  return d;
+}
+function renderPersonState(p,d){
+  d=d||document.querySelector('[data-pid="'+p.id+'"]'); if(!d)return;
+  const q=c=>d.querySelector(c);
+  const sp=q('.sp'); const txt={ok:'in the spine',s:'sending\u2026',q:'not in the spine yet \u2014 tap to send',bad:'spine refused \u2014 tap to retry'}[p.sp];
+  sp.className='sp '+(p.sp||'n');
+  sp.textContent=txt||(p.rec?(p.name.trim()&&(p.num||p.email)?'':'name and a number or email, then it goes to the spine'):'goes to the spine when you card the painting');
+  if(p.sp==='bad'&&p.err)sp.title=p.err;
+  sp.onclick=(p.sp==='q'||p.sp==='bad')?()=>pushPerson(p):null;
+  const a=q('.send'); const link=roomLink(p); const it=queue.find(i=>i.id===p.cardId);
+  const lagLeft=it&&it.okAt?150000-(Date.now()-it.okAt):0;
+  const isMail=!p.num&&p.email;
+  a.className='send'+(isMail?' mail':'');
+  if(!p.name.trim()||!(p.num||p.email)){a.classList.add('wait');a.textContent='Name and a number (or email) first';a.href='#';return;}
+  if(!link){a.classList.add('wait');a.textContent=p.cardId||p.rec?'Waiting for the card to reach the spine\u2026':'Card the painting, then send';a.href='#';return;}
+  if(lagLeft>0){a.classList.add('wait');a.textContent='Site catching up \u2014 send in about '+Math.ceil(lagLeft/60000)+' min';a.href='#';needTick=true;clearTimeout(tick);tick=setTimeout(()=>renderPersonState(p),20000);return;}
+  const body=msgOf(p)+'\n\n'+link;
+  if(isMail){a.href='mailto:'+p.email+'?subject='+encodeURIComponent((p.title||'A painting')+' \u2014 a private view')+'&body='+encodeURIComponent(body);}
+  else{a.href='https://wa.me/'+fullDigits(p)+'?text='+encodeURIComponent(body);a.target='_blank';a.rel='noopener';}
+  a.textContent=(p.sent?'Re-send ':'Send ')+(isMail?'Email':'WhatsApp');
+}
+function esc(t){return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+let peopleFocus=null;
+function renderDraftPeople(){
+  const el=document.getElementById('pplList'); el.innerHTML='';
+  const ds=PEOPLE.filter(p=>!p.cardId&&!p.rec);
+  if(!ds.length){el.innerHTML='<div class="wallnote">Nobody added yet \u2014 tap below the moment someone stops to talk.</div>';return;}
+  ds.forEach(p=>el.appendChild(personCard(p)));
+}
+document.getElementById('addPerson').onclick=()=>{newPerson({src:'In person'});renderDraftPeople();
+  const el=document.querySelector('#pplList .pc input');if(el)el.focus();};
+document.getElementById('addQR').onclick=()=>{newPerson({src:'QR'});renderDraftPeople();
+  const el=document.querySelector('#pplList .pc input');if(el)el.focus();};
+function renderPeople(){
+  const list=document.getElementById('peopleList'); if(!list)return; list.innerHTML='';
+  const q=(document.getElementById('peopleSearch').value||'').toLowerCase();
+  const inSpine=PEOPLE.filter(p=>p.iid).length;
+  document.getElementById('peopleNote').textContent=PEOPLE.length+' on this phone \u00b7 '+inSpine+' in the spine. Everything here is saved as you type and never cleared by the app.';
+  const groups=new Map();
+  PEOPLE.filter(p=>!q||[p.name,p.num,p.email,p.title,p.code].join(' ').toLowerCase().includes(q))
+    .forEach(p=>{const k=p.title||'\u2014 not carded yet';if(!groups.has(k))groups.set(k,[]);groups.get(k).push(p);});
+  if(!groups.size){list.innerHTML='<div class="empty">Nobody here yet.</div>';return;}
+  groups.forEach((ps,k)=>{
+    const h=document.createElement('div');h.className='grp';h.innerHTML=esc(k)+' <span>'+ps.length+' \u2014 hidden from each other</span>';list.appendChild(h);
+    ps.forEach(p=>list.appendChild(personCard(p)));
+  });
+  if(peopleFocus){const el=document.querySelector('[data-pid="'+peopleFocus+'"]');if(el)el.scrollIntoView({block:'start'});peopleFocus=null;}
+}
+document.getElementById('peopleSearch').addEventListener('input',renderPeople);
+document.getElementById('copyPeople').onclick=async function(){
+  const t=PEOPLE.map(p=>[p.name,channelOf(p),p.title||'(not carded)',p.code,p.src].filter(Boolean).join(' \u00b7 ')).join('\n');
+  try{await navigator.clipboard.writeText(t);this.textContent='copied \u2014 paste it anywhere safe';}
+  catch(e){prompt('Copy this:',t);}
+  setTimeout(()=>{this.textContent='Copy everyone as text';},3000);
+};
+document.getElementById('pushPeople').onclick=()=>PEOPLE.filter(p=>p.rec&&p.sp!=='ok').forEach(pushPerson);
+addEventListener('online',()=>PEOPLE.filter(p=>p.rec&&(p.sp==='q'||p.sp==='bad')).forEach(pushPerson));
 
 // ================= queue + sync =================
 let queue=JSON.parse(localStorage.getItem('fs2-q')||'[]');
@@ -543,66 +726,14 @@ function render(){
     // once the card and its room page are live, offer the zap per person,
     // plus a standing way to add more people to THIS card — never a reason
     // to tap "Card it" again for someone you met after the fact
-    const SITE_LAG=150000;   // GitHub Pages takes ~2 min to show a new photo
-    if(it.kind==='card' && it.state==='ok' && it.okAt && Date.now()-it.okAt<SITE_LAG){
-      const w=document.createElement('div'); w.className='err'; w.style.color='var(--dim)';
-      const left=Math.ceil((SITE_LAG-(Date.now()-it.okAt))/60000);
-      w.textContent='site catching up — the Text buttons appear in about '+left+' min, when the photo is live';
-      list.appendChild(w); needTick=true;
-    }
-    if(it.kind==='card' && it.state==='ok' && (!it.okAt || Date.now()-it.okAt>=SITE_LAG)){
-      (it.people||[]).forEach(p=>{
-        const first=p.name.split(' ')[0];
-        const msg=(p.src==='QR'
-          ?'Hi '+first+' — thanks for sending your name at the easel. Here\u2019s '+it.title+
-           ' finished — a first look, before it goes anywhere else.\n\n'
-          :'Hi '+first+' — great to meet you today. Here\u2019s '+it.title+
-           ', fresh off the easel — first look, before it goes anywhere else.\n\n')+
-          SITE+'/view.html?p='+it.slug+'&w='+(p.code||'');
-        const isEmail=(p.contact||'').includes('@');
-        if(isEmail){
-          const a=document.createElement('a'); a.className='mlbtn';
-          a.href='mailto:'+p.contact+'?subject='+encodeURIComponent(it.title+' — a private view')+
-            '&body='+encodeURIComponent(msg);
-          a.textContent='Email '+first; list.appendChild(a);
-        }else{
-          const a=document.createElement('a'); a.className='wabtn'; a.target='_blank'; a.rel='noopener';
-          a.href='https://wa.me/'+waDigits(p.contact)+'?text='+encodeURIComponent(msg);
-          a.textContent='Text '+first+(p.src==='QR'?' (QR)':''); list.appendChild(a);
-        }
-      });
-      const addBtn=document.createElement('button'); addBtn.type='button';
-      addBtn.style.cssText='display:block;margin:3px 0 6px 63px;background:var(--sap);'+
-        'color:#101408;border:0;border-radius:99px;font:inherit;font-size:13.5px;font-weight:800;'+
-        'padding:9px 15px';
-      addBtn.textContent='\u2713 Add someone else to \u201c'+it.title+'\u201d';
-      addBtn.onclick=()=>addPersonToCard(it,'In person');
-      list.appendChild(addBtn);
-      const qrBtn=document.createElement('button'); qrBtn.type='button';
-      qrBtn.style.cssText='display:block;margin:0 0 12px 63px;background:none;border:1px solid var(--teal);'+
-        'color:var(--teal);border-radius:99px;font:inherit;font-size:13.5px;font-weight:800;padding:8px 15px';
-      qrBtn.textContent='\u2713 Add a QR contact to \u201c'+it.title+'\u201d';
-      qrBtn.onclick=()=>addPersonToCard(it,'QR');
-      list.appendChild(qrBtn);
-    }
-    // same zap for someone logged via "Someone's interested" on the wall —
-    // an older painting deserves the same one-tap send as a brand new one
-    if(it.kind==='enquiry' && it.state==='ok' && it.slug){
-      const first=it.name.split(' ')[0];
-      const msg='Hi '+first+' — great to meet you today. Here\u2019s '+it.paintingTitle+
-        ', for your first look, before it goes anywhere else.\n\n'+
-        SITE+'/view.html?p='+it.slug+'&w='+(it.code||'');
-      const isEmail=(it.contact||'').includes('@');
-      if(isEmail){
-        const a=document.createElement('a'); a.className='mlbtn';
-        a.href='mailto:'+it.contact+'?subject='+encodeURIComponent(it.paintingTitle+' — a private view')+
-          '&body='+encodeURIComponent(msg);
-        a.textContent='Email '+first; list.appendChild(a);
-      }else{
-        const a=document.createElement('a'); a.className='wabtn'; a.target='_blank'; a.rel='noopener';
-        a.href='https://wa.me/'+waDigits(it.contact)+'?text='+encodeURIComponent(msg);
-        a.textContent='Text '+first; list.appendChild(a);
-      }
+    if(it.kind==='card' && it.state==='ok'){
+      const n=PEOPLE.filter(p=>p.cardId===it.id).length;
+      const g=document.createElement('button'); g.type='button';
+      g.style.cssText='display:block;margin:3px 0 12px 63px;background:var(--sap);color:#101408;border:0;'+
+        'border-radius:99px;font:inherit;font-size:13.5px;font-weight:800;padding:9px 15px';
+      g.textContent=n?(n+(n===1?' person':' people')+' — send their links →'):'＋ Add someone to \u201c'+it.title+'\u201d';
+      g.onclick=()=>{ if(!n)addPersonToCard(it,'In person'); else {peopleFocus=it.slug;showTab('people');} };
+      list.appendChild(g);
     }
   });
   if(needTick)tick=setTimeout(render,20000);
@@ -610,19 +741,11 @@ function render(){
 document.getElementById('syncAll').onclick=()=>queue.filter(i=>i.state!=='ok').forEach(sync);
 
 // add one more person to a painting that's already in the spine — no new
-// card, no duplicate. Works for a card from earlier this session.
-async function addPersonToCard(it,src){
-  src=src||'In person';
-  const name=(prompt(src==='QR'?'Their first name (from the WhatsApp)?':'Their name?')||'').trim(); if(!name)return;
-  const contact=askContact();
-  const p={name:name,contact:contact,src:src};
-  it.people=it.people||[]; it.people.push(p); render(); saveQ();
-  const code=(it.slug.slice(0,4)).toUpperCase().replace(/[^A-Z0-9]/g,'')+'-'+(name.slice(0,3)).toUpperCase();
-  const fi={}; fi[FI.person]=name; fi[FI.channel]=contact; fi[FI.type]='Easel'; fi[FI.source]=src;
-  fi[FI.code]=code; fi[FI.notes]=(src==='QR'?'Scanned the easel QR — ':'Met at the easel — ')+it.title+'. ('+today()+')'; fi[FI.link]=[it.rec];
-  try{ await at('POST',INTEREST,{records:[{fields:fi}],typecast:true}); p.code=code; }
-  catch(e){ alert('Couldn\u2019t log '+name+' — check your connection, then tap Add someone else again.'); }
-  render(); saveQ();
+// card, no duplicate. Opens a person card in the People book, pre-linked.
+function addPersonToCard(it,src){
+  const p=newPerson({src:src||'In person',cardId:it.id,rec:it.rec,slug:it.slug,title:it.title});
+  peopleFocus=p.id; showTab('people'); renderPeople();
+  setTimeout(()=>{const el=document.querySelector('[data-pid="'+p.id+'"] input');if(el)el.focus();},60);
 }
 
 document.getElementById('cardBtn').onclick=function(){
@@ -641,8 +764,11 @@ document.getElementById('cardBtn').onclick=function(){
   const it={kind:'card',id:'c'+Date.now().toString(36),title:title,slug:slug,
     b64:photoB64,thumb:photoThumb||thumbOf(photoURL),size:size,priceN:priceN,
     pin:pin,notes:document.getElementById('notes').value.trim(),
-    people:peoplePending.slice(),
     stamp:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),state:'q'};
+  // everyone met so far now belongs to this card — their details never move,
+  // they just get the painting's name, slug and tracking tag attached
+  PEOPLE.filter(p=>!p.cardId&&!p.rec).forEach(p=>{p.cardId=it.id;p.slug=slug;p.title=title;p.code=codeFor(slug,p.name);});
+  savePeople();
   queue.unshift(it); render(); sync(it); saveQ();   // send first; a full phone must never stop the send
   clearDraft();
   // clear for the next one
@@ -652,7 +778,7 @@ document.getElementById('cardBtn').onclick=function(){
   document.getElementById('phPrev').classList.add('hidden');
   document.getElementById('phEmpty').classList.remove('hidden');
   dupEl.style.display='none';
-  peoplePending=[];pplRender();
+  renderDraftPeople();
 };
 
 async function sync(it){
@@ -691,21 +817,12 @@ async function sync(it){
         await ghPut(it.slug+'.json', b64utf8(JSON.stringify(room)), 'Field Studio: room for '+it.title);
       }catch(e){}
 
-      // log everyone you met straight into the spine, no re-typing
-      if(it.people && it.people.length){
-        for(const p of it.people){
-          const code=(it.slug.slice(0,4)).toUpperCase().replace(/[^A-Z0-9]/g,'')+'-'+
-            (p.name.slice(0,3)).toUpperCase();
-          const fi={}; fi[FI.person]=p.name; fi[FI.channel]=p.contact; fi[FI.type]='Easel';
-          fi[FI.source]=p.src||'In person';
-          fi[FI.code]=code; fi[FI.notes]=(p.src==='QR'?'Scanned the easel QR — ':'Met at the easel — ')+it.title+'. ('+today()+')';
-          fi[FI.link]=[it.rec];
-          try{
-            await at('POST',INTEREST,{records:[{fields:fi}],typecast:true});
-            p.code=code;
-          }catch(e){}
-        }
+      // everyone met at the easel goes into the spine, linked to this card
+      for(const p of PEOPLE.filter(p=>p.cardId===it.id)){
+        p.rec=it.rec; p.slug=it.slug; p.title=it.title; if(!p.code)p.code=codeFor(it.slug,p.name);
+        await pushPerson(p);
       }
+      savePeople(); renderPeople();
     }else if(it.kind==='edit'){
       const fields={};
       if(it.loc)fields[F.curLoc]=it.loc;
@@ -731,12 +848,6 @@ async function sync(it){
       await ghPut('now.json',b64utf8(JSON.stringify(now)),'Easel QR: '+it.title+' is live');
     }else if(it.kind==='unlive'){
       await ghDel('now.json','Easel QR: nothing on the easel');
-    }else if(it.kind==='enquiry'){
-      const fields={};
-      fields[FI.person]=it.name;fields[FI.channel]=it.contact;
-      fields[FI.type]='Easel';fields[FI.code]=it.code;fields[FI.source]='In person';
-      fields[FI.notes]=it.note; if(it.rec)fields[FI.link]=[it.rec];
-      await at('POST',INTEREST,{records:[{fields:fields}],typecast:true});
     }
     it.state='ok'; it.err=''; if(!it.okAt)it.okAt=Date.now();
   }catch(e){it.state='bad'; it.err=String(e&&e.message||e);}
@@ -928,44 +1039,37 @@ document.getElementById('shDel').onclick=function(){
   sheetWrap.classList.remove('open');renderWall();
 };
 
-// ================= enquiry (CRM) =================
-const enqWrap=document.getElementById('enqWrap');
+// ================= someone's interested (from the wall) =================
 document.getElementById('shEnq').onclick=()=>{
-  document.getElementById('enqPainting').textContent=sheetP.title;
-  document.getElementById('enqName').value='';document.getElementById('enqContact').value='';
-  document.getElementById('enqNote').value='';
-  sheetWrap.classList.remove('open');enqWrap.classList.add('open');};
-document.getElementById('enqClose').onclick=()=>enqWrap.classList.remove('open');
-enqWrap.onclick=e=>{if(e.target===enqWrap)enqWrap.classList.remove('open');};
-document.getElementById('enqSave').onclick=()=>{
-  const name=document.getElementById('enqName').value.trim();
-  if(!name){alert('A name at least.');return;}
-  const contact=document.getElementById('enqContact').value.trim();
-  const note=document.getElementById('enqNote').value.trim();
-  const code=(sheetP.slug||'xxx').slice(0,4).toUpperCase().replace(/-/g,'')+'-'+
-    name.slice(0,3).toUpperCase();
-  const it={kind:'enquiry',id:'n'+Date.now().toString(36),title:name+' → '+sheetP.title,
-    paintingTitle:sheetP.title,slug:sheetP.slug,
-    rec:sheetP.rec,name:name,contact:contact,code:code,
-    note:'Met at the easel — '+sheetP.title+'. '+(note||'')+' ('+today()+')',
-    stamp:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),state:'q'};
-  queue.unshift(it);render();sync(it);saveQ();
-  enqWrap.classList.remove('open');
+  const p=newPerson({src:'In person',rec:sheetP.rec,slug:sheetP.slug||'',title:sheetP.title,
+    code:sheetP.slug?codeFor(sheetP.slug,''):''});
+  sheetWrap.classList.remove('open'); peopleFocus=p.id; showTab('people'); renderPeople();
+  setTimeout(()=>{const el=document.querySelector('[data-pid="'+p.id+'"] input');if(el)el.focus();},60);
+};
+document.getElementById('shPeople').onclick=async function(){
+  if(needKeys())return;
+  this.textContent='reading the spine…';
+  try{ const n=await pullPeople(sheetP); this.textContent=n+' pulled — see People';
+    setTimeout(()=>{sheetWrap.classList.remove('open');peopleFocus=sheetP.slug||sheetP.title;showTab('people');renderPeople();},700);
+  }catch(e){ this.textContent='couldn\u2019t read — '+(e.message||e); }
 };
 
 // ================= tabs + boot =================
 const cardView=document.getElementById('cardView'),wallView=document.getElementById('wallView');
+const peopleView=document.getElementById('peopleView');
 function showTab(w){
-  const wall=w==='wall';
-  document.getElementById('tabCard').classList.toggle('on',!wall);
-  document.getElementById('tabWall').classList.toggle('on',wall);
-  cardView.classList.toggle('hidden',wall);wallView.classList.toggle('hidden',!wall);
-  document.getElementById('saveBar').style.display=wall?'none':'';
-  if(!wall)setTimeout(()=>map.invalidateSize(),80);
+  ['card','wall','people'].forEach(t=>{
+    document.getElementById('tab'+t[0].toUpperCase()+t.slice(1)).classList.toggle('on',t===w);});
+  cardView.classList.toggle('hidden',w!=='card');wallView.classList.toggle('hidden',w!=='wall');
+  peopleView.classList.toggle('hidden',w!=='people');
+  document.getElementById('saveBar').style.display=w==='card'?'':'none';
+  if(w==='card')setTimeout(()=>map.invalidateSize(),80);
+  if(w==='people')renderPeople();
 }
 document.getElementById('tabCard').onclick=()=>showTab('card');
 document.getElementById('tabWall').onclick=()=>showTab('wall');
-net();render();renderWall();restoreDraft();
+document.getElementById('tabPeople').onclick=()=>showTab('people');
+net();render();renderWall();restoreDraft();renderDraftPeople();renderPeople();
 if(K.at)loadWall();else keyWrap.classList.add('open');
 </script>
 </body></html>
