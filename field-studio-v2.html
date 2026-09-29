@@ -207,6 +207,10 @@
     <button class="x" id="shClose" type="button">×</button>
   </div>
   <div class="age" id="shAge"></div>
+  <div class="field"><label>Already on the card</label>
+    <div id="shOnCard" style="background:var(--panel2);border-radius:9px;padding:10px 12px;font-size:14px;line-height:1.45;white-space:pre-wrap;color:var(--canvas);max-height:240px;overflow-y:auto"></div>
+    <div class="wallnote" style="margin-top:6px">The boxes below add to this — they start empty every time.</div>
+  </div>
   <div class="field"><label>Photo</label>
     <div class="photo">
       <img class="ph hidden" id="shPhPrev" alt="">
@@ -270,7 +274,7 @@ const F={title:'fldUwsWcBNFRiOm80',slug:'fldaFiuL9FO21uLI0',img:'fldsi0m3fLzHXER
  curLoc:'fldJ8tcc8rBUUWTbC',framed:'fldmzEwUPg57ajdeQ',notes:'fld1EoW9eum2LlLsC'};
 const FI={person:'fldwoBk1IKLWTpk4g',channel:'fldxZUFngyekqKU7Z',notes:'fldh4nntPUsKiIqSw',
  type:'fld2CZPj8l8KUKjPJ',code:'fldtGO7poSrEqdjQe',link:'fldJ9NCEwhh9U8xiA',source:'fldwt7yXBA5yrcWwY'};
-const VER='v2.1 · 29 Sep';
+const VER='v2.1.1 · 29 Sep';
 document.getElementById('ver').textContent=VER;
 // anything that blows up now shows on screen instead of vanishing
 const errBar=document.getElementById('errBar');
@@ -810,6 +814,11 @@ function openSheet(p){
   ph.innerHTML=u?'<img src="'+u+'">':'<span class="noph">'+initials(p.title)+'</span>';
   document.getElementById('shTitle').textContent=p.title;
   document.getElementById('shMeta').textContent=[p.sold?'sold':'',p.loc].filter(Boolean).join(' · ')||'—';
+  const lines=(p.notes||'').split('\n').filter(Boolean);
+  document.getElementById('shOnCard').textContent=
+    (p.loc?'Where: '+p.loc+'\n':'')+
+    (lines.length?lines.join('\n'):'')||'Nothing written yet.';
+  const oc=document.getElementById('shOnCard'); oc.scrollTop=oc.scrollHeight;
   const age=p.created?days(p.created):null;
   const rel=document.getElementById('shRelease');
   if(p.pub){document.getElementById('shAge').innerHTML='Already on the public site.';
