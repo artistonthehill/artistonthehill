@@ -274,7 +274,7 @@ const F={title:'fldUwsWcBNFRiOm80',slug:'fldaFiuL9FO21uLI0',img:'fldsi0m3fLzHXER
  curLoc:'fldJ8tcc8rBUUWTbC',framed:'fldmzEwUPg57ajdeQ',notes:'fld1EoW9eum2LlLsC'};
 const FI={person:'fldwoBk1IKLWTpk4g',channel:'fldxZUFngyekqKU7Z',notes:'fldh4nntPUsKiIqSw',
  type:'fld2CZPj8l8KUKjPJ',code:'fldtGO7poSrEqdjQe',link:'fldJ9NCEwhh9U8xiA',source:'fldwt7yXBA5yrcWwY'};
-const VER='v2.1.2 · 29 Sep';
+const VER='v2.1.3 · 29 Sep';
 document.getElementById('ver').textContent=VER;
 // anything that blows up now shows on screen instead of vanishing
 const errBar=document.getElementById('errBar');
@@ -519,8 +519,10 @@ function saveQ(){
   }
 }
 function today(){return new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+let needTick=false,tick=null;
 function render(){
   const list=document.getElementById('queue'); list.innerHTML='';
+  needTick=false; clearTimeout(tick);
   if(!queue.length){list.innerHTML='<div class="empty">Nothing carded yet.</div>';return;}
   queue.forEach(it=>{
     const d=document.createElement('div');d.className='item';
@@ -541,7 +543,14 @@ function render(){
     // once the card and its room page are live, offer the zap per person,
     // plus a standing way to add more people to THIS card — never a reason
     // to tap "Card it" again for someone you met after the fact
-    if(it.kind==='card' && it.state==='ok'){
+    const SITE_LAG=150000;   // GitHub Pages takes ~2 min to show a new photo
+    if(it.kind==='card' && it.state==='ok' && it.okAt && Date.now()-it.okAt<SITE_LAG){
+      const w=document.createElement('div'); w.className='err'; w.style.color='var(--dim)';
+      const left=Math.ceil((SITE_LAG-(Date.now()-it.okAt))/60000);
+      w.textContent='site catching up — the Text buttons appear in about '+left+' min, when the photo is live';
+      list.appendChild(w); needTick=true;
+    }
+    if(it.kind==='card' && it.state==='ok' && (!it.okAt || Date.now()-it.okAt>=SITE_LAG)){
       (it.people||[]).forEach(p=>{
         const first=p.name.split(' ')[0];
         const msg=(p.src==='QR'
@@ -596,6 +605,7 @@ function render(){
       }
     }
   });
+  if(needTick)tick=setTimeout(render,20000);
 }
 document.getElementById('syncAll').onclick=()=>queue.filter(i=>i.state!=='ok').forEach(sync);
 
@@ -728,7 +738,7 @@ async function sync(it){
       fields[FI.notes]=it.note; if(it.rec)fields[FI.link]=[it.rec];
       await at('POST',INTEREST,{records:[{fields:fields}],typecast:true});
     }
-    it.state='ok'; it.err='';
+    it.state='ok'; it.err=''; if(!it.okAt)it.okAt=Date.now();
   }catch(e){it.state='bad'; it.err=String(e&&e.message||e);}
   render();saveQ();
 }
