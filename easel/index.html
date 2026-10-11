@@ -68,6 +68,7 @@
   .now-head .t{font-weight:700} .now-head .k{opacity:.6;font-size:.85rem}
   .now-note{margin:14px 0 6px;font-size:1rem;line-height:1.5}
   .now-doors{margin-top:12px}
+  .hold{opacity:.7;font-style:italic;margin-top:-6px}
 </style>
 </head>
 <body>
@@ -77,8 +78,9 @@
 </header>
 
 <h1>On <em>the easel</em></h1>
-<p class="note">Every painting is made on location, in a single sitting.
+<p class="note">Most of these are made on location, in a single sitting.
 This is the latest — still smelling faintly of oil paint.</p>
+<p class="note hold" id="hold" hidden>Nothing on the easel today. The latest finished painting is below.</p>
 
 
 <div class="now" id="now" hidden>
@@ -129,7 +131,7 @@ function viewLink(p){
 
 
 fetch("/now.json?v="+Date.now()).then(r=>r.ok?r.json():null).then(n=>{
-  if(!n||!n.img) return;
+  if(!n||!n.img){ document.getElementById("hold").hidden=false; return; }
   document.getElementById("now-img").src="/"+n.img+"?v="+Date.now();
   if(n.title) document.getElementById("now-title").textContent=n.title;
   if(n.where) document.getElementById("now-where").textContent=n.where;
@@ -141,7 +143,7 @@ fetch("/now.json?v="+Date.now()).then(r=>r.ok?r.json():null).then(n=>{
   wa.addEventListener("click",()=>{ try{ ping("tapped"); }catch(e){} });
   document.getElementById("now").hidden=false;
   document.querySelector("h1").innerHTML="On <em>the easel</em> now";
-}).catch(()=>{});
+}).catch(()=>{ document.getElementById("hold").hidden=false; });
 
 fetch("/paintings.json?v="+Date.now()).then(r=>r.json()).then(all=>{
   if (!all.length) return;
