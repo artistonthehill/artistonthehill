@@ -38,6 +38,7 @@
   .pc select{background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--canvas);
     font:inherit;font-size:16px;padding:12px 10px;-webkit-appearance:none;appearance:none}
   .pc textarea{min-height:120px}
+  .pc textarea.paste{min-height:64px;margin-top:8px;border-color:var(--teal);font-size:14px}
   .pc .lab{font-size:12px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;margin-top:12px}
   .pc .open{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:6px}
   .pc .open button{flex:1;background:none;border:0;color:var(--dim);font:inherit;font-size:14px;font-weight:700;padding:10px 4px}
@@ -60,6 +61,20 @@
   .pc .tag b{color:var(--canvas);font-family:ui-monospace,Menlo,monospace}
   .grp{font-weight:800;font-size:15px;margin:18px 0 8px;display:flex;gap:8px;align-items:baseline}
   .grp span{font-weight:400;color:var(--dim);font-size:13px}
+  .nd{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+  .nd.pri{border-color:var(--aliz)}
+  .nd .n{font-size:16px;font-weight:800}
+  .nd .n .pt{font-weight:600;color:var(--ochre)}
+  .nd .m{font-size:13px;color:var(--dim);margin-top:3px;line-height:1.4}
+  .nd .why{font-size:14px;color:var(--canvas);margin-top:6px}
+  .nd textarea{margin-top:8px;min-height:84px;font-size:15px}
+  .nd .row{display:flex;gap:8px;margin-top:10px;align-items:center}
+  .nd .go{flex:1;border:0;border-radius:11px;font:inherit;font-size:15.5px;font-weight:800;padding:13px;text-align:center;text-decoration:none;color:#fff;background:#25D366}
+  .nd .go.mail{background:#2F6FB5}
+  .nd .go.off{background:var(--panel2);color:var(--dim);pointer-events:none}
+  .nd .dn{flex:0 0 auto;background:var(--sap);color:#101408;border:0;border-radius:11px;font:inherit;font-size:15px;font-weight:800;padding:13px 16px}
+  .nd .sk{flex:0 0 auto;background:none;border:1px solid var(--line);color:var(--dim);border-radius:11px;font:inherit;font-size:13.5px;padding:12px 10px}
+  .tabs button{padding:11px 4px;font-size:15px}
   .hidden{display:none!important}
   .field{margin-bottom:16px}
   label{display:block;font-size:14px;color:var(--dim);margin-bottom:7px}
@@ -166,9 +181,10 @@
 
   <div id="errBar" class="hidden" style="background:#3a1a17;border:1px solid var(--aliz);color:#f3c7c1;border-radius:10px;padding:10px 12px;font-size:13.5px;margin-bottom:12px"></div>
   <div class="tabs">
-    <button id="tabCard" class="on" type="button">Card new</button>
-    <button id="tabWall" type="button">The wall</button>
+    <button id="tabCard" class="on" type="button">Card</button>
+    <button id="tabWall" type="button">Wall</button>
     <button id="tabPeople" type="button">People <span id="peopleN" style="font-weight:400"></span></button>
+    <button id="tabNudges" type="button">Nudges <span id="nudgeN" style="font-weight:400;color:var(--ochre)"></span></button>
   </div>
 
   <div id="cardView">
@@ -215,6 +231,11 @@
     <div id="queue"><div class="empty">Nothing carded yet.</div></div>
   </div>
 
+  <div id="nudgesView" class="hidden">
+    <div class="wallnote" id="nudgeNote">Who's worth a word, and why — written by the Desk from the opens. You read, change a word if you like, press send, tick Done.</div>
+    <div class="chips" style="margin-bottom:10px"><button class="chip" id="nudgeRefresh" type="button">Refresh</button></div>
+    <div id="nudgeList"><div class="empty">Reading the spine…</div></div>
+  </div>
   <div id="peopleView" class="hidden">
     <div class="wallhead"><input type="text" id="peopleSearch" autocomplete="off" placeholder="Search names, numbers, paintings…"></div>
     <div class="wallnote" id="peopleNote"></div>
@@ -264,6 +285,18 @@
     <div class="chips" id="shLocChips" style="margin-bottom:8px"></div>
     <input type="text" id="shLoc" autocomplete="off" placeholder="leave blank to leave unchanged">
   </div>
+  <div class="field"><label>What the room shows <span style="color:var(--dim)">(saved to the card and the room page together)</span></label>
+    <div class="row" style="display:flex;gap:8px">
+      <input type="text" id="shPrice" inputmode="numeric" autocomplete="off" placeholder="price inc VAT, e.g. 2760" style="flex:1">
+      <input type="text" id="shSize" autocomplete="off" placeholder="size, e.g. 80×30cm" style="flex:1">
+    </div>
+    <div class="chips" style="margin-top:8px">
+      <button class="chip" id="shPoa" type="button">Price on application</button>
+      <button class="chip" id="shFramedT" type="button">Framed</button>
+      <button class="chip" id="shCrate" type="button">Delivered in a crate</button>
+      <button class="chip" id="shSoldT" type="button">Sold</button>
+    </div>
+  </div>
   <div class="field"><label for="shFrame">Frame &amp; depth <span style="color:var(--dim)">(for frame reuse later)</span></label>
     <input type="text" id="shFrame" autocomplete="off" placeholder="e.g. oak 20mm rebate, 18mm board — leave blank to skip">
   </div>
@@ -274,6 +307,7 @@
     <button class="write" id="shWrite" type="button">Write to the card</button>
     <button class="release" id="shRelease" type="button">Release to the site</button>
   </div>
+  <button class="enq" id="shRepub" type="button" style="border-color:var(--dim);color:var(--dim)">Republish the room page from the card</button>
   <button class="enq" id="shEnq" type="button">Someone's interested — add them</button>
   <button class="enq" id="shPeople" type="button" style="border-color:var(--dim);color:var(--dim)">People on this card (from the spine)</button>
   <button class="enq" id="shLive" type="button" style="border-color:var(--ochre);color:var(--ochre)">Put this on the easel QR</button>
@@ -295,15 +329,18 @@
 
 <script>
 // ================= constants =================
-const BASE='appE8PGfkXDMuZCXe', TABLE='tblLVyDTlgB3E8sQp', INTEREST='tblOm2OI5T91fEhjh';
+const BASE='appE8PGfkXDMuZCXe', TABLE='tblLVyDTlgB3E8sQp', INTEREST='tblOm2OI5T91fEhjh', LEDGER='tbllwlPramLaSIqY8';
+const FL={entry:'fldK8eAwvwEka7wKV',date:'fldahipakXfqBxP22',who:'fldZ3e0YjKsEPIf3W',painting:'fldZCyRMJe3U032Jc',done:'fldT4YUVtEQpBgvr7'};
 const F={title:'fldUwsWcBNFRiOm80',slug:'fldaFiuL9FO21uLI0',img:'fldsi0m3fLzHXERwF',
  size:'fldWPm0R5SD7mztnp',priceDisp:'fldAMf6fRUa1jSCsH',priceVat:'fldaFsyOE94n3osr7',
  sold:'fldK2MfHmSOcuL5Cd',pub:'flduUIlOtmw04hwwL',lat:'fldaDJkmLc2ygxYyJ',lng:'fldM6DKhwMMNKb6lK',
- curLoc:'fldJ8tcc8rBUUWTbC',framed:'fldmzEwUPg57ajdeQ',notes:'fld1EoW9eum2LlLsC'};
+ curLoc:'fldJ8tcc8rBUUWTbC',framed:'fldmzEwUPg57ajdeQ',notes:'fld1EoW9eum2LlLsC',prints:'fldapZPALBU4fJiri'};
 const FI={person:'fldwoBk1IKLWTpk4g',channel:'fldxZUFngyekqKU7Z',notes:'fldh4nntPUsKiIqSw',
  type:'fld2CZPj8l8KUKjPJ',code:'fldtGO7poSrEqdjQe',link:'fldJ9NCEwhh9U8xiA',source:'fldwt7yXBA5yrcWwY',
- priority:'flddTmjw0xb0S8ykd'};
-const VER='v2.2 · 29 Sep';
+ priority:'flddTmjw0xb0S8ykd',touches:'fldcBwL6jQDskJPBn',lastOpen:'fldMFAsFfA12HlW39',opens:'fldWJQi06yFvwx0WS',
+ tapped:'flduOqix8luzLgP4p',lastDev:'fldSu6JpSJamglYvz',nDue:'fldJSZFsimcVW0NPE',nWhy:'fldf3QKRBWjcsgT7K',
+ nMsg:'fldAeRqNIKLl5AwFc',nSent:'fldBfiZsqW0m57w9o'};
+const VER='v2.4 · 11 Oct';
 document.getElementById('ver').textContent=VER;
 // anything that blows up now shows on screen instead of vanishing
 const errBar=document.getElementById('errBar');
@@ -506,7 +543,8 @@ document.getElementById('title').addEventListener('input',()=>{
 const CCS=[['44','UK +44'],['353','IE +353'],['31','NL +31'],['49','DE +49'],['33','FR +33'],['40','RO +40'],
  ['30','GR +30'],['34','ES +34'],['39','IT +39'],['41','CH +41'],['32','BE +32'],['43','AT +43'],['351','PT +351'],
  ['45','DK +45'],['46','SE +46'],['47','NO +47'],['48','PL +48'],['1','US/CA +1'],['61','AU +61'],['64','NZ +64'],
- ['971','UAE +971'],['852','HK +852'],['65','SG +65'],['886','TW +886'],['81','JP +81']];
+ ['971','UAE +971'],['852','HK +852'],['65','SG +65'],['886','TW +886'],['81','JP +81'],
+ ['90','TR +90'],['27','ZA +27'],['36','HU +36'],['420','CZ +420'],['372','EE +372'],['358','FI +358'],['354','IS +354'],['356','MT +356'],['357','CY +357'],['385','HR +385'],['421','SK +421'],['380','UA +380'],['52','MX +52'],['55','BR +55'],['91','IN +91'],['972','IL +972'],['966','SA +966'],['974','QA +974']];
 function loadPeople(){
   for(const k of ['fs2-people','fs2-people-bak']){
     try{const v=JSON.parse(localStorage.getItem(k)||'null'); if(Array.isArray(v))return v;}catch(e){}
@@ -542,11 +580,34 @@ function msgOf(p){return (p.msg!==null&&p.msg!==undefined)?p.msg:openerText(p);}
 function roomLink(p){return p.slug?SITE+'/view.html?p='+p.slug+'&w='+(p.code||''):'';}
 function fullDigits(p){return (p.cc||'')+(p.num||'').replace(/[^0-9]/g,'').replace(/^0+/,'');}
 function channelOf(p){return p.num?('+'+fullDigits(p)):(p.email||'');}
+// Pull a name and number out of whatever WhatsApp gives you: the "Send my
+// name" message ("Hi Tony — I'd like to see X when it's finished. Simge"),
+// a shared contact ("Simge Yilmaz\n+90 532 123 4567"), or a copied chat line
+// ("[11/10/2026, 14:02:11] +44 7700 900123: Hi Tony ...").
+function parseWA(t){
+  t=(t||'').trim(); if(!t)return null;
+  let num='',cc='44',name='';
+  const m=t.match(/\+?\s?(\d[\d\s\-().]{7,}\d)/);
+  if(m){ const ch=fromChannel((m[0].trim().startsWith('+')?'+':'')+m[1]); if(ch.num){num=ch.num;cc=ch.cc;} }
+  const body=t.replace(/\[[^\]]*\]/g,' ').replace(/\+?\d[\d\s\-().]{7,}\d/g,' ').replace(/^(contact|name|phone|mobile|tel)\s*:/gim,' ');
+  const tail=body.match(/finished\.?\s*([A-Za-z\u00C0-\u024F' -]{2,40})\s*$/i);   // the name they typed over [Your first name]
+  if(tail&&!/your first name/i.test(tail[1]))name=tail[1].trim();
+  if(!name){
+    const lines=body.split(/\n/).map(x=>x.trim()).filter(x=>x&&!/^(hi|hello|hey)\b/i.test(x)&&!/[@:]/.test(x)&&x.split(/\s+/).length<=4&&/^[A-Za-z\u00C0-\u024F' -]+$/.test(x));
+    if(lines.length)name=lines[0];
+  }
+  name=name.replace(/\s+/g,' ').replace(/^[^A-Za-z\u00C0-\u024F]+|[^A-Za-z\u00C0-\u024F]+$/g,'');
+  return {num:num,cc:cc,name:name};
+}
 function fromChannel(ch){   // spine "Channel" → cc/num/email
   ch=(ch||'').trim(); if(ch.includes('@'))return {email:ch,cc:'44',num:''};
   let d=ch.replace(/[^0-9]/g,''); if(!d)return {email:'',cc:'44',num:''};
   if(d.startsWith('0')){return {email:'',cc:'44',num:d.slice(1)};}
-  const cc=CCS.map(c=>c[0]).sort((a,b)=>b.length-a.length).find(c=>d.startsWith(c));
+  if(d.startsWith('00'))d=d.slice(2);
+  const plus=ch.startsWith('+')||ch.startsWith('00')||d.length>11;
+  if(!plus&&d.startsWith('7')&&d.length===10)return {email:'',cc:'44',num:d};   // bare UK mobile without the 0
+  let cc=CCS.map(c=>c[0]).sort((a,b)=>b.length-a.length).find(c=>d.startsWith(c));
+  if(!cc&&plus){cc=d.slice(0,2);CCS.push([cc,'+'+cc]);}   // unknown country: keep the code rather than lose it
   return cc?{email:'',cc:cc,num:d.slice(cc.length)}:{email:'',cc:'44',num:d};
 }
 let pushTimers={};
@@ -588,7 +649,8 @@ function personCard(p){
   const ccOpts=CCS.map(c=>'<option value="'+c[0]+'"'+(c[0]===p.cc?' selected':'')+'>'+c[1]+'</option>').join('');
   d.innerHTML=
     '<input type="text" class="nm" placeholder="Their name" autocomplete="off" value="'+esc(p.name)+'">'+
-    (p.src==='QR'?'<div class="tag">Came in by the easel QR</div>':'')+
+    (p.src==='QR'?'<div class="tag">Came in by the easel QR</div>'+
+      '<textarea class="paste" placeholder="Paste their WhatsApp here — the message, or a shared contact — and the name and number fill in"></textarea>':'')+
     '<div class="row"><select class="cc">'+ccOpts+'</select><input type="text" class="num" inputmode="tel" placeholder="WhatsApp number" autocomplete="off" value="'+esc(p.num)+'"></div>'+
     '<input type="text" class="em" inputmode="email" placeholder="Email" autocomplete="off" value="'+esc(p.email)+'">'+
     '<div class="tag">Painting: <b>'+(p.title?esc(p.title):'not carded yet \u2014 stays with the piece you\u2019re on')+'</b>'+(p.code?' \u00b7 tag <b>'+esc(p.code)+'</b>':'')+'</div>'+
@@ -603,6 +665,12 @@ function personCard(p){
     '<div class="foot"><span class="sp n"></span><button type="button" class="rm">remove</button></div>';
   const q=c=>d.querySelector(c);
   const upd=()=>{savePeople();renderPersonState(p);queuePush(p);};
+  if(q('.paste'))q('.paste').oninput=e=>{
+    const r=parseWA(e.target.value); if(!r)return;
+    if(r.num&&!p.num){p.cc=r.cc;p.num=r.num;q('.cc').value=r.cc;q('.num').value=r.num;}
+    if(r.name&&!p.name){p.name=r.name;q('.nm').value=r.name;if(p.msg===null)q('.msg').value=openerText(p);if(p.slug)p.code=codeFor(p.slug,p.name);}
+    if(r.num||r.name){e.target.value='';e.target.placeholder='Got it — '+(r.name||'')+(r.name&&r.num?', ':'')+(r.num?'+'+r.cc+' '+r.num:'')+'. Check it, then it goes to the spine.';upd();}
+  };
   q('.nm').oninput=e=>{p.name=e.target.value;if(p.msg===null)q('.msg').value=openerText(p);if(p.slug)p.code=codeFor(p.slug,p.name);upd();};
   q('.cc').onchange=e=>{p.cc=e.target.value;upd();};
   q('.num').oninput=e=>{p.num=e.target.value;upd();};
@@ -709,8 +777,9 @@ function render(){
   if(!queue.length){list.innerHTML='<div class="empty">Nothing carded yet.</div>';return;}
   queue.forEach(it=>{
     const d=document.createElement('div');d.className='item';
-    const stTxt={q:'queued',s:'sending…',ok:(it.kind==='live'?'on the QR':it.kind==='unlive'?'off the QR':'in the spine'),bad:'retry'}[it.state];
-    const kindTxt={card:'new card',edit:'edit',del:'delete',enquiry:'interest',live:'easel QR',unlive:'easel QR'}[it.kind]||it.kind;
+    const liveTxt=it.live===true?'Live \u2713':it.liveTimeout?'pushed — not seen live yet, check the page':'pushed — live in ~2 min';
+    const stTxt={q:'queued',s:'sending…',ok:((it.kind==='live'||it.kind==='unlive')?liveTxt:'in the spine'),bad:'retry'}[it.state];
+    const kindTxt=it.repub?'room republished':({card:'new card',edit:'edit',del:'delete',enquiry:'interest',live:'easel QR',unlive:'easel QR'}[it.kind]||it.kind);
     d.innerHTML=(it.thumb?'<img src="'+it.thumb+'">':'<img>')+
       '<div class="t"><div class="n">'+it.title+'</div><div class="m">'+kindTxt+
       ' · '+it.stamp+(it.volatile&&it.state!=='ok'?' · <span style="color:var(--aliz)">photo in memory only</span>':'')+'</div></div>'+
@@ -808,14 +877,8 @@ async function sync(it){
       // push the private room page straight away — it works before Release,
       // exactly like the old app: view.html reads this file directly, no
       // waiting on Publish or the map pipeline.
-      try{
-        const room={t:it.title};
-        if(it.size)room.s=it.size;
-        if(it.priceN){room.p=Number(it.priceN);room.v=true;}
-        if(it.frame)room.f=!/unfram/i.test(it.frame);
-        room.i=SITE+'/images/'+it.slug+'.jpg';
-        await ghPut(it.slug+'.json', b64utf8(JSON.stringify(room)), 'Field Studio: room for '+it.title);
-      }catch(e){}
+      try{ await pushRoom(it.slug,{title:it.title,size:it.size,price:Number(it.priceN)||0,framed:false,img:'images/'+it.slug+'.jpg'}); }
+      catch(e){ it.err='room page not written ('+(e.message||e)+') — tap Republish on the wall'; }
 
       // everyone met at the easel goes into the spine, linked to this card
       for(const p of PEOPLE.filter(p=>p.cardId===it.id)){
@@ -828,15 +891,25 @@ async function sync(it){
       if(it.loc)fields[F.curLoc]=it.loc;
       if(it.pub)fields[F.pub]=true;
       if(it.noteAdd)fields[F.notes]=(it.baseNotes?it.baseNotes+'\n':'')+it.noteAdd;
+      if(it.room){ const r=it.room;
+        if(r.poa){fields[F.priceVat]=null;fields[F.priceDisp]='Price on application';}
+        else if(r.price!==undefined){fields[F.priceVat]=r.price||null;fields[F.priceDisp]=r.price?('\u00a3'+Number(r.price).toLocaleString('en-GB')):'';}
+        if(r.size!==undefined)fields[F.size]=r.size;
+        if(r.framed!==undefined)fields[F.framed]=!!r.framed;
+        if(r.sold!==undefined){fields[F.sold]=!!r.sold; if(r.sold)fields[F.priceDisp]='Sold';}
+      }
+      let slug=it.slug;
       if(it.photoB64){
-        let slug=it.slug;
         if(!slug){ slug=slugify(it.title)+'-'+tri(); fields[F.slug]=slug; it.slug=slug; }
         await ghPut('images/'+slug+'.jpg', it.photoB64, 'Field Studio: photo for '+it.title);
         fields[F.img]='images/'+slug+'.jpg';
-        const wp=wallList.find(w=>w.rec===it.rec);
-        if(wp){ wp.img=fields[F.img]; wp.slug=slug; }
       }
-      await at('PATCH',TABLE,{records:[{id:it.rec,fields:fields}],typecast:true});
+      if(Object.keys(fields).length) await at('PATCH',TABLE,{records:[{id:it.rec,fields:fields}],typecast:true});
+      const wp=wallList.find(w=>w.rec===it.rec);
+      if(wp){ if(fields[F.img]){wp.img=fields[F.img];wp.slug=slug;} if(it.room){Object.assign(wp,it.room);} if(it.loc)wp.loc=it.loc; if(it.pub)wp.pub=true; localStorage.setItem('fs2-wall',JSON.stringify(wallList)); }
+      // the room page follows the card, every time
+      if(slug && (it.room||it.photoB64||it.repub)){ const src=wp||it.card||{};
+        await pushRoom(slug,Object.assign({},src,it.room||{},{title:it.title,img:fields[F.img]||src.img})); }
       renderWall();
     }else if(it.kind==='del'){
       await at('DELETE',TABLE+'?records[]='+it.rec);
@@ -844,14 +917,43 @@ async function sync(it){
       // one painting on the sign at a time: writing now.json replaces the last
       let img=it.img;
       if(it.b64){ await ghPut('images/now.jpg',it.b64,'Easel QR: '+it.title); img='images/now.jpg'; }
-      const now={img:img,title:it.title,where:it.where||'',date:new Date().toISOString().slice(0,10)};
+      it.date=new Date().toISOString().slice(0,10);
+      const now={img:img,title:it.title,where:it.where||'',date:it.date};
       await ghPut('now.json',b64utf8(JSON.stringify(now)),'Easel QR: '+it.title+' is live');
+      it.live=null; waitLive(it);
     }else if(it.kind==='unlive'){
       await ghDel('now.json','Easel QR: nothing on the easel');
+      it.live=null; waitLive(it);
     }
     it.state='ok'; it.err=''; if(!it.okAt)it.okAt=Date.now();
   }catch(e){it.state='bad'; it.err=String(e&&e.message||e);}
   render();saveQ();
+}
+
+// ================= the room page (view.html reads <slug>.json) =================
+// one builder for Card it, the edit sheet and Republish — so the room can never
+// drift from the card again
+function roomFor(p){
+  const room={t:p.title||'',updated:new Date().toISOString().slice(0,10)};
+  if(p.size)room.s=p.size;
+  if(p.poa){room.p='';}else if(p.price){room.p=String(Math.round(p.price));room.v=true;}
+  room.f=!!p.framed; room.d=p.crate===false?'hand':'crate';
+  room.sold=!!p.sold; room.w=!p.sold; room.m=120; room.pr=true;
+  if(p.prints)room.g=p.prints;
+  room.i=p.imgUrl||(p.img?(p.img.startsWith('http')?p.img:SITE+'/'+p.img):'');
+  return room;
+}
+async function pushRoom(slug,p){ await ghPut(slug+'.json', b64utf8(JSON.stringify(roomFor(p))), 'Field Studio: room for '+(p.title||slug)); }
+// the easel page: poll until the site is actually serving what we pushed
+async function waitLive(it){
+  for(let i=0;i<16;i++){
+    await new Promise(r=>setTimeout(r,20000));
+    try{ const r=await fetch(SITE+'/now.json?v='+Date.now(),{cache:'no-store'});
+      if(it.kind==='unlive'&&r.status===404){it.live=true;render();return;}
+      if(r.ok){const n=await r.json(); if(n&&n.title===it.title&&n.date===it.date){it.live=true;render();return;}}
+    }catch(e){}
+  }
+  it.live=false; it.liveTimeout=true; render();
 }
 
 // ================= the wall =================
@@ -866,11 +968,14 @@ async function loadWall(){
     do{
       const j=await at('GET',TABLE+'?pageSize=100&returnFieldsByFieldId=true'+
         '&fields[]='+F.title+'&fields[]='+F.slug+'&fields[]='+F.img+'&fields[]='+F.sold+
-        '&fields[]='+F.pub+'&fields[]='+F.curLoc+'&fields[]='+F.notes+(offset?'&offset='+offset:''));
+        '&fields[]='+F.pub+'&fields[]='+F.curLoc+'&fields[]='+F.notes+
+        '&fields[]='+F.priceVat+'&fields[]='+F.priceDisp+'&fields[]='+F.size+'&fields[]='+F.framed+'&fields[]='+F.prints+
+        (offset?'&offset='+offset:''));
       j.records.forEach(r=>out.push({rec:r.id,created:r.createdTime,
         title:r.fields[F.title]||'?',slug:r.fields[F.slug]||'',img:r.fields[F.img]||'',
         sold:!!r.fields[F.sold],pub:!!r.fields[F.pub],loc:r.fields[F.curLoc]||'',
-        notes:r.fields[F.notes]||''}));
+        notes:r.fields[F.notes]||'',price:r.fields[F.priceVat]||0,priceDisp:r.fields[F.priceDisp]||'',
+        size:r.fields[F.size]||'',framed:!!r.fields[F.framed],prints:r.fields[F.prints]||''}));
       offset=j.offset||'';
     }while(offset);
     wallList=out;localStorage.setItem('fs2-wall',JSON.stringify(out));
@@ -923,10 +1028,24 @@ let sheetP=null,delArmed=false;
  .forEach(n=>{const b=document.createElement('button');b.type='button';b.className='chip';
   b.textContent=n;b.onclick=()=>{document.getElementById('shLoc').value=n;};
   document.getElementById('shLocChips').appendChild(b);});
+let shFlags={poa:false,framed:false,crate:true,sold:false};
+function drawShFlags(){
+  const on=(id,v)=>{const b=document.getElementById(id);b.style.borderColor=v?'var(--ochre)':'';b.style.color=v?'var(--ochre)':'';};
+  on('shPoa',shFlags.poa);on('shFramedT',shFlags.framed);on('shCrate',shFlags.crate);on('shSoldT',shFlags.sold);
+  document.getElementById('shPrice').disabled=shFlags.poa;
+}
+document.getElementById('shPoa').onclick=()=>{shFlags.poa=!shFlags.poa;drawShFlags();};
+document.getElementById('shFramedT').onclick=()=>{shFlags.framed=!shFlags.framed;drawShFlags();};
+document.getElementById('shCrate').onclick=()=>{shFlags.crate=!shFlags.crate;drawShFlags();};
+document.getElementById('shSoldT').onclick=()=>{shFlags.sold=!shFlags.sold;drawShFlags();};
 function openSheet(p){
   sheetP=p;delArmed=false;
   document.getElementById('shLoc').value='';document.getElementById('shNote').value='';
   document.getElementById('shFrame').value='';
+  document.getElementById('shPrice').value=p.price?String(Math.round(p.price)):'';
+  document.getElementById('shSize').value=p.size||'';
+  shFlags={poa:/application/i.test(p.priceDisp||''),framed:!!p.framed,crate:true,sold:!!p.sold};
+  drawShFlags();
   shPhotoB64=null;shPhotoURL=null;shPhotoThumb=null;
   const shp=document.getElementById('shPhPrev'),she=document.getElementById('shPhEmpty');
   if(p.img){shp.src=SITE+'/'+p.img;shp.classList.remove('hidden');she.classList.add('hidden');}
@@ -982,8 +1101,21 @@ function queueEdit(pub){
   const loc=document.getElementById('shLoc').value.trim();
   const note=document.getElementById('shNote').value.trim();
   const frame=document.getElementById('shFrame').value.trim();
-  if(!loc&&!note&&!frame&&!pub&&!shPhotoB64){sheetWrap.classList.remove('open');return;}
+  const priceN=Number((document.getElementById('shPrice').value||'').replace(/[^0-9]/g,''))||0;
+  const size=document.getElementById('shSize').value.trim();
+  const room={};
+  if(shFlags.poa!==/application/i.test(sheetP.priceDisp||'')||(!shFlags.poa&&priceN!==Math.round(sheetP.price||0))){room.price=priceN;room.poa=shFlags.poa;}
+  if(size!==(sheetP.size||''))room.size=size;
+  if(shFlags.framed!==!!sheetP.framed)room.framed=shFlags.framed;
+  if(shFlags.sold!==!!sheetP.sold)room.sold=shFlags.sold;
+  if(shFlags.crate===false)room.crate=false;
+  const roomChanged=Object.keys(room).length>0;
+  if(!loc&&!note&&!frame&&!pub&&!shPhotoB64&&!roomChanged){sheetWrap.classList.remove('open');return;}
   const lines=[];
+  if(room.price!==undefined)lines.push((room.poa?'Price on application':'Price \u00a3'+priceN.toLocaleString('en-GB')+' inc VAT')+' \u2014 '+today()+' (field studio)');
+  if(room.size!==undefined)lines.push('Size: '+size+' \u2014 '+today());
+  if(room.framed!==undefined)lines.push((room.framed?'Framed':'Unframed')+' \u2014 '+today());
+  if(room.sold!==undefined)lines.push((room.sold?'Marked SOLD':'Marked unsold again')+' \u2014 '+today());
   if(loc)lines.push('\u2192 '+loc+' \u2014 '+today()+' (field studio)');
   if(frame)lines.push('Frame/depth: '+frame+' \u2014 '+today());
   if(shPhotoB64)lines.push('Photo added from the wall \u2014 '+today());
@@ -992,9 +1124,12 @@ function queueEdit(pub){
   const it={kind:'edit',id:'e'+Date.now().toString(36),title:sheetP.title,rec:sheetP.rec,
     loc:loc||null,pub:!!pub,baseNotes:sheetP.notes||'',noteAdd:lines.join('\n'),
     photoB64:shPhotoB64,hadPhoto:!!shPhotoB64,thumb:shPhotoThumb,slug:sheetP.slug||null,
+    room:roomChanged?room:null,card:{title:sheetP.title,size:sheetP.size,price:sheetP.price,priceDisp:sheetP.priceDisp,framed:sheetP.framed,sold:sheetP.sold,prints:sheetP.prints,img:sheetP.img},
     stamp:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),state:'q'};
   if(loc)sheetP.loc=loc;
   if(pub)sheetP.pub=true;
+  if(roomChanged){ if(room.price!==undefined){sheetP.price=room.poa?0:priceN;sheetP.priceDisp=room.poa?'Price on application':(priceN?'\u00a3'+priceN.toLocaleString('en-GB'):'');}
+    if(room.size!==undefined)sheetP.size=size; if(room.framed!==undefined)sheetP.framed=room.framed; if(room.sold!==undefined)sheetP.sold=room.sold; }
   sheetP.notes=(sheetP.notes?sheetP.notes+'\n':'')+it.noteAdd;
   queue.unshift(it);render();sync(it);saveQ();
   sheetWrap.classList.remove('open');renderWall();
@@ -1027,6 +1162,15 @@ document.getElementById('clearLive').onclick=function(){
   showTab('card');
 };
 document.getElementById('shWrite').onclick=()=>queueEdit(false);
+document.getElementById('shRepub').onclick=function(){
+  if(needKeys())return;
+  if(!sheetP.slug){alert('This card has no slug yet — add a photo and Write to the card first.');return;}
+  const it={kind:'edit',id:'r'+Date.now().toString(36),title:sheetP.title,rec:sheetP.rec,slug:sheetP.slug,repub:true,
+    card:{title:sheetP.title,size:sheetP.size,price:sheetP.price,priceDisp:sheetP.priceDisp,framed:sheetP.framed,sold:sheetP.sold,prints:sheetP.prints,img:sheetP.img},
+    stamp:stamp(),state:'q'};
+  queue.unshift(it);render();sync(it);saveQ();
+  sheetWrap.classList.remove('open');showTab('card');
+};
 document.getElementById('shRelease').onclick=()=>queueEdit(true);
 document.getElementById('shDel').onclick=function(){
   if(!delArmed){delArmed=true;this.classList.add('arm');
@@ -1054,22 +1198,93 @@ document.getElementById('shPeople').onclick=async function(){
   }catch(e){ this.textContent='couldn\u2019t read — '+(e.message||e); }
 };
 
+// ================= Nudges — the right button at the right time =================
+// Reads the people the Desk has marked "Nudge due". Nothing here ever touches a
+// public file; it reads and writes the spine with the phone's own key.
+let NUDGES=[];
+async function loadNudges(){
+  const list=document.getElementById('nudgeList');
+  if(!K.at){list.innerHTML='<div class="empty">Add your keys (top right) first.</div>';return;}
+  try{
+    const f=encodeURIComponent('{Nudge due}=1');
+    const j=await at('GET',INTEREST+'?returnFieldsByFieldId=true&filterByFormula='+f);
+    NUDGES=j.records.map(r=>({id:r.id,name:r.fields[FI.person]||'',channel:r.fields[FI.channel]||'',
+      painting:(r.fields[FI.link]||[]).map(l=>l).join(', '),paintingIds:r.fields[FI.link]||[],
+      notes:(r.fields[FI.notes]||'').split('\n')[0],why:r.fields[FI.nWhy]||'',msg:r.fields[FI.nMsg]||'',
+      touches:r.fields[FI.touches]||0,priority:!!r.fields[FI.priority],lastOpen:r.fields[FI.lastOpen]||'',
+      opens:r.fields[FI.opens]||0,tapped:!!r.fields[FI.tapped]}));
+    // painting names: the link field gives ids; the wall has titles
+    NUDGES.forEach(n=>{n.painting=n.paintingIds.map(id=>{const w=wallList.find(x=>x.rec===id);return w?w.title:'';}).filter(Boolean).join(', ');});
+    NUDGES.sort((a,b)=>(b.priority-a.priority)||(b.lastOpen>a.lastOpen?1:b.lastOpen<a.lastOpen?-1:0));
+  }catch(e){list.innerHTML='<div class="empty">Couldn\u2019t read the spine — '+(e.message||e)+'</div>';return;}
+  renderNudges();
+}
+function renderNudges(){
+  const list=document.getElementById('nudgeList'); list.innerHTML='';
+  document.getElementById('nudgeN').textContent=NUDGES.length?'('+NUDGES.length+')':'';
+  if(!NUDGES.length){list.innerHTML='<div class="empty">Nobody due a word today.</div>';return;}
+  const groups=new Map();
+  NUDGES.forEach(n=>{const k=n.painting||'\u2014';if(!groups.has(k))groups.set(k,[]);groups.get(k).push(n);});
+  groups.forEach((ns,k)=>{
+    const h=document.createElement('div');h.className='grp';h.innerHTML=esc(k)+' <span>'+ns.length+'</span>';list.appendChild(h);
+    ns.forEach(n=>{
+      const d=document.createElement('div');d.className='nd'+(n.priority?' pri':'');
+      const isMail=n.channel.includes('@'); const capped=n.touches>=2;
+      const when=n.lastOpen?new Date(n.lastOpen).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}):'';
+      d.innerHTML='<div class="n">'+esc(first(n.name)||n.name)+(n.priority?' \u2605':'')+' <span class="pt">\u00b7 '+esc(n.painting||'')+'</span></div>'+
+        '<div class="m">'+esc(n.notes)+'</div>'+
+        '<div class="m">'+(n.opens?n.opens+' open'+(n.opens===1?'':'s'):'no opens')+(when?' \u00b7 last '+when:'')+(n.tapped?' \u00b7 TAPPED':'')+(n.touches?' \u00b7 nudged '+n.touches+'\u00d7':'')+'</div>'+
+        (n.why?'<div class="why">'+esc(n.why)+'</div>':'')+
+        '<textarea class="msg">'+esc(n.msg)+'</textarea>'+
+        '<div class="row"><a class="go'+(isMail?' mail':'')+(capped||!n.channel?' off':'')+'" href="#" target="_blank" rel="noopener">'+
+        (capped?'nudged twice already':!n.channel?'no number or email on file':(isMail?'Email':'WhatsApp'))+'</a>'+
+        '<button type="button" class="dn">Done \u2713</button><button type="button" class="sk">Skip</button></div>';
+      const ta=d.querySelector('.msg'), a=d.querySelector('.go');
+      const setHref=()=>{ const m=ta.value;
+        if(isMail)a.href='mailto:'+n.channel+'?subject='+encodeURIComponent((n.painting||'A painting')+' \u2014 a better photograph')+'&body='+encodeURIComponent(m);
+        else a.href='https://wa.me/'+waDigits(n.channel)+'?text='+encodeURIComponent(m); };
+      setHref(); ta.oninput=setHref;
+      d.querySelector('.dn').onclick=async function(){
+        this.textContent='saving\u2026'; this.disabled=true;
+        const f={}; f[FI.touches]=n.touches+1; f[FI.nSent]=new Date().toISOString().slice(0,10); f[FI.nDue]=false;
+        try{
+          await at('PATCH',INTEREST,{records:[{id:n.id,fields:f}],typecast:true});
+          const lf={}; lf[FL.entry]='Tony \u00b7 nudged '+(first(n.name)||n.name)+' \u00b7 '+(n.painting||'');
+          lf[FL.date]=f[FI.nSent]; lf[FL.who]='Tony'; lf[FL.done]='Sent from the Field Studio Nudges tab'+(isMail?' by email':' by WhatsApp')+'. Why: '+(n.why||'\u2014')+'. Message: '+ta.value;
+          if(n.paintingIds.length)lf[FL.painting]=n.paintingIds;
+          try{ await at('POST',LEDGER,{records:[{fields:lf}],typecast:true}); }catch(e){}
+          NUDGES=NUDGES.filter(x=>x.id!==n.id); renderNudges();
+        }catch(e){ this.textContent='failed \u2014 try again'; this.disabled=false; showErr('nudge not saved: '+(e.message||e)); }
+      };
+      d.querySelector('.sk').onclick=async function(){
+        this.textContent='\u2026'; const f={}; f[FI.nDue]=false;
+        try{ await at('PATCH',INTEREST,{records:[{id:n.id,fields:f}],typecast:true}); NUDGES=NUDGES.filter(x=>x.id!==n.id); renderNudges(); }
+        catch(e){ this.textContent='Skip'; showErr('skip not saved: '+(e.message||e)); }
+      };
+      list.appendChild(d);
+    });
+  });
+}
+document.getElementById('nudgeRefresh').onclick=loadNudges;
+
 // ================= tabs + boot =================
 const cardView=document.getElementById('cardView'),wallView=document.getElementById('wallView');
-const peopleView=document.getElementById('peopleView');
+const peopleView=document.getElementById('peopleView'),nudgesView=document.getElementById('nudgesView');
 function showTab(w){
-  ['card','wall','people'].forEach(t=>{
+  ['card','wall','people','nudges'].forEach(t=>{
     document.getElementById('tab'+t[0].toUpperCase()+t.slice(1)).classList.toggle('on',t===w);});
   cardView.classList.toggle('hidden',w!=='card');wallView.classList.toggle('hidden',w!=='wall');
-  peopleView.classList.toggle('hidden',w!=='people');
+  peopleView.classList.toggle('hidden',w!=='people');nudgesView.classList.toggle('hidden',w!=='nudges');
   document.getElementById('saveBar').style.display=w==='card'?'':'none';
   if(w==='card')setTimeout(()=>map.invalidateSize(),80);
   if(w==='people')renderPeople();
+  if(w==='nudges')loadNudges();
 }
+document.getElementById('tabNudges').onclick=()=>showTab('nudges');
 document.getElementById('tabCard').onclick=()=>showTab('card');
 document.getElementById('tabWall').onclick=()=>showTab('wall');
 document.getElementById('tabPeople').onclick=()=>showTab('people');
 net();render();renderWall();restoreDraft();renderDraftPeople();renderPeople();
-if(K.at)loadWall();else keyWrap.classList.add('open');
+if(K.at){loadWall().then(loadNudges);}else keyWrap.classList.add('open');
 </script>
 </body></html>
