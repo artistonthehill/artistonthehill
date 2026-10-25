@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="description" content="Request a personal PDF catalogue of Tony Parsons originals — matched to the places you love, including work not shown on the website.">
+<meta name="description" content="Request a personal PDF catalogue of Tony Parsons originals ? matched to the places you love, including work not shown on the website.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A catalogue of your own — Tony Parsons</title>
+<title>A catalogue of your own ? Tony Parsons</title>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WE9VCP47Q8"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -68,9 +68,9 @@
   <label for="name">Your name</label>
   <input type="text" id="name" autocomplete="given-name">
 
-  <label for="contact">WhatsApp or email</label>
-  <input type="text" id="contact" autocomplete="off" inputmode="email"
-    placeholder="a number or an address &mdash; whichever you prefer">
+  <label for="contact">Where to send it</label>
+  <input type="text" id="contact" autocomplete="off"
+    placeholder="your WhatsApp number or email address">
 
   <label for="loc">Where you are</label>
   <input type="text" id="loc" autocomplete="off"
@@ -80,10 +80,11 @@
   <div class="chips" id="interests"></div>
 
   <div class="send">
-    <button type="button" id="goBtn">Send my request</button>
+    <button type="button" id="goBtn">Send my request by WhatsApp</button>
   </div>
   <div class="err" id="err"></div>
-  <p class="note">Your catalogue is usually with you the same day.</p>
+  <p class="note">Your request opens in WhatsApp with everything filled in &mdash; just press send.
+  No WhatsApp? <a href="#" id="emailAlt">Send it by email instead</a>. Your catalogue is usually with you the same day.</p>
   <nav class="footnav">
     <a class="fbtn" href="private-view.html">The private view <span>&rarr;</span></a>
     <a class="fbtn" href="waiting-room.html">The Waiting Room <span>&rarr;</span></a>
@@ -98,7 +99,7 @@
 <script>
 const ARTIST_WA="447880601709", ARTIST_EM="artistonthehill@gmail.com";
 const TRACKER="https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
-const OPTIONS=['The last few months — everything, sold and all','Greece','Cornwall & Devon','Sussex','Venice','The Alps','The Bahamas','Animals','Boats & harbours','Everything'];
+const OPTIONS=['The last few months ? everything, sold and all','Greece','Cornwall & Devon','Sussex','Venice','The Alps','The Bahamas','Animals','Boats & harbours','Everything'];
 const picked=new Set();
 const box=document.getElementById('interests');
 OPTIONS.forEach(o=>{
@@ -137,8 +138,7 @@ function message(){
     document.getElementById('name').focus();return null;}
   if(!contact){err.textContent='A WhatsApp number or an email \u2014 so the catalogue can reach you.';
     document.getElementById('contact').focus();return null;}
-  if(!looksEmail(contact)&&!looksPhone(contact)){
-    err.textContent='That doesn\u2019t look like a number or an email \u2014 have another go.';
+  if(contact.length<5){err.textContent='That looks a little short \u2014 a number or an address, so the catalogue can reach you.';
     document.getElementById('contact').focus();return null;}
   if(!picked.size&&!loc){err.textContent='Tell me where you are, or choose at least one interest.';return null;}
   err.textContent='';
@@ -157,18 +157,22 @@ function detail(){
   if(loc)d+=' \u00b7 near: '+loc;
   return {name:name,d:d};
 }
+// WhatsApp is the route (25 Oct 2026): the mailto route silently did nothing on phones
+// without a mail app set up, which read as "it blocks my email". Email stays as a
+// plain fallback link for anyone without WhatsApp.
 document.getElementById('goBtn').onclick=()=>{
   const m=message();if(!m)return;
   const x=detail();
-  const contact=document.getElementById('contact').value.trim();
-  if(looksEmail(contact)){
-    ping('catalogue-request-email'+x.d, x.name);
-    location.href='mailto:'+ARTIST_EM+'?subject='+encodeURIComponent('A catalogue, please')+
-      '&body='+encodeURIComponent(m);
-  }else{
-    ping('catalogue-request-wa'+x.d, x.name);
-    window.open('https://wa.me/'+ARTIST_WA+'?text='+encodeURIComponent(m),'_blank');
-  }
+  ping('catalogue-request-wa'+x.d, x.name);
+  location.href='https://wa.me/'+ARTIST_WA+'?text='+encodeURIComponent(m);
+};
+document.getElementById('emailAlt').onclick=(e)=>{
+  e.preventDefault();
+  const m=message();if(!m)return;
+  const x=detail();
+  ping('catalogue-request-email'+x.d, x.name);
+  location.href='mailto:'+ARTIST_EM+'?subject='+encodeURIComponent('A catalogue, please')+
+    '&body='+encodeURIComponent(m);
 };
 </script>
 </body>
