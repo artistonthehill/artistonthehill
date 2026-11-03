@@ -325,6 +325,10 @@
     <input type="text" id="atKey" autocomplete="off" placeholder="pat…">
     <small>Writes cards and enquiries to the spine. Both stay on this phone.</small></div>
   <div class="srow"><button class="write" id="keySave" type="button">Save keys</button></div>
+  <div class="setrow" style="margin-top:18px"><label>App storage</label>
+    <div class="wallnote" id="storeMeter" style="margin-bottom:8px"></div>
+    <button class="chip" id="tidyBtn" type="button">Tidy — clear photos already sent</button>
+    <small id="tidyNote">Photos of cards that are safely in the spine are cleared automatically; Tidy does it by hand and says what it freed. Nothing on your phone\u2019s camera roll is touched.</small></div>
 </div></div>
 
 <script>
@@ -340,7 +344,7 @@ const FI={person:'fldwoBk1IKLWTpk4g',channel:'fldxZUFngyekqKU7Z',notes:'fldh4nnt
  priority:'flddTmjw0xb0S8ykd',touches:'fldcBwL6jQDskJPBn',lastOpen:'fldMFAsFfA12HlW39',opens:'fldWJQi06yFvwx0WS',
  tapped:'flduOqix8luzLgP4p',lastDev:'fldSu6JpSJamglYvz',nDue:'fldJSZFsimcVW0NPE',nWhy:'fldf3QKRBWjcsgT7K',
  nMsg:'fldAeRqNIKLl5AwFc',nSent:'fldBfiZsqW0m57w9o'};
-const VER='v2.4 · 11 Oct';
+const VER='v2.5 · 3 Nov';
 document.getElementById('ver').textContent=VER;
 // anything that blows up now shows on screen instead of vanishing
 const errBar=document.getElementById('errBar');
@@ -362,8 +366,16 @@ const REST_DAYS=10;   // "a week or two" — quiet period before release feels r
 const K={gh:localStorage.getItem('fs2-gh')||'', at:localStorage.getItem('fs2-at')||''};
 const keyWrap=document.getElementById('keyWrap');
 document.getElementById('gearBtn').onclick=()=>{document.getElementById('ghKey').value=K.gh;
-  document.getElementById('atKey').value=K.at; keyWrap.classList.add('open');};
+  document.getElementById('atKey').value=K.at; storeMeter();
+  if(typeof bootTidy!=='undefined'&&bootTidy.cleared)document.getElementById('tidyNote').textContent='At start-up: cleared '+bootTidy.cleared+', freed about '+mb(bootTidy.freed)+'. Tidy again any time.';
+  keyWrap.classList.add('open');};
 document.getElementById('keyClose').onclick=()=>keyWrap.classList.remove('open');
+document.getElementById('tidyBtn').onclick=function(){
+  const r=tidy(); storeMeter(); render();
+  document.getElementById('tidyNote').textContent='Cleared '+r.cleared+(r.cleared===1?' item':' items')+', freed about '+mb(r.freed)+'. This app now uses '+mb(r.ours)+'.'
+    +(r.others>1048576?' Most of the space is taken by other pages on this site (the old app) — not by this one.':'');
+  if(r.ours<4*1048576) errBar.classList.add('hidden');
+};
 document.getElementById('keySave').onclick=()=>{
   K.gh=document.getElementById('ghKey').value.trim();
   K.at=document.getElementById('atKey').value.trim();
@@ -456,10 +468,10 @@ document.getElementById('phIn').onchange=e=>{
   const img=new Image();
   img.onload=()=>{
     const c=document.createElement('canvas');
-    const s=Math.min(1,1920/Math.max(img.width,img.height));
+    const s=Math.min(1,1600/Math.max(img.width,img.height));
     c.width=Math.round(img.width*s); c.height=Math.round(img.height*s);
     c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-    photoURL=c.toDataURL('image/jpeg',0.86);
+    photoURL=c.toDataURL('image/jpeg',0.8);
     photoB64=photoURL.split(',')[1];
     photoThumb=thumbFrom(c);
     const p=document.getElementById('phPrev');
@@ -754,8 +766,36 @@ addEventListener('online',()=>PEOPLE.filter(p=>p.rec&&(p.sp==='q'||p.sp==='bad')
 let queue=JSON.parse(localStorage.getItem('fs2-q')||'[]');
 // older sessions stored the full photo as the list thumbnail — shed that
 // weight at boot so the phone's storage comes back
-queue.forEach(i=>{ if(i.thumb&&i.thumb.length>40000)i.thumb=null;
-  if(i.state==='ok'){delete i.b64;delete i.photoB64;} });
+// ---- storage housekeeping (3 Nov 2026): the app's own pocket on the phone is a few MB.
+// A photo is kept only until its card reads "in the spine"; Tidy sweeps anything left over.
+const OUR_KEYS=['fs2-q','fs2-draft','fs2-wall','fs2-people','fs2-people-bak','fs2-people-bin','fs2-gh','fs2-at','fs2-lock','fs2-test'];
+function storeBytes(onlyOurs){ let n=0; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i);
+  if(onlyOurs!==undefined && (OUR_KEYS.indexOf(k)>=0)!==onlyOurs) continue; n+=(k.length+(localStorage.getItem(k)||'').length)*2; } }catch(e){} return n; }
+function mb(b){ return (b/1048576).toFixed(b<1048576?2:1)+' MB'; }
+function tidy(){
+  const before=storeBytes(); let cleared=0;
+  const inSpine=slug=>!!slug&&wallList.some(w=>w.slug===slug);
+  const DAY=864e5, now=Date.now();
+  // cards that never read "in the spine" but are there anyway (a reload mid-send, a lost reply)
+  queue.forEach(i=>{
+    if(i.state!=='ok'&&i.kind==='card'&&inSpine(i.slug)){ i.state='ok'; i.err=''; i.okAt=i.okAt||now; i.volatile=false; }
+    if(i.state==='ok'){ if(i.b64||i.photoB64){cleared++;} delete i.b64; delete i.photoB64;
+      if(now-(i.okAt||0)>DAY && i.thumb){ i.thumb=null; } }
+    if(i.thumb&&i.thumb.length>40000){ i.thumb=null; cleared++; }
+  });
+  // sent cards older than a week drop off the session list altogether
+  const keep=queue.filter(i=>!(i.state==='ok'&&now-(i.okAt||0)>7*DAY)); cleared+=queue.length-keep.length;
+  queue.length=0; keep.forEach(i=>queue.push(i));
+  // a leftover draft whose painting is already carded
+  try{ const d=JSON.parse(localStorage.getItem('fs2-draft')||'null');
+    if(d&&d.photoB64&&d.title&&wallList.some(w=>w.title.toLowerCase()===d.title.trim().toLowerCase())){ d.photoB64=null; localStorage.setItem('fs2-draft',JSON.stringify(d)); cleared++; } }catch(e){}
+  saveQ();
+  const after=storeBytes();
+  return {cleared:cleared, freed:Math.max(0,before-after), used:after, ours:storeBytes(true), others:storeBytes(false)};
+}
+function storeMeter(){ const el=document.getElementById('storeMeter'); if(!el)return;
+  const o=storeBytes(true), x=storeBytes(false);
+  el.textContent='This app: '+mb(o)+(x>20000?' · other pages on this site (the old app etc.): '+mb(x):'')+' · the pocket is about 5 MB.'; }
 function saveQ(){
   const slim=keep=>JSON.stringify(queue.map(i=>{
     const c=Object.assign({},i);
@@ -766,7 +806,7 @@ function saveQ(){
     // phone storage full: keep the list, drop the photo bytes, and say so
     try{localStorage.setItem('fs2-q',slim(false));}catch(e2){}
     queue.forEach(i=>{if(i.state!=='ok'&&(i.b64||i.photoB64))i.volatile=true;});
-    showErr('phone storage is full — this photo is only held in memory. Stay in the app until it reads “in the spine”.');
+    showErr('App storage full — tap Keys → Tidy. Your phone\u2019s photos are not involved. This card is held in memory: stay in the app until it reads \u201cin the spine\u201d.');
   }
 }
 function today(){return new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
@@ -926,8 +966,10 @@ async function sync(it){
       it.live=null; waitLive(it);
     }
     it.state='ok'; it.err=''; if(!it.okAt)it.okAt=Date.now();
+    delete it.b64; delete it.photoB64; it.volatile=false;   // the photo's job is done the moment the spine has it
   }catch(e){it.state='bad'; it.err=String(e&&e.message||e);}
   render();saveQ();
+  if(it.state==='ok'&&!errBar.classList.contains('hidden')&&/storage/i.test(errBar.textContent))errBar.classList.add('hidden');
 }
 
 // ================= the room page (view.html reads <slug>.json) =================
@@ -978,8 +1020,10 @@ async function loadWall(){
         size:r.fields[F.size]||'',framed:!!r.fields[F.framed],prints:r.fields[F.prints]||''}));
       offset=j.offset||'';
     }while(offset);
-    wallList=out;localStorage.setItem('fs2-wall',JSON.stringify(out));
+    wallList=out;
+    try{ localStorage.setItem('fs2-wall',JSON.stringify(out.map(w=>Object.assign({},w,{notes:(w.notes||'').slice(-600)})))); }catch(e){}
     wallNote.textContent=out.length+' in the spine. Ochre edge = not yet public.';
+    tidy();
   }catch(e){wallNote.textContent=wallList.length?'Offline — cached wall.':'Couldn\u2019t read the spine — check the Airtable key.';}
   renderWall();
 }
@@ -1084,10 +1128,10 @@ document.getElementById('shPhIn').onchange=e=>{
   const img=new Image();
   img.onload=()=>{
     const c=document.createElement('canvas');
-    const s=Math.min(1,1920/Math.max(img.width,img.height));
+    const s=Math.min(1,1600/Math.max(img.width,img.height));
     c.width=Math.round(img.width*s); c.height=Math.round(img.height*s);
     c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-    shPhotoURL=c.toDataURL('image/jpeg',0.86);
+    shPhotoURL=c.toDataURL('image/jpeg',0.8);
     shPhotoB64=shPhotoURL.split(',')[1];
     shPhotoThumb=thumbFrom(c);
     const p=document.getElementById('shPhPrev');
@@ -1284,7 +1328,7 @@ document.getElementById('tabNudges').onclick=()=>showTab('nudges');
 document.getElementById('tabCard').onclick=()=>showTab('card');
 document.getElementById('tabWall').onclick=()=>showTab('wall');
 document.getElementById('tabPeople').onclick=()=>showTab('people');
-net();render();renderWall();restoreDraft();renderDraftPeople();renderPeople();
+net();const bootTidy=tidy();render();renderWall();restoreDraft();renderDraftPeople();renderPeople();
 if(K.at){loadWall().then(loadNudges);}else keyWrap.classList.add('open');
 </script>
 </body></html>
