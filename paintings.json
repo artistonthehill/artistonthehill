@@ -1,5 +1,42 @@
 [
  {
+  "id": "halamana-evening",
+  "title": "Halamana Evening",
+  "img": "images/halamana-evening.jpg",
+  "price": "£6,960",
+  "size": "97×68.5cm · Oil on canvas · white tray frame",
+  "lat": 50.0886,
+  "lng": -5.1026,
+  "collection": "uk",
+  "category": "marine"
+ },
+ {
+  "id": "worthing-sunset-kau",
+  "title": "Worthing Sunset",
+  "img": "images/worthing-sunset-kau.jpg",
+  "price": "£2,040",
+  "size": "66x30",
+  "lat": 50.81017,
+  "lng": -0.36438
+ },
+ {
+  "id": "seven-sisters-gale-u9z",
+  "title": "Seven Sisters Gale",
+  "img": "images/seven-sisters-gale-u9z.jpg",
+  "price": "£2,760",
+  "size": "80×30cm",
+  "lat": 50.75903,
+  "lng": 0.14812
+ },
+ {
+  "id": "bodium-castle",
+  "title": "Bodium castle",
+  "img": "images/bodium-castle.jpg",
+  "price": "£2,760",
+  "size": "80×30cm · Oil on board",
+  "collection": "uk"
+ },
+ {
   "id": "richmond-hill-jcc",
   "title": "Richmond Hill",
   "img": "images/richmond-hill-jcc.jpg",
