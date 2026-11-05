@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
 <title>A Private View — Artist on the Hill</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://www.google.com/url?q=https://fonts.googleapis.com&source=gmail&ust=1793967004131000&sa=E">
+<link href="https://www.google.com/url?q=https://fonts.googleapis.com/css2?family%3DCormorant%2BGaramond:wght@400;500;600%26family%3DMontserrat:wght@400;500;600%26display%3Dswap&source=gmail&ust=1793967004131000&sa=E" rel="stylesheet">
 <style>
   :root{--gold:#B8963E;--cream:#f5f2ed;--dark:#1a1a1a;--muted:#6b6357;--line:#e2dac9}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -34,7 +34,7 @@
   .panel p{font-size:.9rem;color:var(--muted)}
   .btn{display:block;width:100%;text-align:center;margin-top:12px;padding:14px 32px;border:0;border-radius:10px;
     font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:.5px;font-size:1rem;text-decoration:none;cursor:pointer;color:#fff}
-  .btn.wa{background:#25D366}.btn.dk{background:var(--dark)}
+  .btn.wa{background:#25D366}.https://www.google.com/url?q=http://btn.dk&source=gmail&ust=1793967004131000&sa=E{background:var(--dark)}
   .btn.ghost{background:transparent;color:var(--dark);border:1px solid var(--line)}
   .btn.gold{background:var(--gold)}
   .more{text-align:center;margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
@@ -77,6 +77,9 @@
       <div class="price serif" id="r-price"></div>
     </div>
     <div id="r-terms" class="specs" style="margin-bottom:8px"></div>
+    <p id="r-fig" class="serif" style="display:none;text-align:center;font-size:1.25rem;margin:14px 0 4px"></p>
+    <p id="r-note" style="display:none;text-align:center;font-size:.9rem;opacity:.8;margin:8px 0 14px"></p>
+    <p id="r-one" class="serif" style="display:none;text-align:center;font-size:1.3rem;margin:14px 0 10px"></p>
 
     <div class="panel" id="r-waiting" style="display:none">
       <h3>Reserve it through the Waiting Room</h3>
@@ -84,13 +87,14 @@
       <p>Interest-free monthly payments. The painting is held for you and becomes yours the moment it's finished — no lump sum, no pressure.</p>
     </div>
 
+    <a class="btn wa" id="r-claim" style="display:none">Claim my free A3 print</a>
     <a class="btn wa" id="r-reserve">Message Tony to reserve this piece</a>
     <a class="btn dk" id="r-printlink" style="display:none">Own a print of this piece →</a>
     <a class="btn ghost" id="r-print" style="display:none">I'd love a print of this instead</a>
-    <a class="btn gold" id="r-news" href="https://eepurl.com/gmXsdP" target="_blank" rel="noopener">Join the newsletter</a>
+    <a class="btn gold" id="r-news" href="https://www.google.com/url?q=https://eepurl.com/gmXsdP&source=gmail&ust=1793967004132000&sa=E" target="_blank" rel="noopener">Join the newsletter</a>
 
     <div class="more">
-      <a href="https://www.artistonthehill.co.uk/" target="_blank" rel="noopener">See more of Tony's work →</a>
+      <a href="https://www.google.com/url?q=https://www.artistonthehill.co.uk/&source=gmail&ust=1793967004132000&sa=E" target="_blank" rel="noopener">See more of Tony's work →</a>
     </div>
     <div class="foot">Artist on the Hill · this view is private to you</div>
   </div>
@@ -99,7 +103,7 @@
 
 <script>
 const ARTIST_WA = "447880601709";
-const TRACKER   = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
+const TRACKER   = "https://www.google.com/url?q=https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec&source=gmail&ust=1793967004132000&sa=E";
 
 const $=s=>document.querySelector(s);
 const gbp=n=>"£"+Number(n).toLocaleString("en-GB");
@@ -117,7 +121,7 @@ async function loadRoom(){
   // minutes to deploy it. So: try the site copy first, then fall back to the raw
   // GitHub copy (live seconds after publish), and retry patiently before giving up.
   const localURL=encodeURIComponent(slug)+".json";
-  const rawURL="https://raw.githubusercontent.com/artistonthehill/artistonthehill/main/"+encodeURIComponent(slug)+".json";
+  const rawURL="https://www.google.com/url?q=https://raw.githubusercontent.com/artistonthehill/artistonthehill/main/&source=gmail&ust=1793967004132000&sa=E"+encodeURIComponent(slug)+".json";
   const tryFetch=async url=>{
     const r=await fetch(url,{cache:"no-store"});
     if(!r.ok) throw new Error(r.status);
@@ -156,6 +160,14 @@ function render(P){
 
   const tag=P.t?(' "'+P.t+'"'):" the painting";
 
+  // optional extras (5 Nov 2026): fig = {code: line}, n = note, one = headline line, claim = true
+  if(P.fig&&who&&P.fig[who]){ const f=$("#r-fig"); f.textContent=P.fig[who]; f.style.display="block"; }
+  if(P.n){ const n=$("#r-note"); n.textContent=P.n; n.style.display="block"; }
+  if(P.one){ const o=$("#r-one"); o.textContent=P.one; o.style.display="block"; }
+  if(P.claim&&who&&P.fig&&P.fig[who]){ const c=$("#r-claim"); c.style.display="block";
+    c.href=wa("Hi Tony, I'd like to claim my free A3 print of"+tag+".\nFull name: \nEmail: \nPostal address: ");
+    c.addEventListener("click",()=>ping("tapped",{})); }
+
   if(P.sold){
     $("#r-soldnote").style.display="block";
     $("#r-eyebrow").textContent="A private view";
@@ -179,7 +191,7 @@ function render(P){
   fireTripwire(P);
 }
 
-function wa(text){ return "https://wa.me/"+ARTIST_WA+"?text="+encodeURIComponent(text); }
+function wa(text){ return "https://www.google.com/url?q=https://wa.me/&source=gmail&ust=1793967004132000&sa=E"+ARTIST_WA+"?text="+encodeURIComponent(text); }
 
 function ping(event,geo){
   geo=geo||{};
@@ -198,7 +210,7 @@ async function fireTripwire(P){
   let geo={};
   try{
     const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),2500);
-    const r=await fetch("https://ipwho.is/",{signal:ctrl.signal});
+    const r=await fetch("https://www.google.com/url?q=https://ipwho.is/&source=gmail&ust=1793967004132000&sa=E",{signal:ctrl.signal});
     const j=await r.json();
     if(j&&j.success!==false){ geo={ip:j.ip,region:[j.city,j.region,j.country].filter(Boolean).join(", "),isp:(j.connection&&j.connection.isp)||""}; }
   }catch(e){}
