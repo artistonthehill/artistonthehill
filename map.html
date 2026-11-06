@@ -154,9 +154,10 @@ function initMap(paintingsData) {
       ? 'Hello Tony, I saw ' + p.title + ' on your map — could you paint something similar for me?'
       : 'Hello Tony, I am interested in ' + p.title + ' (' + p.price + ').';
     const waBtn = '<a class="iw-btn" href="https://wa.me/447880601709?text=' + encodeURIComponent(waText) + '" target="_blank" style="background:#8b6f47;">' + (p.sold ? 'Commission similar via WhatsApp' : 'Enquire via WhatsApp') + '</a>';
-    const actionBtns = p.sold && p.prints
-      ? '<a class="iw-btn" href="' + p.prints + '" target="_blank">Order a print →</a>' + waBtn
-      : '<a class="iw-btn" href="' + viewUrl + '" style="margin-bottom:6px;">View painting →</a>' + waBtn;
+    const printBtn = p.prints ? '<a class="iw-btn" href="' + p.prints + '" target="_blank" style="margin-bottom:6px;">Order a print →</a>' : '';
+    const actionBtns = p.sold
+      ? printBtn + waBtn
+      : '<a class="iw-btn" href="' + viewUrl + '" style="margin-bottom:6px;">View painting →</a>' + printBtn + waBtn;
     marker.bindPopup('<div class="iw-wrap">' + imgHtml + '<div class="iw-title">' + p.title + '</div><div class="iw-size">' + p.size + '</div>' + priceHtml + actionBtns + '</div>', { maxWidth: 250, minWidth: 220 });
   });
 
