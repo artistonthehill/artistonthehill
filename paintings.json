@@ -1271,5 +1271,16 @@
   "lng": 0.543929,
   "collection": "uk",
   "category": "landscape"
+ },
+ {
+  "id": "st-anthony-head-lighthouse",
+  "title": "St Anthony Head Lighthouse",
+  "img": "images/st-anthony-head-lighthouse.jpg",
+  "price": "£3,480",
+  "size": "60×80cm · Oil on canvas",
+  "lat": 50.140658,
+  "lng": -5.028157,
+  "collection": "uk",
+  "category": "marine"
  }
 ]
