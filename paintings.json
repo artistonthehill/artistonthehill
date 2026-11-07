@@ -1260,5 +1260,16 @@
   "lat": 50.089432,
   "lng": -5.098191,
   "collection": "uk"
+ },
+ {
+  "id": "bodium-castle",
+  "title": "Bodiam Castle",
+  "img": "images/bodium-castle.jpg",
+  "price": "£2,760",
+  "size": "80×30cm · Oil on board",
+  "lat": 51.001667,
+  "lng": 0.543929,
+  "collection": "uk",
+  "category": "landscape"
  }
 ]
