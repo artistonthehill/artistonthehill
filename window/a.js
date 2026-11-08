@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.3.2 · 8 Nov';
+const VER='v0.4 · 8 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -142,6 +142,10 @@ function regionFor(lat,lng,collection){
 function placeForText(t){ t=String(t||'').toLowerCase(); if(!t) return null;
   for(const p of PLACESL){ const ms=String(p.f[P.matches]||'').split(',').map(s=>s.trim()).filter(Boolean); if(ms.some(m=>t.indexOf(m)>=0)) return p; }
   return null; }
+// sold and gone: Sold ticked, or the office has moved it past Sold, or it lives with a collector
+function gone(r){ if(r.f[F.sold]) return true; const st=selName(r.f[F.stage]); if(['Sold','Delivered','Registered'].indexOf(st)>=0) return true;
+  const p=PLACESL.find(x=>x.id===placeOf(r)); return !!(p&&selName(p.f[P.kind])==='Collector'); }
+const live=()=>SPINE.filter(r=>!gone(r));
 function regionsInUse(){ const s=new Set(['Studio']); SPINE.forEach(r=>{ const v=regionOf(r); if(v) s.add(v); }); return [...s].sort((x,y)=>x==='Studio'?1:y==='Studio'?-1:x.localeCompare(y)); }
 function cacheSpine(){ try{ localStorage.setItem('win-spine',JSON.stringify({at:Date.now(),rows:SPINE})); }catch(e){} }
 function loadCache(){ try{ const c=JSON.parse(localStorage.getItem('win-spine')||'null'); if(c&&c.rows){ SPINE=c.rows; return c.at; } }catch(e){} return 0; }

@@ -106,6 +106,9 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
 .shead{display:flex;align-items:center;gap:10px;padding:10px 12px 0;flex-wrap:wrap}
 .shead .cnt{color:var(--dim);font-size:13px;flex:1}
 .ptools{display:none;gap:8px;align-items:center;padding:8px 12px 0;flex-wrap:wrap}
+.lrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%;background:var(--pane);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 12px;margin-bottom:6px;text-align:left}
+.lrow .lt{font-size:15px}.lrow .ls{font-size:12px;color:var(--dim);white-space:nowrap}
+.drow.sold{border-style:dashed;color:var(--dim)}
 </style>
 </head>
 <body>
@@ -132,6 +135,7 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
   <div class="ptools" id="sPlaceTools"><button class="btn sec sm" id="sPinHere">Pin it here</button><button class="btn sec sm" id="sPinPaste">Paste a Maps link</button><span class="note" id="sPinNote"></span></div>
   <main>
     <div class="grid" id="sGrid"></div>
+    <div id="sList" style="display:none"></div>
     <div id="sTrayWrap" style="display:none"><div class="sect">No picture yet</div><div class="tray" id="sTray"></div></div>
   </main>
 </div>

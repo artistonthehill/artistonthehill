@@ -20,8 +20,8 @@ function hasPin(r){ return r.f[F.lat]!=null&&r.f[F.lng]!=null&&r.f[F.lat]!==''&&
 function drawMap(){
   if(!MAP) return; LAYER.clearLayers(); const drawer=$('drawer'); drawer.innerHTML='';
   if(MODE==='painted'){
-    const groups={}; SPINE.forEach(r=>{ const g=regionOf(r)||(hasPin(r)?'':'Studio'); if(!g) return; (groups[g]=groups[g]||[]).push(r); });
-    const unplaced=SPINE.filter(r=>!regionOf(r)&&hasPin(r));
+    const groups={}; live().forEach(r=>{ const g=regionOf(r)||(hasPin(r)?'':'Studio'); if(!g) return; (groups[g]=groups[g]||[]).push(r); });
+    const unplaced=live().filter(r=>!regionOf(r)&&hasPin(r));
     Object.keys(groups).forEach(g=>{
       const rows=groups[g]; let lat,lng;
       if(g==='Studio'){ [lat,lng]=STUDIO; }
@@ -31,16 +31,18 @@ function drawMap(){
     if(unplaced.length) drawer.innerHTML=`<button class="drow" id="unplacedBtn"><span>${unplaced.length} pinned but not yet on a region</span><span class="n">›</span></button>`,
       $('unplacedBtn').onclick=()=>openSheet({kind:'unplaced'});
   } else {
-    const byPlace={}; SPINE.forEach(r=>{ const p=placeOf(r); if(p) (byPlace[p]=byPlace[p]||[]).push(r); });
+    const byPlace={}; live().forEach(r=>{ const p=placeOf(r); if(p) (byPlace[p]=byPlace[p]||[]).push(r); });
     const rowsHtml=[];
-    PLACESL.forEach(p=>{ if(p.f[P.active]===false) return; const kind=selName(p.f[P.kind]); const n=(byPlace[p.id]||[]).length;
+    PLACESL.forEach(p=>{ if(p.f[P.active]===false) return; const kind=selName(p.f[P.kind]); if(kind==='Collector') return; const n=(byPlace[p.id]||[]).length;
       if(p.f[P.lat]!=null&&p.f[P.lng]!=null&&kind!=='Collector'&&kind!=='Tony') pin(+p.f[P.lat],+p.f[P.lng],p.f[P.name],n,'place',()=>openSheet({kind:'place',key:p.id}));
       else rowsHtml.push(`<button class="drow" data-p="${p.id}"><span>${esc(p.f[P.name])}</span><span class="n">${n}${(kind!=='Collector'&&kind!=='Tony')?' · <em>no pin yet</em>':''} ›</span></button>`); });
-    const nowhere=SPINE.filter(r=>!placeOf(r)).length;
+    const nowhere=live().filter(r=>!placeOf(r)).length;
     if(nowhere) rowsHtml.push(`<button class="drow" data-p="__none"><span>Nowhere recorded</span><span class="n">${nowhere} ›</span></button>`);
     drawer.innerHTML=rowsHtml.join('');
     drawer.querySelectorAll('.drow').forEach(b=>b.onclick=()=>{ const id=b.dataset.p; openSheet(id==='__none'?{kind:'nowhere'}:{kind:'place',key:id}); });
   }
+  const sold=SPINE.filter(gone).length;
+  if(sold){ drawer.insertAdjacentHTML('beforeend',`<button class="drow sold" id="soldBox"><span>Sold and gone</span><span class="n">${sold} ›</span></button>`); $('soldBox').onclick=()=>openSheet({kind:'sold'}); }
   $('modePainted').classList.toggle('on',MODE==='painted'); $('modeNow').classList.toggle('on',MODE==='now');
   $('newBtn').textContent=MODE==='now'?'+':'+'; $('newBtn').title=MODE==='now'?'New card or new place':'New card';
 }
@@ -52,22 +54,28 @@ function fabTap(){
 
 // ---------- the sheet behind a pin ----------
 function sheetRows(s){
-  if(s.kind==='all') return SPINE.slice();
-  if(s.kind==='region') return SPINE.filter(r=>(regionOf(r)||(hasPin(r)?'':'Studio'))===s.key);
-  if(s.kind==='unplaced') return SPINE.filter(r=>!regionOf(r)&&hasPin(r));
-  if(s.kind==='place') return SPINE.filter(r=>placeOf(r)===s.key);
-  if(s.kind==='nowhere') return SPINE.filter(r=>!placeOf(r));
+  if(s.kind==='sold') return SPINE.filter(gone);
+  if(s.kind==='all') return live();
+  if(s.kind==='region') return live().filter(r=>(regionOf(r)||(hasPin(r)?'':'Studio'))===s.key);
+  if(s.kind==='unplaced') return live().filter(r=>!regionOf(r)&&hasPin(r));
+  if(s.kind==='place') return live().filter(r=>placeOf(r)===s.key);
+  if(s.kind==='nowhere') return live().filter(r=>!placeOf(r));
   return [];
 }
 function sheetTitle(s){
-  if(s.kind==='all') return 'All paintings'; if(s.kind==='region') return s.key; if(s.kind==='unplaced') return 'Pinned, no region yet';
+  if(s.kind==='sold') return 'Sold and gone'; if(s.kind==='all') return 'All paintings'; if(s.kind==='region') return s.key; if(s.kind==='unplaced') return 'Pinned, no region yet';
   if(s.kind==='place') return placeName(s.key)||'Place'; if(s.kind==='nowhere') return 'Nowhere recorded'; return '';
 }
 function openSheet(s){ SHEET=s; $('sheet').classList.add('open'); refreshSheet(); try{window.scrollTo(0,0);}catch(e){} }
 function refreshSheet(){
   if(!SHEET||!$('sheet').classList.contains('open')) return;
   const rows=sheetRows(SHEET); const t=sheetTitle(SHEET);
-  const {withPic,noPic}=renderGrid(rows,$('sGrid'),$('sTray'));
+  $('sNew').style.display=SHEET.kind==='sold'?'none':'inline-block'; $('sList').style.display=SHEET.kind==='sold'?'block':'none'; $('sGrid').style.display=SHEET.kind==='sold'?'none':'grid';
+  let noPic=0;
+  if(SHEET.kind==='sold'){ $('sTray').innerHTML=''; $('sTrayWrap').style.display='none';
+    $('sList').innerHTML=rows.map(r=>`<button class="lrow" data-id="${r.id}"><span class="lt">${esc(r.f[F.title]||'(untitled)')}</span><span class="ls">${esc(String(r.f[F.size]||'').split('·')[0].trim())}${placeOf(r)?' · '+esc(placeName(placeOf(r))):''}${selName(r.f[F.stage])?' · '+esc(selName(r.f[F.stage])):''}</span></button>`).join('')||'<div class="note">Nothing sold yet.</div>';
+    $('sList').querySelectorAll('.lrow').forEach(bt=>bt.onclick=()=>{ const r=SPINE.find(x=>x.id===bt.dataset.id); if(r) openCard(r); }); }
+  else ({noPic}=renderGrid(rows,$('sGrid'),$('sTray')));
   $('sTitle').textContent=t; $('sCount').textContent=rows.length+(rows.length===1?' painting':' paintings')+(noPic?' · '+noPic+' without a picture':'');
   const p=SHEET.kind==='place'?PLACESL.find(x=>x.id===SHEET.key):null;
   $('sPlaceTools').style.display=p?'flex':'none';

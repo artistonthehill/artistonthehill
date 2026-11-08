@@ -30,9 +30,10 @@ function renderGrid(rows,g,tray){
   return {withPic,noPic};
 }
 function renderHome(){
-  const noPic=SPINE.filter(r=>!tileSrc(r)).length;
+  const noPic=live().filter(r=>!tileSrc(r)).length;
   const when=lastPull?new Date(lastPull).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'';
-  $('status').innerHTML=SPINE.length?`${SPINE.length} cards${when?' · spine '+when:' · <span class="warn">offline copy</span>'}${noPic?' · '+noPic+' without a picture':''}`:'No cards loaded yet.';
+  const sold=SPINE.filter(gone).length;
+  $('status').innerHTML=SPINE.length?`${SPINE.length-sold} on the walls · ${sold} sold${when?' · spine '+when:' · <span class="warn">offline copy</span>'}${noPic?' · '+noPic+' without a picture':''}`:'No cards loaded yet.';
   if(typeof drawMap==='function') drawMap();
   if(typeof refreshSheet==='function') refreshSheet();
 }
