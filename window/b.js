@@ -83,6 +83,8 @@ function drawForm(){
   $('liveTog').classList.toggle('on',cur.live); $('liveK').textContent=cur.live?'Live on the website':'Not public';
   $('liveS').textContent=cur.live?'Publish to site is ticked — the site follows on its next publish':'Only you can see this card';
   $('soldTog').classList.toggle('on',cur.sold); $('fNotes').value=cur.notes;
+  const st=cur.row?selName(cur.row.f[F.stage]):''; const past=['Sold','Delivered','Registered'].indexOf(st)>=0;
+  $('soldS').textContent=cur.sold?(past?('Stage '+st+' — stays as the office set it'):'Stage moves to Sold when you save; Books takes it from there'):'Marks it sold on the spine — the office does the rest';
   $('stageNote').textContent=cur.row?('Stage: '+((cur.row.f[F.stage]||{}).name||cur.row.f[F.stage]||'—')+' (the office moves this)'):'Stage will be Carded';
   saveState();
 }
@@ -109,6 +111,8 @@ function gather(){
   cur.title=String(cur.title||'').trim(); cur.lat=String(cur.lat||'').trim(); cur.lng=String(cur.lng||'').trim(); cur.loc=String(cur.loc||'').trim();
   const f={}; f[F.title]=cur.title; f[F.size]=sizeText(cur.chip,cur.w,cur.h,cur.medium);
   f[F.price]=+cur.price; f[F.priceDisp]=cur.sold?'Sold':money(cur.price); f[F.publish]=cur.live; f[F.sold]=cur.sold;
+  // the relay: Tony moves cards to Sold; never backwards from here
+  if(cur.sold&&cur.id){ const st=selName(cur.row.f[F.stage]); if(['Sold','Delivered','Registered'].indexOf(st)<0) f[F.stage]='Sold'; }
   if(cur.lat!==''&&cur.lng!==''&&!isNaN(+cur.lat)&&!isNaN(+cur.lng)){ f[F.lat]=+cur.lat; f[F.lng]=+cur.lng; }
   if(!cur.region) cur.region=(cur.lat!==''&&cur.lng!=='')?regionFor(cur.lat,cur.lng,null).region:'Studio';
   f[F.region]=cur.region;
@@ -141,7 +145,7 @@ async function save(){
     names.push('Uploading thumbnail ('+Math.round(cur.pics.thumb.bytes/1024)+' KB)'); steps.push({fn:async()=>{ await ghPut(tp,cur.pics.thumb.b64,'Window: '+tp); f[F.thumb]=tp; return cur.pics.thumb.w+'×'+cur.pics.thumb.h; }});
   }
   names.push(isNew?'Writing the card':'Updating the card'); steps.push({fn:async()=>{
-    if(isNew){ f[F.slug]=slug; f[F.stage]='Carded'; if(!f[F.lat]){ /* no pin: nothing written */ } const rec=await createCard(f); cur.id=rec.id; cur.row={id:rec.id,created:rec.createdTime||new Date().toISOString(),f:rec.fields||f}; SPINE.unshift(cur.row); }
+    if(isNew){ f[F.slug]=slug; f[F.stage]=cur.sold?'Sold':'Carded'; if(!f[F.lat]){ /* no pin: nothing written */ } const rec=await createCard(f); cur.id=rec.id; cur.row={id:rec.id,created:rec.createdTime||new Date().toISOString(),f:rec.fields||f}; SPINE.unshift(cur.row); }
     else { const rec=await patchCard(cur.id,f); cur.row.f=Object.assign({},cur.row.f,rec.fields||f); }
     cacheSpine(); return ''; }});
   names.push('In the spine'); steps.push({fn:async()=>{ const t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}); return '✓ '+t; }});
@@ -218,7 +222,10 @@ window.addEventListener('DOMContentLoaded',()=>{
     navigator.geolocation.getCurrentPosition(p=>{ $('fLat').value=p.coords.latitude.toFixed(6); $('fLng').value=p.coords.longitude.toFixed(6); pinNote(); saveState(); },()=>{ $('pinNote').textContent='Location not allowed — paste from Maps instead.'; },{enableHighAccuracy:true,timeout:12000}); };
   $('studioBtn').onclick=()=>{ $('fLat').value=STUDIO[0]; $('fLng').value=STUDIO[1]; pinNote(); saveState(); };
   $('liveTog').onclick=()=>{ cur.live=!cur.live; drawForm(); };
-  $('soldTog').onclick=()=>{ cur.sold=!cur.sold; drawForm(); };
+  $('soldTog').onclick=()=>{ cur.sold=!cur.sold;
+    if(cur.sold){ const wt=PLACESL.find(p=>selName(p.f[P.kind])==='Tony'), col=PLACESL.find(p=>selName(p.f[P.kind])==='Collector');
+      if(col&&(!cur.place||(wt&&cur.place===wt.id))) cur.place=col.id; }
+    drawForm(); };
   $('saveBtn').onclick=save;
   loadFresh(); loadPlacesCache(); lastPull=loadCache(); if(typeof initMap==='function') initMap(); renderHome();
   if(K.at) refresh(true); else openKeys();
