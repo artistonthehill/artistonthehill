@@ -37,7 +37,7 @@ function drawMap(){
       if(p.f[P.lat]!=null&&p.f[P.lng]!=null&&kind!=='Collector'&&kind!=='Tony') pin(+p.f[P.lat],+p.f[P.lng],p.f[P.name],n,'place',()=>openSheet({kind:'place',key:p.id}));
       else rowsHtml.push(`<button class="drow" data-p="${p.id}"><span>${esc(p.f[P.name])}</span><span class="n">${n}${(kind!=='Collector'&&kind!=='Tony')?' · <em>no pin yet</em>':''} ›</span></button>`); });
     const nowhere=live().filter(r=>!placeOf(r)).length;
-    if(nowhere) rowsHtml.push(`<button class="drow" data-p="__none"><span>Nowhere recorded</span><span class="n">${nowhere} ›</span></button>`);
+    if(nowhere) rowsHtml.push(`<button class="drow" data-p="__none"><span>Where are these now?</span><span class="n">${nowhere} ›</span></button>`);
     drawer.innerHTML=rowsHtml.join('');
     drawer.querySelectorAll('.drow').forEach(b=>b.onclick=()=>{ const id=b.dataset.p; openSheet(id==='__none'?{kind:'nowhere'}:{kind:'place',key:id}); });
   }
@@ -64,7 +64,7 @@ function sheetRows(s){
 }
 function sheetTitle(s){
   if(s.kind==='sold') return 'Sold and gone'; if(s.kind==='all') return 'All paintings'; if(s.kind==='region') return s.key; if(s.kind==='unplaced') return 'Pinned, no region yet';
-  if(s.kind==='place') return placeName(s.key)||'Place'; if(s.kind==='nowhere') return 'Nowhere recorded'; return '';
+  if(s.kind==='place') return placeName(s.key)||'Place'; if(s.kind==='nowhere') return 'Where are these now?'; return '';
 }
 function openSheet(s){ SHEET=s; $('sheet').classList.add('open'); refreshSheet(); try{window.scrollTo(0,0);}catch(e){} }
 function refreshSheet(){
@@ -79,6 +79,14 @@ function refreshSheet(){
   $('sTitle').textContent=t; $('sCount').textContent=rows.length+(rows.length===1?' painting':' paintings')+(noPic?' · '+noPic+' without a picture':'');
   const p=SHEET.kind==='place'?PLACESL.find(x=>x.id===SHEET.key):null;
   $('sPlaceTools').style.display=p?'flex':'none';
+  // the 'where are these now?' sheet: say what it is and offer to place the lot in one go
+  const bulk=$('sBulk'); bulk.style.display=SHEET.kind==='nowhere'&&rows.length?'block':'none';
+  if(SHEET.kind==='nowhere'&&rows.length){ const pl=PLACESL.filter(x=>x.f[P.active]!==false&&selName(x.f[P.kind])!=='Collector');
+    bulk.innerHTML='<div class="note">These cards say where the painting was <em>painted</em> but not where it <em>is</em> today. Open one and tap a place under Now at — or, if they are all in one place:</div><div class="chips" id="bulkChips" style="margin-top:8px"></div><div class="note" id="bulkNote"></div>';
+    chips($('bulkChips'),pl.map(x=>x.id),'',async id=>{ const name=placeName(id); const n=rows.length; const b=$('bulkNote'); b.innerHTML='<span class="spin"></span> Putting '+n+' cards at '+esc(name)+'…';
+      try{ for(let i=0;i<rows.length;i+=10){ const slice=rows.slice(i,i+10).map(r=>({id:r.id,fields:{[F.nowAt]:[id],[F.loc]:name}})); const j=await at('PATCH',TBL,{records:slice,typecast:true,returnFieldsByFieldId:true}); j.records.forEach(rec=>{ const r=SPINE.find(x=>x.id===rec.id); if(r) r.f=Object.assign({},r.f,rec.fields||{}); }); }
+        cacheSpine(); toast(n+' cards now at '+name); renderHome(); openSheet({kind:'place',key:id}); }
+      catch(e){ b.textContent=plain(e); } },id=>'All of these are at '+placeName(id)); }
   if(p){ const pinned=p.f[P.lat]!=null&&p.f[P.lng]!=null; $('sPinHere').textContent=pinned?'Move pin to here':'Pin it here'; $('sPinNote').textContent=pinned?('Pinned at '+(+p.f[P.lat]).toFixed(4)+', '+(+p.f[P.lng]).toFixed(4)):'No pin yet — tap when you are standing there, or paste a Maps link.'; }
 }
 function sheetNew(){ PRESET={}; if(SHEET&&SHEET.kind==='region'&&SHEET.key!=='Studio') PRESET.region=SHEET.key; if(SHEET&&SHEET.kind==='region'&&SHEET.key==='Studio') PRESET.region='Studio'; if(SHEET&&SHEET.kind==='place') PRESET.place=SHEET.key; openCard(null); }
