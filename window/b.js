@@ -137,7 +137,7 @@ async function runSteps(steps,fromIdx){
 async function save(){
   const f=gather(); const m=missing(); if(m.length){ saveState(); return; }
   $('saveBtn').disabled=true; $('saveNote').textContent='';
-  const isNew=!cur.id; const slug=cur.slug||newSlug(cur.title,takenSlugs()); cur.slug=slug;
+  const isNew=!cur.id; const slug=cur.slug||newSlug(cur.title,takenSlugs()); cur.slug=slug; if(!isNew&&cur.row&&cur.row.f[F.slug]!==slug) f[F.slug]=slug;
   const names=[]; const steps=[];
   if(cur.pics){
     const ip=(cur.row&&cur.row.f[F.img])||imgPath(slug), tp=cur.row?thumbPath(cur.row):thumbPath(slug);
@@ -157,7 +157,9 @@ async function save(){
 async function replacePicture(file){
   $('saveNote').textContent=''; let pics;
   showSteps(['Making the two pictures','Uploading web picture','Uploading thumbnail','Pointing the card at them']);
-  const ip=(cur.row&&cur.row.f[F.img])||imgPath(cur.slug), tp=thumbPath(cur.row); const upd={};
+  const upd={};
+  if(!cur.slug){ cur.slug=newSlug(cur.title||cur.row.f[F.title],takenSlugs()); cur.row.f[F.slug]=cur.slug; upd[F.slug]=cur.slug; }   // older cards had no web name — mint one, never save under an empty name
+  const ip=(cur.row&&cur.row.f[F.img])||imgPath(cur.slug), tp=thumbPath(cur.row);
   const ok=await runSteps([
     {fn:async()=>{ pics=await makePictures(file); cur.pics=pics; drawPic(); return pics.web.w+'×'+pics.web.h+' and '+pics.thumb.w+'×'+pics.thumb.h; }},
     {fn:async()=>{ await ghPut(ip,pics.web.b64,'Window: replace '+ip); return Math.round(pics.web.bytes/1024)+' KB'; }},

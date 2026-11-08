@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.3.1 · 8 Nov';
+const VER='v0.3.2 · 8 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -158,7 +158,7 @@ const takenSlugs=()=>new Set(SPINE.map(r=>r.f[F.slug]).filter(Boolean));
 // the thumb sits next to its web picture under the same file name (images/foo.jpg -> images/thumbs/foo.jpg)
 const thumbPath=(slugOrRow)=>{ if(typeof slugOrRow==='string') return 'images/thumbs/'+slugOrRow+'.jpg';
   const f=slugOrRow.f||{}; if(f[F.thumb]) return f[F.thumb]; const i=f[F.img]; if(i) return 'images/thumbs/'+i.split('/').pop().replace(/\.[^.]+$/,'.jpg'); return 'images/thumbs/'+(f[F.slug]||'picture')+'.jpg'; };
-const imgPath=slug=>'images/'+slug+'.jpg';
+const imgPath=slug=>'images/'+(slug||('picture-'+tri()))+'.jpg';
 // picture to show for a card: thumb if the card has one, else the web picture, else nothing (never a black tile)
 // pictures just made on this phone, kept so the wall and the card show them at once — the site takes a minute to serve a new file
 const FRESH={};                                   // slug -> {thumb:dataURL, web:dataURL, at}
