@@ -1,5 +1,12 @@
 [
  {
+  "id": "antico-doge-i0k",
+  "title": "Antico Doge",
+  "img": "images/antico-doge-i0k.jpg",
+  "price": "£1,320",
+  "size": "60×42cm · Oil on board"
+ },
+ {
   "id": "north-sands-glass-beach-wip-y9g",
   "title": "North Sands Glass Beach",
   "img": "images/north-sands-glass-beach-wip-y9g.jpg",
@@ -8,8 +15,8 @@
   "lat": 50.230047,
   "lng": -3.781568,
   "collection": "uk",
-  "category": "marine",
-  "prints": "https://www.thegillangallery.com/product-page/north-sands-glass-salcombe-devon"
+  "prints": "https://www.thegillangallery.com/product-page/north-sands-glass-salcombe-devon",
+  "category": "marine"
  },
  {
   "id": "halamana-evening",
@@ -87,7 +94,7 @@
   "title": "Final Day at Henley 2026",
   "img": "images/final-day-at-henley-2026-3sd.jpg",
   "price": "Sold",
-  "size": "80×30cm · Oil on board, solid white oak frame",
+  "size": "80×30cm · Oil on board",
   "lat": 51.5372,
   "lng": -0.8997,
   "collection": "uk",
@@ -101,7 +108,8 @@
   "price": "£2,760",
   "size": "80×30cm",
   "lat": 50.82307,
-  "lng": -0.13915
+  "lng": -0.13915,
+  "collection": "uk"
  },
  {
   "id": "stockbridge-trout",
@@ -851,7 +859,7 @@
   "id": "bahamas-south-canal",
   "title": "South Canal",
   "img": "images/bahamas-south-canal.jpg",
-  "price": "£1,320",
+  "price": "£1,440",
   "size": "42×30cm · Oil on board",
   "lat": 25.011733,
   "lng": -77.340942,
@@ -894,7 +902,7 @@
   "title": "Amalfi Vista",
   "img": "images/amalfi-vista.jpg",
   "price": "£3,600",
-  "size": "60×42cm · Oil on canvas-wrapped board",
+  "size": "60×42cm · Oil on canvas",
   "lat": 40.632783,
   "lng": 14.602924,
   "collection": "amalfi"
@@ -1104,17 +1112,6 @@
   "category": "landscape"
  },
  {
-  "id": "port-atheni",
-  "title": "Port Atheni",
-  "img": "images/PortAthenism.jpg",
-  "price": "Sold",
-  "size": "60×42cm · Oil on board",
-  "lat": 38.665349,
-  "lng": 20.802619,
-  "collection": "ionian",
-  "sold": true
- },
- {
   "id": "spilia-sparkle",
   "title": "Spilia Sparkle",
   "img": "images/spiliasparklesm.jpg",
@@ -1269,15 +1266,14 @@
   "size": "80×30cm · Oil on board",
   "lat": 51.001667,
   "lng": 0.543929,
-  "collection": "uk",
-  "category": "landscape"
+  "collection": "uk"
  },
  {
   "id": "st-anthony-head-lighthouse",
   "title": "St Anthony Head Lighthouse",
   "img": "images/st-anthony-head-lighthouse.jpg",
   "price": "£3,480",
-  "size": "60×80cm · Oil on canvas",
+  "size": "60×80cm",
   "lat": 50.140658,
   "lng": -5.028157,
   "collection": "uk",
