@@ -82,7 +82,7 @@ function drawForm(){
   chips($('regionChips'),regs,cur.region,v=>{ if(v==='Other'){ $('fRegion').style.display='block'; $('fRegion').focus(); return; } cur.region=v; $('fRegion').style.display='none'; drawForm(); },v=>v==='Other'?'Other…':v);
   const pl=PLACESL.filter(p=>p.f[P.active]!==false); chips($('placeChips'),pl.map(p=>p.id),cur.place,v=>{cur.place=v;drawForm();},id=>placeName(id));
   $('liveTog').classList.toggle('on',cur.live); $('liveK').textContent=cur.live?'Live on the website':'Not public';
-  $('liveS').textContent=cur.live?'Publish to site is ticked — the site follows on its next publish':'Only you can see this card';
+  $('liveS').textContent=cur.live?'On the public website — it follows within two minutes of saving':'Only you can see this card';
   $('soldTog').classList.toggle('on',cur.sold); $('fNotes').value=cur.notes;
   const st=cur.row?selName(cur.row.f[F.stage]):''; const past=['Sold','Delivered','Registered'].indexOf(st)>=0;
   $('soldS').textContent=cur.sold?(past?('Stage '+st+' — stays as the office set it'):'Stage moves to Sold when you save; Books takes it from there'):'Marks it sold on the spine — the office does the rest';
@@ -150,6 +150,15 @@ async function save(){
     else { const rec=await patchCard(cur.id,f); cur.row.f=Object.assign({},cur.row.f,rec.fields||f); }
     cacheSpine(); return ''; }});
   names.push('In the spine'); steps.push({fn:async()=>{ const t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}); return '✓ '+t; }});
+  // the website: republish when Live changes, or when a Live card changes anything the site shows
+  const before=cur.row?Object.assign({},cur.row.f):{}; const wasLive=!!before[F.publish];
+  const siteChange=()=>{ if(cur.live!==wasLive) return true; if(!cur.live) return false; return SITE_FIELDS.some(k=>JSON.stringify(before[k]===undefined?null:before[k])!==JSON.stringify(f[k]===undefined?(before[k]===undefined?null:before[k]):f[k])); };
+  const hasPin=f[F.lat]!=null||(before[F.lat]!=null&&f[F.lat]===undefined);
+  if(cur.live&&!hasPin){ names.push('Website'); steps.push({fn:async()=>'held back — no pin yet; paste one and save again'}); }
+  else if(siteChange()){
+    names.push(cur.live?'Asking the website to republish':'Asking the website to take it down'); steps.push({fn:async()=>{ await ghPublish(); return 'started'; }});
+    if(cur.live){ names.push('On the public map'); steps.push({fn:async()=>{ for(let i=0;i<14;i++){ await new Promise(r=>setTimeout(r,15000)); const s=await onSite(slug); if(s) return '✓ live'; } return 'taking longer than usual — check the map in a few minutes'; }}); }
+  }
   showSteps(names);
   const ok=await runSteps(steps,0);
   if(ok){ if(cur.pics) remember(slug,cur.pics); cur.pics=null; cur.picSrc=cardSrc(cur.row); $('cardTitle').textContent=cur.title; $('cardSub').textContent=slug; drawPic(); renderHome(); toast(isNew?'Card made — in the spine':'Card updated'); $('saveBtn').disabled=false; saveState(); }

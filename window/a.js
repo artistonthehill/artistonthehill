@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.4 · 8 Nov';
+const VER='v0.5 · 8 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -93,6 +93,16 @@ async function ghPut(path,b64,message){
   if(!r.ok){ const t=await r.text(); throw new Error('GitHub '+r.status+(r.status===401?' — token refused':r.status===409?' — try again':'')+' '+t.slice(0,120)); }
   return r.json();
 }
+
+// ask the website to rebuild from the spine (the 'Publish from spine' job) — Tony's decision 8 Nov: Live fires it, no button
+async function ghPublish(){
+  const r=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/workflows/publish-spine.yml/dispatches`,
+    {method:'POST',headers:{Authorization:'token '+K.gh,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({ref:GH_BRANCH})});
+  if(r.status===204) return true; const t=await r.text(); throw new Error('the website would not start its publish ('+r.status+(r.status===403||r.status===404?' — the uploader token may not be allowed to; ask Build to press it':'')+')');
+}
+// is the painting on the public list yet?
+async function onSite(slug){ try{ const r=await fetch('paintings.json?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return null; const d=await r.json(); return d.some(e=>e.id===slug); }catch(e){ return null; } }
+const SITE_FIELDS=[F.title,F.price,F.priceDisp,F.size,F.lat,F.lng,F.img,F.sold,F.publish,F.collection];
 
 // ---------- spine (Airtable) ----------
 async function at(method,path,body){
