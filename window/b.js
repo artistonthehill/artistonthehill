@@ -97,7 +97,8 @@ function pinNote(){
   const la=parseFloat($('fLat').value), ln=parseFloat($('fLng').value); const n=$('pinNote');
   if(isNaN(la)||isNaN(ln)) n.textContent='No pin yet — fine for a studio piece, needed for the map.';
   else if(Math.abs(la-STUDIO[0])<1e-6&&Math.abs(ln-STUDIO[1])<1e-6) n.textContent='Studio — the sea pin off Brighton.';
-  else n.textContent='Pinned at '+la.toFixed(5)+', '+ln.toFixed(5);
+  else n.innerHTML='Pinned at '+la.toFixed(5)+', '+ln.toFixed(5)+((la>49&&la<61&&ln>1.8&&ln<9)?' <span class="warn">— that is east of Britain; lost a minus sign? Tap to flip</span>':'');
+  if(n.querySelector('.warn')){ n.querySelector('.warn').onclick=()=>{ $('fLng').value=(-ln).toFixed(6); cur.lng=$('fLng').value; pinNote(); saveState(); }; }
 }
 function missing(){
   const m=[]; if(!(cur.pics||cur.picSrc)) m.push('a picture'); if(!String(cur.title||'').trim()) m.push('a title');
@@ -244,7 +245,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   // every box writes straight into the card as it is typed, so redrawing the chips never loses a word
   const bind={fTitle:'title',fLat:'lat',fLng:'lng',fW:'w',fH:'h',fPrice:'price',fNotes:'notes',fRegion:'region'};
   Object.keys(bind).forEach(id=>$(id).addEventListener('input',()=>{ if(!cur) return;
-    if(id==='fLat'||id==='fLng'){ const ll=parseLatLng($(id).value); if(ll&&/[a-z@!]/i.test($(id).value)){ $('fLat').value=ll[0]; $('fLng').value=ll[1]; } cur.lat=$('fLat').value; cur.lng=$('fLng').value; pinNote(); }
+    if(id==='fLat'||id==='fLng'){ $(id).value=$(id).value.replace(/[\u2212\u2010-\u2015\u02d7]/g,'-'); const ll=parseLatLng($(id).value); if(ll&&/[a-z@!]/i.test($(id).value)){ $('fLat').value=ll[0]; $('fLng').value=ll[1]; } cur.lat=$('fLat').value; cur.lng=$('fLng').value; pinNote(); }
     else cur[bind[id]]=id==='fPrice'?$(id).value.replace(/[^0-9.]/g,''):(id==='fRegion'?$(id).value.trim():$(id).value);
     saveState(); }));
   $('pasteBtn').onclick=async()=>{ try{ const t=await navigator.clipboard.readText(); const ll=parseLatLng(t); if(!ll) throw 0; $('fLat').value=ll[0]; $('fLng').value=ll[1]; pinNote(); saveState(); toast('Pin pasted'); }

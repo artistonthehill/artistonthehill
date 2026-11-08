@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.6 · 8 Nov';
+const VER='v0.6.1 · 8 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -53,7 +53,8 @@ function parseSize(s){
 }
 // a Google Maps share link, an Apple Maps link, or a plain "51.001667, 0.543929"
 function parseLatLng(t){
-  t=String(t||'').trim(); let m;
+  // Google Maps and iOS hand over a typographic minus (−) and sometimes thin spaces — make them plain first
+  t=String(t||'').replace(/[\u2212\u2010-\u2015\u02d7]/g,'-').replace(/[\u00a0\u2009\u202f]/g,' ').trim(); let m;
   if((m=t.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)))return [+m[1],+m[2]];
   if((m=t.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/)))return [+m[1],+m[2]];
   if((m=t.match(/[?&](?:q|ll|query|sll|center)=(-?\d+\.\d+)(?:,|%2C)(-?\d+\.\d+)/i)))return [+m[1],+m[2]];
@@ -156,6 +157,7 @@ function placeForText(t){ t=String(t||'').toLowerCase(); if(!t) return null;
 function gone(r){ if(r.f[F.sold]) return true; const st=selName(r.f[F.stage]); if(['Sold','Delivered','Registered'].indexOf(st)>=0) return true;
   const p=PLACESL.find(x=>x.id===placeOf(r)); return !!(p&&selName(p.f[P.kind])==='Collector'); }
 const live=()=>SPINE.filter(r=>!gone(r));
+function median(xs){ const s=xs.slice().sort((x,y)=>x-y); const n=s.length; return n?(n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2):0; }
 function regionsInUse(){ const s=new Set(['Studio']); SPINE.forEach(r=>{ const v=regionOf(r); if(v) s.add(v); }); return [...s].sort((x,y)=>x==='Studio'?1:y==='Studio'?-1:x.localeCompare(y)); }
 function cacheSpine(){ try{ localStorage.setItem('win-spine',JSON.stringify({at:Date.now(),rows:SPINE})); }catch(e){} }
 function loadCache(){ try{ const c=JSON.parse(localStorage.getItem('win-spine')||'null'); if(c&&c.rows){ SPINE=c.rows; return c.at; } }catch(e){} return 0; }

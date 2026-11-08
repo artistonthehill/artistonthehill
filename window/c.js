@@ -25,7 +25,7 @@ function drawMap(){
     Object.keys(groups).forEach(g=>{
       const rows=groups[g]; let lat,lng;
       if(g==='Studio'){ [lat,lng]=STUDIO; }
-      else { const p=rows.filter(hasPin); if(!p.length) return; lat=p.reduce((s,r)=>s+ +r.f[F.lat],0)/p.length; lng=p.reduce((s,r)=>s+ +r.f[F.lng],0)/p.length; }
+      else { const p=rows.filter(hasPin); if(!p.length) return; lat=median(p.map(r=>+r.f[F.lat])); lng=median(p.map(r=>+r.f[F.lng])); }   // median: one stray pin can't drag the region out to sea
       pin(lat,lng,g,rows.length,g==='Studio'?'studio':'',()=>openSheet({kind:'region',key:g}));
     });
     if(unplaced.length) drawer.innerHTML=`<button class="drow" id="unplacedBtn"><span>${unplaced.length} pinned but not yet on a region</span><span class="n">›</span></button>`,
