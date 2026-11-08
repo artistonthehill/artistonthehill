@@ -133,6 +133,7 @@ function initMap(paintingsData) {
   }) : L.layerGroup();
 
   paintingsData.forEach(p => {
+    if (typeof p.lat !== 'number' || typeof p.lng !== 'number' || isNaN(p.lat) || isNaN(p.lng)) return;   // no pin yet: skip it, never die
     const isUK = p.lat > 49 && p.lat < 62 && p.lng > -9 && p.lng < 2.5;
     if (isUK) ukBounds.push([p.lat, p.lng]);
     const pinColor = p.sold ? '#9e9e9e' : '#8b6f47';

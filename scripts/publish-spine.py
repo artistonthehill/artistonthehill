@@ -89,6 +89,12 @@ def main():
 
     live = [project(r["fields"]) for r in fetch_all() if is_live(r["fields"])]
     live = [p for p in live if p.get("id") and p.get("title") and p.get("img")]
+    # the guard (Stuart, 3 Nov 2026): a painting with no pin or whose picture is not in the repo never goes out —
+    # the map cannot place it and a pinless entry has killed the map before. Say which ones were held back.
+    def pinned(p): return isinstance(p.get("lat"), (int, float)) and isinstance(p.get("lng"), (int, float))
+    held = [p["id"] for p in live if not pinned(p) or not os.path.exists(p.get("img", ""))]
+    if held: print("held back (no pin or picture file missing):", ", ".join(held))
+    live = [p for p in live if pinned(p) and os.path.exists(p.get("img", ""))]
 
     # carry forward site-only keys (e.g. datePainted) for ids already live
     for p in live:
