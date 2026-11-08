@@ -167,7 +167,8 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
       <label class="f">Title</label>
       <input class="box" id="fTitle" placeholder="Title — yours, not the computer's" autocomplete="off">
       <label class="f">Where it was painted</label>
-      <div class="two"><input class="box" id="fLat" placeholder="Lat" inputmode="decimal"><input class="box" id="fLng" placeholder="Long" inputmode="decimal"></div>
+      <input class="box" id="fPin" placeholder="Paste the pin here — 50.088361, -5.101278 or a Maps link" autocomplete="off" autocorrect="off" autocapitalize="off">
+      <input type="hidden" id="fLat"><input type="hidden" id="fLng">
       <div class="row2"><button class="btn sec sm" id="pasteBtn">Paste from Maps</button><button class="btn sec sm" id="hereBtn">Here</button><button class="btn sec sm" id="studioBtn">Studio piece</button></div>
       <div class="note" id="pinNote"></div>
       <label class="f">Region</label>

@@ -69,7 +69,7 @@ function drawPic(){
   $('form').style.display=has?'block':'none';
 }
 function drawForm(){
-  $('fTitle').value=cur.title; $('fLat').value=cur.lat; $('fLng').value=cur.lng; pinNote();
+  $('fTitle').value=cur.title; $('fLat').value=cur.lat; $('fLng').value=cur.lng; $('fPin').value=(cur.lat!==''&&cur.lng!=='')?(cur.lat+', '+cur.lng):''; pinNote();
   chips($('sizeChips'),SIZES,cur.chip,v=>{cur.chip=v; if(PRICE_FOR[v]&&!cur.price){cur.pchip=PRICE_FOR[v];cur.price=PRICE_FOR[v];} drawForm();},v=>v==='Custom'?'Custom…':v);
   $('customSize').style.display=cur.chip==='Custom'?'grid':'none'; $('fW').value=cur.w; $('fH').value=cur.h;
   chips($('mediumChips'),MEDIA,cur.medium,v=>{cur.medium=v;drawForm();},v=>v.replace('Oil on ',''));
@@ -93,12 +93,16 @@ function drawForm(){
 function chips(el,list,on,set,label){
   el.innerHTML=''; list.forEach(v=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(on===v?' on':''); b.textContent=label?label(v):v; b.onclick=()=>set(v); el.appendChild(b); });
 }
+// one box for the pin: a "lat, lng" pair or a Maps link; the two numbers live in hidden fields
+function setPin(text){ const ll=parseLatLng(text); if(ll){ cur.lat=String(ll[0]); cur.lng=String(ll[1]); $('fLat').value=cur.lat; $('fLng').value=cur.lng; if(/^https?:/i.test(text.trim())) $('fPin').value=cur.lat+', '+cur.lng; }
+  else { cur.lat=''; cur.lng=''; $('fLat').value=''; $('fLng').value=''; }   // empty or unreadable: no pin until it reads
+  pinNote(); }
 function pinNote(){
   const la=parseFloat($('fLat').value), ln=parseFloat($('fLng').value); const n=$('pinNote');
-  if(isNaN(la)||isNaN(ln)) n.textContent='No pin yet — fine for a studio piece, needed for the map.';
+  if(isNaN(la)||isNaN(ln)) n.textContent=$('fPin').value.trim()?'Can\'t read that yet — it wants two numbers like 50.088361, -5.101278':'No pin yet — fine for a studio piece, needed for the map.';
   else if(Math.abs(la-STUDIO[0])<1e-6&&Math.abs(ln-STUDIO[1])<1e-6) n.textContent='Studio — the sea pin off Brighton.';
   else n.innerHTML='Pinned at '+la.toFixed(5)+', '+ln.toFixed(5)+((la>49&&la<61&&ln>1.8&&ln<9)?' <span class="warn">— that is east of Britain; lost a minus sign? Tap to flip</span>':'');
-  if(n.querySelector('.warn')){ n.querySelector('.warn').onclick=()=>{ $('fLng').value=(-ln).toFixed(6); cur.lng=$('fLng').value; pinNote(); saveState(); }; }
+  if(n.querySelector('.warn')){ n.querySelector('.warn').onclick=()=>{ $('fPin').value=la+', '+(-ln).toFixed(6); setPin($('fPin').value); saveState(); }; }
 }
 function missing(){
   const m=[]; if(!(cur.pics||cur.picSrc)) m.push('a picture'); if(!String(cur.title||'').trim()) m.push('a title');
@@ -243,16 +247,16 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('picFile').onchange=e=>onFile(e.target.files[0]);
   $('repBtn').onclick=()=>$('picFile').click();
   // every box writes straight into the card as it is typed, so redrawing the chips never loses a word
-  const bind={fTitle:'title',fLat:'lat',fLng:'lng',fW:'w',fH:'h',fPrice:'price',fNotes:'notes',fRegion:'region'};
+  const bind={fTitle:'title',fPin:'pin',fW:'w',fH:'h',fPrice:'price',fNotes:'notes',fRegion:'region'};
   Object.keys(bind).forEach(id=>$(id).addEventListener('input',()=>{ if(!cur) return;
-    if(id==='fLat'||id==='fLng'){ $(id).value=$(id).value.replace(/[\u2212\u2010-\u2015\u02d7]/g,'-'); const ll=parseLatLng($(id).value); if(ll&&/[a-z@!]/i.test($(id).value)){ $('fLat').value=ll[0]; $('fLng').value=ll[1]; } cur.lat=$('fLat').value; cur.lng=$('fLng').value; pinNote(); }
+    if(id==='fPin'){ setPin($('fPin').value); }
     else cur[bind[id]]=id==='fPrice'?$(id).value.replace(/[^0-9.]/g,''):(id==='fRegion'?$(id).value.trim():$(id).value);
     saveState(); }));
-  $('pasteBtn').onclick=async()=>{ try{ const t=await navigator.clipboard.readText(); const ll=parseLatLng(t); if(!ll) throw 0; $('fLat').value=ll[0]; $('fLng').value=ll[1]; pinNote(); saveState(); toast('Pin pasted'); }
-    catch(e){ toast('Paste the Maps link into the Lat box instead'); $('fLat').focus(); } };
+  $('pasteBtn').onclick=async()=>{ try{ const t=await navigator.clipboard.readText(); const ll=parseLatLng(t); if(!ll) throw 0; $('fPin').value=ll[0]+', '+ll[1]; setPin($('fPin').value); saveState(); toast('Pin pasted'); }
+    catch(e){ toast('Paste into the pin box instead'); $('fPin').focus(); } };
   $('hereBtn').onclick=()=>{ if(!navigator.geolocation){ toast('No location on this device'); return; } $('pinNote').innerHTML='<span class="spin"></span> Finding you…';
-    navigator.geolocation.getCurrentPosition(p=>{ $('fLat').value=p.coords.latitude.toFixed(6); $('fLng').value=p.coords.longitude.toFixed(6); pinNote(); saveState(); },()=>{ $('pinNote').textContent='Location not allowed — paste from Maps instead.'; },{enableHighAccuracy:true,timeout:12000}); };
-  $('studioBtn').onclick=()=>{ $('fLat').value=STUDIO[0]; $('fLng').value=STUDIO[1]; pinNote(); saveState(); };
+    navigator.geolocation.getCurrentPosition(p=>{ $('fPin').value=p.coords.latitude.toFixed(6)+', '+p.coords.longitude.toFixed(6); setPin($('fPin').value); saveState(); },()=>{ $('pinNote').textContent='Location not allowed — paste from Maps instead.'; },{enableHighAccuracy:true,timeout:12000}); };
+  $('studioBtn').onclick=()=>{ $('fPin').value=STUDIO[0]+', '+STUDIO[1]; setPin($('fPin').value); saveState(); };
   $('liveTog').onclick=()=>{ cur.live=!cur.live; drawForm(); };
   $('soldTog').onclick=()=>{ cur.sold=!cur.sold;
     if(cur.sold){ const wt=PLACESL.find(p=>selName(p.f[P.kind])==='Tony'), col=PLACESL.find(p=>selName(p.f[P.kind])==='Collector');
