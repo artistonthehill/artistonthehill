@@ -112,7 +112,7 @@ async function save(){
   const isNew=!cur.id; const slug=cur.slug||newSlug(cur.title,takenSlugs()); cur.slug=slug;
   const names=[]; const steps=[];
   if(cur.pics){
-    const ip=(cur.row&&cur.row.f[F.img])||imgPath(slug), tp=thumbPath(slug);
+    const ip=(cur.row&&cur.row.f[F.img])||imgPath(slug), tp=cur.row?thumbPath(cur.row):thumbPath(slug);
     names.push('Uploading web picture ('+Math.round(cur.pics.web.bytes/1024)+' KB)'); steps.push({fn:async()=>{ await ghPut(ip,cur.pics.web.b64,'Window: '+ip); f[F.img]=ip; return cur.pics.web.w+'×'+cur.pics.web.h; }});
     names.push('Uploading thumbnail ('+Math.round(cur.pics.thumb.bytes/1024)+' KB)'); steps.push({fn:async()=>{ await ghPut(tp,cur.pics.thumb.b64,'Window: '+tp); f[F.thumb]=tp; return cur.pics.thumb.w+'×'+cur.pics.thumb.h; }});
   }
@@ -129,7 +129,7 @@ async function save(){
 async function replacePicture(file){
   $('saveNote').textContent=''; let pics;
   showSteps(['Making the two pictures','Uploading web picture','Uploading thumbnail','Pointing the card at them']);
-  const ip=(cur.row&&cur.row.f[F.img])||imgPath(cur.slug), tp=thumbPath(cur.slug); const upd={};
+  const ip=(cur.row&&cur.row.f[F.img])||imgPath(cur.slug), tp=thumbPath(cur.row); const upd={};
   const ok=await runSteps([
     {fn:async()=>{ pics=await makePictures(file); cur.pics=pics; drawPic(); return pics.web.w+'×'+pics.web.h+' and '+pics.thumb.w+'×'+pics.thumb.h; }},
     {fn:async()=>{ await ghPut(ip,pics.web.b64,'Window: replace '+ip); return Math.round(pics.web.bytes/1024)+' KB'; }},
@@ -159,7 +159,7 @@ async function sweep(){
     const slug=r.f[F.slug]; $('sweepProg').innerHTML=`<span class="spin"></span> ${done+1} of ${todo.length} — ${esc(r.f[F.title]||slug)}`;
     try{ const res=await fetch(r.f[F.img]+'?t='+Date.now()); if(!res.ok) throw new Error('web picture missing on the site ('+res.status+')');
       const blob=await res.blob(); const im=await loadImage(blob); const th=toJpeg(im,THUMB_PX,THUMB_Q); if(im.close) im.close();
-      const tp=thumbPath(slug); await ghPut(tp,th.b64,'Window: thumbnail '+tp); const rec=await patchCard(r.id,{[F.thumb]:tp}); r.f=Object.assign({},r.f,rec.fields||{[F.thumb]:tp}); done++; cacheSpine(); }
+      const tp=thumbPath(r); await ghPut(tp,th.b64,'Window: thumbnail '+tp); const rec=await patchCard(r.id,{[F.thumb]:tp}); r.f=Object.assign({},r.f,rec.fields||{[F.thumb]:tp}); done++; cacheSpine(); }
     catch(e){ failed.push((r.f[F.title]||slug)+': '+e.message); }
   }
   sweeping=false; $('sweepBtn').textContent='Make missing thumbnails';
