@@ -1,15 +1,5 @@
 [
  {
-  "id": "stables-low-tide-creek",
-  "title": "Low Water, Gillan Creek",
-  "img": "images/stables-low-tide-creek.jpg",
-  "price": "£850",
-  "size": "A4 (21×30cm) · Oil on board",
-  "lat": 50.087118,
-  "lng": -5.101904,
-  "collection": "uk"
- },
- {
   "id": "stables-boat-on-the-shingle",
   "title": "Boat on the Shingle",
   "img": "images/stables-boat-on-the-shingle.jpg",
@@ -17,16 +7,6 @@
   "size": "A4 (21×30cm) · Oil on board",
   "lat": 50.088188,
   "lng": -5.100458,
-  "collection": "uk"
- },
- {
-  "id": "stables-evening-moorings",
-  "title": "Evening Moorings",
-  "img": "images/stables-evening-moorings.jpg",
-  "price": "£1,320",
-  "size": "A3 (30×42cm) · Oil on board",
-  "lat": 50.087801,
-  "lng": -5.099513,
   "collection": "uk"
  },
  {
@@ -91,38 +71,6 @@
   "collection": "uk"
  },
  {
-  "id": "beachy-head-walk",
-  "title": "Beachy Walk",
-  "img": "images/beachy-head-walk.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board, white tray frame",
-  "lat": 50.73625,
-  "lng": 0.242361,
-  "collection": "uk"
- },
- {
-  "id": "london-to-brighton-bike-ride",
-  "title": "London to Brighton Cycle Ride 2026",
-  "img": "images/london-to-brighton-bike-ride.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.816927,
-  "lng": -0.122023,
-  "collection": "uk",
-  "category": "landscape"
- },
- {
-  "id": "lindfield-7jx",
-  "title": "Lindfield Pond",
-  "img": "images/lindfield-7jx.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 51.011693,
-  "lng": -0.081661,
-  "collection": "uk",
-  "prints": "https://www.thegillangallery.com/product-page/lindfield-pond"
- },
- {
   "id": "final-day-at-henley-2026-3sd",
   "title": "Final Day at Henley 2026",
   "img": "images/final-day-at-henley-2026-3sd.jpg",
@@ -133,16 +81,6 @@
   "collection": "uk",
   "prints": "https://www.thegillangallery.com/product-page/finals-day-henley-royal-regatta-2026",
   "sold": true
- },
- {
-  "id": "the-palace-gardens-19d",
-  "title": "The Palace Gardens",
-  "img": "images/the-palace-gardens-19d.jpg",
-  "price": "£2,760",
-  "size": "80×30cm",
-  "lat": 50.82307,
-  "lng": -0.13915,
-  "collection": "uk"
  },
  {
   "id": "stockbridge-trout",
@@ -168,27 +106,6 @@
   "category": "marine"
  },
  {
-  "id": "panoramic-peace",
-  "title": "Panoramic Peace",
-  "img": "images/panoramic-peace.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.822533,
-  "lng": -0.156471,
-  "collection": "uk"
- },
- {
-  "id": "ovingdean-panoramic",
-  "title": "Ovingdean",
-  "img": "images/ovingdean-panoramic.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.812029,
-  "lng": -0.066723,
-  "collection": "uk",
-  "category": "landscape"
- },
- {
   "id": "henley-royalty",
   "title": "Henley Royalty",
   "img": "images/henley-royalty.jpg",
@@ -196,123 +113,6 @@
   "size": "42×30cm · Oil on board",
   "lat": 51.536636,
   "lng": -0.900656,
-  "collection": "uk"
- },
- {
-  "id": "foil-river",
-  "title": "Foil River",
-  "img": "images/foil-river.jpg",
-  "price": "£3,360",
-  "size": "60×42cm · Oil on canvas board",
-  "lat": 50.774295,
-  "lng": 0.156019,
-  "collection": "uk"
- },
- {
-  "id": "cowdray-ruins",
-  "title": "Cowdray Ruins",
-  "img": "images/cowdray-ruins.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.988333,
-  "lng": -0.734889,
-  "collection": "uk"
- },
- {
-  "id": "st-wulfrans-ovingdean",
-  "title": "St Wulfrans, Ovingdean",
-  "img": "images/st-wulfrans-ovingdean.jpg",
-  "price": "£1,320",
-  "size": "42×30cm · Oil on canvas board",
-  "lat": 50.816775,
-  "lng": -0.076976,
-  "collection": "uk"
- },
- {
-  "id": "boatrace-2026",
-  "title": "The Boat Race 2026",
-  "img": "images/boatrace-2026.jpg",
-  "price": "£3,600",
-  "size": "60×42cm · Oil on canvas board",
-  "lat": 51.47006,
-  "lng": -0.21733,
-  "collection": "uk",
-  "prints": "https://www.thegillangallery.com/product-page/the-boat-race-2026",
-  "category": "marine"
- },
- {
-  "id": "itchenor",
-  "title": "Itchenor in the Sun",
-  "img": "images/itchenor.jpg",
-  "price": "£2,040",
-  "size": "60×30cm · Oil on canvas",
-  "lat": 50.806564,
-  "lng": -0.864358,
-  "collection": "uk"
- },
- {
-  "id": "west-country-buoy",
-  "title": "West Country Buoy",
-  "img": "images/buoy.jpg",
-  "price": "£1,920",
-  "size": "55×30cm · Oil on board",
-  "lat": 50.396608,
-  "lng": -3.511417,
-  "collection": "uk"
- },
- {
-  "id": "richmond-bridge",
-  "title": "Richmond Bridge",
-  "img": "images/richmond.jpg",
-  "price": "£2,040",
-  "size": "60×30cm · Oil on canvas",
-  "lat": 51.456917,
-  "lng": -0.307158,
-  "collection": "uk"
- },
- {
-  "id": "undercliff",
-  "title": "That Day on the Undercliff",
-  "img": "images/undercliff.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.800576,
-  "lng": -0.044967,
-  "collection": "uk",
-  "prints": "https://www.thegillangallery.com/product-page/that-day-on-the-undercliff"
- },
- {
-  "id": "delawarr",
-  "title": "De La Warr Pavilion",
-  "img": "images/delawarr.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.837312,
-  "lng": 0.472187,
-  "collection": "uk",
-  "prints": "https://www.thegillangallery.com/product-page/de-la-warr-bexhill",
-  "category": "marine"
- },
- {
-  "id": "saltdean-peacehaven",
-  "title": "Saltdean & Peacehaven Cliffs",
-  "img": "images/saltdeanandpeacehaven.jpg",
-  "price": "£1,320",
-  "size": "A3 · Oil on board",
-  "lat": 50.800736,
-  "lng": -0.045977,
-  "collection": "uk",
-  "prints": "https://www.thegillangallery.com/product-page/saltdean-and-peacehaven-cliffs",
-  "category": "marine"
- },
- {
-  "id": "portchester",
-  "title": "Portchester Creek",
-  "img": "images/porchester.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.849599,
-  "lng": -1.177874,
   "collection": "uk"
  },
  {
@@ -358,16 +158,6 @@
   "collection": "uk"
  },
  {
-  "id": "cliffe-bridge",
-  "title": "Cliffe Bridge",
-  "img": "images/cliffe-bridge.jpg",
-  "price": "£1,320",
-  "size": "42×30cm · Oil on board",
-  "lat": 50.874096,
-  "lng": 0.015951,
-  "collection": "uk"
- },
- {
   "id": "horsley",
   "title": "Horsley",
   "img": "images/horsley.jpg",
@@ -375,26 +165,6 @@
   "size": "80×30cm · Oil on board",
   "lat": 51.262669,
   "lng": -0.431707,
-  "collection": "uk"
- },
- {
-  "id": "guildford-guildhall",
-  "title": "Guildford Guild Hall",
-  "img": "images/guildford-guildhall.jpg",
-  "price": "£1,320",
-  "size": "42×30cm · Oil on board",
-  "lat": 51.235832,
-  "lng": -0.571934,
-  "collection": "uk"
- },
- {
-  "id": "sussex-light",
-  "title": "Sussex Light",
-  "img": "images/sussex-light.jpg",
-  "price": "£6,480",
-  "size": "61×91cm · Oil on canvas",
-  "lat": 50.838121,
-  "lng": -0.080679,
   "collection": "uk"
  },
  {
@@ -408,106 +178,6 @@
   "collection": "uk"
  },
  {
-  "id": "thurlestone-west",
-  "title": "Thurlestone West",
-  "img": "images/thurlestone-west.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.270202,
-  "lng": -3.874083,
-  "collection": "uk"
- },
- {
-  "id": "hope-cove",
-  "title": "Hope Cove Harbour",
-  "img": "images/hope-cove.jpg",
-  "price": "£1,320",
-  "size": "42×30cm · Oil on board",
-  "lat": 50.245286,
-  "lng": -3.85951,
-  "collection": "uk"
- },
- {
-  "id": "bantham-burgh",
-  "title": "Bantham and Burgh",
-  "img": "images/bantham-burgh.jpg",
-  "price": "£3,240",
-  "size": "60×42cm · Oil on board",
-  "lat": 50.281157,
-  "lng": -3.864405,
-  "collection": "uk"
- },
- {
-  "id": "bantham-hand",
-  "title": "Bantham Hand",
-  "img": "images/bantham-hand.jpg",
-  "price": "£5,040",
-  "size": "80×60cm · Oil on canvas · Painted on the beach at Bigbury, March 2025",
-  "lat": 50.281989,
-  "lng": -3.891926,
-  "collection": "uk"
- },
- {
-  "id": "mine",
-  "title": "Chapel Porth Engines",
-  "img": "images/mine.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.301623,
-  "lng": -5.237479,
-  "collection": "uk"
- },
- {
-  "id": "lusty-glaze",
-  "title": "Lusty Glaze Beach",
-  "img": "images/lusty-glaze.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.42219,
-  "lng": -5.064237,
-  "collection": "uk"
- },
- {
-  "id": "chapel-porth-beach",
-  "title": "Chapel Porth Beach",
-  "img": "images/chapel-porth-beach.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.301066,
-  "lng": -5.236108,
-  "collection": "uk"
- },
- {
-  "id": "charmouth",
-  "title": "Charmouth. Golden Cap",
-  "img": "images/charmouth.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.733439,
-  "lng": -2.900673,
-  "collection": "uk"
- },
- {
-  "id": "regency-colour",
-  "title": "Regency Colour",
-  "img": "images/regency-colour.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.822612,
-  "lng": -0.137965,
-  "collection": "uk"
- },
- {
-  "id": "kaboom",
-  "title": "Kaboom",
-  "img": "images/kaboom.jpg",
-  "price": "£3,600",
-  "size": "60×42cm · Oil on board",
-  "lat": 50.800006,
-  "lng": -0.043647,
-  "collection": "uk"
- },
- {
   "id": "palma-yachts",
   "title": "Palma Yachts",
   "img": "images/palma-yachts.jpg",
@@ -518,46 +188,6 @@
   "collection": "worldwide"
  },
  {
-  "id": "ravilious-2",
-  "title": "Ravilious Shepherds Cottage 2",
-  "img": "images/ravilious-2.jpg",
-  "price": "£1,320",
-  "size": "42×30cm · Oil on board",
-  "lat": 50.843238,
-  "lng": 0.051936,
-  "collection": "uk"
- },
- {
-  "id": "ravilious-1",
-  "title": "After Ravilious. Shepherds Cottage",
-  "img": "images/ravilious-1.jpg",
-  "price": "£1,320",
-  "size": "42×30cm · Oil on board",
-  "lat": 50.843484,
-  "lng": 0.05233,
-  "collection": "uk"
- },
- {
-  "id": "roedean",
-  "title": "Roedean",
-  "img": "images/roedean.jpg",
-  "price": "£1,320",
-  "size": "42×30cm · Oil on board",
-  "lat": 50.81421,
-  "lng": -0.0922,
-  "collection": "uk"
- },
- {
-  "id": "peace-bruvver",
-  "title": "Peace Bruvver",
-  "img": "images/peace-bruvver.jpg",
-  "price": "£1,320",
-  "size": "42×30cm · Oil on board",
-  "lat": 50.822626,
-  "lng": -0.156713,
-  "collection": "uk"
- },
- {
   "id": "massif-jump",
   "title": "Massif Jump",
   "img": "images/massif-jump.jpg",
@@ -566,16 +196,6 @@
   "lat": 45.984258,
   "lng": 6.722621,
   "collection": "alps"
- },
- {
-  "id": "very-edge",
-  "title": "The Very Edge",
-  "img": "images/very-edge.jpg",
-  "price": "£5,040",
-  "size": "80×60cm · Oil on board",
-  "lat": 50.724791,
-  "lng": 0.236144,
-  "collection": "uk"
  },
  {
   "id": "flaine-diptych-1",
@@ -616,46 +236,6 @@
   "lat": -16.750375,
   "lng": 144.72017,
   "collection": "worldwide"
- },
- {
-  "id": "st-agnes-surfers",
-  "title": "St Agnes Surfers",
-  "img": "images/st-agnes-surfers.jpg",
-  "price": "£1,320",
-  "size": "42×30cm · Oil on board",
-  "lat": 50.319641,
-  "lng": -5.202223,
-  "collection": "uk"
- },
- {
-  "id": "sennen-light",
-  "title": "Sennen Light",
-  "img": "images/sennen-light.jpg",
-  "price": "£1,440",
-  "size": "60×30cm · Oil on board",
-  "lat": 50.078714,
-  "lng": -5.704379,
-  "collection": "uk"
- },
- {
-  "id": "chapel-porth",
-  "title": "Chapel Porth",
-  "img": "images/chapel-porth.jpg",
-  "price": "£1,920",
-  "size": "60×30cm · Oil on board",
-  "lat": 50.301127,
-  "lng": -5.235321,
-  "collection": "uk"
- },
- {
-  "id": "flushing-sailing-club",
-  "title": "Flushing Sailing Club",
-  "img": "images/flushing-sailing-club.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.163056,
-  "lng": -5.070261,
-  "collection": "uk"
  },
  {
   "id": "menai-fish-trap",
@@ -725,36 +305,6 @@
   "size": "80×30cm · Oil on board",
   "lat": 50.72105,
   "lng": -1.109272,
-  "collection": "uk"
- },
- {
-  "id": "bosham",
-  "title": "Bosham Causeway",
-  "img": "images/bosham.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.827798,
-  "lng": -0.853544,
-  "collection": "uk"
- },
- {
-  "id": "st-wulfrans",
-  "title": "St Wulfrans",
-  "img": "images/st-wulfrans.jpg",
-  "price": "£1,320",
-  "size": "42×30cm · Oil on board",
-  "lat": 50.816777,
-  "lng": -0.077018,
-  "collection": "uk"
- },
- {
-  "id": "east-head",
-  "title": "East Head",
-  "img": "images/east-head.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.788699,
-  "lng": -0.911359,
   "collection": "uk"
  },
  {
@@ -921,16 +471,6 @@
   "prints": "https://www.thegillangallery.com/product-page/harbour-island"
  },
  {
-  "id": "crowborough-beacon",
-  "title": "Crowborough Beacon Golf Club",
-  "img": "images/crowborough-beacon.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 51.047949,
-  "lng": 0.148659,
-  "collection": "uk"
- },
- {
   "id": "amalfi-vista",
   "title": "Amalfi Vista",
   "img": "images/amalfi-vista.jpg",
@@ -1030,17 +570,6 @@
   "lng": 6.8772,
   "collection": "alps",
   "prints": "https://www.thegillangallery.com/product-page/sauze-sestriere-turin-italy"
- },
- {
-  "id": "east-cowes-marina",
-  "title": "East Cowes Marina",
-  "img": "images/east-cowes-marina.jpg",
-  "price": "£1,320",
-  "size": "42×30cm · Oil on board",
-  "lat": 50.7509,
-  "lng": -1.2927,
-  "collection": "uk",
-  "datePainted": "2025-05-17"
  },
  {
   "id": "horsmonden-heath",
@@ -1270,46 +799,5 @@
   "lng": -5.31734,
   "collection": "uk",
   "sold": true
- },
- {
-  "id": "the-pontoon",
-  "title": "The Pontoon",
-  "img": "images/ThePontoon.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 50.089252,
-  "lng": -5.101416,
-  "collection": "uk"
- },
- {
-  "id": "compositional-cows",
-  "title": "Compositional Cows",
-  "img": "images/CompositionalCowssm.jpg",
-  "price": "£2,950",
-  "size": "60×40cm · Oil on canvas",
-  "lat": 50.089432,
-  "lng": -5.098191,
-  "collection": "uk"
- },
- {
-  "id": "bodium-castle",
-  "title": "Bodiam Castle",
-  "img": "images/bodium-castle.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 51.001667,
-  "lng": 0.543929,
-  "collection": "uk"
- },
- {
-  "id": "st-anthony-head-lighthouse",
-  "title": "St Anthony Head Lighthouse",
-  "img": "images/st-anthony-head-lighthouse.jpg",
-  "price": "£3,480",
-  "size": "60×80cm",
-  "lat": 50.140658,
-  "lng": -5.028157,
-  "collection": "uk",
-  "category": "marine"
  }
 ]
