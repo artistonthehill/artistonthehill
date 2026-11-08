@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.5 · 8 Nov';
+const VER='v0.6 · 8 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -10,11 +10,11 @@ const SITE='https://www.artistonthehill.co.uk/';
 const F={title:'fldUwsWcBNFRiOm80',slug:'fldaFiuL9FO21uLI0',stage:'fldZ6DTFVAJtkzpiz',priceDisp:'fldAMf6fRUa1jSCsH',
   price:'fldaFsyOE94n3osr7',size:'fldWPm0R5SD7mztnp',collection:'fldIN7uBzbDvDHhVJ',lat:'fldaDJkmLc2ygxYyJ',lng:'fldM6DKhwMMNKb6lK',
   sold:'fldK2MfHmSOcuL5Cd',publish:'flduUIlOtmw04hwwL',img:'fldsi0m3fLzHXERwF',thumb:'fldKefu5fKkJUQc5h',loc:'fldJ8tcc8rBUUWTbC',
-  notes:'fldqu3X4LgdpnAGqn',painted:'fld21YJXOgYdckJSU',region:'fldB1sSpW8PIsmQIc',nowAt:'fldU8VFnEpEgO9FGp'};
+  notes:'fldqu3X4LgdpnAGqn',painted:'fld21YJXOgYdckJSU',region:'fldB1sSpW8PIsmQIc',nowAt:'fldU8VFnEpEgO9FGp',interest:'fldJcgYnNnHeUV03x',invoices:'fldsAVkN3q7Pw4Xp9',plans:'fldD7nFXu5026M38Q',dispatch:'fldxHrc3YAOFdLHfB'};
 const PLACES='tblUniTDKcIQYGKM3';
 const P={name:'fldPhtZfCQkchGdRZ',lat:'fldZlimdU6n5UkGhX',lng:'fldZ8ZWgFk2HzOCjX',kind:'flduZ4tJ7xAeTToNJ',active:'fld9SVfkwgTUobXmd',notes:'fldJxOiPXzFXikM0G',matches:'fldBbdt04qrAIC86p'};
 const KINDS=['Storage','Gallery','Venue','Collector','Home','Tony'];
-const READ_FIELDS=[F.title,F.slug,F.stage,F.priceDisp,F.price,F.size,F.collection,F.lat,F.lng,F.sold,F.publish,F.img,F.thumb,F.loc,F.notes,F.painted,F.region,F.nowAt];
+const READ_FIELDS=[F.title,F.slug,F.stage,F.priceDisp,F.price,F.size,F.collection,F.lat,F.lng,F.sold,F.publish,F.img,F.thumb,F.loc,F.notes,F.painted,F.region,F.nowAt,F.interest,F.invoices,F.plans,F.dispatch];
 const SIZES=['A4','A3','80×30','60×42','80×60','42×30','A2','Custom'];
 const A={A4:'A4 (21×30cm)',A3:'A3 (30×42cm)',A2:'A2 (42×60cm)'};
 const PRICES=['850','1320','2760','3600','5040','Custom'];
@@ -167,6 +167,12 @@ async function pullSpine(){
   rows.sort((a,b)=>a.created<b.created?1:-1); SPINE=rows; cacheSpine(); return rows;
 }
 async function createCard(fields){ const j=await at('POST',TBL,{records:[{fields}],typecast:true,returnFieldsByFieldId:true}); return j.records[0]; }
+async function deleteCard(id){ return at('DELETE',TBL+'/'+id); }
+async function ghDelete(path,message){ const sha=await ghGetSha(path); if(!sha) return false;
+  const r=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`,{method:'DELETE',headers:{Authorization:'token '+K.gh,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message,sha,branch:GH_BRANCH})});
+  if(!r.ok) throw new Error('GitHub '+r.status); return true; }
+// a plain-English reason when the spine refuses
+function plain(e){ const m=String(e&&e.message||e); if(/ROW_DOES_NOT_EXIST/.test(m)) return 'This card was removed from the spine while you had it open (merged or deleted) — go Back and pull down to reload.'; if(/key refused/.test(m)) return 'The spine key was refused — check it under ⚙︎.'; return m; }
 async function patchCard(id,fields){ const j=await at('PATCH',TBL,{records:[{id,fields}],typecast:true,returnFieldsByFieldId:true}); return j.records[0]; }
 const takenSlugs=()=>new Set(SPINE.map(r=>r.f[F.slug]).filter(Boolean));
 // the thumb sits next to its web picture under the same file name (images/foo.jpg -> images/thumbs/foo.jpg)

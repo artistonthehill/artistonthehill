@@ -87,6 +87,7 @@ function drawForm(){
   const st=cur.row?selName(cur.row.f[F.stage]):''; const past=['Sold','Delivered','Registered'].indexOf(st)>=0;
   $('soldS').textContent=cur.sold?(past?('Stage '+st+' — stays as the office set it'):'Stage moves to Sold when you save; Books takes it from there'):'Marks it sold on the spine — the office does the rest';
   $('stageNote').textContent=cur.row?('Stage: '+((cur.row.f[F.stage]||{}).name||cur.row.f[F.stage]||'—')+' (the office moves this)'):'Stage will be Carded';
+  drawDelete();
   saveState();
 }
 function chips(el,list,on,set,label){
@@ -130,7 +131,7 @@ async function runSteps(steps,fromIdx){
   for(let i=fromIdx||0;i<steps.length;i++){
     mark(i,'doing');
     try{ const r=await steps[i].fn(); mark(i,'done',r||''); }
-    catch(e){ mark(i,'fail',e.message); const el=$('st'+i); const b=document.createElement('button'); b.className='btn sec sm'; b.textContent='Retry'; b.style.marginLeft='auto';
+    catch(e){ mark(i,'fail',plain(e)); const el=$('st'+i); const b=document.createElement('button'); b.className='btn sec sm'; b.textContent='Retry'; b.style.marginLeft='auto';
       b.onclick=()=>{ b.remove(); runSteps(steps,i); }; el.appendChild(b); $('saveBtn').disabled=false; return false; }
   }
   return true;
@@ -178,6 +179,24 @@ async function replacePicture(file){
       if(Object.keys(upd).length){ const rec=await patchCard(cur.id,upd); cur.row.f=Object.assign({},cur.row.f,rec.fields||upd); cacheSpine(); return 'card updated'; } return 'paths unchanged — the site picks the new files up on its next publish'; }}
   ],0);
   if(ok){ remember(cur.slug,pics); cur.pics=null; cur.picSrc=cardSrc(cur.row); drawPic(); renderHome(); toast('Picture replaced'); }
+}
+// delete: two taps, no pop-up; refused when anyone real is attached
+let delArmed=0;
+function attached(r){ const n=k=>Array.isArray(r.f[k])?r.f[k].length:0; const parts=[]; if(n(F.interest)) parts.push(n(F.interest)+' on the Interest list'); if(n(F.invoices)) parts.push(n(F.invoices)+' invoice'+(n(F.invoices)>1?'s':'')); if(n(F.plans)) parts.push('a payment plan'); if(n(F.dispatch)) parts.push('a dispatch job'); return parts; }
+function drawDelete(){ const b=$('delBtn'); if(!cur||!cur.id){ b.style.display='none'; return; } b.style.display='block';
+  const att=attached(cur.row); const live=!!cur.row.f[F.publish];
+  if(att.length){ b.disabled=true; b.textContent='Can\'t delete — '+att.join(', ')+' attached. Ask Desk.'; return; }
+  b.disabled=false; b.textContent=delArmed&&Date.now()-delArmed<6000?('Tap again to delete'+(live?' and take it off the website':'')+' — this cannot be undone'):'Delete this card'; }
+async function delTap(){
+  if(!cur||!cur.id||attached(cur.row).length) return;
+  if(!(delArmed&&Date.now()-delArmed<6000)){ delArmed=Date.now(); drawDelete(); setTimeout(()=>{ if(delArmed) { delArmed=0; drawDelete(); } },6000); return; }
+  delArmed=0; drawDelete(); $('delBtn').disabled=true;
+  const r=cur.row, live=!!r.f[F.publish], img=r.f[F.img], th=r.f[F.thumb]||(img?thumbPath(r):''), room=r.f[F.slug]?r.f[F.slug]+'.json':'';
+  const names=['Removing the card from the spine'], steps=[{fn:async()=>{ await deleteCard(cur.id); SPINE=SPINE.filter(x=>x.id!==cur.id); cacheSpine(); return 'gone'; }}];
+  if(img){ names.push('Removing its pictures from the site'); steps.push({fn:async()=>{ let n=0; for(const p of [img,th]) if(p&&await ghDelete(p,'Window: delete '+p)) n++; if(room&&await ghDelete(room,'Window: delete room '+room)) n++; return n+' file'+(n===1?'':'s'); }}); }
+  if(live){ names.push('Asking the website to take it down'); steps.push({fn:async()=>{ await ghPublish(); return 'started'; }}); }
+  showSteps(names); const ok=await runSteps(steps,0);
+  if(ok){ toast('Deleted'); renderHome(); setTimeout(()=>{ $('card').classList.remove('open'); cur=null; },900); }
 }
 async function onFile(file){
   if(!file) return;
@@ -238,7 +257,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(cur.sold){ const wt=PLACESL.find(p=>selName(p.f[P.kind])==='Tony'), col=PLACESL.find(p=>selName(p.f[P.kind])==='Collector');
       if(col&&(!cur.place||(wt&&cur.place===wt.id))) cur.place=col.id; }
     drawForm(); };
-  $('saveBtn').onclick=save;
+  $('saveBtn').onclick=save; $('delBtn').onclick=delTap;
   loadFresh(); loadPlacesCache(); lastPull=loadCache(); if(typeof initMap==='function') initMap(); renderHome();
   if(K.at) refresh(true); else openKeys();
 });
