@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.1.1 · 8 Nov';
+const VER='v0.2 · 8 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -115,5 +115,13 @@ const thumbPath=(slugOrRow)=>{ if(typeof slugOrRow==='string') return 'images/th
   const f=slugOrRow.f||{}; if(f[F.thumb]) return f[F.thumb]; const i=f[F.img]; if(i) return 'images/thumbs/'+i.split('/').pop().replace(/\.[^.]+$/,'.jpg'); return 'images/thumbs/'+(f[F.slug]||'picture')+'.jpg'; };
 const imgPath=slug=>'images/'+slug+'.jpg';
 // picture to show for a card: thumb if the card has one, else the web picture, else nothing (never a black tile)
+// pictures just made on this phone, kept so the wall and the card show them at once — the site takes a minute to serve a new file
+const FRESH={};                                   // slug -> {thumb:dataURL, web:dataURL, at}
+function loadFresh(){ try{ const j=JSON.parse(localStorage.getItem('win-fresh')||'{}'); const cut=Date.now()-86400000; Object.keys(j).forEach(k=>{ if(j[k].at>cut) FRESH[k]=j[k]; }); }catch(e){} }
+function remember(slug,pics){ FRESH[slug]={thumb:pics.thumb.dataURL,web:pics.web.dataURL,at:Date.now()};
+  try{ const keep={}; Object.keys(FRESH).sort((x,y)=>FRESH[y].at-FRESH[x].at).slice(0,30).forEach(k=>keep[k]={thumb:FRESH[k].thumb,at:FRESH[k].at}); localStorage.setItem('win-fresh',JSON.stringify(keep)); }catch(e){} }
 // relative paths: the app is served from the same site as the pictures, so this works on any address the site answers to
-function picFor(r){ return r.f[F.thumb]||r.f[F.img]||''; }
+function tileSrc(r){ const fr=FRESH[r.f[F.slug]]; if(fr&&fr.thumb) return fr.thumb; return r.f[F.thumb]||r.f[F.img]||''; }   // small for the wall
+function cardSrc(r){ const fr=FRESH[r.f[F.slug]]; if(fr&&fr.web) return fr.web; return r.f[F.img]||r.f[F.thumb]||''; }       // big for the card
+function picFor(r){ return cardSrc(r); }
+function isFresh(r){ const fr=FRESH[r.f[F.slug]]; return !!(fr&&Date.now()-fr.at<6*60000); }

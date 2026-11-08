@@ -9,11 +9,17 @@ function renderHome(){
   const g=$('grid'), tray=$('tray'); g.innerHTML=''; tray.innerHTML='';
   let withPic=0, noPic=0;
   SPINE.forEach(r=>{
-    const src=picFor(r), title=r.f[F.title]||'(untitled)';
+    const src=tileSrc(r), title=r.f[F.title]||'(untitled)';
     if(src){ withPic++;
       const b=document.createElement('button'); b.className='tile'+(r.f[F.publish]?' live':'')+(r.f[F.sold]?' sold':'');
       b.innerHTML=`<img loading="lazy" src="${esc(src)}" alt=""><div class="t">${esc(title)}</div>`;
-      b.querySelector('img').onerror=function(){ this.style.display='none'; b.querySelector('.t').insertAdjacentHTML('afterbegin','<span class="warn">picture missing · </span>'); };
+      // a file the site hasn't served yet: say so and keep trying for six minutes before calling it missing
+      const im=b.querySelector('img'); let tries=0;
+      im.onerror=function(){ if(src.startsWith('data:')) return;
+        if(tries<18){ tries++; if(tries===1){ this.style.display='none'; b.querySelector('.t').insertAdjacentHTML('afterbegin','<span class="warn fx">on its way to the site… </span>'); }
+          setTimeout(()=>{ this.src=src+'?r='+Date.now(); },20000); }
+        else { const x=b.querySelector('.fx'); if(x) x.textContent='picture missing · '; } };
+      im.onload=function(){ this.style.display='block'; const x=b.querySelector('.fx'); if(x) x.remove(); };
       b.onclick=()=>openCard(r); g.appendChild(b);
     } else { noPic++;
       const d=document.createElement('div'); d.className='row';
@@ -36,7 +42,7 @@ async function refresh(quiet){
 function blank(){ return {id:null,slug:'',pics:null,picSrc:'',title:'',lat:'',lng:'',chip:'',w:'',h:'',medium:MEDIA[0],pchip:'',price:'',live:false,sold:false,loc:'',notes:'',row:null}; }
 function openCard(r){
   cur=blank();
-  if(r){ const f=r.f; cur.id=r.id; cur.row=r; cur.slug=f[F.slug]||''; cur.picSrc=picFor(r); cur.title=f[F.title]||'';
+  if(r){ const f=r.f; cur.id=r.id; cur.row=r; cur.slug=f[F.slug]||''; cur.picSrc=cardSrc(r); cur.title=f[F.title]||'';
     cur.lat=f[F.lat]==null?'':f[F.lat]; cur.lng=f[F.lng]==null?'':f[F.lng];
     const s=parseSize(f[F.size]); cur.chip=s.chip; cur.w=s.w; cur.h=s.h; cur.medium=s.medium;
     const p=f[F.price]; if(p!=null&&p!==''){ cur.price=String(Math.round(p)); cur.pchip=PRICES.indexOf(cur.price)>=0?cur.price:'Custom'; }
@@ -49,7 +55,10 @@ function drawPic(){
   const has=cur.pics||cur.picSrc; $('camPrompt').style.display=has?'none':'block';
   const im=$('picImg'); im.style.display=has?'block':'none'; im.src=cur.pics?cur.pics.web.dataURL:(cur.picSrc||'');
   $('repBtn').style.display=has?'block':'none'; $('picFile').style.pointerEvents=has?'none':'auto';
-  im.onerror=()=>{ if(cur&&cur.picSrc){ cur.picSrc=''; drawPic(); $('camPrompt').insertAdjacentHTML('beforeend','<div class="warn">The picture on the card is missing from the site — add one.</div>'); } };
+  im.onerror=()=>{ if(!cur||!cur.picSrc||cur.picSrc.startsWith('data:')) return;
+    const th=cur.row&&cur.row.f[F.thumb]; if(th&&cur.picSrc!==th){ cur.picSrc=th; drawPic(); return; }   // big one not served yet: show the small one
+    if(cur.row&&isFresh(cur.row)) return;                                                                    // just uploaded: leave it, it will come
+    cur.picSrc=''; drawPic(); $('camPrompt').insertAdjacentHTML('beforeend','<div class="warn">The picture on the card is missing from the site — add one.</div>'); };
   $('form').style.display=has?'block':'none';
 }
 function drawForm(){
@@ -123,7 +132,7 @@ async function save(){
   names.push('In the spine'); steps.push({fn:async()=>{ const t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}); return '✓ '+t; }});
   showSteps(names);
   const ok=await runSteps(steps,0);
-  if(ok){ cur.pics=null; cur.picSrc=picFor(cur.row); $('cardTitle').textContent=cur.title; $('cardSub').textContent=slug; drawPic(); renderHome(); toast(isNew?'Card made — in the spine':'Card updated'); $('saveBtn').disabled=false; saveState(); }
+  if(ok){ if(cur.pics) remember(slug,cur.pics); cur.pics=null; cur.picSrc=cardSrc(cur.row); $('cardTitle').textContent=cur.title; $('cardSub').textContent=slug; drawPic(); renderHome(); toast(isNew?'Card made — in the spine':'Card updated'); $('saveBtn').disabled=false; saveState(); }
 }
 // a new picture for an existing card: same two paths, overwritten; nothing else on the card changes
 async function replacePicture(file){
@@ -137,7 +146,7 @@ async function replacePicture(file){
     {fn:async()=>{ if(cur.row.f[F.img]!==ip) upd[F.img]=ip; if(cur.row.f[F.thumb]!==tp) upd[F.thumb]=tp;
       if(Object.keys(upd).length){ const rec=await patchCard(cur.id,upd); cur.row.f=Object.assign({},cur.row.f,rec.fields||upd); cacheSpine(); return 'card updated'; } return 'paths unchanged — the site picks the new files up on its next publish'; }}
   ],0);
-  if(ok){ cur.pics=null; cur.picSrc=picFor(cur.row)+'?v='+Date.now(); drawPic(); renderHome(); toast('Picture replaced'); }
+  if(ok){ remember(cur.slug,pics); cur.pics=null; cur.picSrc=cardSrc(cur.row); drawPic(); renderHome(); toast('Picture replaced'); }
 }
 async function onFile(file){
   if(!file) return;
@@ -195,6 +204,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('liveTog').onclick=()=>{ cur.live=!cur.live; drawForm(); };
   $('soldTog').onclick=()=>{ cur.sold=!cur.sold; drawForm(); };
   $('saveBtn').onclick=save;
-  lastPull=loadCache(); renderHome();
+  loadFresh(); lastPull=loadCache(); renderHome();
   if(K.at) refresh(true); else openKeys();
 });
