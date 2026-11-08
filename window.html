@@ -9,6 +9,8 @@
 <meta name="theme-color" content="#1c1b19">
 <title>Window</title>
 <link rel="apple-touch-icon" href="images/now.jpg">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root{--bg:#1c1b19;--pane:#262522;--ink:#f1ece2;--dim:#9a948a;--line:#3a3834;--ok:#5fb87a;--warn:#e0a84a;--bad:#d9634f;--blue:#6fa8dc}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -76,6 +78,34 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
 .toast.show{display:block}
 .keys .k{margin-top:14px}
 .hint{font-size:13px;color:var(--dim)}
+/* map */
+#map{position:fixed;inset:0;top:0;z-index:0;background:#e9e7e2}
+#home{position:relative;z-index:1;pointer-events:none;padding:0}
+#home > *{pointer-events:auto}
+.modes{position:fixed;left:50%;transform:translateX(-50%);top:calc(64px + env(safe-area-inset-top));display:flex;background:rgba(28,27,25,.92);border:1px solid var(--line);border-radius:999px;padding:3px;z-index:3}
+.modes button{background:none;border:none;color:var(--dim);padding:8px 18px;border-radius:999px;font-size:15px}
+.modes button.on{background:var(--ink);color:var(--bg);font-weight:600}
+.zoomrow{position:fixed;right:12px;top:calc(66px + env(safe-area-inset-top));display:flex;flex-direction:column;gap:6px;z-index:3}
+.zoomrow button{background:rgba(28,27,25,.92);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:7px 10px;font-size:13px}
+#status{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:3;background:rgba(28,27,25,.9);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:12px;color:var(--dim);margin:0;max-width:calc(100vw - 100px)}
+.drawer{position:fixed;left:12px;right:90px;bottom:calc(44px + env(safe-area-inset-bottom));z-index:3;display:flex;flex-direction:column;gap:6px;max-height:40vh;overflow:auto}
+.drow{display:flex;justify-content:space-between;align-items:center;background:rgba(28,27,25,.92);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:9px 12px;font-size:15px;text-align:left}
+.drow .n{color:var(--dim);font-size:13px}.drow em{font-style:normal;color:var(--warn)}
+.pin{background:none;border:none}
+.pinwrap{position:relative;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.pincount{min-width:40px;height:40px;padding:0 10px;border-radius:20px;background:var(--bg);color:var(--ink);border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;box-shadow:0 3px 10px rgba(0,0,0,.35)}
+.pinlabel{margin-top:3px;background:rgba(28,27,25,.9);color:var(--ink);font-size:12px;padding:2px 7px;border-radius:7px;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis}
+.pinwrap.studio .pincount{background:#2b4a6b;border-color:#6fa8dc}
+.pinwrap.place .pincount{background:#3b3a2a;border-color:var(--warn)}
+.cross{position:fixed;left:50%;top:50%;width:28px;height:28px;margin:-14px 0 0 -14px;z-index:4;display:none;pointer-events:none}
+.cross::before,.cross::after{content:"";position:absolute;background:var(--bad)}
+.cross::before{left:13px;top:0;width:2px;height:28px}.cross::after{top:13px;left:0;height:2px;width:28px}
+.fabmenu{position:fixed;right:16px;bottom:calc(92px + env(safe-area-inset-bottom));display:none;flex-direction:column;gap:8px;z-index:7}
+.fabmenu.open{display:flex}
+.fabmenu button{background:var(--ink);color:var(--bg);border:none;border-radius:12px;padding:12px 16px;font-size:15px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.45)}
+.shead{display:flex;align-items:center;gap:10px;padding:10px 12px 0;flex-wrap:wrap}
+.shead .cnt{color:var(--dim);font-size:13px;flex:1}
+.ptools{display:none;gap:8px;align-items:center;padding:8px 12px 0;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -84,16 +114,39 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
   <span class="ver" id="ver"></span>
   <button id="keysBtn" title="Keys and tools">⚙︎</button>
 </header>
+<div id="map"></div>
 <main id="home">
+  <div class="modes"><button id="modePainted" class="on">Painted</button><button id="modeNow">Now</button></div>
+  <div class="zoomrow"><button id="ukBtn">UK</button><button id="worldBtn">World</button><button id="allBtn">All</button></div>
+  <div class="drawer" id="drawer"></div>
   <div id="status" class="note"></div>
-  <div class="sect" id="allHead">All paintings</div>
-  <div class="grid" id="grid"></div>
-  <div id="trayWrap" style="display:none">
-    <div class="sect">No picture yet</div>
-    <div class="tray" id="tray"></div>
-  </div>
 </main>
+<div class="cross" id="cross"></div>
 <button class="fab" id="newBtn" title="New card">+</button>
+<div class="fabmenu" id="fabMenu"><button id="fabCard">New card</button><button id="fabPlace">New place</button></div>
+
+<!-- the sheet behind a pin -->
+<div class="sheet" id="sheet">
+  <header><button id="sBack">‹ Map</button><h1 id="sTitle">Sheet</h1><span class="ver" id="sCount"></span></header>
+  <div class="shead"><span class="cnt"></span><button class="btn sm" id="sNew">+ New card</button></div>
+  <div class="ptools" id="sPlaceTools"><button class="btn sec sm" id="sPinHere">Pin it here</button><button class="btn sec sm" id="sPinPaste">Paste a Maps link</button><span class="note" id="sPinNote"></span></div>
+  <main>
+    <div class="grid" id="sGrid"></div>
+    <div id="sTrayWrap" style="display:none"><div class="sect">No picture yet</div><div class="tray" id="sTray"></div></div>
+  </main>
+</div>
+
+<!-- a new place, from the map -->
+<div class="sheet" id="placeSheet">
+  <header><button id="pBack">‹ Back</button><h1>New place</h1></header>
+  <main>
+    <label class="f">Name</label><input class="box" id="pName" placeholder="e.g. Alfriston gallery" autocomplete="off">
+    <label class="f">Kind</label><div class="chips" id="kindChips"></div>
+    <div class="note" id="pickNote" style="margin-top:14px"></div>
+    <div class="row2"><button class="btn" id="pSave">Save with the pin under the cross</button></div>
+    <div class="row2"><button class="btn sec" id="pHere">Save at where I am standing</button></div>
+  </main>
+</div>
 
 <!-- the card -->
 <div class="sheet" id="card">
@@ -113,6 +166,11 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
       <div class="two"><input class="box" id="fLat" placeholder="Lat" inputmode="decimal"><input class="box" id="fLng" placeholder="Long" inputmode="decimal"></div>
       <div class="row2"><button class="btn sec sm" id="pasteBtn">Paste from Maps</button><button class="btn sec sm" id="hereBtn">Here</button><button class="btn sec sm" id="studioBtn">Studio piece</button></div>
       <div class="note" id="pinNote"></div>
+      <label class="f">Region</label>
+      <div class="chips" id="regionChips"></div>
+      <input class="box" id="fRegion" placeholder="Type the region, e.g. Norfolk" style="display:none;margin-top:8px" autocomplete="off">
+      <label class="f">Now at</label>
+      <div class="chips" id="placeChips"></div>
       <label class="f">Size</label>
       <div class="chips" id="sizeChips"></div>
       <div class="two" id="customSize" style="display:none;margin-top:8px"><input class="box" id="fW" placeholder="Width cm" inputmode="numeric"><input class="box" id="fH" placeholder="Height cm" inputmode="numeric"></div>
@@ -124,8 +182,6 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
       <div style="margin-top:18px"><button class="btn" id="saveBtn" disabled>Save</button></div>
       <div class="note" id="saveNote"></div>
       <details class="more" id="more"><summary>More</summary>
-        <label class="f">Now at</label>
-        <input class="box" id="fLoc" placeholder="With Tony">
         <label class="f">Notes for the AI</label>
         <textarea class="box" id="fNotes" rows="3" placeholder="Anything the office should know"></textarea>
         <div class="sw"><div><div class="k">Sold</div></div><button class="tog" id="soldTog"></button></div>
@@ -147,6 +203,7 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
     <div class="note" id="sweepNote">Makes a small picture for every card that has a web picture but no thumbnail, and writes it to the card. Safe to stop and run again.</div>
     <div style="margin-top:10px"><button class="btn sec" id="sweepBtn">Make missing thumbnails</button></div>
     <div class="note" id="sweepProg"></div>
+    <div id="unsureList"></div>
     <div class="sect">Spine</div>
     <div class="note" id="spineNote"></div>
     <div style="margin-top:10px"><button class="btn sec" id="reloadBtn">Reload from the spine</button></div>
@@ -155,5 +212,6 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
 <div class="toast" id="toast"></div>
 <script src="window/a.js"></script>
 <script src="window/b.js"></script>
+<script src="window/c.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.2 · 8 Nov';
+const VER='v0.3 · 8 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -10,8 +10,11 @@ const SITE='https://www.artistonthehill.co.uk/';
 const F={title:'fldUwsWcBNFRiOm80',slug:'fldaFiuL9FO21uLI0',stage:'fldZ6DTFVAJtkzpiz',priceDisp:'fldAMf6fRUa1jSCsH',
   price:'fldaFsyOE94n3osr7',size:'fldWPm0R5SD7mztnp',collection:'fldIN7uBzbDvDHhVJ',lat:'fldaDJkmLc2ygxYyJ',lng:'fldM6DKhwMMNKb6lK',
   sold:'fldK2MfHmSOcuL5Cd',publish:'flduUIlOtmw04hwwL',img:'fldsi0m3fLzHXERwF',thumb:'fldKefu5fKkJUQc5h',loc:'fldJ8tcc8rBUUWTbC',
-  notes:'fldqu3X4LgdpnAGqn',painted:'fld21YJXOgYdckJSU'};
-const READ_FIELDS=[F.title,F.slug,F.stage,F.priceDisp,F.price,F.size,F.collection,F.lat,F.lng,F.sold,F.publish,F.img,F.thumb,F.loc,F.notes,F.painted];
+  notes:'fldqu3X4LgdpnAGqn',painted:'fld21YJXOgYdckJSU',region:'fldB1sSpW8PIsmQIc',nowAt:'fldU8VFnEpEgO9FGp'};
+const PLACES='tblUniTDKcIQYGKM3';
+const P={name:'fldPhtZfCQkchGdRZ',lat:'fldZlimdU6n5UkGhX',lng:'fldZ8ZWgFk2HzOCjX',kind:'flduZ4tJ7xAeTToNJ',active:'fld9SVfkwgTUobXmd',notes:'fldJxOiPXzFXikM0G',matches:'fldBbdt04qrAIC86p'};
+const KINDS=['Storage','Gallery','Venue','Collector','Home','Tony'];
+const READ_FIELDS=[F.title,F.slug,F.stage,F.priceDisp,F.price,F.size,F.collection,F.lat,F.lng,F.sold,F.publish,F.img,F.thumb,F.loc,F.notes,F.painted,F.region,F.nowAt];
 const SIZES=['A4','A3','80×30','60×42','80×60','42×30','A2','Custom'];
 const A={A4:'A4 (21×30cm)',A3:'A3 (30×42cm)',A2:'A2 (42×60cm)'};
 const PRICES=['850','1320','2760','3600','5040','Custom'];
@@ -98,6 +101,48 @@ async function at(method,path,body){
   return r.json();
 }
 let SPINE=[];                       // [{id,created,f:{...by field id}}]
+let PLACESL=[];                     // [{id,f:{...}}]
+const STUDIO=[50.70,-0.05];
+function selName(v){ return v&&typeof v==='object'?(v.name||''):(v||''); }   // single selects come back as objects
+function regionOf(r){ return selName(r.f[F.region]); }
+function placeOf(r){ const l=r.f[F.nowAt]; return Array.isArray(l)&&l.length?(typeof l[0]==='string'?l[0]:l[0].id):''; }
+function placeName(id){ const p=PLACESL.find(x=>x.id===id); return p?(p.f[P.name]||''):''; }
+async function pullPlaces(){
+  const q=Object.values(P).map(f=>'fields%5B%5D='+f).join('&')+'&returnFieldsByFieldId=true&pageSize=100';
+  const j=await at('GET',PLACES+'?'+q); PLACESL=j.records.map(r=>({id:r.id,f:r.fields||{}}));
+  PLACESL.sort((x,y)=>(selName(x.f[P.kind])==='Tony'?-1:0)-(selName(y.f[P.kind])==='Tony'?-1:0)||String(x.f[P.name]).localeCompare(String(y.f[P.name])));
+  try{ localStorage.setItem('win-places',JSON.stringify(PLACESL)); }catch(e){} return PLACESL;
+}
+function loadPlacesCache(){ try{ PLACESL=JSON.parse(localStorage.getItem('win-places')||'[]'); }catch(e){} }
+async function createPlace(fields){ const j=await at('POST',PLACES,{records:[{fields}],typecast:true,returnFieldsByFieldId:true}); const r={id:j.records[0].id,f:j.records[0].fields||fields}; PLACESL.push(r); return r; }
+async function patchPlace(id,fields){ const j=await at('PATCH',PLACES,{records:[{id,fields}],typecast:true,returnFieldsByFieldId:true}); const p=PLACESL.find(x=>x.id===id); if(p) p.f=Object.assign({},p.f,j.records[0].fields||fields); return p; }
+
+// ---------- which pin a painting belongs to, from where the easel stood ----------
+// boxes are [latMin,latMax,lngMin,lngMax]; first match wins, so the small ones come before the big ones
+const BOXES=[
+  ['Venice',45.3,45.6,12.2,12.5],['Amalfi',40.5,40.95,14.1,14.8],['Ionian',37.8,40.0,19.3,21.6],['Alps',44.3,47.6,5.4,10.5],
+  ['Mallorca',39.2,40.0,2.2,3.6],['Madeira',32.5,33.2,-17.5,-16.2],['Bahamas',22.5,27.6,-80,-74],['Australia',-44,-10,112,154],
+  ['Ireland',51.3,55.6,-10.8,-5.9],['Channel Islands',49.1,49.8,-2.75,-1.9],['Scotland',54.6,60.9,-8.0,-0.6],['Wales',51.35,53.45,-5.4,-2.65],
+  ['Isle of Wight',50.57,50.78,-1.6,-1.05],['London',51.28,51.70,-0.52,0.33],['Cornwall',49.9,50.95,-6.5,-4.17],['Devon',50.2,51.25,-4.17,-2.9],
+  ['Dorset',50.5,50.86,-2.9,-1.70],['Hampshire',50.7,51.4,-1.96,-0.95],['Kent',51.08,51.5,0.3,1.45],['Sussex',50.7,51.15,-0.95,0.95],
+  ['Surrey',51.1,51.45,-0.85,0.05],['Thames',51.4,51.75,-1.4,-0.52]];
+const COLL_REGION={ionian:'Ionian',bahamas:'Bahamas',alps:'Alps',amalfi:'Amalfi',venice:'Venice'};
+// returns {region, sure}; sure=false when the pin sits near a border or nowhere we know
+function regionFor(lat,lng,collection){
+  if(lat==null||lng==null||lat===''||lng===''||isNaN(+lat)||isNaN(+lng)) return {region:'Studio',sure:true};
+  lat=+lat; lng=+lng;
+  if(Math.abs(lat-STUDIO[0])<1e-4&&Math.abs(lng-STUDIO[1])<1e-4) return {region:'Studio',sure:true};
+  for(const b of BOXES){ if(lat>=b[1]&&lat<=b[2]&&lng>=b[3]&&lng<=b[4]){
+    const edge=Math.min(lat-b[1],b[2]-lat,lng-b[3],b[4]-lng); return {region:b[0],sure:edge>0.03}; } }
+  const c=COLL_REGION[String(selName(collection)).toLowerCase()]; if(c) return {region:c,sure:false};
+  if(lat>49.8&&lat<59&&lng>-8.5&&lng<2) return {region:'England',sure:false};
+  return {region:'Elsewhere',sure:false};
+}
+// which Place an old free-text Current location means
+function placeForText(t){ t=String(t||'').toLowerCase(); if(!t) return null;
+  for(const p of PLACESL){ const ms=String(p.f[P.matches]||'').split(',').map(s=>s.trim()).filter(Boolean); if(ms.some(m=>t.indexOf(m)>=0)) return p; }
+  return null; }
+function regionsInUse(){ const s=new Set(['Studio']); SPINE.forEach(r=>{ const v=regionOf(r); if(v) s.add(v); }); return [...s].sort((x,y)=>x==='Studio'?1:y==='Studio'?-1:x.localeCompare(y)); }
 function cacheSpine(){ try{ localStorage.setItem('win-spine',JSON.stringify({at:Date.now(),rows:SPINE})); }catch(e){} }
 function loadCache(){ try{ const c=JSON.parse(localStorage.getItem('win-spine')||'null'); if(c&&c.rows){ SPINE=c.rows; return c.at; } }catch(e){} return 0; }
 async function pullSpine(){

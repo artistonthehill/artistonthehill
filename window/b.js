@@ -1,14 +1,13 @@
 /* Window — Part B: the screens. Home grid, the card, the steps, Replace picture, the thumbnail sweep, keys. */
 'use strict';
-const STUDIO=[50.70,-0.05];
 let cur=null;            // the card on screen
+let PRESET={};           // region/place a sheet hands to a new card
 let lastPull=0;
 
-// ---------- home ----------
-function renderHome(){
-  const g=$('grid'), tray=$('tray'); g.innerHTML=''; tray.innerHTML='';
-  let withPic=0, noPic=0;
-  SPINE.forEach(r=>{
+// ---------- a grid of picture tiles (used by the sheets) ----------
+function renderGrid(rows,g,tray){
+  g.innerHTML=''; tray.innerHTML=''; let withPic=0, noPic=0;
+  rows.forEach(r=>{
     const src=tileSrc(r), title=r.f[F.title]||'(untitled)';
     if(src){ withPic++;
       const b=document.createElement('button'); b.className='tile'+(r.f[F.publish]?' live':'')+(r.f[F.sold]?' sold':'');
@@ -27,26 +26,33 @@ function renderHome(){
       d.querySelector('button').onclick=()=>openCard(r); tray.appendChild(d);
     }
   });
-  $('trayWrap').style.display=noPic?'block':'none';
-  $('allHead').textContent='All paintings · '+withPic;
+  tray.parentElement.style.display=noPic?'block':'none';
+  return {withPic,noPic};
+}
+function renderHome(){
+  const noPic=SPINE.filter(r=>!tileSrc(r)).length;
   const when=lastPull?new Date(lastPull).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'';
-  $('status').innerHTML=SPINE.length?`${SPINE.length} cards${when?' · from the spine '+when:' · <span class="warn">offline copy</span>'}${noPic?' · '+noPic+' without a picture':''}`:'No cards loaded yet.';
+  $('status').innerHTML=SPINE.length?`${SPINE.length} cards${when?' · spine '+when:' · <span class="warn">offline copy</span>'}${noPic?' · '+noPic+' without a picture':''}`:'No cards loaded yet.';
+  if(typeof drawMap==='function') drawMap();
+  if(typeof refreshSheet==='function') refreshSheet();
 }
 async function refresh(quiet){
   if(!K.at){ openKeys(); return; }
-  try{ $('status').innerHTML='<span class="spin"></span> Reading the spine…'; await pullSpine(); lastPull=Date.now(); renderHome(); if(!quiet) toast('Spine read: '+SPINE.length+' cards'); }
+  try{ $('status').innerHTML='<span class="spin"></span> Reading the spine…'; await Promise.all([pullSpine(),pullPlaces()]); lastPull=Date.now(); renderHome(); if(!quiet) toast('Spine read: '+SPINE.length+' cards');
+    if(typeof backfill==='function') backfill(); }
   catch(e){ renderHome(); $('status').innerHTML='<span class="bad">'+esc(e.message)+'</span>'+(SPINE.length?' · showing the last copy':''); }
 }
 
 // ---------- the card ----------
-function blank(){ return {id:null,slug:'',pics:null,picSrc:'',title:'',lat:'',lng:'',chip:'',w:'',h:'',medium:MEDIA[0],pchip:'',price:'',live:false,sold:false,loc:'',notes:'',row:null}; }
+function blank(){ return {id:null,slug:'',pics:null,picSrc:'',title:'',lat:'',lng:'',chip:'',w:'',h:'',medium:MEDIA[0],pchip:'',price:'',live:false,sold:false,loc:'',notes:'',region:'',place:'',row:null}; }
 function openCard(r){
   cur=blank();
   if(r){ const f=r.f; cur.id=r.id; cur.row=r; cur.slug=f[F.slug]||''; cur.picSrc=cardSrc(r); cur.title=f[F.title]||'';
     cur.lat=f[F.lat]==null?'':f[F.lat]; cur.lng=f[F.lng]==null?'':f[F.lng];
     const s=parseSize(f[F.size]); cur.chip=s.chip; cur.w=s.w; cur.h=s.h; cur.medium=s.medium;
     const p=f[F.price]; if(p!=null&&p!==''){ cur.price=String(Math.round(p)); cur.pchip=PRICES.indexOf(cur.price)>=0?cur.price:'Custom'; }
-    cur.live=!!f[F.publish]; cur.sold=!!f[F.sold]; cur.loc=f[F.loc]||''; cur.notes=f[F.notes]||''; }
+    cur.live=!!f[F.publish]; cur.sold=!!f[F.sold]; cur.loc=f[F.loc]||''; cur.notes=f[F.notes]||''; cur.region=regionOf(r); cur.place=placeOf(r); }
+  else { if(PRESET.region) cur.region=PRESET.region; if(PRESET.place) cur.place=PRESET.place; const wt=PLACESL.find(p=>selName(p.f[P.kind])==='Tony'); if(!cur.place&&wt) cur.place=wt.id; }
   $('cardTitle').textContent=r?(cur.title||'Card'):'New card'; $('cardSub').textContent=r?(cur.slug||''):'';
   $('steps').style.display='none'; $('steps').innerHTML='';
   drawPic(); drawForm(); $('card').classList.add('open'); try{window.scrollTo(0,0);}catch(e){}
@@ -68,9 +74,15 @@ function drawForm(){
   chips($('mediumChips'),MEDIA,cur.medium,v=>{cur.medium=v;drawForm();},v=>v.replace('Oil on ',''));
   chips($('priceChips'),PRICES,cur.pchip,v=>{cur.pchip=v; cur.price=v==='Custom'?(PRICES.indexOf(cur.price)>=0?'':cur.price):v; drawForm();},v=>v==='Custom'?'Custom…':money(v));
   $('fPrice').style.display=cur.pchip==='Custom'?'block':'none'; $('fPrice').value=cur.pchip==='Custom'?cur.price:'';
+  // region: the ones in use, plus a suggestion from the pin, plus Other…
+  const sug=(!cur.id&&!cur.region&&cur.lat!==''&&cur.lng!=='')?regionFor(cur.lat,cur.lng,null).region:'';
+  if(sug&&!cur.region&&sug!=='England'&&sug!=='Elsewhere') cur.region=sug;
+  const regs=regionsInUse(); if(cur.region&&regs.indexOf(cur.region)<0) regs.unshift(cur.region); regs.push('Other');
+  chips($('regionChips'),regs,cur.region,v=>{ if(v==='Other'){ $('fRegion').style.display='block'; $('fRegion').focus(); return; } cur.region=v; $('fRegion').style.display='none'; drawForm(); },v=>v==='Other'?'Other…':v);
+  const pl=PLACESL.filter(p=>p.f[P.active]!==false); chips($('placeChips'),pl.map(p=>p.id),cur.place,v=>{cur.place=v;drawForm();},id=>placeName(id));
   $('liveTog').classList.toggle('on',cur.live); $('liveK').textContent=cur.live?'Live on the website':'Not public';
   $('liveS').textContent=cur.live?'Publish to site is ticked — the site follows on its next publish':'Only you can see this card';
-  $('soldTog').classList.toggle('on',cur.sold); $('fLoc').value=cur.loc; $('fNotes').value=cur.notes;
+  $('soldTog').classList.toggle('on',cur.sold); $('fNotes').value=cur.notes;
   $('stageNote').textContent=cur.row?('Stage: '+((cur.row.f[F.stage]||{}).name||cur.row.f[F.stage]||'—')+' (the office moves this)'):'Stage will be Carded';
   saveState();
 }
@@ -98,7 +110,10 @@ function gather(){
   const f={}; f[F.title]=cur.title; f[F.size]=sizeText(cur.chip,cur.w,cur.h,cur.medium);
   f[F.price]=+cur.price; f[F.priceDisp]=cur.sold?'Sold':money(cur.price); f[F.publish]=cur.live; f[F.sold]=cur.sold;
   if(cur.lat!==''&&cur.lng!==''&&!isNaN(+cur.lat)&&!isNaN(+cur.lng)){ f[F.lat]=+cur.lat; f[F.lng]=+cur.lng; }
-  if(cur.loc||!cur.id) f[F.loc]=cur.loc||'With Tony'; if(cur.notes||cur.id) f[F.notes]=cur.notes;
+  if(!cur.region) cur.region=(cur.lat!==''&&cur.lng!=='')?regionFor(cur.lat,cur.lng,null).region:'Studio';
+  f[F.region]=cur.region;
+  if(cur.place){ f[F.nowAt]=[cur.place]; f[F.loc]=placeName(cur.place); } else if(!cur.id) f[F.loc]='With Tony';
+  if(cur.notes||cur.id) f[F.notes]=cur.notes;
   return f;
 }
 
@@ -182,8 +197,9 @@ function openKeys(){ $('kAt').value=K.at; $('kGh').value=K.gh; $('spineNote').te
 // ---------- wiring ----------
 window.addEventListener('DOMContentLoaded',()=>{
   $('ver').textContent=VER;
-  $('newBtn').onclick=()=>openCard(null);
-  $('cardBack').onclick=()=>{ $('card').classList.remove('open'); cur=null; };
+  $('newBtn').onclick=()=>{ if(typeof fabTap==='function') fabTap(); else { PRESET={}; openCard(null); } };
+  $('cardBack').onclick=()=>{ $('card').classList.remove('open'); cur=null; PRESET={}; };
+  $('allBtn').onclick=()=>openSheet({kind:'all'});
   $('keysBtn').onclick=openKeys; $('keysBack').onclick=()=>$('keys').classList.remove('open');
   $('kSave').onclick=()=>{ K.set($('kAt').value,$('kGh').value); toast('Keys saved on this phone'); $('keys').classList.remove('open'); refresh(); };
   $('reloadBtn').onclick=()=>{ $('keys').classList.remove('open'); refresh(); };
@@ -191,10 +207,10 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('picFile').onchange=e=>onFile(e.target.files[0]);
   $('repBtn').onclick=()=>$('picFile').click();
   // every box writes straight into the card as it is typed, so redrawing the chips never loses a word
-  const bind={fTitle:'title',fLat:'lat',fLng:'lng',fW:'w',fH:'h',fPrice:'price',fLoc:'loc',fNotes:'notes'};
+  const bind={fTitle:'title',fLat:'lat',fLng:'lng',fW:'w',fH:'h',fPrice:'price',fNotes:'notes',fRegion:'region'};
   Object.keys(bind).forEach(id=>$(id).addEventListener('input',()=>{ if(!cur) return;
     if(id==='fLat'||id==='fLng'){ const ll=parseLatLng($(id).value); if(ll&&/[a-z@!]/i.test($(id).value)){ $('fLat').value=ll[0]; $('fLng').value=ll[1]; } cur.lat=$('fLat').value; cur.lng=$('fLng').value; pinNote(); }
-    else cur[bind[id]]=id==='fPrice'?$(id).value.replace(/[^0-9.]/g,''):$(id).value;
+    else cur[bind[id]]=id==='fPrice'?$(id).value.replace(/[^0-9.]/g,''):(id==='fRegion'?$(id).value.trim():$(id).value);
     saveState(); }));
   $('pasteBtn').onclick=async()=>{ try{ const t=await navigator.clipboard.readText(); const ll=parseLatLng(t); if(!ll) throw 0; $('fLat').value=ll[0]; $('fLng').value=ll[1]; pinNote(); saveState(); toast('Pin pasted'); }
     catch(e){ toast('Paste the Maps link into the Lat box instead'); $('fLat').focus(); } };
@@ -204,6 +220,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('liveTog').onclick=()=>{ cur.live=!cur.live; drawForm(); };
   $('soldTog').onclick=()=>{ cur.sold=!cur.sold; drawForm(); };
   $('saveBtn').onclick=save;
-  loadFresh(); lastPull=loadCache(); renderHome();
+  loadFresh(); loadPlacesCache(); lastPull=loadCache(); if(typeof initMap==='function') initMap(); renderHome();
   if(K.at) refresh(true); else openKeys();
 });
