@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.8 · 9 Nov';
+const VER='v0.8.1 · 9 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -17,7 +17,7 @@ const KINDS=['Storage','Gallery','Venue','Collector','Home','Tony'];
 const READ_FIELDS=[F.title,F.slug,F.stage,F.priceDisp,F.price,F.size,F.collection,F.lat,F.lng,F.sold,F.publish,F.img,F.thumb,F.loc,F.notes,F.painted,F.region,F.nowAt,F.interest,F.invoices,F.plans,F.dispatch];
 const SIZES=['A4','A3','80×30','60×42','80×60','42×30','A2','Custom'];
 const A={A4:'A4 (21×30cm)',A3:'A3 (30×42cm)',A2:'A2 (42×60cm)'};
-const PRICES=['850','1320','2760','3600','5040','Custom'];
+const PRICES=['850','1320','2760','3600','5040','6480','Custom'];
 const PRICE_FOR={A3:'1320','80×30':'2760'};            // the Decisions price table; others wait for Tony
 const MEDIA=['Oil on board','Oil on canvas','Oil on paper'];
 const WEB_PX=1600, WEB_Q=0.8, THUMB_PX=240, THUMB_Q=0.7;
