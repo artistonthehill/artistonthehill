@@ -94,7 +94,13 @@ function chips(el,list,on,set,label){
   el.innerHTML=''; list.forEach(v=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(on===v?' on':''); b.textContent=label?label(v):v; b.onclick=()=>set(v); el.appendChild(b); });
 }
 // one box for the pin: a "lat, lng" pair or a Maps link; the two numbers live in hidden fields
-function setPin(text){ const ll=parseLatLng(text); if(ll){ cur.lat=String(ll[0]); cur.lng=String(ll[1]); $('fLat').value=cur.lat; $('fLng').value=cur.lng; if(/^https?:/i.test(text.trim())) $('fPin').value=cur.lat+', '+cur.lng; }
+let resolving=0;
+function setPin(text){
+  if(isShortMapLink(text)){ const my=++resolving; $('pinNote').innerHTML='<span class="spin"></span> Following the Maps link…';
+    resolveShortLink(text).then(ll=>{ if(my!==resolving) return; $('fPin').value=ll[0]+', '+ll[1]; setPin($('fPin').value); saveState(); toast('Pin read from the link'); })
+      .catch(e=>{ if(my!==resolving) return; cur.lat=''; cur.lng=''; $('fLat').value=''; $('fLng').value=''; $('pinNote').innerHTML='<span class="warn">Could not read that link ('+esc(e.message)+'). In Google Maps, long-press the spot and copy the numbers shown instead.</span>'; saveState(); });
+    return; }
+  const ll=parseLatLng(text); if(ll){ cur.lat=String(ll[0]); cur.lng=String(ll[1]); $('fLat').value=cur.lat; $('fLng').value=cur.lng; if(/^https?:/i.test(text.trim())) $('fPin').value=cur.lat+', '+cur.lng; }
   else { cur.lat=''; cur.lng=''; $('fLat').value=''; $('fLng').value=''; }   // empty or unreadable: no pin until it reads
   pinNote(); }
 function pinNote(){
@@ -252,7 +258,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(id==='fPin'){ setPin($('fPin').value); }
     else cur[bind[id]]=id==='fPrice'?$(id).value.replace(/[^0-9.]/g,''):(id==='fRegion'?$(id).value.trim():$(id).value);
     saveState(); }));
-  $('pasteBtn').onclick=async()=>{ try{ const t=await navigator.clipboard.readText(); const ll=parseLatLng(t); if(!ll) throw 0; $('fPin').value=ll[0]+', '+ll[1]; setPin($('fPin').value); saveState(); toast('Pin pasted'); }
+  $('pasteBtn').onclick=async()=>{ try{ const t=await navigator.clipboard.readText(); if(isShortMapLink(t)){ $('fPin').value=t.trim(); setPin(t); return; } const ll=parseLatLng(t); if(!ll) throw 0; $('fPin').value=ll[0]+', '+ll[1]; setPin($('fPin').value); saveState(); toast('Pin pasted'); }
     catch(e){ toast('Paste into the pin box instead'); $('fPin').focus(); } };
   $('hereBtn').onclick=()=>{ if(!navigator.geolocation){ toast('No location on this device'); return; } $('pinNote').innerHTML='<span class="spin"></span> Finding you…';
     navigator.geolocation.getCurrentPosition(p=>{ $('fPin').value=p.coords.latitude.toFixed(6)+', '+p.coords.longitude.toFixed(6); setPin($('fPin').value); saveState(); },()=>{ $('pinNote').textContent='Location not allowed — paste from Maps instead.'; },{enableHighAccuracy:true,timeout:12000}); };

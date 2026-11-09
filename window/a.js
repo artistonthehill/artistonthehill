@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.7.1 · 8 Nov';
+const VER='v0.8 · 9 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -62,6 +62,18 @@ function parseLatLng(t){
   return null;
 }
 function toast(msg,ms){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),ms||2600); }
+
+// a short Google Maps link (maps.app.goo.gl) only gives up its pin after a redirect the phone can't see;
+// the Private View alert script follows it for us (resolve=) and hands back lat/lng
+const RESOLVER='https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec';
+const isShortMapLink=t=>/^(https?:\/\/)?(maps\.app\.goo\.gl|goo\.gl\/maps)\//i.test(String(t||'').trim());
+async function resolveShortLink(t){
+  const u=String(t).trim().replace(/^(?!https?:)/,'https://');
+  const r=await fetch(RESOLVER+'?resolve='+encodeURIComponent(u),{redirect:'follow'});
+  if(!r.ok) throw new Error('link reader answered '+r.status);
+  const j=await r.json(); if(j&&typeof j.lat==='number'&&typeof j.lng==='number') return [j.lat,j.lng];
+  throw new Error(j&&j.error?j.error:'that link did not carry a pin');
+}
 
 // ---------- pictures: the two files and nothing larger ----------
 async function loadImage(file){
