@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.8.1 · 9 Nov';
+const VER='v0.9 · 9 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -10,11 +10,14 @@ const SITE='https://www.artistonthehill.co.uk/';
 const F={title:'fldUwsWcBNFRiOm80',slug:'fldaFiuL9FO21uLI0',stage:'fldZ6DTFVAJtkzpiz',priceDisp:'fldAMf6fRUa1jSCsH',
   price:'fldaFsyOE94n3osr7',size:'fldWPm0R5SD7mztnp',collection:'fldIN7uBzbDvDHhVJ',lat:'fldaDJkmLc2ygxYyJ',lng:'fldM6DKhwMMNKb6lK',
   sold:'fldK2MfHmSOcuL5Cd',publish:'flduUIlOtmw04hwwL',img:'fldsi0m3fLzHXERwF',thumb:'fldKefu5fKkJUQc5h',loc:'fldJ8tcc8rBUUWTbC',
-  notes:'fldqu3X4LgdpnAGqn',painted:'fld21YJXOgYdckJSU',region:'fldB1sSpW8PIsmQIc',nowAt:'fldU8VFnEpEgO9FGp',interest:'fldJcgYnNnHeUV03x',invoices:'fldsAVkN3q7Pw4Xp9',plans:'fldD7nFXu5026M38Q',dispatch:'fldxHrc3YAOFdLHfB'};
+  notes:'fldqu3X4LgdpnAGqn',painted:'fld21YJXOgYdckJSU',region:'fldB1sSpW8PIsmQIc',nowAt:'fldU8VFnEpEgO9FGp',interest:'fldJcgYnNnHeUV03x',invoices:'fldsAVkN3q7Pw4Xp9',plans:'fldD7nFXu5026M38Q',dispatch:'fldxHrc3YAOFdLHfB',
+  framed:'fldmzEwUPg57ajdeQ',frame:'fldTViGN0uZdMMEFA',depth:'fldX8WfNcajmDFFGf',sellsWith:'fldXnP3NAPNPysrzM'};
 const PLACES='tblUniTDKcIQYGKM3';
+const FRAMES='tblAw6tA16Hir2thk';
+const FR={id:'fldEceMSE3JBsuZqc',rw:'fldXSaPvYQoggZSuK',rh:'fldJE3uiUWxnynyFI',status:'fld2vtBqEuoXDV0ZJ',on:'fldKxZCMHq1IGwI0N',style:'fld2p7poyb92KgPvT'};
 const P={name:'fldPhtZfCQkchGdRZ',lat:'fldZlimdU6n5UkGhX',lng:'fldZ8ZWgFk2HzOCjX',kind:'flduZ4tJ7xAeTToNJ',active:'fld9SVfkwgTUobXmd',notes:'fldJxOiPXzFXikM0G',matches:'fldBbdt04qrAIC86p'};
 const KINDS=['Storage','Gallery','Venue','Collector','Home','Tony'];
-const READ_FIELDS=[F.title,F.slug,F.stage,F.priceDisp,F.price,F.size,F.collection,F.lat,F.lng,F.sold,F.publish,F.img,F.thumb,F.loc,F.notes,F.painted,F.region,F.nowAt,F.interest,F.invoices,F.plans,F.dispatch];
+const READ_FIELDS=[F.title,F.slug,F.stage,F.priceDisp,F.price,F.size,F.collection,F.lat,F.lng,F.sold,F.publish,F.img,F.thumb,F.loc,F.notes,F.painted,F.region,F.nowAt,F.interest,F.invoices,F.plans,F.dispatch,F.framed,F.frame,F.depth,F.sellsWith];
 const SIZES=['A4','A3','80×30','60×42','80×60','42×30','A2','Custom'];
 const A={A4:'A4 (21×30cm)',A3:'A3 (30×42cm)',A2:'A2 (42×60cm)'};
 const PRICES=['850','1320','2760','3600','5040','6480','Custom'];
@@ -137,6 +140,18 @@ async function pullPlaces(){
   try{ localStorage.setItem('win-places',JSON.stringify(PLACESL)); }catch(e){} return PLACESL;
 }
 function loadPlacesCache(){ try{ PLACESL=JSON.parse(localStorage.getItem('win-places')||'[]'); }catch(e){} }
+// ---------- frames (read-mostly: the card only picks one; the frame's own life stays with the Frames steward) ----------
+let FRAMESL=[];                     // [{id,f:{...}}]
+function frameOf(r){ const l=r.f[F.frame]; return Array.isArray(l)&&l.length?(typeof l[0]==='string'?l[0]:l[0].id):''; }
+function frameLabel(id){ const x=FRAMESL.find(z=>z.id===id); if(!x) return id?'a frame the app can\u2019t see':''; const f=x.f; const rb=(f[FR.rw]&&f[FR.rh])?(' · '+f[FR.rw]+'×'+f[FR.rh]+'mm'):''; return (f[FR.id]||id)+rb; }
+function frameFree(x,cardId){ const on=x.f[FR.on]; const ids=Array.isArray(on)?on.map(o=>typeof o==='string'?o:o.id):[]; return !ids.length||(cardId&&ids.indexOf(cardId)>=0); }
+async function pullFrames(){
+  const q=Object.values(FR).map(f=>'fields%5B%5D='+f).join('&')+'&returnFieldsByFieldId=true&pageSize=100'; const rows=[]; let off='';
+  do{ const j=await at('GET',FRAMES+'?'+q+(off?'&offset='+off:'')); j.records.forEach(r=>rows.push({id:r.id,f:r.fields||{}})); off=j.offset||''; }while(off);
+  rows.sort((x,y)=>String(x.f[FR.id]||'').localeCompare(String(y.f[FR.id]||''))); FRAMESL=rows;
+  try{ localStorage.setItem('win-frames',JSON.stringify(FRAMESL)); }catch(e){} return FRAMESL;
+}
+function loadFramesCache(){ try{ FRAMESL=JSON.parse(localStorage.getItem('win-frames')||'[]'); }catch(e){} }
 async function createPlace(fields){ const j=await at('POST',PLACES,{records:[{fields}],typecast:true,returnFieldsByFieldId:true}); const r={id:j.records[0].id,f:j.records[0].fields||fields}; PLACESL.push(r); return r; }
 async function patchPlace(id,fields){ const j=await at('PATCH',PLACES,{records:[{id,fields}],typecast:true,returnFieldsByFieldId:true}); const p=PLACESL.find(x=>x.id===id); if(p) p.f=Object.assign({},p.f,j.records[0].fields||fields); return p; }
 

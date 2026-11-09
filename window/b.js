@@ -39,20 +39,21 @@ function renderHome(){
 }
 async function refresh(quiet){
   if(!K.at){ openKeys(); return; }
-  try{ $('status').innerHTML='<span class="spin"></span> Reading the spine…'; await Promise.all([pullSpine(),pullPlaces()]); lastPull=Date.now(); renderHome(); if(!quiet) toast('Spine read: '+SPINE.length+' cards');
+  try{ $('status').innerHTML='<span class="spin"></span> Reading the spine…'; await Promise.all([pullSpine(),pullPlaces(),pullFrames().catch(()=>{})]); lastPull=Date.now(); renderHome(); if(!quiet) toast('Spine read: '+SPINE.length+' cards');
     if(typeof backfill==='function') backfill(); }
   catch(e){ renderHome(); $('status').innerHTML='<span class="bad">'+esc(e.message)+'</span>'+(SPINE.length?' · showing the last copy':''); }
 }
 
 // ---------- the card ----------
-function blank(){ return {id:null,slug:'',pics:null,picSrc:'',title:'',lat:'',lng:'',chip:'',w:'',h:'',medium:MEDIA[0],pchip:'',price:'',live:false,sold:false,loc:'',notes:'',region:'',place:'',row:null}; }
+function blank(){ return {id:null,slug:'',pics:null,picSrc:'',title:'',lat:'',lng:'',chip:'',w:'',h:'',medium:MEDIA[0],pchip:'',price:'',live:false,sold:false,loc:'',notes:'',region:'',place:'',frame:'',frame0:'',sells:true,sells0:true,depth:'',depth0:'',row:null}; }
 function openCard(r){
   cur=blank();
   if(r){ const f=r.f; cur.id=r.id; cur.row=r; cur.slug=f[F.slug]||''; cur.picSrc=cardSrc(r); cur.title=f[F.title]||'';
     cur.lat=f[F.lat]==null?'':f[F.lat]; cur.lng=f[F.lng]==null?'':f[F.lng];
     const s=parseSize(f[F.size]); cur.chip=s.chip; cur.w=s.w; cur.h=s.h; cur.medium=s.medium;
     const p=f[F.price]; if(p!=null&&p!==''){ cur.price=String(Math.round(p)); cur.pchip=PRICES.indexOf(cur.price)>=0?cur.price:'Custom'; }
-    cur.live=!!f[F.publish]; cur.sold=!!f[F.sold]; cur.loc=f[F.loc]||''; cur.notes=f[F.notes]||''; cur.region=regionOf(r); cur.place=placeOf(r); }
+    cur.live=!!f[F.publish]; cur.sold=!!f[F.sold]; cur.loc=f[F.loc]||''; cur.notes=f[F.notes]||''; cur.region=regionOf(r); cur.place=placeOf(r);
+    cur.frame=cur.frame0=frameOf(r); cur.sells=cur.sells0=cur.frame?!!f[F.sellsWith]:true; cur.depth=cur.depth0=(f[F.depth]==null?'':String(f[F.depth])); }
   else { if(PRESET.region) cur.region=PRESET.region; if(PRESET.place) cur.place=PRESET.place; const wt=PLACESL.find(p=>selName(p.f[P.kind])==='Tony'); if(!cur.place&&wt) cur.place=wt.id; }
   $('cardTitle').textContent=r?(cur.title||'Card'):'New card'; $('cardSub').textContent=r?(cur.slug||''):'';
   $('steps').style.display='none'; $('steps').innerHTML='';
@@ -84,12 +85,23 @@ function drawForm(){
   $('liveTog').classList.toggle('on',cur.live); $('liveK').textContent=cur.live?'Live on the website':'Not public';
   $('liveS').textContent=cur.live?'On the public website — it follows within two minutes of saving':'Only you can see this card';
   $('soldTog').classList.toggle('on',cur.sold); $('fNotes').value=cur.notes;
+  // frame: none, the one it wears, the free frames that fit this size, Other… (typed ID)
+  const fits=framesThatFit(); const fl=['']; if(cur.frame) fl.push(cur.frame); fits.forEach(x=>{ if(fl.indexOf(x.id)<0) fl.push(x.id); }); fl.push('Other');
+  chips($('frameChips'),fl,cur.frame,v=>{ if(v==='Other'){ $('fFrame').style.display='block'; $('fFrame').focus(); return; } cur.frame=v; if(v&&v!==cur.frame0) cur.sells=true; $('fFrame').style.display='none'; drawForm(); },v=>v===''?'No frame':v==='Other'?'Other…':frameLabel(v));
+  $('frameList').innerHTML=FRAMESL.filter(x=>frameFree(x,cur.id)).map(x=>'<option value="'+esc(x.f[FR.id]||'')+'">').join('');
+  $('frameNote').textContent=fits.length?'':(FRAMESL.length?'No free frame on the spine is this size — Other… takes any frame ID':'Frames not read yet — pull down to reload');
+  $('sellsSw').style.display=cur.frame?'flex':'none'; $('sellsTog').classList.toggle('on',cur.sells); $('sellsS').textContent=cur.sells?'The frame goes with the painting when it sells':'The frame comes off and goes back to stock when it sells';
+  $('fDepth').value=cur.depth;
   const st=cur.row?selName(cur.row.f[F.stage]):''; const past=['Sold','Delivered','Registered'].indexOf(st)>=0;
   $('soldS').textContent=cur.sold?(past?('Stage '+st+' — stays as the office set it'):'Stage moves to Sold when you save; Books takes it from there'):'Marks it sold on the spine — the office does the rest';
   $('stageNote').textContent=cur.row?('Stage: '+((cur.row.f[F.stage]||{}).name||cur.row.f[F.stage]||'—')+' (the office moves this)'):'Stage will be Carded';
   drawDelete();
   saveState();
 }
+// the painting's size in mm (either orientation) and the free frames whose rebate is within 12mm of it
+function sizeMM(){ const d={A4:[210,300],A3:[300,420],A2:[420,600]}[cur.chip]; if(d) return d; const m=String(cur.chip==='Custom'?(cur.w+'×'+cur.h):cur.chip).match(/(\d+(?:\.\d+)?)\s*×\s*(\d+(?:\.\d+)?)/); return m?[+m[1]*10,+m[2]*10]:null; }
+function framesThatFit(){ const mm=sizeMM(); if(!mm) return []; const near=(a,b)=>Math.abs(a-b)<=12;
+  return FRAMESL.filter(x=>{ if(!frameFree(x,cur.id)) return false; const w=+x.f[FR.rw]||0,h=+x.f[FR.rh]||0; if(!w||!h) return false; return (near(w,mm[0])&&near(h,mm[1]))||(near(w,mm[1])&&near(h,mm[0])); }).slice(0,8); }
 function chips(el,list,on,set,label){
   el.innerHTML=''; list.forEach(v=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(on===v?' on':''); b.textContent=label?label(v):v; b.onclick=()=>set(v); el.appendChild(b); });
 }
@@ -131,6 +143,10 @@ function gather(){
   f[F.region]=cur.region;
   if(cur.place){ f[F.nowAt]=[cur.place]; f[F.loc]=placeName(cur.place); } else if(!cur.id) f[F.loc]='With Tony';
   if(cur.notes||cur.id) f[F.notes]=cur.notes;
+  // frame, depth, sells-with: only written when Tony changed them, so the lockup app's older entries are left alone
+  if(cur.frame!==cur.frame0){ f[F.frame]=cur.frame?[cur.frame]:[]; f[F.framed]=!!cur.frame; f[F.sellsWith]=cur.frame?cur.sells:false; }
+  else if(cur.frame&&cur.sells!==cur.sells0) f[F.sellsWith]=cur.sells;
+  const dp=String(cur.depth||'').trim(); if(dp!==cur.depth0){ if(dp===''){ if(cur.id) f[F.depth]=null; } else if(!isNaN(+dp)&&+dp>0) f[F.depth]=+dp; }
   return f;
 }
 
@@ -253,10 +269,10 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('picFile').onchange=e=>onFile(e.target.files[0]);
   $('repBtn').onclick=()=>$('picFile').click();
   // every box writes straight into the card as it is typed, so redrawing the chips never loses a word
-  const bind={fTitle:'title',fPin:'pin',fW:'w',fH:'h',fPrice:'price',fNotes:'notes',fRegion:'region'};
+  const bind={fTitle:'title',fPin:'pin',fW:'w',fH:'h',fPrice:'price',fNotes:'notes',fRegion:'region',fDepth:'depth'};
   Object.keys(bind).forEach(id=>$(id).addEventListener('input',()=>{ if(!cur) return;
     if(id==='fPin'){ setPin($('fPin').value); }
-    else cur[bind[id]]=id==='fPrice'?$(id).value.replace(/[^0-9.]/g,''):(id==='fRegion'?$(id).value.trim():$(id).value);
+    else cur[bind[id]]=(id==='fPrice'||id==='fDepth')?$(id).value.replace(/[^0-9.]/g,''):(id==='fRegion'?$(id).value.trim():$(id).value);
     saveState(); }));
   $('pasteBtn').onclick=async()=>{ try{ const t=await navigator.clipboard.readText(); if(isShortMapLink(t)){ $('fPin').value=t.trim(); setPin(t); return; } const ll=parseLatLng(t); if(!ll) throw 0; $('fPin').value=ll[0]+', '+ll[1]; setPin($('fPin').value); saveState(); toast('Pin pasted'); }
     catch(e){ toast('Paste into the pin box instead'); $('fPin').focus(); } };
@@ -264,11 +280,13 @@ window.addEventListener('DOMContentLoaded',()=>{
     navigator.geolocation.getCurrentPosition(p=>{ $('fPin').value=p.coords.latitude.toFixed(6)+', '+p.coords.longitude.toFixed(6); setPin($('fPin').value); saveState(); },()=>{ $('pinNote').textContent='Location not allowed — paste from Maps instead.'; },{enableHighAccuracy:true,timeout:12000}); };
   $('studioBtn').onclick=()=>{ $('fPin').value=STUDIO[0]+', '+STUDIO[1]; setPin($('fPin').value); saveState(); };
   $('liveTog').onclick=()=>{ cur.live=!cur.live; drawForm(); };
+  $('sellsTog').onclick=()=>{ cur.sells=!cur.sells; drawForm(); };
+  $('fFrame').addEventListener('change',()=>{ const t=$('fFrame').value.trim().toUpperCase(); if(!t) return; const x=FRAMESL.find(z=>String(z.f[FR.id]||'').toUpperCase()===t); if(!x){ toast('No frame called '+t+' on the spine'); return; } cur.frame=x.id; cur.sells=true; $('fFrame').value=''; drawForm(); });
   $('soldTog').onclick=()=>{ cur.sold=!cur.sold;
     if(cur.sold){ const wt=PLACESL.find(p=>selName(p.f[P.kind])==='Tony'), col=PLACESL.find(p=>selName(p.f[P.kind])==='Collector');
       if(col&&(!cur.place||(wt&&cur.place===wt.id))) cur.place=col.id; }
     drawForm(); };
   $('saveBtn').onclick=save; $('delBtn').onclick=delTap;
-  loadFresh(); loadPlacesCache(); lastPull=loadCache(); if(typeof initMap==='function') initMap(); renderHome();
+  loadFresh(); loadPlacesCache(); loadFramesCache(); lastPull=loadCache(); if(typeof initMap==='function') initMap(); renderHome();
   if(K.at) refresh(true); else openKeys();
 });

@@ -191,6 +191,13 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
       <details class="more" id="more"><summary>More</summary>
         <label class="f">Notes for the AI</label>
         <textarea class="box" id="fNotes" rows="3" placeholder="Anything the office should know"></textarea>
+        <label class="f">Frame</label>
+        <div class="chips" id="frameChips"></div>
+        <input class="box" id="fFrame" list="frameList" placeholder="Type the frame ID, e.g. FR-SM05" style="display:none;margin-top:8px" autocomplete="off"><datalist id="frameList"></datalist>
+        <div class="note" id="frameNote"></div>
+        <div class="sw" id="sellsSw" style="display:none"><div><div class="k">Sells with frame</div><div class="s" id="sellsS"></div></div><button class="tog" id="sellsTog"></button></div>
+        <label class="f">Depth (mm)</label>
+        <input class="box" id="fDepth" inputmode="decimal" placeholder="Panel or canvas depth in mm, e.g. 18">
         <div class="note" id="stageNote"></div>
         <div style="margin-top:18px"><button class="btn sec" id="delBtn" style="display:none;color:var(--bad);border-color:var(--bad)">Delete this card</button></div>
         <div class="note">Deleting removes the card, its pictures and its room page. It is refused while anyone is on the card's Interest list or an invoice is attached — those are the office's to untangle.</div>
