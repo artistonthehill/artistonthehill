@@ -45,7 +45,7 @@ async function refresh(quiet){
 }
 
 // ---------- the card ----------
-function blank(){ return {id:null,slug:'',pics:null,picSrc:'',title:'',lat:'',lng:'',chip:'',w:'',h:'',medium:MEDIA[0],pchip:'',price:'',live:false,sold:false,loc:'',notes:'',region:'',place:'',frame:'',frame0:'',sells:true,sells0:true,depth:'',depth0:'',row:null}; }
+function blank(){ return {id:null,slug:'',pics:null,picSrc:'',title:'',lat:'',lng:'',chip:'',w:'',h:'',medium:MEDIA[0],pchip:'',price:'',live:false,sold:false,loc:'',notes:'',region:'',place:'',frame:'',frame0:'',sells:true,sells0:true,depth:'',depth0:'',want:false,want0:false,row:null}; }
 function openCard(r){
   cur=blank();
   if(r){ const f=r.f; cur.id=r.id; cur.row=r; cur.slug=f[F.slug]||''; cur.picSrc=cardSrc(r); cur.title=f[F.title]||'';
@@ -53,7 +53,7 @@ function openCard(r){
     const s=parseSize(f[F.size]); cur.chip=s.chip; cur.w=s.w; cur.h=s.h; cur.medium=s.medium;
     const p=f[F.price]; if(p!=null&&p!==''){ cur.price=String(Math.round(p)); cur.pchip=PRICES.indexOf(cur.price)>=0?cur.price:'Custom'; }
     cur.live=!!f[F.publish]; cur.sold=!!f[F.sold]; cur.loc=f[F.loc]||''; cur.notes=f[F.notes]||''; cur.region=regionOf(r); cur.place=placeOf(r);
-    cur.frame=cur.frame0=frameOf(r); cur.sells=cur.sells0=cur.frame?!!f[F.sellsWith]:true; cur.depth=cur.depth0=(f[F.depth]==null?'':String(f[F.depth])); }
+    cur.frame=cur.frame0=frameOf(r); cur.sells=cur.sells0=cur.frame?!!f[F.sellsWith]:true; cur.depth=cur.depth0=(f[F.depth]==null?'':String(f[F.depth])); cur.want=cur.want0=!!f[F.want]; }
   else { if(PRESET.region) cur.region=PRESET.region; if(PRESET.place) cur.place=PRESET.place; const wt=PLACESL.find(p=>selName(p.f[P.kind])==='Tony'); if(!cur.place&&wt) cur.place=wt.id; }
   $('cardTitle').textContent=r?(cur.title||'Card'):'New card'; $('cardSub').textContent=r?(cur.slug||''):'';
   $('steps').style.display='none'; $('steps').innerHTML='';
@@ -85,6 +85,10 @@ function drawForm(){
   $('liveTog').classList.toggle('on',cur.live); $('liveK').textContent=cur.live?'Live on the website':'Not public';
   $('liveS').textContent=cur.live?'On the public website — it follows within two minutes of saving':'Only you can see this card';
   $('soldTog').classList.toggle('on',cur.sold); $('fNotes').value=cur.notes;
+  // "Tony to find the spot": for whoever cards a painting without knowing where the easel stood. A pin clears it.
+  const pinned=cur.lat!==''&&cur.lng!==''; if(pinned&&cur.want) cur.want=false;
+  $('wantSw').style.display=pinned?'none':'flex'; $('wantTog').classList.toggle('on',cur.want);
+  $('wantS').textContent=cur.want?'On Tony\u2019s list \u2014 he adds where the easel stood later. Saving a pin takes it off the list.':'Don\u2019t know where it was painted? Tap this and carry on \u2014 Tony fills the pin in later.';
   // frame: none, the one it wears, the free frames that fit this size, Other… (typed ID)
   const fits=framesThatFit(); const fl=['']; if(cur.frame) fl.push(cur.frame); fits.forEach(x=>{ if(fl.indexOf(x.id)<0) fl.push(x.id); }); fl.push('Other');
   chips($('frameChips'),fl,cur.frame,v=>{ if(v==='Other'){ $('fFrame').style.display='block'; $('fFrame').focus(); return; } cur.frame=v; if(v&&v!==cur.frame0) cur.sells=true; $('fFrame').style.display='none'; drawForm(); },v=>v===''?'No frame':v==='Other'?'Other…':frameLabel(v));
@@ -139,8 +143,9 @@ function gather(){
   // the relay: Tony moves cards to Sold; never backwards from here
   if(cur.sold&&cur.id){ const st=selName(cur.row.f[F.stage]); if(['Sold','Delivered','Registered'].indexOf(st)<0) f[F.stage]='Sold'; }
   if(cur.lat!==''&&cur.lng!==''&&!isNaN(+cur.lat)&&!isNaN(+cur.lng)){ f[F.lat]=+cur.lat; f[F.lng]=+cur.lng; }
-  if(!cur.region) cur.region=(cur.lat!==''&&cur.lng!=='')?regionFor(cur.lat,cur.lng,null).region:'Studio';
-  f[F.region]=cur.region;
+  if(!cur.region) cur.region=(cur.lat!==''&&cur.lng!=='')?regionFor(cur.lat,cur.lng,null).region:(cur.want?'':'Studio');
+  if(cur.region) f[F.region]=cur.region;
+  if(cur.want!==cur.want0) f[F.want]=cur.want;
   if(cur.place){ f[F.nowAt]=[cur.place]; f[F.loc]=placeName(cur.place); } else if(!cur.id) f[F.loc]='With Tony';
   if(cur.notes||cur.id) f[F.notes]=cur.notes;
   // frame, depth, sells-with: only written when Tony changed them, so the lockup app's older entries are left alone
@@ -281,6 +286,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('studioBtn').onclick=()=>{ $('fPin').value=STUDIO[0]+', '+STUDIO[1]; setPin($('fPin').value); saveState(); };
   $('liveTog').onclick=()=>{ cur.live=!cur.live; drawForm(); };
   $('sellsTog').onclick=()=>{ cur.sells=!cur.sells; drawForm(); };
+  $('wantTog').onclick=()=>{ cur.want=!cur.want; drawForm(); };
   $('fFrame').addEventListener('change',()=>{ const t=$('fFrame').value.trim().toUpperCase(); if(!t) return; const x=FRAMESL.find(z=>String(z.f[FR.id]||'').toUpperCase()===t); if(!x){ toast('No frame called '+t+' on the spine'); return; } cur.frame=x.id; cur.sells=true; $('fFrame').value=''; drawForm(); });
   $('soldTog').onclick=()=>{ cur.sold=!cur.sold;
     if(cur.sold){ const wt=PLACESL.find(p=>selName(p.f[P.kind])==='Tony'), col=PLACESL.find(p=>selName(p.f[P.kind])==='Collector');

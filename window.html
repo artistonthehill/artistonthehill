@@ -109,6 +109,7 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
 .lrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%;background:var(--pane);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 12px;margin-bottom:6px;text-align:left}
 .lrow .lt{font-size:15px}.lrow .ls{font-size:12px;color:var(--dim);white-space:nowrap}
 .drow.sold{border-style:dashed;color:var(--dim)}
+.drow.want{border-color:var(--warn)}
 </style>
 </head>
 <body>
@@ -172,6 +173,7 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
       <input type="hidden" id="fLat"><input type="hidden" id="fLng">
       <div class="row2"><button class="btn sec sm" id="pasteBtn">Paste from Maps</button><button class="btn sec sm" id="hereBtn">Here</button><button class="btn sec sm" id="studioBtn">Studio piece</button></div>
       <div class="note" id="pinNote"></div>
+      <div class="sw" id="wantSw" style="margin-top:10px"><div><div class="k">Tony to find the spot</div><div class="s" id="wantS"></div></div><button class="tog" id="wantTog"></button></div>
       <label class="f">Region</label>
       <div class="chips" id="regionChips"></div>
       <input class="box" id="fRegion" placeholder="Type the region, e.g. Norfolk" style="display:none;margin-top:8px" autocomplete="off">

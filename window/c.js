@@ -16,11 +16,12 @@ function pin(lat,lng,label,count,cls,onTap){
   const html=`<div class="pinwrap ${cls||''}"><div class="pincount">${count}</div><div class="pinlabel">${esc(label)}</div></div>`;
   const m=L.marker([lat,lng],{icon:L.divIcon({className:'pin',html,iconSize:[1,1],iconAnchor:[0,0]})}); m.on('click',onTap); LAYER.addLayer(m); return m;
 }
+function wanted(r){ return !!r.f[F.want]&&!hasPin(r); }
 function hasPin(r){ return r.f[F.lat]!=null&&r.f[F.lng]!=null&&r.f[F.lat]!==''&&r.f[F.lng]!==''; }
 function drawMap(){
   if(!MAP) return; LAYER.clearLayers(); const drawer=$('drawer'); drawer.innerHTML='';
   if(MODE==='painted'){
-    const groups={}; live().forEach(r=>{ const g=regionOf(r)||(hasPin(r)?'':'Studio'); if(!g) return; (groups[g]=groups[g]||[]).push(r); });
+    const groups={}; live().forEach(r=>{ const g=regionOf(r)||(hasPin(r)||wanted(r)?'':'Studio'); if(!g) return; (groups[g]=groups[g]||[]).push(r); });
     const unplaced=live().filter(r=>!regionOf(r)&&hasPin(r));
     Object.keys(groups).forEach(g=>{
       const rows=groups[g]; let lat,lng;
@@ -41,6 +42,8 @@ function drawMap(){
     drawer.innerHTML=rowsHtml.join('');
     drawer.querySelectorAll('.drow').forEach(b=>b.onclick=()=>{ const id=b.dataset.p; openSheet(id==='__none'?{kind:'nowhere'}:{kind:'place',key:id}); });
   }
+  const want=live().filter(wanted).length;
+  if(want){ drawer.insertAdjacentHTML('beforeend',`<button class="drow want" id="wantBox"><span>Pins wanted \u2014 where did the easel stand?</span><span class="n">${want} \u203a</span></button>`); $('wantBox').onclick=()=>openSheet({kind:'wanted'}); }
   const sold=SPINE.filter(gone).length;
   if(sold){ drawer.insertAdjacentHTML('beforeend',`<button class="drow sold" id="soldBox"><span>Sold and gone</span><span class="n">${sold} ›</span></button>`); $('soldBox').onclick=()=>openSheet({kind:'sold'}); }
   $('modePainted').classList.toggle('on',MODE==='painted'); $('modeNow').classList.toggle('on',MODE==='now');
@@ -56,21 +59,22 @@ function fabTap(){
 function sheetRows(s){
   if(s.kind==='sold') return SPINE.filter(gone);
   if(s.kind==='all') return live();
-  if(s.kind==='region') return live().filter(r=>(regionOf(r)||(hasPin(r)?'':'Studio'))===s.key);
+  if(s.kind==='region') return live().filter(r=>(regionOf(r)||(hasPin(r)||wanted(r)?'':'Studio'))===s.key);
+  if(s.kind==='wanted') return live().filter(wanted);
   if(s.kind==='unplaced') return live().filter(r=>!regionOf(r)&&hasPin(r));
   if(s.kind==='place') return live().filter(r=>placeOf(r)===s.key);
   if(s.kind==='nowhere') return live().filter(r=>!placeOf(r));
   return [];
 }
 function sheetTitle(s){
-  if(s.kind==='sold') return 'Sold and gone'; if(s.kind==='all') return 'All paintings'; if(s.kind==='region') return s.key; if(s.kind==='unplaced') return 'Pinned, no region yet';
+  if(s.kind==='sold') return 'Sold and gone'; if(s.kind==='wanted') return 'Pins wanted'; if(s.kind==='all') return 'All paintings'; if(s.kind==='region') return s.key; if(s.kind==='unplaced') return 'Pinned, no region yet';
   if(s.kind==='place') return placeName(s.key)||'Place'; if(s.kind==='nowhere') return 'Where are these now?'; return '';
 }
 function openSheet(s){ SHEET=s; $('sheet').classList.add('open'); refreshSheet(); try{window.scrollTo(0,0);}catch(e){} }
 function refreshSheet(){
   if(!SHEET||!$('sheet').classList.contains('open')) return;
   const rows=sheetRows(SHEET); const t=sheetTitle(SHEET);
-  $('sNew').style.display=SHEET.kind==='sold'?'none':'inline-block'; $('sList').style.display=SHEET.kind==='sold'?'block':'none'; $('sGrid').style.display=SHEET.kind==='sold'?'none':'grid';
+  $('sNew').style.display=(SHEET.kind==='sold'||SHEET.kind==='wanted')?'none':'inline-block'; $('sList').style.display=SHEET.kind==='sold'?'block':'none'; $('sGrid').style.display=SHEET.kind==='sold'?'none':'grid';
   let noPic=0;
   if(SHEET.kind==='sold'){ $('sTray').innerHTML=''; $('sTrayWrap').style.display='none';
     $('sList').innerHTML=rows.map(r=>`<button class="lrow" data-id="${r.id}"><span class="lt">${esc(r.f[F.title]||'(untitled)')}</span><span class="ls">${esc(String(r.f[F.size]||'').split('·')[0].trim())}${placeOf(r)?' · '+esc(placeName(placeOf(r))):''}${selName(r.f[F.stage])?' · '+esc(selName(r.f[F.stage])):''}</span></button>`).join('')||'<div class="note">Nothing sold yet.</div>';
@@ -121,7 +125,7 @@ async function backfill(){
   if(backfilled||!K.at) return; backfilled=true;
   const regUpd=[], unsure=[], placeUpd=[];
   SPINE.forEach(r=>{
-    if(!regionOf(r)){ const g=regionFor(r.f[F.lat],r.f[F.lng],r.f[F.collection]); regUpd.push({id:r.id,fields:{[F.region]:g.region}}); if(!g.sure) unsure.push((r.f[F.title]||r.f[F.slug]||'?')+' → '+g.region); }
+    if(!regionOf(r)&&!wanted(r)){ const g=regionFor(r.f[F.lat],r.f[F.lng],r.f[F.collection]); regUpd.push({id:r.id,fields:{[F.region]:g.region}}); if(!g.sure) unsure.push((r.f[F.title]||r.f[F.slug]||'?')+' → '+g.region); }
     if(!placeOf(r)&&r.f[F.loc]){ const p=placeForText(r.f[F.loc]); if(p) placeUpd.push({id:r.id,fields:{[F.nowAt]:[p.id]}}); }
   });
   if(!regUpd.length&&!placeUpd.length) return;
