@@ -56,14 +56,19 @@ function fabTap(){
 }
 
 // ---------- the sheet behind a pin ----------
+// every sheet runs A→Z by title (untitled cards last) so a remembered title is quick to find
+function byTitle(rows){
+  const key=r=>String(r.f[F.title]||'').trim();
+  return rows.slice().sort((x,y)=>{ const a=key(x), b=key(y); if(!a&&b) return 1; if(a&&!b) return -1; return a.localeCompare(b,'en',{sensitivity:'base',numeric:true}); });
+}
 function sheetRows(s){
-  if(s.kind==='sold') return SPINE.filter(gone);
-  if(s.kind==='all') return live();
-  if(s.kind==='region') return live().filter(r=>(regionOf(r)||(hasPin(r)||wanted(r)?'':'Studio'))===s.key);
-  if(s.kind==='wanted') return live().filter(wanted);
-  if(s.kind==='unplaced') return live().filter(r=>!regionOf(r)&&hasPin(r));
-  if(s.kind==='place') return live().filter(r=>placeOf(r)===s.key);
-  if(s.kind==='nowhere') return live().filter(r=>!placeOf(r));
+  if(s.kind==='sold') return byTitle(SPINE.filter(gone));
+  if(s.kind==='all') return byTitle(live());
+  if(s.kind==='region') return byTitle(live().filter(r=>(regionOf(r)||(hasPin(r)||wanted(r)?'':'Studio'))===s.key));
+  if(s.kind==='wanted') return byTitle(live().filter(wanted));
+  if(s.kind==='unplaced') return byTitle(live().filter(r=>!regionOf(r)&&hasPin(r)));
+  if(s.kind==='place') return byTitle(live().filter(r=>placeOf(r)===s.key));
+  if(s.kind==='nowhere') return byTitle(live().filter(r=>!placeOf(r)));
   return [];
 }
 function sheetTitle(s){
