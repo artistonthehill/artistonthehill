@@ -59,6 +59,14 @@ load();
 try{ const q=new URLSearchParams({event:"viewed",page:"saltmarsh",who:"site",code:"site",ua:navigator.userAgent||"",
   tz:Intl.DateTimeFormat().resolvedOptions().timeZone||"",lang:navigator.language||"",ref:document.referrer||"direct",visits:"1"});
   new Image().src=TRACKER+"?"+q.toString(); }catch(e){}
+// Scan alert (Tony, 13 Nov 2026): one tripwire email per device per day. The tracker emails on every
+// "tapped" event, so a scan is sent as one. To switch the emails off, delete this block.
+(function(){ const day=new Date().toISOString().slice(0,10); let seen=null;
+  try{ seen=localStorage.getItem("saltmarsh-scan"); localStorage.setItem("saltmarsh-scan",day); }catch(e){}
+  if(seen===day) return;
+  try{ const q=new URLSearchParams({event:"tapped",page:"saltmarsh",who:"SALTMARSH-QR-SCAN",code:"SALTMARSH-QR-SCAN",ua:navigator.userAgent||"",
+    tz:Intl.DateTimeFormat().resolvedOptions().timeZone||"",lang:navigator.language||"",ref:document.referrer||"direct",visits:"1"});
+    new Image().src=TRACKER+"?"+q.toString(); }catch(e){} })();
 </script>
 </body>
 </html>
