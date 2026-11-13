@@ -167,16 +167,6 @@
   "collection": "worldwide"
  },
  {
-  "id": "ripley-queen",
-  "title": "Ripley and the Queen",
-  "img": "images/ripley-queen.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 51.300583,
-  "lng": -0.492209,
-  "collection": "uk"
- },
- {
   "id": "horsley",
   "title": "Horsley",
   "img": "images/horsley.jpg",
