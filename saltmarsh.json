@@ -1,0 +1,185 @@
+{
+ "updated": "2026-11-13",
+ "paintings": [
+  {
+   "t": "Alabaster Bay",
+   "s": "60×42cm · Oil on board",
+   "room": "bahamas-alabaster-bay",
+   "img": "images/saltmarsh/bahamas-alabaster-bay.jpg",
+   "sec": "The Bahamas",
+   "w": 800,
+   "h": 566
+  },
+  {
+   "t": "Russell Island",
+   "s": "60×42cm · Oil on board",
+   "room": "bahamas-russell-island",
+   "img": "images/saltmarsh/bahamas-russell-island.jpg",
+   "sec": "The Bahamas",
+   "w": 800,
+   "h": 558
+  },
+  {
+   "t": "Wreckers View",
+   "s": "60×42cm · Oil on board",
+   "room": "bahamas-wreckers-view",
+   "img": "images/saltmarsh/bahamas-wreckers-view.jpg",
+   "sec": "The Bahamas",
+   "w": 800,
+   "h": 562
+  },
+  {
+   "t": "Harbour Island",
+   "s": "A2 · Oil on board",
+   "room": "bahamas-harbour-island",
+   "img": "images/saltmarsh/bahamas-harbour-island.jpg",
+   "sec": "The Bahamas",
+   "w": 800,
+   "h": 564
+  },
+  {
+   "t": "Governors Harbour",
+   "s": "42×30cm · Oil on board",
+   "room": "bahamas-governors-harbour",
+   "img": "images/saltmarsh/bahamas-governors-harbour.jpg",
+   "sec": "The Bahamas",
+   "w": 800,
+   "h": 562
+  },
+  {
+   "t": "Sea Swings",
+   "s": "42×30cm · Oil on board",
+   "room": "bahamas-sea-swings",
+   "img": "images/saltmarsh/bahamas-sea-swings.jpg",
+   "sec": "The Bahamas",
+   "w": 800,
+   "h": 566
+  },
+  {
+   "t": "Love Beach",
+   "s": "42×30cm · Oil on board",
+   "room": "bahamas-love-beach",
+   "img": "images/saltmarsh/bahamas-love-beach.jpg",
+   "sec": "The Bahamas",
+   "w": 800,
+   "h": 562
+  },
+  {
+   "t": "Spilia Sparkle",
+   "s": "60×42cm · Oil on board",
+   "room": "spilia-sparkle",
+   "img": "images/saltmarsh/spilia-sparkle.jpg",
+   "sec": "Greece",
+   "w": 800,
+   "h": 566
+  },
+  {
+   "t": "Kioni",
+   "s": "42×30cm · Oil on board",
+   "room": "kioni",
+   "img": "images/saltmarsh/kioni.jpg",
+   "sec": "Greece",
+   "w": 800,
+   "h": 574
+  },
+  {
+   "t": "Fiskardo",
+   "s": "42×30cm · Oil on board",
+   "room": "fiskardo-j63",
+   "img": "images/saltmarsh/fiskardo-j63.jpg",
+   "sec": "Greece",
+   "w": 800,
+   "h": 565
+  },
+  {
+   "t": "Sivota Sunrise",
+   "s": "42×30cm · Oil on canvas",
+   "room": "sivota-sunrise",
+   "img": "images/saltmarsh/sivota-sunrise.jpg",
+   "sec": "Greece",
+   "w": 800,
+   "h": 562
+  },
+  {
+   "t": "Sivota Olive Press (Liotrivi)",
+   "s": "42×30cm · Oil on canvas",
+   "room": "sivota-olive-press",
+   "img": "images/saltmarsh/sivota-olive-press.jpg",
+   "sec": "Greece",
+   "w": 800,
+   "h": 565
+  },
+  {
+   "t": "Ponte de l'Ogio",
+   "s": "42×30cm · Oil on canvas-covered board",
+   "room": "pointe-de-l-ogio",
+   "img": "images/saltmarsh/pointe-de-l-ogio.jpg",
+   "sec": "Venice",
+   "w": 800,
+   "h": 1107
+  },
+  {
+   "t": "The Greek Quarter",
+   "s": "42×30cm · Oil on canvas",
+   "room": "the-greek-quarter",
+   "img": "images/saltmarsh/the-greek-quarter.jpg",
+   "sec": "Venice",
+   "w": 800,
+   "h": 1141
+  },
+  {
+   "t": "Panoramic Peace",
+   "s": "80×30cm · Oil on board",
+   "room": "panoramic-peace",
+   "img": "images/saltmarsh/panoramic-peace.jpg",
+   "sec": "England",
+   "w": 800,
+   "h": 300
+  },
+  {
+   "t": "Peace West",
+   "s": "80×30cm · Oil on board",
+   "room": "peace-west",
+   "img": "images/saltmarsh/peace-west.jpg",
+   "sec": "England",
+   "w": 800,
+   "h": 287
+  },
+  {
+   "t": "Bosham Causeway",
+   "s": "80×30cm · Oil on board",
+   "room": "bosham",
+   "img": "images/saltmarsh/bosham.jpg",
+   "sec": "England",
+   "w": 800,
+   "h": 305
+  },
+  {
+   "t": "Bodiam Castle",
+   "s": "80×30cm · Oil on board",
+   "room": "bodium-castle",
+   "img": "images/saltmarsh/bodium-castle.jpg",
+   "sec": "England",
+   "w": 800,
+   "h": 301
+  },
+  {
+   "t": "The Palace Gardens",
+   "s": "80×30cm · Oil on board",
+   "room": "the-palace-gardens-19d",
+   "img": "images/saltmarsh/the-palace-gardens-19d.jpg",
+   "sec": "England",
+   "w": 800,
+   "h": 297
+  },
+  {
+   "t": "Wellington Horse Trials I",
+   "s": "80×30cm · Oil on board",
+   "room": "wellington-horse-trials-2026",
+   "img": "images/saltmarsh/wellington-horse-trials-2026.jpg",
+   "sec": "England",
+   "w": 800,
+   "h": 298
+  }
+ ]
+}

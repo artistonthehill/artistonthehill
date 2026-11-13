@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Artist Tony Parsons @ Saltmarsh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#B8963E;--cream:#f5f2ed;--dark:#1a1a1a;--muted:#6b6357;--line:#e2dac9}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--cream);color:var(--dark);font-family:'Montserrat',sans-serif;line-height:1.6;padding:28px 18px 48px}
+  .wrap{max-width:560px;margin:0 auto}
+  .eyebrow{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600;text-align:center}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:2.3rem;line-height:1.15;text-align:center;margin:8px 0 10px}
+  .intro{text-align:center;color:var(--muted);font-size:.95rem;border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:6px}
+  h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.5rem;text-align:center;margin:30px 0 14px;color:var(--dark)}
+  h2:after{content:"";display:block;width:36px;height:1px;background:var(--gold);margin:8px auto 0}
+  a.item{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:16px}
+  a.item img{display:block;width:100%;height:auto;background:#ece7dd}
+  a.item .cap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px 14px}
+  a.item .t{font-family:'Cormorant Garamond',serif;font-size:1.35rem;line-height:1.2}
+  a.item .s{font-size:.8rem;color:var(--muted);margin-top:2px}
+  a.item .go{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600;white-space:nowrap}
+  #empty{display:none;text-align:center;color:var(--muted);margin-top:30px}
+  .foot{text-align:center;color:var(--muted);font-size:.8rem;margin-top:30px;padding-top:20px;border-top:1px solid var(--line)}
+  .foot a{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">On the walls</div>
+  <h1>Artist Tony Parsons @ Saltmarsh</h1>
+  <p class="intro">The paintings hanging at Saltmarsh Farmhouse at the moment.<br>Tap any picture for its private view.</p>
+  <div id="list"></div>
+  <p id="empty">The list is being rehung — please look again in a little while.</p>
+  <p class="foot">Original oil paintings by Tony Parsons · <a href="index.html">artistonthehill.co.uk</a></p>
+</div>
+<script>
+const TRACKER="https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+async function load(){
+  const raw="https://raw.githubusercontent.com/artistonthehill/artistonthehill/main/saltmarsh.json?t="+Date.now();
+  let d=null;
+  for(const u of ["saltmarsh.json?t="+Date.now(),raw]){ try{ const r=await fetch(u,{cache:"no-store"}); if(r.ok){ d=await r.json(); break; } }catch(e){} }
+  const ps=(d&&d.paintings||[]).filter(p=>!p.sold);
+  if(!ps.length){ document.getElementById("empty").style.display="block"; return; }
+  const order=[]; const by={};
+  ps.forEach(p=>{ const k=p.sec||""; if(!by[k]){ by[k]=[]; order.push(k); } by[k].push(p); });
+  let h="";
+  order.forEach(k=>{ if(k) h+="<h2>"+esc(k)+"</h2>";
+    by[k].forEach(p=>{ h+='<a class="item" href="view.html?p='+encodeURIComponent(p.room)+'&w=site">'
+      +'<img loading="lazy" src="'+esc(p.img)+'" alt="'+esc(p.t)+'"'+(p.w&&p.h?' width="'+p.w+'" height="'+p.h+'"':'')+'>'
+      +'<div class="cap"><div><div class="t">'+esc(p.t)+'</div><div class="s">'+esc(p.s)+'</div></div><div class="go">View ›</div></div></a>'; }); });
+  document.getElementById("list").innerHTML=h;
+}
+load();
+try{ const q=new URLSearchParams({event:"viewed",page:"saltmarsh",who:"site",code:"site",ua:navigator.userAgent||"",
+  tz:Intl.DateTimeFormat().resolvedOptions().timeZone||"",lang:navigator.language||"",ref:document.referrer||"direct",visits:"1"});
+  new Image().src=TRACKER+"?"+q.toString(); }catch(e){}
+</script>
+</body>
+</html>
