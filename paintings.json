@@ -167,16 +167,6 @@
   "collection": "worldwide"
  },
  {
-  "id": "horsley",
-  "title": "Horsley",
-  "img": "images/horsley.jpg",
-  "price": "£2,760",
-  "size": "80×30cm · Oil on board",
-  "lat": 51.262669,
-  "lng": -0.431707,
-  "collection": "uk"
- },
- {
   "id": "thurlestone-beach",
   "title": "Thurlestone Beach",
   "img": "images/thurlestone-beach.jpg",
