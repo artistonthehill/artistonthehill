@@ -17,6 +17,7 @@ function pin(lat,lng,label,count,cls,onTap){
   const m=L.marker([lat,lng],{icon:L.divIcon({className:'pin',html,iconSize:[1,1],iconAnchor:[0,0]})}); m.on('click',onTap); LAYER.addLayer(m); return m;
 }
 function wanted(r){ return !!r.f[F.want]&&!hasPin(r); }
+function hasJob(r){ return !!String(r.f[F.job]||'').trim(); }
 function hasPin(r){ return r.f[F.lat]!=null&&r.f[F.lng]!=null&&r.f[F.lat]!==''&&r.f[F.lng]!==''; }
 function drawMap(){
   if(!MAP) return; LAYER.clearLayers(); const drawer=$('drawer'); drawer.innerHTML='';
@@ -31,6 +32,15 @@ function drawMap(){
     });
     if(unplaced.length) drawer.innerHTML=`<button class="drow" id="unplacedBtn"><span>${unplaced.length} pinned but not yet on a region</span><span class="n">›</span></button>`,
       $('unplacedBtn').onclick=()=>openSheet({kind:'unplaced'});
+  } else if(MODE==='log'){
+    const withJob=SPINE.filter(hasJob); const pinned=withJob.filter(hasPin); const unpinned=withJob.filter(r=>!hasPin(r));
+    pinned.forEach(r=>pin(+r.f[F.lat],+r.f[F.lng],r.f[F.title]||'(untitled)','',' log',()=>openLog(r)));
+    const rows=[];
+    if(!withJob.length) rows.push('<div class="note">No job sheets yet. Lockup Sales writes one onto a card and it appears here, pinned where the easel stood.</div>');
+    unpinned.forEach(r=>rows.push(`<button class="drow" data-log="${r.id}"><span>${esc(r.f[F.title]||'(untitled)')}</span><span class="n"><em>no pin</em> ›</span></button>`));
+    drawer.innerHTML=rows.join('');
+    drawer.querySelectorAll('[data-log]').forEach(b=>b.onclick=()=>{ const r=SPINE.find(x=>x.id===b.dataset.log); if(r) openLog(r); });
+    $('status').textContent=withJob.length+(withJob.length===1?' painting with a log':' paintings with a log');
   } else {
     const byPlace={}; live().forEach(r=>{ const p=placeOf(r); if(p) (byPlace[p]=byPlace[p]||[]).push(r); });
     const rowsHtml=[];
@@ -42,11 +52,12 @@ function drawMap(){
     drawer.innerHTML=rowsHtml.join('');
     drawer.querySelectorAll('.drow').forEach(b=>b.onclick=()=>{ const id=b.dataset.p; openSheet(id==='__none'?{kind:'nowhere'}:{kind:'place',key:id}); });
   }
+  if(MODE==='log'){ $('modePainted').classList.remove('on'); $('modeNow').classList.remove('on'); $('modeLog').classList.add('on'); return; }
   const want=live().filter(wanted).length;
   if(want){ drawer.insertAdjacentHTML('beforeend',`<button class="drow want" id="wantBox"><span>Pins wanted \u2014 where did the easel stand?</span><span class="n">${want} \u203a</span></button>`); $('wantBox').onclick=()=>openSheet({kind:'wanted'}); }
   const sold=SPINE.filter(gone).length;
   if(sold){ drawer.insertAdjacentHTML('beforeend',`<button class="drow sold" id="soldBox"><span>Sold and gone</span><span class="n">${sold} ›</span></button>`); $('soldBox').onclick=()=>openSheet({kind:'sold'}); }
-  $('modePainted').classList.toggle('on',MODE==='painted'); $('modeNow').classList.toggle('on',MODE==='now');
+  $('modePainted').classList.toggle('on',MODE==='painted'); $('modeNow').classList.toggle('on',MODE==='now'); $('modeLog').classList.remove('on');
   $('newBtn').textContent=MODE==='now'?'+':'+'; $('newBtn').title=MODE==='now'?'New card or new place':'New card';
 }
 function setMode(m){ MODE=m; drawMap(); }
@@ -150,7 +161,8 @@ function showUnsure(){ let u=[]; try{ u=JSON.parse(localStorage.getItem('win-uns
   el.innerHTML=u.length?('<div class="sect">Regions guessed from near a border — check these</div>'+u.map(x=>'<div class="note">'+esc(x)+'</div>').join('')+'<div class="note">Open the card and tap the right region; the list clears when they are all changed.</div>'):''; }
 
 window.addEventListener('DOMContentLoaded',()=>{
-  $('modePainted').onclick=()=>setMode('painted'); $('modeNow').onclick=()=>setMode('now');
+  $('modePainted').onclick=()=>setMode('painted'); $('modeNow').onclick=()=>setMode('now'); $('modeLog').onclick=()=>setMode('log');
+  $('lBack').onclick=()=>$('log').classList.remove('open'); $('lightbox').onclick=()=>$('lightbox').classList.remove('open');
   $('sBack').onclick=()=>{ $('sheet').classList.remove('open'); SHEET=null; };
   $('sNew').onclick=sheetNew; $('sPinHere').onclick=pinPlaceHere; $('sPinPaste').onclick=pinPlacePaste;
   $('fabCard').onclick=()=>{ $('fabMenu').classList.remove('open'); PRESET={}; openCard(null); };
@@ -160,3 +172,62 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('ukBtn').onclick=()=>MAP.fitBounds(UK_BOUNDS);
   showUnsure();
 });
+
+
+// ---------- the painting log: renders the card's Job sheet (five headings) — read-only, never written from here ----------
+function mdInline(t){ return esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/(^|[^*])\*([^*]+)\*/g,'$1<i>$2</i>').replace(/`([^`]+)`/g,'<code>$1</code>'); }
+function mdBlocks(lines){
+  // bullets, numbered lists, pipe tables and paragraphs — enough for the sheet, no more
+  const out=[]; let i=0;
+  while(i<lines.length){ const l=lines[i];
+    if(!l.trim()){ i++; continue; }
+    if(/^\s*[-*]\s+/.test(l)){ const it=[]; while(i<lines.length&&/^\s*[-*]\s+/.test(lines[i])){ it.push(lines[i].replace(/^\s*[-*]\s+/,'')); i++; } out.push({t:'ul',items:it}); continue; }
+    if(/^\s*\d+[.)]\s+/.test(l)){ const it=[]; while(i<lines.length&&/^\s*\d+[.)]\s+/.test(lines[i])){ it.push(lines[i].replace(/^\s*\d+[.)]\s+/,'')); i++; } out.push({t:'ol',items:it}); continue; }
+    if(/^\s*\|/.test(l)){ const rows=[]; while(i<lines.length&&/^\s*\|/.test(lines[i])){ const cells=lines[i].trim().replace(/^\||\|$/g,'').split('|').map(c=>c.trim()); if(!cells.every(c=>/^:?-{2,}:?$/.test(c))) rows.push(cells); i++; } out.push({t:'table',rows}); continue; }
+    const p=[]; while(i<lines.length&&lines[i].trim()&&!/^\s*([-*]|\d+[.)])\s+/.test(lines[i])&&!/^\s*\|/.test(lines[i])){ p.push(lines[i].trim()); i++; } out.push({t:'p',text:p.join(' ')});
+  }
+  return out;
+}
+function blocksHtml(blocks,opt){ opt=opt||{};
+  return blocks.map(b=>{
+    if(b.t==='p') return '<p>'+mdInline(b.text)+'</p>';
+    if(b.t==='table') return '<table>'+b.rows.map((r,ri)=>'<tr>'+r.map(c=>(ri===0?'<th>':'<td>')+mdInline(c)+(ri===0?'</th>':'</td>')).join('')+'</tr>').join('')+'</table>';
+    const items=b.items.map(x=>'<li'+(opt.markNext&&/\bNEXT\b/.test(x)?' class="lnext"':'')+'>'+mdInline(x)+'</li>').join('');
+    return (b.t==='ol'?'<ol>':'<ul>')+items+(b.t==='ol'?'</ol>':'</ul>');
+  }).join('');
+}
+function timelineHtml(blocks){
+  // every bullet is one event, "date — what happened"; newest first, as Tony asked
+  const items=[]; blocks.forEach(b=>{ if(b.t==='ul'||b.t==='ol') items.push(...b.items); else if(b.t==='p') items.push(b.text); });
+  if(!items.length) return '<p class="note">Nothing logged yet.</p>';
+  return '<div class="ltl">'+items.slice().reverse().map(x=>{ const m=x.match(/^(.{3,40}?)\s+[—–-]\s+([\s\S]+)$/); return m?'<div class="it"><span class="d">'+mdInline(m[1])+'</span><span>'+mdInline(m[2])+'</span></div>':'<div class="it"><span class="d"></span><span>'+mdInline(x)+'</span></div>'; }).join('')+'</div>';
+}
+function parseJob(text){
+  const secs=[]; let cur={key:'pre',title:'',lines:[]};
+  String(text||'').replace(/\r/g,'').split('\n').forEach(l=>{ const h=l.match(/^#{2,3}\s+(.+)$/); if(h){ secs.push(cur); const t=h[1].replace(/\s*\(.*\)\s*$/,'').trim(); const k=/best bet/i.test(t)?'best':/timeline/i.test(t)?'timeline':/contact/i.test(t)?'contacts':/jobs|outstanding/i.test(t)?'jobs':/idea/i.test(t)?'ideas':'other'; cur={key:k,title:t,lines:[]}; } else if(!/^#\s/.test(l)) cur.lines.push(l); });
+  secs.push(cur); return secs;
+}
+function openLog(r){
+  const f=r.f; const secs=parseJob(f[F.job]); const pre=secs.find(s=>s.key==='pre');
+  const size=String(f[F.size]||''); const price=f[F.priceDisp]||(f[F.price]?money(String(Math.round(f[F.price]))):''); const now=placeOf(r)?placeName(placeOf(r)):(f[F.loc]||'');
+  const src=cardSrc(r); const img=src?(/^(data:|https?:)/.test(src)?src:SITE+src):'';
+  let h='';
+  if(img) h+='<div class="lpic"><img src="'+esc(img)+'" alt=""></div>';
+  h+='<div class="lmeta">'+[esc(regionOf(r)||''),esc(size),esc(price),now?('now at '+esc(now)):'',hasPin(r)?('easel at '+(+f[F.lat]).toFixed(5)+', '+(+f[F.lng]).toFixed(5)):'no easel pin'].filter(Boolean).join(' · ')+'</div>';
+  if(pre&&pre.lines.some(l=>l.trim())) h+='<div class="lmeta">'+blocksHtml(mdBlocks(pre.lines))+'</div>';
+  const by=k=>secs.filter(s=>s.key===k);
+  const panel=(cls,title,inner)=>'<section class="lpanel '+cls+'"><h2>'+esc(title)+'</h2>'+inner+'</section>';
+  const best=by('best')[0]; h+=panel('best','Best bet',best?blocksHtml(mdBlocks(best.lines)):'<p class="note">Not written yet.</p>');
+  const tl=by('timeline')[0]; let shots=''; const att=Array.isArray(f[F.shots])?f[F.shots]:[];
+  if(att.length) shots='<div class="shots">'+att.map(a=>{ const th=(a.thumbnails&&(a.thumbnails.large||a.thumbnails.small)||{}).url||a.url; return '<img src="'+esc(th)+'" data-full="'+esc(a.url)+'" alt="">'; }).join('')+'</div>';
+  h+=panel('tl','Timeline',(tl?timelineHtml(mdBlocks(tl.lines)):'<p class="note">Nothing logged yet.</p>')+shots);
+  const c=by('contacts')[0]; h+=panel('contacts','Contacts made',c?blocksHtml(mdBlocks(c.lines)):'<p class="note">None yet.</p>');
+  const j=by('jobs')[0]; h+=panel('jobs','Jobs outstanding',j?blocksHtml(mdBlocks(j.lines),{markNext:true}):'<p class="note">None.</p>');
+  const id=by('ideas')[0]; h+=panel('ideas','Ideas to pursue',id?blocksHtml(mdBlocks(id.lines)):'<p class="note">None yet.</p>');
+  by('other').forEach(s=>{ h+=panel('other',s.title,blocksHtml(mdBlocks(s.lines))); });
+  h+='<div class="note" style="margin:16px 0">This page is the record. The chasing happens in the Lockup Sales chat, which writes it. Tap the picture to open the card.</div>';
+  $('lTitle').textContent=f[F.title]||'Log'; $('lSub').textContent=f[F.slug]||''; $('lMain').innerHTML=h;
+  $('lMain').querySelectorAll('.shots img').forEach(im=>im.onclick=()=>{ $('lbImg').src=im.dataset.full; $('lightbox').classList.add('open'); });
+  const pic=$('lMain').querySelector('.lpic img'); if(pic) pic.onclick=()=>openCard(r);
+  $('log').classList.add('open'); try{window.scrollTo(0,0);}catch(e){}
+}

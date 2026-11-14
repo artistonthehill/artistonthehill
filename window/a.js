@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.12 · 13 Nov';
+const VER='v0.13 · 14 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -11,13 +11,13 @@ const F={title:'fldUwsWcBNFRiOm80',slug:'fldaFiuL9FO21uLI0',stage:'fldZ6DTFVAJtk
   price:'fldaFsyOE94n3osr7',size:'fldWPm0R5SD7mztnp',collection:'fldIN7uBzbDvDHhVJ',lat:'fldaDJkmLc2ygxYyJ',lng:'fldM6DKhwMMNKb6lK',
   sold:'fldK2MfHmSOcuL5Cd',publish:'flduUIlOtmw04hwwL',img:'fldsi0m3fLzHXERwF',thumb:'fldKefu5fKkJUQc5h',loc:'fldJ8tcc8rBUUWTbC',
   notes:'fldqu3X4LgdpnAGqn',painted:'fld21YJXOgYdckJSU',region:'fldB1sSpW8PIsmQIc',nowAt:'fldU8VFnEpEgO9FGp',interest:'fldJcgYnNnHeUV03x',invoices:'fldsAVkN3q7Pw4Xp9',plans:'fldD7nFXu5026M38Q',dispatch:'fldxHrc3YAOFdLHfB',
-  framed:'fldmzEwUPg57ajdeQ',frame:'fldTViGN0uZdMMEFA',depth:'fldX8WfNcajmDFFGf',sellsWith:'fldXnP3NAPNPysrzM',want:'fldwrVJDGCzOqs6pO'};
+  framed:'fldmzEwUPg57ajdeQ',frame:'fldTViGN0uZdMMEFA',depth:'fldX8WfNcajmDFFGf',sellsWith:'fldXnP3NAPNPysrzM',want:'fldwrVJDGCzOqs6pO',job:'fld6KlIoP36vXo3yN',shots:'fldW46kJWUKqE3HQT'};
 const PLACES='tblUniTDKcIQYGKM3';
 const FRAMES='tblAw6tA16Hir2thk';
 const FR={id:'fldEceMSE3JBsuZqc',rw:'fldXSaPvYQoggZSuK',rh:'fldJE3uiUWxnynyFI',status:'fld2vtBqEuoXDV0ZJ',on:'fldKxZCMHq1IGwI0N',style:'fld2p7poyb92KgPvT'};
 const P={name:'fldPhtZfCQkchGdRZ',lat:'fldZlimdU6n5UkGhX',lng:'fldZ8ZWgFk2HzOCjX',kind:'flduZ4tJ7xAeTToNJ',active:'fld9SVfkwgTUobXmd',notes:'fldJxOiPXzFXikM0G',matches:'fldBbdt04qrAIC86p'};
 const KINDS=['Storage','Gallery','Venue','Collector','Home','Tony'];
-const READ_FIELDS=[F.title,F.slug,F.stage,F.priceDisp,F.price,F.size,F.collection,F.lat,F.lng,F.sold,F.publish,F.img,F.thumb,F.loc,F.notes,F.painted,F.region,F.nowAt,F.interest,F.invoices,F.plans,F.dispatch,F.framed,F.frame,F.depth,F.sellsWith,F.want];
+const READ_FIELDS=[F.title,F.slug,F.stage,F.priceDisp,F.price,F.size,F.collection,F.lat,F.lng,F.sold,F.publish,F.img,F.thumb,F.loc,F.notes,F.painted,F.region,F.nowAt,F.interest,F.invoices,F.plans,F.dispatch,F.framed,F.frame,F.depth,F.sellsWith,F.want,F.job,F.shots];
 const SIZES=['A4','A3','80×30','60×42','80×60','42×30','A2','Custom'];
 const A={A4:'A4 (21×30cm)',A3:'A3 (30×42cm)',A2:'A2 (42×60cm)'};
 const PRICES=['850','1320','2760','3600','5040','6480','Custom'];
