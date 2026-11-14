@@ -222,12 +222,19 @@ function openLog(r){
   if(att.length) shots='<div class="shots">'+att.map(a=>{ const th=(a.thumbnails&&(a.thumbnails.large||a.thumbnails.small)||{}).url||a.url; return '<img src="'+esc(th)+'" data-full="'+esc(a.url)+'" alt="">'; }).join('')+'</div>';
   h+=panel('tl','Timeline',(tl?timelineHtml(mdBlocks(tl.lines)):'<p class="note">Nothing logged yet.</p>')+shots);
   const c=by('contacts')[0]; h+=panel('contacts','Contacts made',c?blocksHtml(mdBlocks(c.lines)):'<p class="note">None yet.</p>');
-  const j=by('jobs')[0]; h+=panel('jobs','Jobs outstanding',j?blocksHtml(mdBlocks(j.lines),{markNext:true}):'<p class="note">None.</p>');
+  const j=by('jobs')[0]; h+=panel('jobs','Jobs outstanding',(j?blocksHtml(mdBlocks(j.lines),{markNext:true}):'<p class="note">None.</p>')+'<div style="margin-top:12px"><button class="btn sec sm" id="lUpdate">Update this list with Lockup Sales</button></div><div class="note" id="lUpdateNote"></div>');
   const id=by('ideas')[0]; h+=panel('ideas','Ideas to pursue',id?blocksHtml(mdBlocks(id.lines)):'<p class="note">None yet.</p>');
   by('other').forEach(s=>{ h+=panel('other',s.title,blocksHtml(mdBlocks(s.lines))); });
   h+='<div class="note" style="margin:16px 0">This page is the record. The chasing happens in the Lockup Sales chat, which writes it. Tap the picture to open the card.</div>';
   $('lTitle').textContent=f[F.title]||'Log'; $('lSub').textContent=f[F.slug]||''; $('lMain').innerHTML=h;
   $('lMain').querySelectorAll('.shots img').forEach(im=>im.onclick=()=>{ $('lbImg').src=im.dataset.full; $('lightbox').classList.add('open'); });
   const pic=$('lMain').querySelector('.lpic img'); if(pic) pic.onclick=()=>openCard(r);
+  // "Update this list": copies a ready-made message (the list + what to do with it) and opens AOTH HQ. Claude's project page ignores pre-typed text in a link, so it is copy → open → paste → send.
+  const ub=$('lUpdate'); if(ub) ub.onclick=async()=>{
+    const jobsText=j?j.lines.join('\n').trim():'(none listed)';
+    const msg="You're Lockup Sales \u2014 read lockup-sales/brief.md, then the Job sheet field on card "+r.id+" ("+(f[F.title]||'')+").\n\nTake me through its Jobs outstanding one at a time \u2014 one job per message, ask me: done, still open, or changed (and how). Don't move on until I've answered. When we've been through them all, rewrite the Jobs outstanding section in the card's Job sheet field with one job marked NEXT, add a Timeline line for what got done, and write one Ledger line. Then tell me the one next step.\n\nThe list as it stands:\n"+jobsText;
+    let copied=false; try{ await navigator.clipboard.writeText(msg); copied=true; }catch(e){}
+    $('lUpdateNote').textContent=copied?'Copied. Opening AOTH HQ \u2014 tap the message box, paste, send.':'Could not copy on this device \u2014 open AOTH HQ and tell Lockup Sales which painting.';
+    setTimeout(()=>{ window.open(HQ_URL,'_blank'); },copied?600:0); };
   $('log').classList.add('open'); try{window.scrollTo(0,0);}catch(e){}
 }

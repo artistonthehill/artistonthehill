@@ -2,10 +2,11 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.13 · 14 Nov';
+const VER='v0.13.1 · 14 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
+const HQ_URL='https://claude.ai/project/01a0e971-986b-7046-b6a0-b7193e917210';   // the AOTH HQ project — the Window never carries anything private; this is just a door
 // Paintings fields — ids, never names (names can be renamed; ids can't)
 const F={title:'fldUwsWcBNFRiOm80',slug:'fldaFiuL9FO21uLI0',stage:'fldZ6DTFVAJtkzpiz',priceDisp:'fldAMf6fRUa1jSCsH',
   price:'fldaFsyOE94n3osr7',size:'fldWPm0R5SD7mztnp',collection:'fldIN7uBzbDvDHhVJ',lat:'fldaDJkmLc2ygxYyJ',lng:'fldM6DKhwMMNKb6lK',
