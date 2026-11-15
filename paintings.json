@@ -114,17 +114,6 @@
   "category": "landscape"
  },
  {
-  "id": "distance",
-  "title": "Distance",
-  "img": "images/distance.jpg",
-  "price": "£3,480",
-  "size": "60×42cm · Oil on canvas board",
-  "lat": 32.82787,
-  "lng": -16.984589,
-  "collection": "ionian",
-  "category": "marine"
- },
- {
   "id": "henley-royalty",
   "title": "Henley Royalty",
   "img": "images/henley-royalty.jpg",
