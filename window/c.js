@@ -80,23 +80,35 @@ function sheetRows(s){
   if(s.kind==='unplaced') return byTitle(live().filter(r=>!regionOf(r)&&hasPin(r)));
   if(s.kind==='place') return byTitle(live().filter(r=>placeOf(r)===s.key));
   if(s.kind==='nowhere') return byTitle(live().filter(r=>!placeOf(r)));
+  if(s.kind==='search'){ const q=String(s.q||'').trim().toLowerCase(); if(!q) return [];
+    // every card on the spine, sold or not: the point is to learn whether it's there at all
+    return byTitle(SPINE.filter(r=>String(r.f[F.title]||'').toLowerCase().indexOf(q)>=0)); }
   return [];
 }
 function sheetTitle(s){
   if(s.kind==='sold') return 'Sold and gone'; if(s.kind==='wanted') return 'Pins wanted'; if(s.kind==='all') return 'All paintings'; if(s.kind==='region') return s.key; if(s.kind==='unplaced') return 'Pinned, no region yet';
-  if(s.kind==='place') return placeName(s.key)||'Place'; if(s.kind==='nowhere') return 'Where are these now?'; return '';
+  if(s.kind==='place') return placeName(s.key)||'Place'; if(s.kind==='nowhere') return 'Where are these now?'; if(s.kind==='search') return 'Find by title'; return '';
 }
 function openSheet(s){ SHEET=s; $('sheet').classList.add('open'); refreshSheet(); try{window.scrollTo(0,0);}catch(e){} }
 function refreshSheet(){
   if(!SHEET||!$('sheet').classList.contains('open')) return;
   const rows=sheetRows(SHEET); const t=sheetTitle(SHEET);
-  $('sNew').style.display=(SHEET.kind==='sold'||SHEET.kind==='wanted')?'none':'inline-block'; $('sList').style.display=SHEET.kind==='sold'?'block':'none'; $('sGrid').style.display=SHEET.kind==='sold'?'none':'grid';
+  const isList=SHEET.kind==='sold'||SHEET.kind==='search';
+  $('sNew').style.display=(SHEET.kind==='sold'||SHEET.kind==='wanted'||SHEET.kind==='search')?'none':'inline-block'; $('sList').style.display=isList?'block':'none'; $('sGrid').style.display=isList?'none':'grid';
+  $('sFind').style.display=SHEET.kind==='search'?'flex':'none';
   let noPic=0;
-  if(SHEET.kind==='sold'){ $('sTray').innerHTML=''; $('sTrayWrap').style.display='none';
+  if(SHEET.kind==='search'){ $('sTray').innerHTML=''; $('sTrayWrap').style.display='none'; const q=String(SHEET.q||'').trim();
+    // each hit says where it is now, so a card can be spotted without opening it
+    $('sList').innerHTML=rows.map(r=>{ const src=tileSrc(r); const where=placeOf(r)?placeName(placeOf(r)):(gone(r)?'':'nowhere recorded');
+      const bits=[String(r.f[F.size]||'').split('·')[0].trim(), where?(placeOf(r)?where:'<em>'+where+'</em>'):'', gone(r)?'sold':''].filter(Boolean);
+      return `<button class="srow" data-id="${r.id}">${src?`<img loading="lazy" src="${esc(src)}" alt="">`:'<div class="no">no picture</div>'}<div class="w"><div class="lt">${esc(r.f[F.title]||'(untitled)')}</div><div class="ls">${bits.join(' · ')}</div></div></button>`; }).join('')
+      ||(q?'<div class="note" style="padding:0 12px">Nothing on the spine with “'+esc(q)+'” in the title. If it is here in your hands, it has not been carded yet — tap + to card it.</div>':'<div class="note" style="padding:0 12px">Type part of the title. Every card on the spine is searched, sold ones too.</div>');
+    $('sList').querySelectorAll('.srow').forEach(bt=>bt.onclick=()=>{ const r=SPINE.find(x=>x.id===bt.dataset.id); if(r) openCard(r); }); }
+  else if(SHEET.kind==='sold'){ $('sTray').innerHTML=''; $('sTrayWrap').style.display='none';
     $('sList').innerHTML=rows.map(r=>`<button class="lrow" data-id="${r.id}"><span class="lt">${esc(r.f[F.title]||'(untitled)')}</span><span class="ls">${esc(String(r.f[F.size]||'').split('·')[0].trim())}${placeOf(r)?' · '+esc(placeName(placeOf(r))):''}${selName(r.f[F.stage])?' · '+esc(selName(r.f[F.stage])):''}</span></button>`).join('')||'<div class="note">Nothing sold yet.</div>';
     $('sList').querySelectorAll('.lrow').forEach(bt=>bt.onclick=()=>{ const r=SPINE.find(x=>x.id===bt.dataset.id); if(r) openCard(r); }); }
   else ({noPic}=renderGrid(rows,$('sGrid'),$('sTray')));
-  $('sTitle').textContent=t; $('sCount').textContent=rows.length+(rows.length===1?' painting':' paintings')+(noPic?' · '+noPic+' without a picture':'');
+  $('sTitle').textContent=t; $('sCount').textContent=(SHEET.kind==='search'&&!String(SHEET.q||'').trim())?'':rows.length+(rows.length===1?' painting':' paintings')+(noPic?' · '+noPic+' without a picture':'');
   const p=SHEET.kind==='place'?PLACESL.find(x=>x.id===SHEET.key):null;
   $('sPlaceTools').style.display=p?'flex':'none';
   // the 'where are these now?' sheet: say what it is and offer to place the lot in one go
@@ -164,6 +176,11 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('modePainted').onclick=()=>setMode('painted'); $('modeNow').onclick=()=>setMode('now'); $('modeLog').onclick=()=>setMode('log');
   $('lBack').onclick=()=>$('log').classList.remove('open'); $('lightbox').onclick=()=>$('lightbox').classList.remove('open');
   $('sBack').onclick=()=>{ $('sheet').classList.remove('open'); SHEET=null; };
+  // find by title: the magnifier in the header opens a sheet with the box at the top; results update as you type
+  $('findBtn').onclick=()=>{ openSheet({kind:'search',q:$('findBox').value}); setTimeout(()=>{ try{ $('findBox').focus(); }catch(e){} },50); };
+  $('findBox').oninput=()=>{ if(SHEET&&SHEET.kind==='search'){ SHEET.q=$('findBox').value; refreshSheet(); } };
+  $('findBox').onkeydown=e=>{ if(e.key==='Enter') { try{ $('findBox').blur(); }catch(x){} } };
+  $('findClear').onclick=()=>{ $('findBox').value=''; if(SHEET&&SHEET.kind==='search'){ SHEET.q=''; refreshSheet(); } try{ $('findBox').focus(); }catch(e){} };
   $('sNew').onclick=sheetNew; $('sPinHere').onclick=pinPlaceHere; $('sPinPaste').onclick=pinPlacePaste;
   $('fabCard').onclick=()=>{ $('fabMenu').classList.remove('open'); PRESET={}; openCard(null); };
   $('fabPlace').onclick=openPlaceSheet;

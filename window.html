@@ -119,6 +119,15 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
 .shead{display:flex;align-items:center;gap:10px;padding:10px 12px 0;flex-wrap:wrap}
 .shead .cnt{color:var(--dim);font-size:13px;flex:1}
 .ptools{display:none;gap:8px;align-items:center;padding:8px 12px 0;flex-wrap:wrap}
+.find{display:flex;align-items:center;gap:8px;margin:10px 12px 0;background:var(--pane);border:1px solid var(--line);border-radius:12px;padding:0 10px 0 12px;color:var(--dim)}
+.find input{flex:1;background:none;border:none;color:var(--ink);font-size:17px;padding:12px 0;min-width:0;outline:none}
+.find input::-webkit-search-cancel-button{display:none}
+.find button{background:none;border:none;color:var(--dim);font-size:16px;padding:8px 2px}
+.srow{display:flex;align-items:center;gap:12px;width:100%;background:var(--pane);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:8px 10px;margin-bottom:6px;text-align:left}
+.srow img{width:64px;height:48px;object-fit:cover;border-radius:6px;background:#2a2927;flex:none}
+.srow .no{width:64px;height:48px;border-radius:6px;background:#2a2927;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--dim)}
+.srow .lt{font-size:15px}.srow .ls{font-size:12px;color:var(--dim);margin-top:2px}.srow .ls em{font-style:normal;color:var(--warn)}
+.srow .w{flex:1;min-width:0}
 .lrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%;background:var(--pane);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 12px;margin-bottom:6px;text-align:left}
 .lrow .lt{font-size:15px}.lrow .ls{font-size:12px;color:var(--dim);white-space:nowrap}
 .drow.sold{border-style:dashed;color:var(--dim)}
@@ -129,6 +138,7 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
 <header>
   <h1>Window</h1>
   <span class="ver" id="ver"></span>
+  <button id="findBtn" title="Find by title" aria-label="Find by title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="vertical-align:-3px"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg></button>
   <button id="keysBtn" title="Keys and tools">⚙︎</button>
 </header>
 <div id="map"></div>
@@ -146,6 +156,7 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
 <div class="sheet" id="sheet">
   <header><button id="sBack">‹ Map</button><h1 id="sTitle">Sheet</h1><span class="ver" id="sCount"></span></header>
   <div class="shead"><span class="cnt"></span><button class="btn sm" id="sNew">+ New card</button></div>
+  <div class="find" id="sFind" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg><input id="findBox" type="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Part of a title — e.g. Sivota"><button id="findClear" aria-label="Clear">✕</button></div>
   <div id="sBulk" style="display:none;padding:8px 12px 0"></div>
   <div class="ptools" id="sPlaceTools"><button class="btn sec sm" id="sPinHere">Pin it here</button><button class="btn sec sm" id="sPinPaste">Paste a Maps link</button><span class="note" id="sPinNote"></span></div>
   <main>
