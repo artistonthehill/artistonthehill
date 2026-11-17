@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-13",
+ "updated": "2026-11-17",
  "paintings": [
   {
    "t": "Alabaster Bay",
@@ -9,33 +9,6 @@
    "sec": "The Bahamas",
    "w": 800,
    "h": 566
-  },
-  {
-   "t": "Russell Island",
-   "s": "60×42cm · Oil on board",
-   "room": "bahamas-russell-island",
-   "img": "images/saltmarsh/bahamas-russell-island.jpg",
-   "sec": "The Bahamas",
-   "w": 800,
-   "h": 558
-  },
-  {
-   "t": "Wreckers View",
-   "s": "60×42cm · Oil on board",
-   "room": "bahamas-wreckers-view",
-   "img": "images/saltmarsh/bahamas-wreckers-view.jpg",
-   "sec": "The Bahamas",
-   "w": 800,
-   "h": 562
-  },
-  {
-   "t": "Harbour Island",
-   "s": "60×42cm · Oil on board",
-   "room": "bahamas-harbour-island",
-   "img": "images/saltmarsh/bahamas-harbour-island.jpg",
-   "sec": "The Bahamas",
-   "w": 800,
-   "h": 564
   },
   {
    "t": "Governors Harbour",
@@ -65,15 +38,6 @@
    "h": 562
   },
   {
-   "t": "Spilia Sparkle",
-   "s": "60×42cm · Oil on board",
-   "room": "spilia-sparkle",
-   "img": "images/saltmarsh/spilia-sparkle.jpg",
-   "sec": "Greece",
-   "w": 800,
-   "h": 566
-  },
-  {
    "t": "Kioni",
    "s": "42×30cm · Oil on board",
    "room": "kioni",
@@ -90,15 +54,6 @@
    "sec": "Greece",
    "w": 800,
    "h": 565
-  },
-  {
-   "t": "Sivota Sunrise",
-   "s": "42×30cm · Oil on canvas",
-   "room": "sivota-sunrise",
-   "img": "images/saltmarsh/sivota-sunrise.jpg",
-   "sec": "Greece",
-   "w": 800,
-   "h": 562
   },
   {
    "t": "Sivota Olive Press (Liotrivi)",
@@ -180,6 +135,42 @@
    "sec": "England",
    "w": 800,
    "h": 298
+  },
+  {
+   "t": "Sussex by the Sea",
+   "s": "80×30cm · Oil on board",
+   "room": "sussex-by-the-sea",
+   "img": "images/saltmarsh/sussex-by-the-sea.jpg",
+   "sec": "England",
+   "w": 800,
+   "h": 314
+  },
+  {
+   "t": "Zebra Sisters",
+   "s": "80×30cm · Oil on board",
+   "room": "zebra-sisters-r52",
+   "img": "images/saltmarsh/zebra-sisters-r52.jpg",
+   "sec": "England",
+   "w": 800,
+   "h": 298
+  },
+  {
+   "t": "Cottages from the East",
+   "s": "42×30cm · Oil on canvas",
+   "room": "cottages-from-the-east",
+   "img": "images/saltmarsh/cottages-from-the-east.jpg",
+   "sec": "England",
+   "w": 800,
+   "h": 583
+  },
+  {
+   "t": "River Beach, Cuckmere",
+   "s": "A3 (30×42cm) · Oil on board",
+   "room": "river-beach-cuckmere-sn2",
+   "img": "images/saltmarsh/river-beach-cuckmere-sn2.jpg",
+   "sec": "England",
+   "w": 800,
+   "h": 590
   }
  ]
 }
