@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.14 · 15 Nov';
+const VER='v0.14.1 · 18 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -182,7 +182,9 @@ function placeForText(t){ t=String(t||'').toLowerCase(); if(!t) return null;
   for(const p of PLACESL){ const ms=String(p.f[P.matches]||'').split(',').map(s=>s.trim()).filter(Boolean); if(ms.some(m=>t.indexOf(m)>=0)) return p; }
   return null; }
 // sold and gone: Sold ticked, or the office has moved it past Sold, or it lives with a collector
-function gone(r){ if(r.f[F.sold]) return true; const st=selName(r.f[F.stage]); if(['Sold','Delivered','Registered'].indexOf(st)>=0) return true;
+// the relay from Sold onwards (plus the old 'Registered' word, kept for anything that still writes it)
+const PAST_STAGES=['Sold','Paid','TOAT registered','Framed and crated','Dispatched','Delivered','Registered'];
+function gone(r){ if(r.f[F.sold]) return true; const st=selName(r.f[F.stage]); if(PAST_STAGES.indexOf(st)>=0) return true;
   const p=PLACESL.find(x=>x.id===placeOf(r)); return !!(p&&selName(p.f[P.kind])==='Collector'); }
 const live=()=>SPINE.filter(r=>!gone(r));
 function median(xs){ const s=xs.slice().sort((x,y)=>x-y); const n=s.length; return n?(n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2):0; }

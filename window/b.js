@@ -96,7 +96,7 @@ function drawForm(){
   $('frameNote').textContent=fits.length?'':(FRAMESL.length?'No free frame on the spine is this size — Other… takes any frame ID':'Frames not read yet — pull down to reload');
   $('sellsSw').style.display=cur.frame?'flex':'none'; $('sellsTog').classList.toggle('on',cur.sells); $('sellsS').textContent=cur.sells?'The frame goes with the painting when it sells':'The frame comes off and goes back to stock when it sells';
   $('fDepth').value=cur.depth;
-  const st=cur.row?selName(cur.row.f[F.stage]):''; const past=['Sold','Delivered','Registered'].indexOf(st)>=0;
+  const st=cur.row?selName(cur.row.f[F.stage]):''; const past=PAST_STAGES.indexOf(st)>=0;
   $('soldS').textContent=cur.sold?(past?('Stage '+st+' — stays as the office set it'):'Stage moves to Sold when you save; Books takes it from there'):'Marks it sold on the spine — the office does the rest';
   $('stageNote').textContent=cur.row?('Stage: '+((cur.row.f[F.stage]||{}).name||cur.row.f[F.stage]||'—')+' (the office moves this)'):'Stage will be Carded';
   drawDelete();
@@ -141,7 +141,7 @@ function gather(){
   const f={}; f[F.title]=cur.title; f[F.size]=sizeText(cur.chip,cur.w,cur.h,cur.medium);
   f[F.price]=+cur.price; f[F.priceDisp]=cur.sold?'Sold':money(cur.price); f[F.publish]=cur.live; f[F.sold]=cur.sold;
   // the relay: Tony moves cards to Sold; never backwards from here
-  if(cur.sold&&cur.id){ const st=selName(cur.row.f[F.stage]); if(['Sold','Delivered','Registered'].indexOf(st)<0) f[F.stage]='Sold'; }
+  if(cur.sold&&cur.id){ const st=selName(cur.row.f[F.stage]); if(PAST_STAGES.indexOf(st)<0) f[F.stage]='Sold'; }
   if(cur.lat!==''&&cur.lng!==''&&!isNaN(+cur.lat)&&!isNaN(+cur.lng)){ f[F.lat]=+cur.lat; f[F.lng]=+cur.lng; }
   if(!cur.region) cur.region=(cur.lat!==''&&cur.lng!=='')?regionFor(cur.lat,cur.lng,null).region:(cur.want?'':'Studio');
   if(cur.region) f[F.region]=cur.region;
