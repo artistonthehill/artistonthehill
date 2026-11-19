@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>A Private Catalogue — Artist on the Hill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#B8963E;--cream:#f5f2ed;--dark:#1a1a1a;--muted:#6b6357;--line:#e2dac9}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--cream);color:var(--dark);font-family:'Montserrat',sans-serif;line-height:1.6;padding:28px 18px 48px}
+  .wrap{max-width:620px;margin:0 auto}
+  .eyebrow{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600;text-align:center}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:2.3rem;line-height:1.15;text-align:center;margin:8px 0 10px}
+  .intro{text-align:center;color:var(--muted);font-size:.95rem;border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:22px}
+  #loading,#gone{text-align:center;color:var(--muted);margin-top:30px}
+  #gone{display:none}
+  #cat{display:none}
+  a.item{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:18px}
+  a.item .pic{background:#ece7dd}
+  a.item img{display:block;width:100%;height:auto}
+  a.item.tall .pic{padding:16px 0}
+  a.item.tall img{width:58%;margin:0 auto;border-radius:6px}
+  a.item .cap{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:13px 16px 15px}
+  a.item .t{font-family:'Cormorant Garamond',serif;font-size:1.45rem;line-height:1.2}
+  a.item .s{font-size:.8rem;color:var(--muted);margin-top:3px}
+  a.item .r{text-align:right;white-space:nowrap}
+  a.item .p{font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:var(--gold);line-height:1.2}
+  a.item .go{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:4px}
+  a.item .gone{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600;line-height:1.5;margin-top:7px}
+  .know{background:#fff;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:18px 20px;margin:26px 0 8px}
+  .know h3{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.3rem;margin-bottom:6px}
+  .know p{font-size:.9rem;color:var(--muted);margin-top:8px}
+  .btn{display:block;width:100%;text-align:center;margin-top:14px;padding:14px 32px;border:0;border-radius:10px;
+    font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:.5px;font-size:1rem;text-decoration:none;cursor:pointer;color:#fff;background:#25D366}
+  .about{text-align:center;color:var(--muted);font-size:.88rem;margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+  .about .sig{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;color:var(--dark);margin-top:8px}
+  .foot{text-align:center;color:var(--muted);font-size:.78rem;margin-top:24px}
+  .foot a{color:var(--muted)}
+</style>
+<script defer src="analytics.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">A Private Catalogue</div>
+
+  <div id="loading"><p>Opening your catalogue…</p></div>
+
+  <div id="gone">
+    <h1>This link isn't ready yet</h1>
+    <p>Give it a minute and refresh — or ask Tony for a fresh one.</p>
+  </div>
+
+  <div id="cat">
+    <h1 id="c-title"></h1>
+    <p class="intro" id="c-intro"></p>
+    <div id="list"></div>
+
+    <div class="know">
+      <h3>Good to know</h3>
+      <p>Each price includes VAT, framing, delivery and a certificate of provenance.</p>
+      <p>Any of these can be paid for gradually through the Waiting Room: a monthly standing order from your own bank, with no interest and no credit check. The painting comes home with you, framed, once the first payment is in.</p>
+      <p>I am also available for commissions: a place that matters to you, a view from a window, a house, an occasion.</p>
+      <a class="btn" id="c-msg">Message Tony</a>
+    </div>
+
+    <div class="about">
+      <p>I paint in oils, mostly outdoors and on the spot. I was the in-house artist for the first two series of Sky Arts Portrait Artist of the Year, and have exhibited with the ROI and RSMA at the Mall Galleries in London.</p>
+      <p class="sig">Tony Parsons</p>
+    </div>
+    <p class="foot">Artist on the Hill · <a href="https://www.artistonthehill.co.uk/">artistonthehill.co.uk</a> · this catalogue is private to you</p>
+  </div>
+</div>
+
+<script>
+// A private catalogue (19 Nov 2026): cat.html?p=<catalogue-slug>&w=<who code>
+// Reads catalogue/<catalogue-slug>.json = {t, updated, n, paintings:[{t, loc, s, p, room, img, w, h, sold, tall}]}.
+// Each picture opens the classic private room, view.html?p=<room>&w=<who code>, carrying the code through.
+// The file carries no name: the person is only ever the code on the link.
+const ARTIST_WA = "447880601709";
+const TRACKER   = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const gbp=n=>"£"+Number(n).toLocaleString("en-GB");
+
+const params=new URLSearchParams(location.search);
+const slug=(params.get("p")||params.get("c")||"").trim().replace(/[^a-z0-9-]/gi,"");
+const who =(params.get("w")||params.get("who")||"").trim();
+const page="catalogue-"+slug;
+
+if(!slug){ showGone(); } else { load(); }
+
+async function load(){
+  const localURL="catalogue/"+encodeURIComponent(slug)+".json";
+  const rawURL="https://raw.githubusercontent.com/artistonthehill/artistonthehill/main/catalogue/"+encodeURIComponent(slug)+".json";
+  const tryFetch=async url=>{ const r=await fetch(url,{cache:"no-store"}); if(!r.ok) throw new Error(r.status); return r.json(); };
+  for(let attempt=0;attempt<3;attempt++){
+    try{ render(await tryFetch(localURL+"?t="+Date.now())); return; }catch(e){}
+    try{ render(await tryFetch(rawURL+"?t="+Date.now())); return; }catch(e){}
+    await new Promise(res=>setTimeout(res,3000));
+  }
+  showGone();
+}
+
+function showGone(){ $("#loading").style.display="none"; $("#gone").style.display="block"; ping("opened"); }
+
+function render(C){
+  $("#loading").style.display="none";
+  $("#cat").style.display="block";
+  ping("opened");
+  $("#c-title").textContent=C.t||"Paintings";
+  $("#c-intro").textContent=C.n||"Tap any picture for a closer look.";
+  const w=encodeURIComponent(who||"site");
+  let h="";
+  (C.paintings||[]).forEach(p=>{
+    const amt=parseFloat(p.p)||0;
+    const right=(!p.sold&&amt?'<div class="p">'+gbp(amt)+'</div>':'')+'<div class="go">View ›</div>';
+    const gone=p.sold?'<div class="gone">In a private collection · prints to order</div>':'';
+    h+='<a class="item'+(p.tall?' tall':'')+'" href="view.html?p='+encodeURIComponent(p.room)+'&w='+w+'">'
+      +'<div class="pic"><img loading="lazy" src="'+esc(p.img)+'" alt="'+esc(p.t)+'"'+(p.w&&p.h?' width="'+p.w+'" height="'+p.h+'"':'')+'></div>'
+      +'<div class="cap"><div><div class="t">'+esc(p.t)+'</div><div class="s">'+esc([p.loc,p.s].filter(Boolean).join(" · "))+'</div>'+gone+'</div>'
+      +'<div class="r">'+right+'</div></div></a>';
+  });
+  $("#list").innerHTML=h;
+  const m=$("#c-msg");
+  m.href="https://wa.me/"+ARTIST_WA+"?text="+encodeURIComponent("Hi Tony, I've been looking through the "+(C.t||"")+" catalogue.");
+  m.addEventListener("click",()=>ping("tapped",{}));
+  fireTripwire();
+}
+
+function ping(event,geo){
+  geo=geo||{};
+  const key="seen-"+page+"-"+who;
+  let visits=0; try{ visits=parseInt(localStorage.getItem(key)||"0"); if(event==="opened"){ visits++; localStorage.setItem(key,String(visits)); } }catch(e){}
+  const q=new URLSearchParams({
+    event:event||"", page:page, who:who||"site", code:who||"site",
+    region:geo.region||"", ip:geo.ip||"", isp:geo.isp||"",
+    ua:navigator.userAgent||"", tz:Intl.DateTimeFormat().resolvedOptions().timeZone||"",
+    lang:navigator.language||"", ref:document.referrer||"direct", visits:String(visits)
+  });
+  const img=new Image(); img.src=TRACKER+"?"+q.toString();
+}
+
+async function fireTripwire(){
+  let geo={};
+  try{
+    const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),2500);
+    const r=await fetch("https://ipwho.is/",{signal:ctrl.signal});
+    const j=await r.json();
+    if(j&&j.success!==false){ geo={ip:j.ip,region:[j.city,j.region,j.country].filter(Boolean).join(", "),isp:(j.connection&&j.connection.isp)||""}; }
+  }catch(e){}
+  ping("viewed",geo);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+{
+ "t": "Shere and the Surrey Hills",
+ "updated": "2026-11-19",
+ "n": "The Surrey paintings that are still with me, with Shere first. Tap any picture for a closer look.",
+ "paintings": [
+  {
+   "t": "Shere Winter Sun",
+   "loc": "Shere, Surrey",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "shere-winter-sun-5fm",
+   "img": "images/catalogue/shere-winter-sun-5fm.jpg",
+   "w": 1200,
+   "h": 442
+  },
+  {
+   "t": "Abinger Hammer",
+   "loc": "Abinger Hammer, Surrey",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "abinger-hammer-b56",
+   "img": "images/catalogue/abinger-hammer-b56.jpg",
+   "w": 1200,
+   "h": 448
+  },
+  {
+   "t": "East Horsley",
+   "loc": "East Horsley, Surrey",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "east-horsley-tns",
+   "img": "images/catalogue/east-horsley-tns.jpg",
+   "w": 1200,
+   "h": 451
+  },
+  {
+   "t": "Ripley and the Queen",
+   "loc": "Ripley High Street, Surrey",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "ripley-and-the-queen-5xb",
+   "img": "images/catalogue/ripley-and-the-queen-5xb.jpg",
+   "w": 1200,
+   "h": 470
+  },
+  {
+   "t": "Guildford Guild Hall",
+   "loc": "Guildford, Surrey",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "guildford-guildhall",
+   "img": "images/catalogue/guildford-guildhall.jpg",
+   "w": 900,
+   "h": 1301,
+   "tall": true
+  },
+  {
+   "t": "Fenton! Newlands Corner",
+   "loc": "Newlands Corner, Surrey",
+   "s": "80×30cm · Oil on board",
+   "p": "",
+   "room": "fenton",
+   "img": "images/catalogue/fenton.jpg",
+   "w": 1200,
+   "h": 440,
+   "sold": true
+  }
+ ]
+}
