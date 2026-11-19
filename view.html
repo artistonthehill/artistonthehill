@@ -43,6 +43,11 @@
   .sendname{margin:16px 0 4px;text-align:center}
   .sendname p{font-style:italic;opacity:.75;font-size:16px;margin:0 0 10px}
   .sendname a{display:block;background:#1f3f3c;color:#fff;text-decoration:none;font-size:15px;letter-spacing:.1em;padding:16px}
+  .details{margin:0 0 26px}
+  .details .eyebrow{text-align:center;margin:2px 0 12px}
+  .details figure{margin:0 0 16px}
+  .details img{width:100%;border-radius:14px;border:1px solid var(--line);display:block}
+  .details figcaption{text-align:center;color:var(--muted);font-size:.82rem;margin-top:6px}
 </style>
 <script defer src="analytics.js"></script>
 </head>
@@ -62,6 +67,7 @@
 
   <div id="room">
     <img id="hero" class="hero" alt="" style="display:none">
+    <div id="r-details" class="details" style="display:none"></div>
     <div class="sendname" id="sendname" style="display:none">
       <p>For a private link when this or the next one is ready, send me your first name.</p>
       <a id="sendname-a" href="#">Send my name</a>
@@ -164,6 +170,15 @@ function render(P){
   if(P.fig&&who&&P.fig[who]){ const f=$("#r-fig"); f.textContent=P.fig[who]; f.style.display="block"; }
   if(P.n){ const n=$("#r-note"); n.textContent=P.n; n.style.display="block"; }
   if(P.one){ const o=$("#r-one"); o.textContent=P.one; o.style.display="block"; }
+  // optional close-ups (19 Nov 2026): x = [{i: image path, c: caption}], xh = small heading above them
+  if(Array.isArray(P.x)&&P.x.length){ const d=$("#r-details");
+    if(P.xh){ const h=document.createElement("div"); h.className="eyebrow"; h.textContent=P.xh; d.appendChild(h); }
+    P.x.forEach(o=>{ if(!o||!o.i) return;
+      const f=document.createElement("figure"), im=document.createElement("img");
+      im.src=o.i; im.alt=o.c||""; f.appendChild(im);
+      if(o.c){ const cap=document.createElement("figcaption"); cap.textContent=o.c; f.appendChild(cap); }
+      d.appendChild(f); });
+    d.style.display="block"; }
   if(P.claim&&who&&P.fig&&P.fig[who]){ const c=$("#r-claim"); c.style.display="block";
     c.href=wa("Hi Tony, I'd like to claim my free A3 print of"+tag+".\nFull name: \nEmail: \nPostal address: ");
     c.addEventListener("click",()=>ping("tapped",{})); }
