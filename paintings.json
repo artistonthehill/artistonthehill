@@ -249,11 +249,12 @@
   "id": "fenton",
   "title": "Fenton! (Original) Newlands Corner",
   "img": "images/fenton.jpg",
-  "price": "£2,760",
+  "price": "Sold",
   "size": "80×30cm · Oil on board",
   "lat": 51.232698,
   "lng": -0.507346,
-  "collection": "uk"
+  "collection": "uk",
+  "sold": true
  },
  {
   "id": "mudeford-quay",
