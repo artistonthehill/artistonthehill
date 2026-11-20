@@ -1,0 +1,47 @@
+{
+ "t": "Rock and the north Cornish coast",
+ "updated": "2026-11-20",
+ "n": "The north Cornwall paintings that are still with me, with Porthilly first. Tap any picture for a closer look.",
+ "paintings": [
+  {
+   "t": "Porthilly Beach",
+   "loc": "Rock, Cornwall",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "porthilly-rock-cornwall-0n4",
+   "img": "images/catalogue/porthilly-rock-cornwall-0n4.jpg",
+   "w": 1200,
+   "h": 445
+  },
+  {
+   "t": "Lusty Glaze Beach",
+   "loc": "Lusty Glaze, Newquay",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "lusty-glaze",
+   "img": "images/catalogue/lusty-glaze.jpg",
+   "w": 1200,
+   "h": 445
+  },
+  {
+   "t": "Chapel Porth",
+   "loc": "Chapel Porth, St Agnes",
+   "s": "60×30cm · Oil on board",
+   "p": "2040",
+   "room": "chapel-porth",
+   "img": "images/catalogue/chapel-porth.jpg",
+   "w": 1200,
+   "h": 579
+  },
+  {
+   "t": "St Agnes Surfers",
+   "loc": "St Agnes, Cornwall",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "st-agnes-surfers",
+   "img": "images/catalogue/st-agnes-surfers.jpg",
+   "w": 1200,
+   "h": 840
+  }
+ ]
+}
