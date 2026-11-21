@@ -1,0 +1,68 @@
+{
+ "t": "Henley and the Thames",
+ "updated": "2026-11-21",
+ "n": "The Thames paintings that are still with me, with Henley first. Tap any picture for a closer look.",
+ "paintings": [
+  {
+   "t": "Thamesfield Henley",
+   "loc": "Henley-on-Thames",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "thamesfield-henley-u03",
+   "img": "images/catalogue/thamesfield-henley-u03.jpg",
+   "w": 1200,
+   "h": 445
+  },
+  {
+   "t": "Henley Royalty",
+   "loc": "Henley-on-Thames",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "henley-royalty",
+   "img": "images/catalogue/henley-royalty.jpg",
+   "w": 1200,
+   "h": 841
+  },
+  {
+   "t": "Temple Mill Island, Thames",
+   "loc": "The Thames near Marlow",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "temple-mill-island-thames-pwu",
+   "img": "images/catalogue/temple-mill-island-thames-pwu.jpg",
+   "w": 1200,
+   "h": 448
+  },
+  {
+   "t": "The Swan at Streatley",
+   "loc": "Streatley-on-Thames",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "swan-at-streatley",
+   "img": "images/catalogue/swan-at-streatley.jpg",
+   "w": 1200,
+   "h": 454
+  },
+  {
+   "t": "Richmond River",
+   "loc": "Richmond upon Thames",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "richmond-and-the-river-okk",
+   "img": "images/catalogue/richmond-and-the-river-okk.jpg",
+   "w": 1181,
+   "h": 448
+  },
+  {
+   "t": "Final Day at Henley 2026",
+   "loc": "Henley Royal Regatta",
+   "s": "80×30cm · Oil on board",
+   "p": "",
+   "room": "final-day-at-henley-2026-3sd",
+   "img": "images/catalogue/final-day-at-henley-2026-3sd.jpg",
+   "w": 1200,
+   "h": 442,
+   "sold": true
+  }
+ ]
+}
