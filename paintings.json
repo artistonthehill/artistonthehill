@@ -1,5 +1,14 @@
 [
  {
+  "id": "dual-accord-quq",
+  "title": "Dual Accord",
+  "img": "images/large-animals-polo.jpg",
+  "price": "£6,480",
+  "size": "50×75cm · Oil on board",
+  "lat": 50.995541,
+  "lng": -0.7242943
+ },
+ {
   "id": "chapel-porth-beach",
   "title": "Chapel Porth Beach",
   "img": "images/chapel-porth-beach.jpg",
