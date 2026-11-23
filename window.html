@@ -158,7 +158,7 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
   <div class="shead"><span class="cnt"></span><button class="btn sm" id="sNew">+ New card</button></div>
   <div class="find" id="sFind" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg><input id="findBox" type="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Part of a title — e.g. Sivota"><button id="findClear" aria-label="Clear">✕</button></div>
   <div id="sBulk" style="display:none;padding:8px 12px 0"></div>
-  <div class="ptools" id="sPlaceTools"><button class="btn sec sm" id="sPinHere">Pin it here</button><button class="btn sec sm" id="sPinPaste">Paste a Maps link</button><span class="note" id="sPinNote"></span></div>
+  <div class="ptools" id="sPlaceTools"><button class="btn sec sm" id="sPinHere">Pin it here</button><button class="btn sec sm" id="sPinPaste">Paste a Maps link</button><span class="note" id="sPinNote"></span><input class="box" id="sPinBox" style="display:none;flex-basis:100%" placeholder="Paste the Maps link here, or 50.088361, -5.101278" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
   <main>
     <div class="grid" id="sGrid"></div>
     <div id="sList" style="display:none"></div>
@@ -179,6 +179,8 @@ input.box,textarea.box{width:100%;background:var(--pane);border:1px solid var(--
   <main>
     <label class="f">Name</label><input class="box" id="pName" placeholder="e.g. Alfriston gallery" autocomplete="off">
     <label class="f">Kind</label><div class="chips" id="kindChips"></div>
+    <div class="row2"><button class="btn sec sm" id="pPaste">Paste a Maps link</button></div>
+    <input class="box" id="pPin" style="display:none;margin-top:8px" placeholder="Paste the Maps link here, or 50.088361, -5.101278" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
     <div class="note" id="pickNote" style="margin-top:14px"></div>
     <div class="row2"><button class="btn" id="pSave">Save with the pin under the cross</button></div>
     <div class="row2"><button class="btn sec" id="pHere">Save at where I am standing</button></div>

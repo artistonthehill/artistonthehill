@@ -129,20 +129,35 @@ async function pinPlaceHere(){
   navigator.geolocation.getCurrentPosition(async pos=>{ try{ await patchPlace(p.id,{[P.lat]:+pos.coords.latitude.toFixed(6),[P.lng]:+pos.coords.longitude.toFixed(6)}); toast(p.f[P.name]+' pinned'); refreshSheet(); drawMap(); }catch(e){ $('sPinNote').textContent=e.message; } },
     ()=>{ $('sPinNote').textContent='Location not allowed — paste a Maps link instead.'; },{enableHighAccuracy:true,timeout:12000});
 }
-async function pinPlacePaste(){
+// a Maps link or a "lat, lng" pair → [lat,lng]; short links go via the resolver. null if it can't be read yet.
+async function readPinText(t){ t=String(t||'').trim(); if(!t) return null; if(isShortMapLink(t)) return await resolveShortLink(t); return parseLatLng(t); }
+let placePasteSeq=0;
+function pinPlacePaste(){
+  // the button shows a box to paste into (reading the clipboard directly is blocked on most phones); if the clipboard
+  // can be read and already holds a pin, it is dropped straight in
   const p=SHEET&&SHEET.kind==='place'?PLACESL.find(x=>x.id===SHEET.key):null; if(!p) return;
-  try{ const t=await navigator.clipboard.readText(); const ll=parseLatLng(t); if(!ll) throw 0; await patchPlace(p.id,{[P.lat]:ll[0],[P.lng]:ll[1]}); toast(p.f[P.name]+' pinned'); refreshSheet(); drawMap(); }
-  catch(e){ toast(e&&e.message?e.message:'Copy a Google Maps link first, then tap Paste'); }
+  const b=$('sPinBox'); b.style.display='block'; b.value=''; $('sPinNote').textContent='Paste the Maps link (or the two numbers) into the box.';
+  try{ b.focus(); }catch(e){}
+  if(navigator.clipboard&&navigator.clipboard.readText){ navigator.clipboard.readText().then(t=>{ if(t&&(isShortMapLink(t)||parseLatLng(t))&&!b.value){ b.value=t.trim(); b.oninput(); } }).catch(()=>{}); }
+}
+async function placeBoxInput(){
+  const p=SHEET&&SHEET.kind==='place'?PLACESL.find(x=>x.id===SHEET.key):null; if(!p) return;
+  const t=$('sPinBox').value.trim(); if(!t) return; const my=++placePasteSeq;
+  if(isShortMapLink(t)) $('sPinNote').innerHTML='<span class="spin"></span> Following the Maps link…';
+  try{ const ll=await readPinText(t); if(my!==placePasteSeq) return;
+    if(!ll){ $('sPinNote').textContent="Can't read that yet — it wants a Maps link or two numbers like 50.088361, -5.101278"; return; }
+    await patchPlace(p.id,{[P.lat]:+ll[0].toFixed(6),[P.lng]:+ll[1].toFixed(6)}); toast(p.f[P.name]+' pinned'); $('sPinBox').style.display='none'; $('sPinBox').value=''; refreshSheet(); drawMap(); }
+  catch(e){ if(my===placePasteSeq) $('sPinNote').innerHTML='<span class="warn">Could not read that link ('+esc(e.message)+'). In Google Maps, long-press the spot and copy the numbers shown instead.</span>'; }
 }
 
 // ---------- a new Place from the map ----------
-let placing=false, newKind='Storage';
-function openPlaceSheet(){ $('fabMenu').classList.remove('open'); placing=true; $('pName').value=''; newKind='Storage'; chips($('kindChips'),KINDS.filter(k=>k!=='Tony'),newKind,v=>{newKind=v;chips($('kindChips'),KINDS.filter(k=>k!=='Tony'),newKind,arguments.callee);});
+let placing=false, newKind='Storage', placePin=null, newPlaceSeq=0;
+function openPlaceSheet(){ $('fabMenu').classList.remove('open'); placing=true; $('pName').value=''; newKind='Storage'; placePin=null; $('pPin').value=''; $('pPin').style.display='none'; $('pSave').textContent='Save with the pin under the cross'; chips($('kindChips'),KINDS.filter(k=>k!=='Tony'),newKind,v=>{newKind=v;chips($('kindChips'),KINDS.filter(k=>k!=='Tony'),newKind,arguments.callee);});
   $('pickNote').textContent='Pin at '+MAP.getCenter().lat.toFixed(5)+', '+MAP.getCenter().lng.toFixed(5)+' — drag the map so the cross sits on the place, or use Here'; $('placeSheet').classList.add('open'); $('cross').style.display='block'; }
 function closePlaceSheet(){ placing=false; $('placeSheet').classList.remove('open'); $('cross').style.display='none'; }
 async function savePlace(useHere){
   const name=$('pName').value.trim(); if(!name){ toast('Give the place a name'); return; }
-  const c=MAP.getCenter(); let lat=+c.lat.toFixed(6), lng=+c.lng.toFixed(6);
+  const c=MAP.getCenter(); let lat=placePin?placePin[0]:+c.lat.toFixed(6), lng=placePin?placePin[1]:+c.lng.toFixed(6);
   const go=async()=>{ try{ const r=await createPlace({[P.name]:name,[P.kind]:newKind,[P.active]:true,[P.lat]:lat,[P.lng]:lng,[P.matches]:name.toLowerCase()}); toast(name+' added'); closePlaceSheet(); drawMap(); openSheet({kind:'place',key:r.id}); }catch(e){ toast(e.message); } };
   if(useHere&&navigator.geolocation){ navigator.geolocation.getCurrentPosition(p=>{ lat=+p.coords.latitude.toFixed(6); lng=+p.coords.longitude.toFixed(6); go(); },()=>go(),{enableHighAccuracy:true,timeout:12000}); } else go();
 }
@@ -185,6 +200,16 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('fabCard').onclick=()=>{ $('fabMenu').classList.remove('open'); PRESET={}; openCard(null); };
   $('fabPlace').onclick=openPlaceSheet;
   $('pBack').onclick=closePlaceSheet; $('pSave').onclick=()=>savePlace(false); $('pHere').onclick=()=>savePlace(true);
+  $('sPinBox').oninput=placeBoxInput;
+  $('pPaste').onclick=()=>{ const b=$('pPin'); b.style.display='block'; $('pickNote').textContent='Paste the Maps link (or the two numbers) into the box.'; try{ b.focus(); }catch(e){}
+    if(navigator.clipboard&&navigator.clipboard.readText){ navigator.clipboard.readText().then(t=>{ if(t&&(isShortMapLink(t)||parseLatLng(t))&&!b.value){ b.value=t.trim(); b.oninput(); } }).catch(()=>{}); } };
+  $('pPin').oninput=async()=>{ const t=$('pPin').value.trim(); const my=++newPlaceSeq; if(!t){ placePin=null; $('pSave').textContent='Save with the pin under the cross'; return; }
+    if(isShortMapLink(t)) $('pickNote').innerHTML='<span class="spin"></span> Following the Maps link…';
+    try{ const ll=await readPinText(t); if(my!==newPlaceSeq) return;
+      if(!ll){ placePin=null; $('pSave').textContent='Save with the pin under the cross'; $('pickNote').textContent="Can't read that yet — it wants a Maps link or two numbers like 50.088361, -5.101278"; return; }
+      placePin=[+ll[0].toFixed(6),+ll[1].toFixed(6)]; try{ MAP.setView(placePin, Math.max(MAP.getZoom(),13)); }catch(e){}
+      $('pickNote').textContent='Pinned from the link at '+placePin[0].toFixed(5)+', '+placePin[1].toFixed(5); $('pSave').textContent='Save with this pin'; }
+    catch(e){ if(my===newPlaceSeq){ placePin=null; $('pSave').textContent='Save with the pin under the cross'; $('pickNote').innerHTML='<span class="warn">Could not read that link ('+esc(e.message)+'). In Google Maps, long-press the spot and copy the numbers shown instead.</span>'; } } };
   $('worldBtn').onclick=()=>{ const pts=[]; LAYER.eachLayer(m=>pts.push(m.getLatLng())); if(pts.length>1) MAP.fitBounds(L.latLngBounds(pts).pad(0.2)); };
   $('ukBtn').onclick=()=>MAP.fitBounds(UK_BOUNDS);
   showUnsure();
