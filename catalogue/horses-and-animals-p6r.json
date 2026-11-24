@@ -1,0 +1,79 @@
+{
+ "t": "Horses and other animals",
+ "updated": "2026-11-24",
+ "n": "Polo at Cowdray, two from Wellington International Horse Trials, and four studio paintings of other animals. The prices shown are current; they go up on 1 December 2026. Tap any picture for a closer look.",
+ "paintings": [
+  {
+   "t": "Dual Accord",
+   "loc": "Polo at Cowdray",
+   "s": "50×75cm · Oil on board",
+   "p": "6480",
+   "room": "dual-accord-quq",
+   "img": "images/catalogue/dual-accord-quq.jpg",
+   "w": 797,
+   "h": 1200,
+   "tall": true
+  },
+  {
+   "t": "Wellington Horse Trials I",
+   "loc": "Painted live at the event",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "wellington-horse-trials-2026",
+   "img": "images/catalogue/wellington-horse-trials-2026.jpg",
+   "w": 1200,
+   "h": 447
+  },
+  {
+   "t": "Wellington Horse Trials II",
+   "loc": "Painted live at the event",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "wellington-horse-trials-ii-k4m",
+   "img": "images/catalogue/wellington-horse-trials-ii-k4m.jpg",
+   "w": 1200,
+   "h": 453
+  },
+  {
+   "t": "Otter and Capybara",
+   "loc": "Studio painting",
+   "s": "61×91cm · Oil on canvas",
+   "p": "6480",
+   "room": "otter-and-capybara",
+   "img": "images/catalogue/otter-and-capybara.jpg",
+   "w": 1200,
+   "h": 793
+  },
+  {
+   "t": "Lucid Poultry",
+   "loc": "Studio painting",
+   "s": "Oil on canvas",
+   "p": "6480",
+   "room": "lucid-poultry-k9h",
+   "img": "images/catalogue/lucid-poultry-k9h.jpg",
+   "w": 1200,
+   "h": 799
+  },
+  {
+   "t": "Neon Monk",
+   "loc": "Studio painting",
+   "s": "120×90cm · Oil on canvas",
+   "p": "8760",
+   "room": "neon-monk",
+   "img": "images/catalogue/neon-monk.jpg",
+   "w": 900,
+   "h": 1185,
+   "tall": true
+  },
+  {
+   "t": "Interesting Friends",
+   "loc": "Studio painting",
+   "s": "120×100cm · Oil on board",
+   "p": "8760",
+   "room": "interesting-friends",
+   "img": "images/catalogue/interesting-friends.jpg",
+   "w": 1200,
+   "h": 1000
+  }
+ ]
+}
