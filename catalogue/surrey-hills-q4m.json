@@ -1,6 +1,6 @@
 {
  "t": "Shere and the Surrey Hills",
- "updated": "2026-11-19",
+ "updated": "2026-11-25",
  "n": "The Surrey paintings that are still with me, with Shere first. Tap any picture for a closer look.",
  "paintings": [
   {
@@ -37,11 +37,12 @@
    "t": "Ripley and the Queen",
    "loc": "Ripley High Street, Surrey",
    "s": "80×30cm · Oil on board",
-   "p": "2760",
+   "p": "",
    "room": "ripley-and-the-queen-5xb",
    "img": "images/catalogue/ripley-and-the-queen-5xb.jpg",
    "w": 1200,
-   "h": 470
+   "h": 470,
+   "sold": true
   },
   {
    "t": "Guildford Guild Hall",

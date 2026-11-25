@@ -1,13 +1,13 @@
 {
  "t": "Ripley and the Queen",
- "updated": "2026-11-19",
+ "updated": "2026-11-25",
  "s": "80×30cm · Oil on board",
- "p": "2760",
+ "p": "",
  "v": true,
  "f": true,
  "d": "crate",
- "sold": false,
- "w": true,
+ "sold": true,
+ "w": false,
  "pr": true,
  "i": "images/ripley-and-the-queen-5xb.jpg"
 }
