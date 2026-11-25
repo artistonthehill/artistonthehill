@@ -1,5 +1,14 @@
 [
  {
+  "id": "pilots-rx7",
+  "title": "Pilots",
+  "img": "images/pilots-rx7.jpg",
+  "price": "£1,320",
+  "size": "A3 (30×42cm) · Oil on board",
+  "lat": 50.0888547,
+  "lng": -5.1004558
+ },
+ {
   "id": "emergency-parasols-f1w",
   "title": "Emergency Parasols",
   "img": "images/emergency-parasols-f1w.jpg",
