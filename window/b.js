@@ -162,8 +162,8 @@ function mark(i,state,extra){ const el=$('st'+i); if(!el) return; el.className='
 async function runSteps(steps,fromIdx){
   // steps: [{name, fn}] — stops at the first failure and offers Retry from there; the card is never half-written
   for(let i=fromIdx||0;i<steps.length;i++){
-    mark(i,'doing');
-    try{ const r=await steps[i].fn(); mark(i,'done',r||''); }
+    mark(i,'doing'); ghRetry.onRetry=(label,n,e)=>mark(i,'doing','GitHub hiccup ('+((e&&e.status)||'network')+') — trying again, '+n+' of 3');
+    try{ const r=await steps[i].fn(); ghRetry.onRetry=null; mark(i,'done',r||''); }
     catch(e){ mark(i,'fail',plain(e)); const el=$('st'+i); const b=document.createElement('button'); b.className='btn sec sm'; b.textContent='Retry'; b.style.marginLeft='auto';
       b.onclick=()=>{ b.remove(); runSteps(steps,i); }; el.appendChild(b); $('saveBtn').disabled=false; return false; }
   }

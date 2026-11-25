@@ -2,7 +2,7 @@
    Spec: build/spec-window-app.md (Stuart, 7 Nov 2026). Section 3 first.
    Nothing private lives in this file: keys come from the phone's storage. */
 'use strict';
-const VER='v0.15 · 23 Nov';
+const VER='v0.15.1 · 25 Nov';
 const BASE='appE8PGfkXDMuZCXe', TBL='tblLVyDTlgB3E8sQp';
 const GH_OWNER='artistonthehill', GH_REPO='artistonthehill', GH_BRANCH='main';
 const SITE='https://www.artistonthehill.co.uk/';
@@ -98,17 +98,32 @@ function toJpeg(src,maxPx,q){
 async function makePictures(file){ const im=await loadImage(file); const web=toJpeg(im,WEB_PX,WEB_Q); const thumb=toJpeg(im,THUMB_PX,THUMB_Q); if(im.close) im.close(); return {web,thumb}; }
 
 // ---------- repo (GitHub contents API, the uploader token) ----------
+// GitHub answers 500/502/503 (and the odd 409) now and then for no reason of ours; a second go a moment later
+// nearly always works, so every call gets three tries before Tony sees a red line
+const RETRY_WAITS=[1500,4000];
+async function ghRetry(label,fn){
+  for(let i=0;;i++){
+    try{ return await fn(); }
+    catch(e){ const s=e&&e.status; const again=(s>=500&&s<600)||s===409||s===0||(!s&&/fetch|network|load failed/i.test(String(e&&e.message)));
+      if(!again||i>=RETRY_WAITS.length) throw e;
+      if(typeof ghRetry.onRetry==='function') ghRetry.onRetry(label,i+1,e);
+      await new Promise(r=>setTimeout(r,RETRY_WAITS[i])); }
+  }
+}
+function ghErr(r,t){ const e=new Error('GitHub '+r.status+(r.status===401?' — token refused':r.status===409?' — try again':'')+' '+String(t||'').slice(0,120)); e.status=r.status; return e; }
 async function ghGetSha(path){
-  const r=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}?ref=${GH_BRANCH}&t=${Date.now()}`,
-    {headers:{Authorization:'token '+K.gh,Accept:'application/vnd.github.v3+json'}});
-  if(r.status===404) return null; if(!r.ok) throw new Error('GitHub '+r.status); return (await r.json()).sha||null;
+  return ghRetry('read '+path, async()=>{
+    const r=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}?ref=${GH_BRANCH}&t=${Date.now()}`,
+      {headers:{Authorization:'token '+K.gh,Accept:'application/vnd.github.v3+json'}});
+    if(r.status===404) return null; if(!r.ok) throw ghErr(r,await r.text()); return (await r.json()).sha||null; });
 }
 async function ghPut(path,b64,message){
-  const sha=await ghGetSha(path); const body={message,content:b64,branch:GH_BRANCH}; if(sha) body.sha=sha;
-  const r=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`,
-    {method:'PUT',headers:{Authorization:'token '+K.gh,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-  if(!r.ok){ const t=await r.text(); throw new Error('GitHub '+r.status+(r.status===401?' — token refused':r.status===409?' — try again':'')+' '+t.slice(0,120)); }
-  return r.json();
+  return ghRetry('upload '+path, async()=>{
+    const sha=await ghGetSha(path); const body={message,content:b64,branch:GH_BRANCH}; if(sha) body.sha=sha;
+    const r=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`,
+      {method:'PUT',headers:{Authorization:'token '+K.gh,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!r.ok) throw ghErr(r,await r.text());
+    return r.json(); });
 }
 
 // ask the website to rebuild from the spine (the 'Publish from spine' job) — Tony's decision 8 Nov: Live fires it, no button
