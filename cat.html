@@ -37,6 +37,8 @@
     font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:.5px;font-size:1rem;text-decoration:none;cursor:pointer;color:#fff;background:#25D366}
   .about{text-align:center;color:var(--muted);font-size:.88rem;margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
   .about .sig{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;color:var(--dark);margin-top:8px}
+  .know p.or{text-align:center;font-size:.85rem;margin-top:10px}
+  .know p.or a{color:inherit}
   .foot{text-align:center;color:var(--muted);font-size:.78rem;margin-top:24px}
   .foot a{color:var(--muted)}
 </style>
@@ -64,6 +66,7 @@
       <p>Any of these can be paid for gradually through the Waiting Room: a monthly standing order from your own bank, with no interest and no credit check. The painting comes home with you, framed, once the first payment is in.</p>
       <p>I am also available for commissions: a place that matters to you, a view from a window, a house, an occasion.</p>
       <a class="btn" id="c-msg">Message Tony</a>
+      <p class="or" id="c-or" style="display:none">That opens WhatsApp. No WhatsApp, or nothing happened? <a id="c-txt" href="#">Send a text message instead</a>.</p>
     </div>
 
     <div class="about">
@@ -80,6 +83,7 @@
 // Each picture opens the classic private room, view.html?p=<room>&w=<who code>, carrying the code through.
 // The file carries no name: the person is only ever the code on the link.
 const ARTIST_WA = "447880601709";
+let GEO = {};   // where the visitor is, once known: sent with a button tap so the alert says where
 const TRACKER   = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -125,8 +129,13 @@ function render(C){
   });
   $("#list").innerHTML=h;
   const m=$("#c-msg");
-  m.href="https://wa.me/"+ARTIST_WA+"?text="+encodeURIComponent("Hi Tony, I've been looking through the "+(C.t||"")+" catalogue.");
-  m.addEventListener("click",()=>ping("tapped",{}));
+  const msg="Hi Tony, I've been looking through the "+(C.t||"")+" catalogue.";
+  m.href="https://wa.me/"+ARTIST_WA+"?text="+encodeURIComponent(msg);
+  m.addEventListener("click",()=>ping("tapped",GEO));
+  // WhatsApp often fails to open from Facebook's and Instagram's own browsers: on a phone, offer a plain text message as well.
+  if(/iPhone|iPod|Android/i.test(navigator.userAgent||"")){ $("#c-or").style.display="block";
+    const t=$("#c-txt"); t.href="sms:+"+ARTIST_WA+"?&body="+encodeURIComponent(msg);
+    t.addEventListener("click",()=>ping("tapped",GEO)); }
   fireTripwire();
 }
 
@@ -151,6 +160,7 @@ async function fireTripwire(){
     const j=await r.json();
     if(j&&j.success!==false){ geo={ip:j.ip,region:[j.city,j.region,j.country].filter(Boolean).join(", "),isp:(j.connection&&j.connection.isp)||""}; }
   }catch(e){}
+  GEO=geo;
   ping("viewed",geo);
 }
 </script>

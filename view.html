@@ -40,9 +40,13 @@
   .more{text-align:center;margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
   .more a{color:var(--muted);font-size:.82rem;text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
   .foot{text-align:center;color:var(--muted);font-size:.78rem;margin-top:24px}
-  .sendname{margin:16px 0 4px;text-align:center}
+  .sendname{margin:16px 0 26px;text-align:center}
   .sendname p{font-style:italic;opacity:.75;font-size:16px;margin:0 0 10px}
   .sendname a{display:block;background:#1f3f3c;color:#fff;text-decoration:none;font-size:15px;letter-spacing:.1em;padding:16px}
+  .sendname input{display:block;width:100%;box-sizing:border-box;margin:0 0 10px;padding:14px;border:1px solid #1f3f3c;border-radius:0;
+    background:#fff;color:#1f3f3c;font-family:inherit;font-size:16px;text-align:center}
+  .sendname p.how{font-style:normal;font-size:14px;margin:12px 0 2px}
+  .sendname a.alt{background:transparent;color:#1f3f3c;border:1px solid #1f3f3c;margin-top:8px;padding:14px}
   .details{margin:0 0 26px}
   .details .eyebrow{text-align:center;margin:2px 0 12px}
   .details figure{margin:0 0 16px}
@@ -70,7 +74,10 @@
     <div id="r-details" class="details" style="display:none"></div>
     <div class="sendname" id="sendname" style="display:none">
       <p>For a private link when this or the next one is ready, send me your first name.</p>
+      <input id="sendname-n" type="text" placeholder="Your first name" autocomplete="given-name" autocapitalize="words" maxlength="40" aria-label="Your first name">
       <a id="sendname-a" href="#">Send my name</a>
+      <p class="how" id="sendname-how">That opens WhatsApp with the message written. Just press send.</p>
+      <a id="sendname-t" class="alt" href="#" style="display:none">Or send it as a text message</a>
     </div>
     <div class="soldnote" id="r-soldnote" style="display:none">
       <div class="lab">NOW IN A PRIVATE COLLECTION</div>
@@ -109,6 +116,7 @@
 
 <script>
 const ARTIST_WA = "447880601709";
+let GEO = {};   // where the visitor is, once known: sent with a button tap so the alert says where
 const TRACKER   = "https://script.google.com/macros/s/AKfycbyat7BaffKYZXnznmS9BH9j9vjYSnxo2Yl3TY1egWuBE_hFSJ4Gr86N8lxYSm6kiP8sjA/exec";
 
 const $=s=>document.querySelector(s);
@@ -201,8 +209,17 @@ function render(P){
   }
 
   if(!who||who==="site"){ const sn=$("#sendname"); sn.style.display="block";
-    const a=$("#sendname-a"); a.href=wa("Hi Tony — I'd like a private link to "+(P.t||"the painting")+". [Your first name]");
-    a.addEventListener("click",()=>ping("tapped",{})); }
+    // The message goes complete, with the name typed on this page: nothing to edit in the other app.
+    // WhatsApp often fails to open from Facebook's and Instagram's own browsers, so on a phone a plain text message is offered as well.
+    const a=$("#sendname-a"), t=$("#sendname-t"), n=$("#sendname-n");
+    if(/iPhone|iPod|Android/i.test(navigator.userAgent||"")){ t.style.display="block";
+      $("#sendname-how").innerHTML+="<br>No WhatsApp, or nothing happened?"; }
+    const set=()=>{ const nm=(n.value||"").trim().slice(0,40);
+      const msg="Hi Tony, "+(nm?"it's "+nm+". ":"")+"I'd like a private link to "+(P.t||"the painting")+", please.";
+      a.href=wa(msg);
+      t.href="sms:+"+ARTIST_WA+"?&body="+encodeURIComponent(msg); };
+    set(); n.addEventListener("input",set);
+    [a,t].forEach(b=>b.addEventListener("click",()=>ping("tapped",GEO))); }
   fireTripwire(P);
 }
 
@@ -229,6 +246,7 @@ async function fireTripwire(P){
     const j=await r.json();
     if(j&&j.success!==false){ geo={ip:j.ip,region:[j.city,j.region,j.country].filter(Boolean).join(", "),isp:(j.connection&&j.connection.isp)||""}; }
   }catch(e){}
+  GEO=geo;
   ping("viewed",geo);
 }
 </script>
