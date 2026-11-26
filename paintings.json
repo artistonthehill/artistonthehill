@@ -1,5 +1,14 @@
 [
  {
+  "id": "rottingdean-high-street-owd",
+  "title": "Rottingdean High Street",
+  "img": "images/rottingdean-high-street-owd.jpg",
+  "price": "£1,320",
+  "size": "A3 (30×42cm) · Oil on board",
+  "lat": 50.8054309,
+  "lng": -0.0582981
+ },
+ {
   "id": "pilots-rx7",
   "title": "Pilots",
   "img": "images/pilots-rx7.jpg",
