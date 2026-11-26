@@ -35,11 +35,13 @@ function drawMap(){
   } else if(MODE==='log'){
     const withJob=SPINE.filter(hasJob); const pinned=withJob.filter(hasPin); const unpinned=withJob.filter(r=>!hasPin(r));
     pinned.forEach(r=>pin(+r.f[F.lat],+r.f[F.lng],r.f[F.title]||'(untitled)','',' log',()=>openLog(r)));
-    const rows=[];
+    const rows=[]; const fresh=SPINE.filter(r=>!gone(r)&&r.created&&Date.now()-Date.parse(r.created)<3*86400000).length;
+    rows.push(`<button class="drow" id="jotBtn"><span>Notes on new cards</span><span class="n">${fresh} in 3 days ›</span></button>`);
     if(!withJob.length) rows.push('<div class="note">No job sheets yet. Lockup Sales writes one onto a card and it appears here, pinned where the easel stood.</div>');
     unpinned.forEach(r=>rows.push(`<button class="drow" data-log="${r.id}"><span>${esc(r.f[F.title]||'(untitled)')}</span><span class="n"><em>no pin</em> ›</span></button>`));
     drawer.innerHTML=rows.join('');
     drawer.querySelectorAll('[data-log]').forEach(b=>b.onclick=()=>{ const r=SPINE.find(x=>x.id===b.dataset.log); if(r) openLog(r); });
+    $('jotBtn').onclick=()=>openSheet({kind:'jot',days:3,all:false});
     $('status').textContent=withJob.length+(withJob.length===1?' painting with a log':' paintings with a log');
   } else {
     const byPlace={}; live().forEach(r=>{ const p=placeOf(r); if(p) (byPlace[p]=byPlace[p]||[]).push(r); });
@@ -80,6 +82,9 @@ function sheetRows(s){
   if(s.kind==='unplaced') return byTitle(live().filter(r=>!regionOf(r)&&hasPin(r)));
   if(s.kind==='place') return byTitle(live().filter(r=>placeOf(r)===s.key));
   if(s.kind==='nowhere') return byTitle(live().filter(r=>!placeOf(r)));
+  if(s.kind==='jot'){ const days=s.days||3; const since=Date.now()-days*86400000;
+    // newest first: the cards made in the last few days, A3 only unless Tony flips the chip
+    return SPINE.filter(r=>!gone(r)&&r.created&&Date.parse(r.created)>=since&&(s.all||/\bA3\b/.test(String(r.f[F.size]||'')))).sort((x,y)=>Date.parse(y.created)-Date.parse(x.created)); }
   if(s.kind==='search'){ const q=String(s.q||'').trim().toLowerCase(); if(!q) return [];
     // every card on the spine, sold or not: the point is to learn whether it's there at all
     return byTitle(SPINE.filter(r=>String(r.f[F.title]||'').toLowerCase().indexOf(q)>=0)); }
@@ -87,16 +92,32 @@ function sheetRows(s){
 }
 function sheetTitle(s){
   if(s.kind==='sold') return 'Sold and gone'; if(s.kind==='wanted') return 'Pins wanted'; if(s.kind==='all') return 'All paintings'; if(s.kind==='region') return s.key; if(s.kind==='unplaced') return 'Pinned, no region yet';
-  if(s.kind==='place') return placeName(s.key)||'Place'; if(s.kind==='nowhere') return 'Where are these now?'; if(s.kind==='search') return 'Find by title'; return '';
+  if(s.kind==='place') return placeName(s.key)||'Place'; if(s.kind==='nowhere') return 'Where are these now?'; if(s.kind==='search') return 'Find by title'; if(s.kind==='jot') return 'Notes on new cards'; return '';
 }
 function openSheet(s){ SHEET=s; $('sheet').classList.add('open'); refreshSheet(); try{window.scrollTo(0,0);}catch(e){} }
 function refreshSheet(){
   if(!SHEET||!$('sheet').classList.contains('open')) return;
   const rows=sheetRows(SHEET); const t=sheetTitle(SHEET);
-  const isList=SHEET.kind==='sold'||SHEET.kind==='search';
-  $('sNew').style.display=(SHEET.kind==='sold'||SHEET.kind==='wanted'||SHEET.kind==='search')?'none':'inline-block'; $('sList').style.display=isList?'block':'none'; $('sGrid').style.display=isList?'none':'grid';
+  const isList=SHEET.kind==='sold'||SHEET.kind==='search'||SHEET.kind==='jot';
+  $('sNew').style.display=(SHEET.kind==='sold'||SHEET.kind==='wanted'||SHEET.kind==='search'||SHEET.kind==='jot')?'none':'inline-block'; $('sList').style.display=isList?'block':'none'; $('sGrid').style.display=isList?'none':'grid';
   $('sFind').style.display=SHEET.kind==='search'?'flex':'none';
   let noPic=0;
+  if(SHEET.kind==='jot'){ $('sTray').innerHTML=''; $('sTrayWrap').style.display='none';
+    const chips=`<div class="jotbar"><button class="chip ${SHEET.all?'':'on'}" data-jot="a3">A3 only</button><button class="chip ${SHEET.all?'on':''}" data-jot="all">All sizes</button><button class="chip ${SHEET.days===7?'on':''}" data-jot="7">Last week</button><button class="chip ${(SHEET.days||3)===3?'on':''}" data-jot="3">Last 3 days</button></div>
+      <div class="note" style="padding:0 0 10px">A line or two next to each one — where it might sell, who to show it to, a group to post in. Saving puts it under “Ideas to pursue” on the card's job sheet, so it shows on the Log map and Lockup Sales picks it up from there.</div>`;
+    $('sList').innerHTML=chips+(rows.map(r=>{ const src=tileSrc(r); const secs=parseJob(r.f[F.job]); const ideas=secs.find(s=>s.key==='ideas'); const txt=ideas?ideas.lines.join('\n').trim():'';
+      const where=placeOf(r)?placeName(placeOf(r)):(r.f[F.loc]||''); const bits=[String(r.f[F.size]||'').split('·')[0].trim(), where, r.f[F.priceDisp]||''].filter(Boolean);
+      return `<div class="jot" data-id="${r.id}"><div class="srow" style="margin-bottom:0;border-radius:10px 10px 0 0">${src?`<img loading="lazy" src="${esc(src)}" alt="">`:'<div class="no">no picture</div>'}<div class="w"><div class="lt">${esc(r.f[F.title]||'(untitled)')}</div><div class="ls">${esc(bits.join(' · '))}</div></div></div>
+        <textarea class="box jt" rows="2" placeholder="Notes for later…">${esc(txt)}</textarea><div class="jrow"><span class="note js"></span><button class="btn sec sm jsave" disabled>Save</button></div></div>`; }).join('')
+      ||'<div class="note">Nothing carded in that time.</div>');
+    $('sList').querySelectorAll('[data-jot]').forEach(b=>b.onclick=()=>{ const v=b.dataset.jot; if(v==='a3') SHEET.all=false; else if(v==='all') SHEET.all=true; else SHEET.days=+v; refreshSheet(); });
+    $('sList').querySelectorAll('.jot').forEach(box=>{ const ta=box.querySelector('.jt'), sv=box.querySelector('.jsave'), st=box.querySelector('.js'); const start=ta.value;
+      ta.oninput=()=>{ sv.disabled=ta.value.trim()===start.trim(); st.textContent=''; };
+      sv.onclick=async()=>{ const r=SPINE.find(x=>x.id===box.dataset.id); if(!r) return; sv.disabled=true; st.textContent='Saving…';
+        try{ const text=jotIntoSheet(r.f[F.job], ta.value); const rec=await patchCard(r.id,{[F.job]:text}); r.f[F.job]=(rec&&rec.fields&&rec.fields[F.job])||text; try{ localStorage.setItem('win-spine',JSON.stringify(SPINE)); }catch(e){}
+          st.textContent='Saved ✓'; toast('On the Log map'); ta.dataset.saved=ta.value; }
+        catch(e){ st.textContent=plain(e); sv.disabled=false; } }; });
+    $('sTitle').textContent=sheetTitle(SHEET); $('sCount').textContent=rows.length+(rows.length===1?' painting':' paintings')+' carded in the last '+((SHEET.days||3)===7?'week':'3 days'); return; }
   if(SHEET.kind==='search'){ $('sTray').innerHTML=''; $('sTrayWrap').style.display='none'; const q=String(SHEET.q||'').trim();
     // each hit says where it is now, so a card can be spotted without opening it
     $('sList').innerHTML=rows.map(r=>{ const src=tileSrc(r); const where=placeOf(r)?placeName(placeOf(r)):(gone(r)?'':'nowhere recorded');
@@ -243,6 +264,15 @@ function timelineHtml(blocks){
   const items=[]; blocks.forEach(b=>{ if(b.t==='ul'||b.t==='ol') items.push(...b.items); else if(b.t==='p') items.push(b.text); });
   if(!items.length) return '<p class="note">Nothing logged yet.</p>';
   return '<div class="ltl">'+items.slice().reverse().map(x=>{ const m=x.match(/^(.{3,40}?)\s+[—–-]\s+([\s\S]+)$/); return m?'<div class="it"><span class="d">'+mdInline(m[1])+'</span><span>'+mdInline(m[2])+'</span></div>':'<div class="it"><span class="d"></span><span>'+mdInline(x)+'</span></div>'; }).join('')+'</div>';
+}
+// Tony's quick notes go under "Ideas to pursue"; a card with no job sheet yet gets the five house headings
+function jotIntoSheet(existing, note){
+  const n=String(note||'').replace(/\r/g,'').trim(); const today=new Date().toISOString().slice(0,10);
+  if(!String(existing||'').trim()) return `## Best bet\n\n## Timeline\n- ${today}: carded; Tony's first notes\n\n## Contacts made\n\n## Jobs outstanding\n\n## Ideas to pursue\n${n}\n`;
+  const lines=String(existing).replace(/\r/g,'').split('\n'); let start=-1,end=lines.length;
+  for(let i=0;i<lines.length;i++){ const h=lines[i].match(/^#{2,3}\s+(.+)$/); if(h){ if(start>=0){ end=i; break; } if(/idea/i.test(h[1])) start=i+1; } }
+  if(start<0) return String(existing).replace(/\s+$/,'')+`\n\n## Ideas to pursue\n${n}\n`;
+  return lines.slice(0,start).concat(n?n.split('\n'):[], ['']).concat(lines.slice(end)).join('\n').replace(/\n{3,}/g,'\n\n');
 }
 function parseJob(text){
   const secs=[]; let cur={key:'pre',title:'',lines:[]};
