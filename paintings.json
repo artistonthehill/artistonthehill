@@ -1,5 +1,14 @@
 [
  {
+  "id": "pagham-harbour-jlm",
+  "title": "Pagham Harbour",
+  "img": "images/pagham-harbour-jlm.jpg",
+  "price": "£1,320",
+  "size": "A3 (30×42cm) · Oil on board",
+  "lat": 50.7625499,
+  "lng": -0.7503091
+ },
+ {
   "id": "thurlestone-vl7",
   "title": "Thurlestone",
   "img": "images/thurlestone-vl7.jpg",
