@@ -274,16 +274,6 @@
   "collection": "uk"
  },
  {
-  "id": "palma-yachts",
-  "title": "Palma Yachts",
-  "img": "images/palma-yachts.jpg",
-  "price": "£3,600",
-  "size": "42×30cm · Oil on board",
-  "lat": 39.566903,
-  "lng": 2.644182,
-  "collection": "worldwide"
- },
- {
   "id": "massif-jump",
   "title": "Massif Jump",
   "img": "images/massif-jump.jpg",
