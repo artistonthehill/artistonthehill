@@ -1,0 +1,147 @@
+{
+ "t": "The Bahamas",
+ "updated": "2026-11-27",
+ "n": "The Bahamas paintings that are still with me, with Love Beach first. Tap any picture for a closer look.",
+ "paintings": [
+  {
+   "t": "Love Beach",
+   "loc": "Love Beach, New Providence",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "bahamas-love-beach",
+   "img": "images/catalogue/bahamas-love-beach.jpg",
+   "w": 1181,
+   "h": 829
+  },
+  {
+   "t": "Paradise Ferry",
+   "loc": "Nassau",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "bahamas-paradise-ferry",
+   "img": "images/catalogue/bahamas-paradise-ferry.jpg",
+   "w": 1181,
+   "h": 831
+  },
+  {
+   "t": "Cabbage Beach",
+   "loc": "Paradise Island, Nassau",
+   "s": "60×42cm · Oil on board",
+   "p": "3600",
+   "room": "bahamas-cabbage-beach",
+   "img": "images/catalogue/bahamas-cabbage-beach.jpg",
+   "w": 1181,
+   "h": 832
+  },
+  {
+   "t": "Sea Swings",
+   "loc": "Spanish Wells",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "bahamas-sea-swings",
+   "img": "images/catalogue/bahamas-sea-swings.jpg",
+   "w": 1181,
+   "h": 836
+  },
+  {
+   "t": "The Pink House",
+   "loc": "Spanish Wells",
+   "s": "42×30cm · Oil on board",
+   "p": "1440",
+   "room": "bahamas-pink-house",
+   "img": "images/catalogue/bahamas-pink-house.jpg",
+   "w": 1181,
+   "h": 832
+  },
+  {
+   "t": "Wreckers View",
+   "loc": "Spanish Wells",
+   "s": "60×42cm · Oil on board",
+   "p": "3600",
+   "room": "bahamas-wreckers-view",
+   "img": "images/catalogue/bahamas-wreckers-view.jpg",
+   "w": 1181,
+   "h": 830
+  },
+  {
+   "t": "Alabaster Bay",
+   "loc": "Spanish Wells, Eleuthera",
+   "s": "60×42cm · Oil on board",
+   "p": "3600",
+   "room": "bahamas-alabaster-bay",
+   "img": "images/catalogue/bahamas-alabaster-bay.jpg",
+   "w": 1181,
+   "h": 836
+  },
+  {
+   "t": "Russell Island",
+   "loc": "Russell Island, Eleuthera",
+   "s": "60×42cm · Oil on board",
+   "p": "3600",
+   "room": "bahamas-russell-island",
+   "img": "images/catalogue/bahamas-russell-island.jpg",
+   "w": 1181,
+   "h": 824
+  },
+  {
+   "t": "Spanish Wells Sunrise",
+   "loc": "Spanish Wells",
+   "s": "80×60cm · Oil on canvas",
+   "p": "6840",
+   "room": "bahamas-spanish-wells-sunrise",
+   "img": "images/catalogue/bahamas-spanish-wells-sunrise.jpg",
+   "w": 1181,
+   "h": 899
+  },
+  {
+   "t": "Fish-eye View",
+   "loc": "Spanish Wells harbour",
+   "s": "84×60cm · Oil on birch board",
+   "p": "7620",
+   "room": "bahamas-fish-eye-view",
+   "img": "images/catalogue/bahamas-fish-eye-view.jpg",
+   "w": 1181,
+   "h": 828
+  },
+  {
+   "t": "Harbour Island",
+   "loc": "Harbour Island",
+   "s": "60×42cm · Oil on board",
+   "p": "3600",
+   "room": "bahamas-harbour-island",
+   "img": "images/catalogue/bahamas-harbour-island.jpg",
+   "w": 1181,
+   "h": 833
+  },
+  {
+   "t": "Governors Harbour",
+   "loc": "Eleuthera",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "bahamas-governors-harbour",
+   "img": "images/catalogue/bahamas-governors-harbour.jpg",
+   "w": 1181,
+   "h": 829
+  },
+  {
+   "t": "South Canal",
+   "loc": "Eleuthera",
+   "s": "42×30cm · Oil on board",
+   "p": "1440",
+   "room": "bahamas-south-canal",
+   "img": "images/catalogue/bahamas-south-canal.jpg",
+   "w": 1181,
+   "h": 831
+  },
+  {
+   "t": "Sandy Point Marina",
+   "loc": "Sandy Point, Abaco",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "bahamas-sandy-point-marina",
+   "img": "images/catalogue/bahamas-sandy-point-marina.jpg",
+   "w": 1181,
+   "h": 835
+  }
+ ]
+}
