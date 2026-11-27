@@ -1,0 +1,379 @@
+{
+ "t": "Brighton, Hove and east to the Cuckmere",
+ "updated": "2026-11-27",
+ "n": "Paintings of Brighton and Hove and the coast east to the Cuckmere Valley that are still with me. Tap any picture for a closer look.",
+ "paintings": [
+  {
+   "t": "West Pier Sticks",
+   "loc": "Brighton seafront",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "west-pier-sticks-14d",
+   "img": "images/catalogue/west-pier-sticks-14d.jpg",
+   "w": 1200,
+   "h": 850
+  },
+  {
+   "t": "Penny Lift Sketch",
+   "loc": "Madeira Drive, Brighton",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "penny-lift-sketch-x0d",
+   "img": "images/catalogue/penny-lift-sketch-x0d.jpg",
+   "w": 1200,
+   "h": 848
+  },
+  {
+   "t": "The Palace Gardens",
+   "loc": "The Royal Pavilion, Brighton",
+   "s": "80×30cm",
+   "p": "2760",
+   "room": "the-palace-gardens-19d",
+   "img": "images/catalogue/the-palace-gardens-19d.jpg",
+   "w": 1200,
+   "h": 446
+  },
+  {
+   "t": "Duke of yorks. Brighton",
+   "loc": "Preston Circus, Brighton",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "duke-of-yorks-brighton-fwm",
+   "img": "images/catalogue/duke-of-yorks-brighton-fwm.jpg",
+   "w": 1200,
+   "h": 861
+  },
+  {
+   "t": "Preston Park Roundhouse",
+   "loc": "Preston Park, Brighton",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "preston-park-roundhouse-db5",
+   "img": "images/catalogue/preston-park-roundhouse-db5.jpg",
+   "w": 1200,
+   "h": 837
+  },
+  {
+   "t": "Queens Park Brighton",
+   "loc": "Queens Park, Brighton",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "queens-park-brighton-r4e",
+   "img": "images/catalogue/queens-park-brighton-r4e.jpg",
+   "w": 1200,
+   "h": 440
+  },
+  {
+   "t": "Pepper Pot",
+   "loc": "Queens Park, Brighton",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "pepper-pot-33l",
+   "img": "images/catalogue/pepper-pot-33l.jpg",
+   "w": 900,
+   "h": 1255,
+   "tall": true
+  },
+  {
+   "t": "London to Brighton Cycle Ride 2026",
+   "loc": "Madeira Drive, Brighton",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "london-to-brighton-bike-ride",
+   "img": "images/catalogue/london-to-brighton-bike-ride.jpg",
+   "w": 1200,
+   "h": 446
+  },
+  {
+   "t": "Stanmer Light",
+   "loc": "Stanmer Park, Brighton",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "stanmer-light-vea",
+   "img": "images/catalogue/stanmer-light-vea.jpg",
+   "w": 1200,
+   "h": 853
+  },
+  {
+   "t": "Panoramic Peace",
+   "loc": "Hove seafront",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "panoramic-peace",
+   "img": "images/catalogue/panoramic-peace.jpg",
+   "w": 1200,
+   "h": 450
+  },
+  {
+   "t": "Peace West",
+   "loc": "Hove seafront",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "peace-west",
+   "img": "images/catalogue/peace-west.jpg",
+   "w": 1200,
+   "h": 430
+  },
+  {
+   "t": "Peace Bruvver",
+   "loc": "Hove seafront",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "peace-bruvver",
+   "img": "images/catalogue/peace-bruvver.jpg",
+   "w": 900,
+   "h": 1250,
+   "tall": true
+  },
+  {
+   "t": "Hove Huts",
+   "loc": "Hove seafront",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "hove-huts-6g5",
+   "img": "images/catalogue/hove-huts-6g5.jpg",
+   "w": 1200,
+   "h": 851
+  },
+  {
+   "t": "Hove Huts",
+   "loc": "Hove seafront",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "hove-huts-0hv",
+   "img": "images/catalogue/hove-huts-0hv.jpg",
+   "w": 1200,
+   "h": 836
+  },
+  {
+   "t": "Prom",
+   "loc": "Brighton and Hove seafront",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "prom-5fz",
+   "img": "images/catalogue/prom-5fz.jpg",
+   "w": 1200,
+   "h": 843
+  },
+  {
+   "t": "Hove Park Tavern",
+   "loc": "Hove",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "hove-pub-1md",
+   "img": "images/catalogue/hove-pub-1md.jpg",
+   "w": 1200,
+   "h": 829
+  },
+  {
+   "t": "That Day on the Undercliff",
+   "loc": "The undercliff, east of Brighton",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "undercliff",
+   "img": "images/catalogue/undercliff.jpg",
+   "w": 1200,
+   "h": 443
+  },
+  {
+   "t": "Roedean",
+   "loc": "Roedean",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "roedean",
+   "img": "images/catalogue/roedean.jpg",
+   "w": 1200,
+   "h": 846
+  },
+  {
+   "t": "Roedean Summer Fete",
+   "loc": "Roedean",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "roedean-summer-fete-r6r",
+   "img": "images/catalogue/roedean-summer-fete-r6r.jpg",
+   "w": 1200,
+   "h": 449
+  },
+  {
+   "t": "Ovingdean",
+   "loc": "Ovingdean",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "ovingdean-3he",
+   "img": "images/catalogue/ovingdean-3he.jpg",
+   "w": 1200,
+   "h": 850
+  },
+  {
+   "t": "Rottingdean High Street",
+   "loc": "Rottingdean",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "rottingdean-high-street-owd",
+   "img": "images/catalogue/rottingdean-high-street-owd.jpg",
+   "w": 1200,
+   "h": 836
+  },
+  {
+   "t": "Saltdean Peak",
+   "loc": "Saltdean",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "saltdean-peak-30o",
+   "img": "images/catalogue/saltdean-peak-30o.jpg",
+   "w": 1200,
+   "h": 849
+  },
+  {
+   "t": "Lido at Christmas",
+   "loc": "Saltdean",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "lido-at-christmas-qqw",
+   "img": "images/catalogue/lido-at-christmas-qqw.jpg",
+   "w": 1200,
+   "h": 866
+  },
+  {
+   "t": "Saltdean & Peacehaven Cliffs",
+   "loc": "Saltdean and Peacehaven",
+   "s": "A3 · Oil on board",
+   "p": "1320",
+   "room": "saltdean-peacehaven",
+   "img": "images/catalogue/saltdean-peacehaven.jpg",
+   "w": 1200,
+   "h": 839
+  },
+  {
+   "t": "Telscombe Village",
+   "loc": "Telscombe",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "telscombe-village-zy3",
+   "img": "images/catalogue/telscombe-village-zy3.jpg",
+   "w": 1200,
+   "h": 838
+  },
+  {
+   "t": "Piddinghoe Lake",
+   "loc": "Piddinghoe",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "piddinghoe-lake-wns",
+   "img": "images/catalogue/piddinghoe-lake-wns.jpg",
+   "w": 1200,
+   "h": 813
+  },
+  {
+   "t": "Devils Dyke Sunset",
+   "loc": "Devil's Dyke",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "devils-dyke-sunset-o6l",
+   "img": "images/catalogue/devils-dyke-sunset-o6l.jpg",
+   "w": 1200,
+   "h": 436
+  },
+  {
+   "t": "Devils dyke golf course",
+   "loc": "Devil's Dyke",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "devils-dyke-golf-course-io3",
+   "img": "images/catalogue/devils-dyke-golf-course-io3.jpg",
+   "w": 1200,
+   "h": 444
+  },
+  {
+   "t": "Jill, no…Jack?",
+   "loc": "The South Downs above Brighton",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "jill-no-jack-pxg",
+   "img": "images/catalogue/jill-no-jack-pxg.jpg",
+   "w": 1200,
+   "h": 850
+  },
+  {
+   "t": "Windey River Cuckmere",
+   "loc": "Cuckmere Valley",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "windey-river-cuckmere-ll6",
+   "img": "images/catalogue/windey-river-cuckmere-ll6.jpg",
+   "w": 1200,
+   "h": 442
+  },
+  {
+   "t": "River Beach, Cuckmere",
+   "loc": "Cuckmere Haven",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "river-beach-cuckmere-sn2",
+   "img": "images/catalogue/river-beach-cuckmere-sn2.jpg",
+   "w": 1200,
+   "h": 823
+  },
+  {
+   "t": "Foil River",
+   "loc": "Cuckmere Valley",
+   "s": "60×42cm · Oil on canvas board",
+   "p": "3600",
+   "room": "foil-river",
+   "img": "images/catalogue/foil-river.jpg",
+   "w": 1200,
+   "h": 846
+  },
+  {
+   "t": "Cottages from the East",
+   "loc": "Cuckmere Haven",
+   "s": "42×30cm · Oil on canvas",
+   "p": "1320",
+   "room": "cottages-from-the-east",
+   "img": "images/catalogue/cottages-from-the-east.jpg",
+   "w": 1200,
+   "h": 856
+  },
+  {
+   "t": "Seven Sisters Gale",
+   "loc": "The Seven Sisters",
+   "s": "80×30cm · Oil on canvas",
+   "p": "2760",
+   "room": "seven-sisters-gale-u9z",
+   "img": "images/catalogue/seven-sisters-gale-u9z.jpg",
+   "w": 1200,
+   "h": 448
+  },
+  {
+   "t": "Winter Sisters",
+   "loc": "The Seven Sisters",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "winter-sisters-fn8",
+   "img": "images/catalogue/winter-sisters-fn8.jpg",
+   "w": 1200,
+   "h": 428
+  },
+  {
+   "t": "Zebra Sisters",
+   "loc": "The Seven Sisters",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "zebra-sisters-r52",
+   "img": "images/catalogue/zebra-sisters-r52.jpg",
+   "w": 1200,
+   "h": 447
+  },
+  {
+   "t": "Sisters Study",
+   "loc": "The Seven Sisters",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "sisters-study-q3d",
+   "img": "images/catalogue/sisters-study-q3d.jpg",
+   "w": 1200,
+   "h": 844
+  }
+ ]
+}

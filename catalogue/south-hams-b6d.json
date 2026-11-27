@@ -1,0 +1,127 @@
+{
+ "t": "Burgh Island and the South Hams",
+ "updated": "2026-11-27",
+ "n": "The South Hams paintings that are still with me, with Burgh Island first. Tap any picture for a closer look.",
+ "paintings": [
+  {
+   "t": "Afternoon Burgh Island",
+   "loc": "Burgh Island",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "afternoon-burgh-island-m48",
+   "img": "images/catalogue/afternoon-burgh-island-m48.jpg",
+   "w": 1200,
+   "h": 450
+  },
+  {
+   "t": "It’s on Stilts!",
+   "loc": "Burgh Island",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "it-s-on-stilts-5y5",
+   "img": "images/catalogue/it-s-on-stilts-5y5.jpg",
+   "w": 1200,
+   "h": 849
+  },
+  {
+   "t": "Sea Pool Burgh Island",
+   "loc": "Burgh Island",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "sea-pool-unk",
+   "img": "images/catalogue/sea-pool-unk.jpg",
+   "w": 1200,
+   "h": 868
+  },
+  {
+   "t": "Bantham and Burgh",
+   "loc": "Bantham and Burgh Island",
+   "s": "60×42cm · Oil on board",
+   "p": "3600",
+   "room": "bantham-burgh",
+   "img": "images/catalogue/bantham-burgh.jpg",
+   "w": 1200,
+   "h": 839
+  },
+  {
+   "t": "Back O the Ship",
+   "loc": "South Devon",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "back-o-the-ship-tcf",
+   "img": "images/catalogue/back-o-the-ship-tcf.jpg",
+   "w": 1200,
+   "h": 444
+  },
+  {
+   "t": "Thurlestone West",
+   "loc": "Thurlestone",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "thurlestone-west",
+   "img": "images/catalogue/thurlestone-west.jpg",
+   "w": 1200,
+   "h": 439
+  },
+  {
+   "t": "Thurlestone",
+   "loc": "Thurlestone",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "thurlestone-vl7",
+   "img": "images/catalogue/thurlestone-vl7.jpg",
+   "w": 1200,
+   "h": 835
+  },
+  {
+   "t": "Thurlestone Beach",
+   "loc": "Thurlestone",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "thurlestone-beach",
+   "img": "images/catalogue/thurlestone-beach.jpg",
+   "w": 1200,
+   "h": 844
+  },
+  {
+   "t": "Noss Mayo",
+   "loc": "Noss Mayo",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "noss-mayo-6yy",
+   "img": "images/catalogue/noss-mayo-6yy.jpg",
+   "w": 1200,
+   "h": 442
+  },
+  {
+   "t": "North Sands Glass Beach",
+   "loc": "North Sands, Salcombe",
+   "s": "97×60cm · Oil on canvas",
+   "p": "5950",
+   "room": "north-sands-glass-beach-wip-y9g",
+   "img": "images/catalogue/north-sands-glass-beach-wip-y9g.jpg",
+   "w": 1200,
+   "h": 743
+  },
+  {
+   "t": "Dart South (Bayard’s Dartmouth)",
+   "loc": "Dartmouth",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "dart-south-bayard-s-dartmouth-a1h",
+   "img": "images/catalogue/dart-south-bayard-s-dartmouth-a1h.jpg",
+   "w": 1200,
+   "h": 838
+  },
+  {
+   "t": "Noss On Dart",
+   "loc": "The River Dart",
+   "s": "80×30cm · Oil on board",
+   "p": "2760",
+   "room": "noss-on-dart-pv5",
+   "img": "images/catalogue/noss-on-dart-pv5.jpg",
+   "w": 1200,
+   "h": 438
+  }
+ ]
+}
