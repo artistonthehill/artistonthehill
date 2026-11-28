@@ -1,6 +1,6 @@
 {
  "t": "Burgh Island and the South Hams",
- "updated": "2026-11-27",
+ "updated": "2026-11-28",
  "n": "The South Hams paintings that are still with me, with Burgh Island first. Tap any picture for a closer look.",
  "paintings": [
   {
@@ -34,6 +34,16 @@
    "h": 868
   },
   {
+   "t": "Disc Bar",
+   "loc": "Burgh Island",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "disc-bar-vj8",
+   "img": "images/catalogue/disc-bar-vj8.jpg",
+   "w": 1200,
+   "h": 931
+  },
+  {
    "t": "Bantham and Burgh",
    "loc": "Bantham and Burgh Island",
    "s": "60×42cm · Oil on board",
@@ -45,7 +55,7 @@
   },
   {
    "t": "Back O the Ship",
-   "loc": "South Devon",
+   "loc": "Burgh Island",
    "s": "80×30cm · Oil on board",
    "p": "2760",
    "room": "back-o-the-ship-tcf",

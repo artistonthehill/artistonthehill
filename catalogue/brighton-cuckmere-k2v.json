@@ -1,6 +1,6 @@
 {
  "t": "Brighton, Hove and east to the Cuckmere",
- "updated": "2026-11-27",
+ "updated": "2026-11-28",
  "n": "Paintings of Brighton and Hove and the coast east to the Cuckmere Valley that are still with me. Tap any picture for a closer look.",
  "paintings": [
   {
@@ -22,6 +22,16 @@
    "img": "images/catalogue/penny-lift-sketch-x0d.jpg",
    "w": 1200,
    "h": 848
+  },
+  {
+   "t": "Emergency Parasols",
+   "loc": "Brighton seafront",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "emergency-parasols-f1w",
+   "img": "images/catalogue/emergency-parasols-f1w.jpg",
+   "w": 1200,
+   "h": 842
   },
   {
    "t": "The Palace Gardens",
@@ -147,7 +157,7 @@
   },
   {
    "t": "Prom",
-   "loc": "Brighton and Hove seafront",
+   "loc": "Hove seafront",
    "s": "A3 (30×42cm) · Oil on board",
    "p": "1320",
    "room": "prom-5fz",
@@ -246,6 +256,26 @@
    "h": 839
   },
   {
+   "t": "Kaboom",
+   "loc": "Saltdean",
+   "s": "60×42cm · Oil on board",
+   "p": "3600",
+   "room": "kaboom",
+   "img": "images/catalogue/kaboom.jpg",
+   "w": 1200,
+   "h": 856
+  },
+  {
+   "t": "White Cliffs Sunset",
+   "loc": "Saltdean",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "white-cliffs-sunset-rdx",
+   "img": "images/catalogue/white-cliffs-sunset-rdx.jpg",
+   "w": 1200,
+   "h": 827
+  },
+  {
    "t": "Telscombe Village",
    "loc": "Telscombe",
    "s": "A3 (30×42cm) · Oil on board",
@@ -287,13 +317,33 @@
   },
   {
    "t": "Jill, no…Jack?",
-   "loc": "The South Downs above Brighton",
+   "loc": "Clayton, on the Downs above Brighton",
    "s": "A3 (30×42cm) · Oil on board",
    "p": "1320",
    "room": "jill-no-jack-pxg",
    "img": "images/catalogue/jill-no-jack-pxg.jpg",
    "w": 1200,
    "h": 850
+  },
+  {
+   "t": "After Ravilious. Shepherds Cottage",
+   "loc": "The Downs near Lewes",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "ravilious-1",
+   "img": "images/catalogue/ravilious-1.jpg",
+   "w": 1200,
+   "h": 844
+  },
+  {
+   "t": "Ravilious Shepherds Cottage 2",
+   "loc": "The Downs near Lewes",
+   "s": "42×30cm · Oil on board",
+   "p": "1320",
+   "room": "ravilious-2",
+   "img": "images/catalogue/ravilious-2.jpg",
+   "w": 1200,
+   "h": 825
   },
   {
    "t": "Windey River Cuckmere",

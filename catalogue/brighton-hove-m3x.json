@@ -34,6 +34,16 @@
    "h": 848
   },
   {
+   "t": "Emergency Parasols",
+   "loc": "Brighton seafront",
+   "s": "A3 (30×42cm) · Oil on board",
+   "p": "1320",
+   "room": "emergency-parasols-f1w",
+   "img": "images/catalogue/emergency-parasols-f1w.jpg",
+   "w": 1200,
+   "h": 842
+  },
+  {
    "t": "Duke of yorks. Brighton",
    "loc": "Preston Circus, Brighton",
    "s": "A3 (30×42cm) · Oil on board",
@@ -147,7 +157,7 @@
   },
   {
    "t": "Prom",
-   "loc": "Brighton and Hove seafront",
+   "loc": "Hove seafront",
    "s": "A3 (30×42cm) · Oil on board",
    "p": "1320",
    "room": "prom-5fz",
